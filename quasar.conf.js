@@ -26,7 +26,7 @@ module.exports = function (/* ctx */) {
     extras: [
       // 'ionicons-v4',
       // 'mdi-v5',
-      // 'fontawesome-v5',
+       'fontawesome-v5',
       // 'eva-icons',
       // 'themify',
       // 'line-awesome',
@@ -38,7 +38,7 @@ module.exports = function (/* ctx */) {
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
     framework: {
-      iconSet: 'material-icons', // Quasar icon set
+      iconSet: 'fontawesome-v5', //Quasar icon set
       lang: 'en-us', // Quasar language pack
 
       // Possible values for "all":
@@ -65,7 +65,22 @@ module.exports = function (/* ctx */) {
         'QItemSection',
         'QItemLabel',
         'QAvatar',
-        'QFooter'
+        'QFooter',
+
+        'QTabs',
+        'QTab',
+        'QRouteTab',
+        'QInput',
+        'QBanner',
+        'QSpace',
+        'QScrollArea',
+        'QSeparator',
+        'QUploader',
+        'QTabPanels',
+        'QTabPanel',
+        'QCard',
+        'QSelect'
+
       ],
 
       directives: [
@@ -106,7 +121,8 @@ module.exports = function (/* ctx */) {
           loader: 'eslint-loader',
           exclude: /node_modules/,
           options: {
-            formatter: require('eslint').CLIEngine.getFormatter('stylish')
+            formatter: require('eslint').CLIEngine.getFormatter('stylish'),
+            fix : true
           }
         })
       }
@@ -133,8 +149,8 @@ module.exports = function (/* ctx */) {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {}, // only for GenerateSW
       manifest: {
-        name: 'Quasar App',
-        short_name: 'Quasar App',
+        name: 'UmiyaMatrimony.com',
+        short_name: 'UmiyaMatrimony.com',
         description: 'Umiya Matrimony',
         display: 'standalone',
         orientation: 'portrait',
