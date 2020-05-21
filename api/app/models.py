@@ -2,7 +2,7 @@ from flask import current_app
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+import jwt
 from datetime import datetime, timedelta
 
 
@@ -49,24 +49,6 @@ class User(db.Model):
 
     @staticmethod
     def verify_token(token):
-        s = Serializer(current_app.config['SECRET_KEY'])
-        try:
-            data = s.loads(token)
-        except:
-            return None
-        return User.query.get(data['id'])
-
-    # creates token of user object
-    # decode('utf-8') converts token to string
-    def get_reset_password_token(self, expires_in=current_app.config['FORGOT_PASSWORD_TOKEN_EXPIRE']):
-        return jwt.encode(
-            {'reset_password': self.id, 'exp': datetime.utcnow() +
-             timedelta(seconds=expires_in)},
-            current_app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
-
-    # decodes token and returns user object
-    @staticmethod
-    def verify_reset_password_token(token):
         try:
             id = jwt.decode(token, current_app.config['SECRET_KEY'],
                             algorithms=['HS256'])['reset_password']

@@ -1,7 +1,7 @@
 <template>
-<div>
-    <h1>Testing</h1>
-</div>
+  <q-page padding class="flex">
+    <h3>Testing</h3>
+  </q-page>
 </template>
 
 <script>
