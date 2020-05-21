@@ -82,8 +82,13 @@ const menuList = [
     icon: 'search',
     label: 'Search',
     link: '/search',
+    separator: true
+  },
+    {
+    label: 'Test',
+    link: '/test',
     separator: false
-  }
+  },
   /*
   ,
   {
