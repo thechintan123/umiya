@@ -774,7 +774,7 @@ let heightFromInches = heightFrom.substr(5,2); // 5 is position for inches
 let heightToInches = heightTo.substr(5,2);
 console.log('Height Inches',heightFromInches, heightToInches);
 console.log('Cond',( parseInt(heightToInches) < parseInt(heightFromFoot)));
-    if(parseInt(heightToInches) < parseInt(heightFromFoot)){
+    if(parseInt(heightToInches) < parseInt(heightFromInches)){
     return false
     }
     else{
