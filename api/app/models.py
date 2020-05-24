@@ -13,7 +13,7 @@ class User(db.Model):
     password_hash = db.Column(db.String(100))
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'), default=2, nullable=False)
     create_date = db.Column(db.DateTime,default=datetime.utcnow, nullable=False)
-    token = db.Column(db.String(32), index=True, unique=True)
+    token = db.Column(db.String(140), index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
 
     def __init__(self,**kwargs):
@@ -33,7 +33,8 @@ class User(db.Model):
             return self.token
         payload = {'user': self.id, 'exp': now + timedelta(seconds=expires_in)}
         # decode('utf-8') converts token to string
-        self.token = jwt.encode(payload, current_app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
+        self.token = jwt.encode(
+            payload, current_app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
         self.token_expiration = now + timedelta(seconds=expires_in)
         db.session.add(self)
         return self.token
@@ -55,13 +56,6 @@ class User(db.Model):
         except:
             return
         return User.query.get(id)
-
-    def to_dict(self):
-        data = {
-            'email': self.email,
-            'role': self.role.name
-        }
-        return data
 
     def __repr__(self):
         return '<User {}>'.format(self.email)

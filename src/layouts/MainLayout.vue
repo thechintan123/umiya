@@ -84,11 +84,16 @@ const menuList = [
     link: '/search',
     separator: true
   },
-    {
-    label: 'Test',
-    link: '/test',
+  {
+    label: 'Test Login',
+    link: '/test_login',
     separator: false
   },
+  {
+    label: 'Test Reg',
+    link: '/test_reg',
+    separator: false
+  }
   /*
   ,
   {

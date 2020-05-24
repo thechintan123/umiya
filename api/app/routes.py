@@ -13,9 +13,13 @@ def index():
 @app.route('/api/tokens', methods=['POST'])
 @basic_auth.login_required
 def get_token():
-   token = basic_auth.current_user().get_token()
-   db.session.commit()
-   return jsonify({'token': token})
+    token = basic_auth.current_user().get_token()
+    payload = { \
+        'email': basic_auth.current_user().email, \
+        'token': token \
+    }
+    db.session.commit()
+    return jsonify(payload)
 
 
 @app.route('/api/tokens', methods=['DELETE'])
@@ -42,13 +46,24 @@ def register():
         return bad_request('please use a different email address')
     user = User(email=data['email'])
     user.set_password(data['password'])
+    # also adds token to user session
+    token = user.get_token() 
     db.session.add(user)
     db.session.commit()
     
-    response = jsonify(user.to_dict())
+    payload = { \
+        'email': user.email, \
+        'token': token \
+    }
+    response = jsonify(payload)
     response.status_code = 201
-    response.headers['Location'] = url_for('get_user', id=user.id)
+    # response.headers['Location'] = url_for('get_user', id=user.id)
     return response
 
+
+@app.route('/api/hello', methods=['GET'])
+@token_auth.login_required
+def hello():
+    return jsonify({'message': 'hello world!!!'})
 
 
