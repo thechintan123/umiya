@@ -1,8 +1,11 @@
 <template>
 
-<div class="">
+<div class="q-pa-md  fit column">
 
-    <q-card flat bordered class="my-card">
+    <!-- <q-card flat bordered class="my-card">--->
+
+    <q-card>
+
 
     <q-banner class="bg-grey-3 q-mb-xs">
       <template v-slot:avatar>
@@ -11,67 +14,109 @@
         Register on website!!
     </q-banner>
 
+
         <q-tabs
           v-model="tab"
           dense
           class="text-secondary"
           active-color="primary"
           indicator-color="primary"
-          align="justify"
           narrow-indicator
+          align="justify"
+          @click="tabChange"
         >
-          <q-tab name="account" icon="fas fa-address-card" label="Basic" />
-          <q-tab name="personal" icon="ballot" label="Personal" />
-          <q-tab name="upload" icon="add_a_photo" label="Upload" />
-
+          <q-tab name="basic" icon="fas fa-user-cog" label="Basic" >
+                    <q-badge v-if="basicHasError" align="top" color="blue" floating>
+                        Error <q-icon name="warning" color="yellow" class="q-ml-sm" />
+                    </q-badge>
+          </q-tab>
+          <q-tab name="personal" icon="ballot" label="Personal" >
+                     <q-badge v-if="personalHasError" align="top" color="blue" floating>
+                        Error <q-icon name="warning" color="yellow" class="q-ml-sm" />
+                    </q-badge>
+          </q-tab>
+          <q-tab name="upload" icon="add_a_photo" label="Upload" >
+                     <q-badge v-if="uploadHasError" align="top" color="blue" floating>
+                        Error <q-icon name="warning" color="yellow" class="q-ml-sm" />
+                    </q-badge>
+          </q-tab>
         </q-tabs>
 
         <q-separator />
 
-        <q-tab-panels v-model="tab" animated>
-            <q-tab-panel name="account">
+        <q-tab-panels v-model="tab"
+        keep-alive
+        animated>
+            <q-tab-panel name="basic">
 
+                 <q-form greedy ref="basicForm">
 
+                 <q-input outlined v-model="formData.email"
+                 label="Email (Login ID)*"
 
-
-                 <q-input outlined v-model="formData.email" label="Email"
                   :rules="[ val => !!val || 'Field is required', val => checkEmail(val) || 'Please enter valid email address.']"
-                  lazy-rules
-                  ref="email"
                   dense
+                  clearable
+                  hint = "Hint: This Email will be used as login ID"
                   />
-
-
-
-                 <q-input outlined v-model="formData.password"
-                 :rules="[ val => !!val || 'Field is required']"
-                  lazy-rules
-                  ref="password"
-                 label="Password" type="password"
-                  dense
-                 />
-
-                 <q-input outlined v-model="formData.confirmPassword"
-                 :rules="[ val => !!val || 'Field is required']"
-                  lazy-rules
-                 label="Confirm Password" type="password"
-                 dense
-                 />
 
 
                  <div class="row">
                  <div class="col">
-                 <q-input outlined v-model="formData.firstName"
-                 label="First Name"
+                 <q-input outlined v-model="formData.password"
+                 :rules="[ val => !!val || 'Field is required']"
+                  lazy-rules
+                  ref="password"
+                 label="Password*"
+
+                 type="password"
+                  dense
+                  clearable
+                  :type="isPwd ? 'password' : 'text'" hint="Password with toggle"
+                 >
+                <template v-slot:append>
+                  <q-icon
+                    :name="isPwd ? 'visibility_off' : 'visibility'"
+                    class="cursor-pointer"
+                    @click="isPwd = !isPwd"
+                    clearable
+                  />
+                </template>
+                </q-input>
+
+                </div>
+                <div class="col">
+
+                 <q-input outlined v-model="formData.confirmPassword"
+                 :rules="[ val => !!val || 'Field is required', val => checkConfirmPassword(val) || 'Password & Confirm Password are not same' ]"
+                  lazy-rules
+                 label="Confirm Password*"
+
+                 type="password"
+                 dense
+                 clearable
+                 />
+                </div>
+                </div>
+
+                 <div class="row">
+                 <div class="col">
+                 <q-input outlined
+                  v-model="formData.firstName"
+                 label="First Name*"
+
                  :rules="[ val => !!val || 'Field is required']"
                  dense
+                 clearable
                  />
                  </div>
                  <div class="col">
                   <q-input outlined v-model="formData.lastName"
-                 label="Last Name"
+                 label="Last Name*"
+
                  :rules="[ val => !!val || 'Field is required']"
                  dense
+                 clearable
                  />
                  </div>
                  </div>
@@ -83,14 +128,9 @@
                    dense
                    options-dense
                     clearable
-                    use-input
-                    hide-selected
-                    fill-input
-                    input-debounce="0"
-                   label="Gender"
-                   :rules="[ val => !!val || 'Field is required']"
-                   @filter="filterGenderFn"
+                   label="Gender*"
 
+                   :rules="[ val => !!val || 'Field is required']"
                    />
 
 
@@ -101,9 +141,11 @@
                     dense
                     stack-label
                     type="date"
-                    label="Date of Birth"
+                    label="Date of Birth*"
+
                     :rules="[ val => !!val || 'Field is required']"
                     @blur = "calculateAge"
+                    clearable
                      />
                  </div>
                  <div class="col">
@@ -116,36 +158,49 @@
                  </div>
                  </div>
 
+                 <div class="row">
+                 <div class="col">
+                   <q-radio v-model="formData.country" val="India" left-label  label="Living in : India" />
+                   <q-radio v-model="formData.country" val="Other" left-label  label="Other" />
+                   </div>
+
+                 <div class="col">
                    <q-select
                    outlined
-                   v-model="formData.Country"
+                   :disable = "formData.country === 'India'"
+                    v-model="formData.OtherCountry"
                    :options="countryOptions"
                    dense
                    options-dense
-                   label="Country"
+                   label="Other Country"
                    use-input
                     hide-selected
                     fill-input
+                    :rules="[ val => checkOtherCountry(val) || 'Field is required']"
                     input-debounce="0"
-                   :rules="[ val => !!val || 'Field is required']"
                     @filter="filterCountryFn"
+                    clearable
                    />
+                   </div>
+                  </div>
+
 
                  <div class="row">
                  <div class="col">
                    <q-input v-model="formData.state"
                     outlined
                     dense
-                    label="State"
-                    :rules="[ val => !!val || 'Field is required']"
+                    label="State*"
 
+                    :rules="[ val => !!val || 'Field is required']"
                      />
                  </div>
                  <div class="col">
                    <q-input v-model="formData.city"
                     outlined
                     dense
-                    label="City"
+                    label="City*"
+
                     :rules="[ val => !!val || 'Field is required']"
                      />
                  </div>
@@ -168,10 +223,8 @@
                    <q-input v-model="formData.primaryContact"
                     outlined
                     dense
-                    label="Primary Contact"
-                    mask="##### #####"
-                    fill-mask
-                    type = "tel"
+                    label="Primary Contact*"
+                    type = "number"
                     :rules="[ val => !!val || 'Field is required']"
                      />
                  </div>
@@ -180,118 +233,311 @@
                     outlined
                     dense
                     label="Alternate Contact"
+                    type = "number"
                      />
                  </div>
                  </div>
 
+                  <q-toggle
+                    v-model="formData.agreeTnC"
+                    checked-icon="check"
+                    color="green"
+                    unchecked-icon="clear"
+                    label = "Agree Terms & Conditions *"
+                    dense
+
+                  />
+
+
+
              <div class="row">
+
               <q-space/>
-              <q-btn color="primary" label="Next"
-              @click="tab = 'personal'"/>
+              <q-btn color="primary" label="Next >"  @click="submitBasicForm()"/>
 
-                 </div>
+             </div>
 
+</q-form>
 
          </q-tab-panel>
 
           <q-tab-panel name="personal">
 
-                 <div class="row">
+            <q-form greedy ref="personalForm">
+              <div class="row">
                  <div class="col">
                    <q-select v-model="formData.maritalStatus"
                     :options = "martialOptions"
                     outlined
                     dense
-                    label="Marital Status"
+                     options-dense
+                    label="Marital Status*"
                     :rules="[ val => !!val || 'Field is required']"
                      />
                  </div>
+                  <div class="col">
+                   <q-select
+                   outlined
+                   v-model="formData.height"
+                   dense
+                   options-dense
+                    clearable
+                   label="Height*"
+                   :options = "heightOptions"
+                   :rules="[ val => !!val || 'Field is required']"
+                   >
+                   </q-select>
+                 </div>
+                 </div>
+
+
+                 <div class="row">
                  <div class="col">
-                  <q-input outlined v-model="formData.height"
-                 label="Age"
-                 readonly
-                 disable
-                 dense
-                 />
+                   <q-select v-model="formData.gotra"
+                    outlined
+                    dense
+                     options-dense
+                     :options = "gotraOptions"
+                    label="Gotra"
+                     />
+                 </div>
+
+                  <div class="col">
+                   <q-input v-model="formData.originalSurname"
+                    outlined
+                    dense
+                    label="Original Surname*"
+                    :rules="[ val => !!val || 'Field is required']"
+
+                     />
                  </div>
                  </div>
 
                  <q-input outlined v-model="formData.fatherName"
-                 label="Father Name"
+                 label="Father Name*"
                  :rules="[ val => !!val || 'Field is required']"
                  dense
                  />
 
-                   <div class="row">
-                 <div class="col-1">
-                   <q-input v-model="formData.primaryContactCountryCode"
-                    outlined
-                    dense
-                    label="Code"
-                    mask="##"
-                    fill-mask
-                    type = "tel"
-                    :rules="[ val => !!val || 'Field is required']"
-                     />
-                   </div>
-                  <div class="col-5">
+                 <q-input outlined v-model="formData.residentialAddress"
+                 label="Residential Address*"
+                 :rules="[ val => !!val || 'Field is required']"
+                 dense
+                 placeholder = "Flat/House no, Building Name, Street Name, City, State"
+                 hint = "Hint: Flat/House no, Building Name, Street Name, City, State"
 
-                   <q-input v-model="formData.primaryContact"
-                    outlined
-                    dense
-                    label="Primary Contact"
-                    mask="##### #####"
-                    fill-mask
-                    type = "tel"
-                    :rules="[ val => !!val || 'Field is required']"
-                     />
-                 </div>
+                 />
+
+                  <q-input
+                  v-model="formData.aboutYourself"
+                  outlined
+                  dense
+                  label= "Tell us about yourself (Optional)"
+                  type="textarea"
+                  placeholder = "Your education, profession, Interest and family"
+                  hint = "Hint: Your education, profession, Interest and family"
+                  />
+
+                 <div class="text-subtitle1">Partner Preferences</div>
+
+
+                 <div class="row">
                  <div class="col">
-                   <q-input v-model="formData.alternateContact"
+                   <q-select
+                   outlined
+                   v-model="formData.ageFrom"
+                   dense
+                   options-dense
+                    clearable
+                   label="Age(From)*"
+                   :options = "ageFromToOptions"
+                   :rules="[ val => !!val || 'Field is required']"
+                   >
+                   </q-select>
+                 </div>
+                  <div class="col">
+                   <q-select
+                   outlined
+                   v-model="formData.ageTo"
+                   dense
+                   options-dense
+                    clearable
+                   label="Age(To)*"
+                    :options = "ageFromToOptions"
+                   :rules="[ val => !!val || 'Field is required', val => checkAgeFromAgeTo(val) || 'Age(To) should be greater than Age(From).' ]"
+                   >
+                   </q-select>
+                 </div>
+                 </div>
+
+
+                 <div class="row">
+                 <div class="col">
+                   <q-select
+                   outlined
+                   v-model="formData.heightFrom"
+                   dense
+                   options-dense
+                    clearable
+                   label="Height(From)*"
+                   :options = "heightOptions"
+                   :rules="[ val => !!val || 'Field is required']"
+                   >
+                   </q-select>
+
+
+                 </div>
+                  <div class="col">
+                   <q-select
+                   outlined
+                   v-model="formData.heightTo"
+                   dense
+                   options-dense
+                    clearable
+                   label="Height(To)*"
+                    :options = "heightOptions"
+                   :rules="[ val => !!val || 'Field is required' , val => checkHeightFromHeightTo(val) || 'Height(To) should be greater than Height(From).']"
+                   >
+                   </q-select>
+                 </div>
+                 </div>
+
+
+                   <q-select
+                   v-model="formData.maritalStatusPreference"
+                    :options = "martialOptions"
                     outlined
                     dense
-                    label="Alternate Contact"
+                     options-dense
+                    label="Marital Status*"
+                    :rules="[ val => !!val || 'Field is required']"
+                    multiple
+                     use-chips
+                    input-debounce="0"
+                    hint = "Hint: Multiple Options can be selected"
                      />
-                 </div>
-                 </div>
+
 
              <div class="row">
-              <q-space/>
-              <q-btn color="primary" label="Next"
-              @click="tab = 'personal'"/>
+
+              <q-btn color="secondary"
+              flat
+              label="Back"
+              @click="tab = 'basic'"/>
+                            <q-space/>
+              <q-btn color="primary" label="Next>"
+              @click="submitPersonalForm"
+
+              />
               </div>
 
+          </q-form>
           </q-tab-panel>
 
+
           <q-tab-panel name="upload">
+
+              <q-form ref="uploadForm" greedy>
                    <div class="q-mb-xs">
+                   <q-field
+                   borderless
+                   :rules="[ val => !!val || 'One Photo is required']"
+                   dense
+                   >
+                  <template v-slot:control>
                     <q-uploader
                       url="http://localhost:4444/upload"
                       label = "Upload Photos"
+                      class="my-uploader"
+                      multiple
+                      batch
+                     accept="image/*"
+                      @rejected="onRejected"
+                      max-files="4"
+
                     />
+                      </template>
+                  </q-field>
                   </div>
+
+                   <div class="q-mb-xs">
+                   <q-field
+                   borderless
+                   :rules="[ val => !!val || 'One ID Proof is required']"
+                   dense
+                   >
+                  <template v-slot:control>
+                    <q-uploader
+                      url="http://localhost:4444/upload"
+                      label = "Upload ID Proof"
+                      class="my-uploader"
+                      accept="image/*,.pdf"
+                     @rejected="onRejected"
+                     color="accent"
+                    />
+                  </template>
+                  </q-field>
+                  </div>
+
+
+              <q-select v-model="formData.sourceOfWebsite" :options="sourceOfWebsiteOptions"
+              label="Where do you come to know?"
+               dense
+               options-dense
+               outlined
+               clearable
+               :rules="[ val => !!val || 'Field is required']"
+               />
+
+
+             <div class="row">
+
+              <q-btn color="secondary" label="Back"
+              flat
+              @click="tab = 'personal'"/>
+              <q-space/>
+              <q-btn color="primary" label="Final Submit"   @click="submitFinalForm"/>
+              </div>
+
+            </q-form>
 
           </q-tab-panel>
 
         </q-tab-panels>
-
 
         </q-card>
 </div>
 </template>
 
 <script>
-import {countryList} from './countryList.js'
+import {countryList} from './countryList.js';
+import {gotraList} from './gotraList.js';
+
 
 export default{
 data(){
 return {
-tab: 'account',
-dense : true,
-genderOptions : ['Male','Female'],
-martialOptions : ['Never Married','Divorced','Widowed'],
-countryOptions : countryList,
 
+//Form Settings
+isPwd: true,
+tab: 'basic',
+imageSrc: '',
+dense : true,
+basicHasError : false,
+personalHasError : false,
+uploadHasError : false,
+
+
+//Dropdown List
+genderOptions : ['Male','Female'],
+martialOptions : ['Never Married','Divorced','Widowed','Awaiting Divorce'],
+countryOptions : countryList,
+heightOptions : [],
+ageFromToOptions : [],
+gotraOptions : gotraList,
+sourceOfWebsiteOptions : ['Friends','Families','FaceBook','WhatsApp','Other'],
+
+//formData
 formData : {
   email : '',
   password : '',
@@ -301,7 +547,8 @@ formData : {
   gender : '',
   dateOfBirth : '',
   age : 0,
-  country : '',
+  country : 'India',
+  otherCountry : '',
   state : '',
   city : '',
   primaryContact : '',
@@ -312,29 +559,157 @@ formData : {
   height : '',
   gotra : '',
   originalSurname : '',
-  fatherName : ''
+  fatherName : '',
+  residentialAddress : '',
+  aboutYourself : '',
+  ageFrom : '',
+  ageTo : '',
+  heightFrom : '',
+  heightTo : '',
+  martialStatusPreferences : [],
+  agreeTnC : false
 
 }
 }
 }
 ,
+created(){
+this.createHeightList();
+this.createAgeFromToList();
+},
+
 methods : {
+tabChange(){
+console.log('tabChange');
+console.log('tab', this.tab);
+if (this.tab == 'basic' && this.basicHasError){
+this.$refs.basicForm.validate();
+}
+else if(this.tab == 'personal' && this.personalHasError){
+this.$refs.personalForm.validate();
+}
+else if(this.tab == 'upload' && this.uploadHasError){
+this.$refs.uploadForm.validate();
+}
+},
+submitBasicForm(){
+console.log('submitBasicForm');
+console.log(this.$refs.basicForm);
+console.log('Email', this.$refs.email);
+this.$refs.basicForm.validate().then(success => {
+  if (success) {
+    console.log("Success");
+    this.basicHasError = false;
+    this.tab = "personal";
+  }
+  else {
+    console.log("Error");
+    this.basicHasError = true;
+  }
+}
+)
+console.log('hasError',this.$refs.basicForm.hasError);
+}
+,
+submitPersonalForm(){
+console.log('submitPersonalForm');
+console.log(this.$refs.personalForm);
+this.$refs.personalForm.validate().then(success => {
+  if (success) {
+    console.log("Success");
+    this.personalHasError = false;
+    this.tab = "upload";
+  }
+  else {
+    console.log("Error");
+    this.personalHasError = true;
+  }
+}
+)
+console.log('hasError',this.$refs.personalForm.hasError);
+}
+,
+submitFinalForm(){
+console.log('submitFinalForm');
+console.log(this.$refs.uploadForm);
+
+if(typeof this.$refs.basicForm === 'undefined'){
+this.basicHasError = true;
+}
+else{
+this.submitBasicForm();
+}
+
+if(typeof this.$refs.personalForm === 'undefined'){
+this.personalHasError = true;
+}
+else{
+this.submitPersonalForm();
+}
+
+if(typeof this.$refs.uploadForm === 'undefined'){
+this.uploadHasError = true;
+}
+else{
+this.submitUploadForm();
+}
+}
+
+
+,
+submitUploadForm(){
+console.log('submitUploadForm');
+this.$refs.uploadForm.validate().then(success => {
+  if (success) {
+    console.log("Success");
+    this.uploadHasError = false;
+    console.log('FormData', formData);
+  }
+  else {
+    console.log("Error");
+    this.uploadHasError = true;
+  }
+}
+)
+console.log('hasError',this.$refs.uploadForm.hasError);
+}
+
+,
+createHeightList(){
+//create height list when component is created
+let h;
+let i;
+let startHeight = 4;
+let endHeight = 7;
+for( h = startHeight; h<=endHeight;h++)
+{
+    for(i=0;i<=12;i++)
+  {
+  this.heightOptions.push(h + ' ft '+i+' inches');
+  }
+  }
+
+}
+,
+createAgeFromToList(){
+let startAge = 18;
+let endAge = 60;
+let a;
+for(a = startAge; a<=endAge;a++){
+this.ageFromToOptions.push(a);
+}
+}
+,
+
 calculateAge(){
 console.log('calculateAge');
 console.log('DOB',this.formData.dateOfBirth);
 
 var dob_inMS = Date.parse(this.formData.dateOfBirth);
-console.log('DOB converted',dob);
-
+console.log('DOB converted',dob_inMS);
  var diff_ms = Date.now() - dob_inMS;
  var age_dt = new Date(diff_ms);
- this.formData.age = Math.abs(age_dt.getUTCFullYear() - 1970);
-},
-filterGenderFn (val, update, abort) {
-      update(() => {
-        const needle = val.toLowerCase()
-        this.genderOptions = this.genderOptions.filter(v => v.toLowerCase().indexOf(needle) > -1)
-      })
+ this.formData.age = Math.abs(age_dt.getUTCFullYear() - 1970) + ' years';
 }
 ,
 filterCountryFn (val, update, abort) {
@@ -344,27 +719,83 @@ filterCountryFn (val, update, abort) {
       })
 }
 
+
 ,
-submitForm(){
-console.log('Submit form');
-this.$refs.email.validate();
-this.$refs.password.validate();
-if(!this.$refs.email.hasError && !this.$refs.password.hasError){
-  if(this.tab == 'login'){
-console.log('Login User');
-}
-else {
-console.log('Register User');
+
+checkOtherCountry(otherCountry){
+//console.log('otherCountry', otherCountry);
+//console.log(this.formData.country === 'Other' && otherCountry === null);
+if(this.formData.country === 'Other' && otherCountry === null){
+return false
+} else {
+return true
 }
 }
+,
+checkConfirmPassword(confirmPassword){
+console.log('confirm',this.formData.password,confirmPassword);
+if(this.formData.password === confirmPassword){
+return true
+} else {
+return false
 }
+}
+
 ,
 checkEmail(email){
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    console.log('checkEmail', re.test(String(email).toLowerCase()));
+//    console.log('checkEmail', re.test(String(email).toLowerCase()));
     return re.test(String(email).toLowerCase());
 }
+,
+checkAgeFromAgeTo(ageTo){
+//console.log('Age',this.formData.ageFrom, ageTo);
+if(ageTo < this.formData.ageFrom)
+{ return false
+}else
+{
+return true
 }
+},
+checkHeightFromHeightTo(heightTo){
+console.log('Height',this.formData.heightFrom, heightTo);
+let heightFrom = this.formData.heightFrom;
+//let heightTo = this.formData.heightTo;
+let heightFromFoot = parseInt(heightFrom.charAt(0)); // 0  is position for foot
+let heightToFoot = parseInt(heightTo.charAt(0));
+
+console.log('Height Foot',heightFromFoot, heightToFoot);
+if(heightToFoot < heightFromFoot){
+return false;
+}
+else if(heightToFoot === heightFromFoot){
+//in case foot is same then check inches
+let heightFromInches = heightFrom.substr(5,2); // 5 is position for inches
+let heightToInches = heightTo.substr(5,2);
+console.log('Height Inches',heightFromInches, heightToInches);
+console.log('Cond',( parseInt(heightToInches) < parseInt(heightFromFoot)));
+    if(parseInt(heightToInches) < parseInt(heightFromFoot)){
+    return false
+    }
+    else{
+    return true
+    }
+}
+else{
+return true;
+}
+}
+,
+//This is reject message for File Uploader
+onRejected (rejectedEntries) {
+      // Notify plugin needs to be installed
+      // https://quasar.dev/quasar-plugins/notify#Installation
+      this.$q.notify({
+        type: 'negative',
+        message: `${rejectedEntries.length} file(s) did not pass validation constraints`
+      })
+    }
+  }
 ,
 filters : {
 captilize(value){
@@ -374,10 +805,15 @@ return value[0].toUpperCase() + value.slice(1);
 }
 </script>
 
+
 <style scoped>
 .my-card {
-  width: 100%;
+  width: auto;
   min-width: 500px;
   max-width: 800px
   }
+
+.my-uploader{
+  max-width:300px;
+}
 </style>

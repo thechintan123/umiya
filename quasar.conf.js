@@ -79,7 +79,13 @@ module.exports = function (/* ctx */) {
         'QTabPanels',
         'QTabPanel',
         'QCard',
-        'QSelect'
+        'QSelect',
+        'QImg',
+        'QForm',
+        'QBadge',
+        'QField',
+        'QRadio',
+        'QToggle'
 
       ],
 

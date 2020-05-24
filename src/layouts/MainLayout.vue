@@ -1,24 +1,33 @@
 <template>
+
   <q-layout view="hHh lpR fFf">
+      <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="left = !left" />
 
-        <q-toolbar-title>
-          <q-avatar>
-            <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg">
+        <q-toolbar-title >
+        <div class="row">
+        <div class="col-auto q-mr-xs">
+          <q-avatar square size="42px">
+            <img src="~assets/logos/LogoMakr_Ring_RED.png" size=50%>
           </q-avatar>
+         </div>
+          <div class="col-auto text-secondary UM_title" style="font-family: 'Great Vibes', cursive ;font-size: 36px">
           UmiyaMatrimony.com
+          </div>
+          </div>
         </q-toolbar-title>
       </q-toolbar>
 
+<!--
       <q-tabs align="left">
         <q-route-tab to = "/One" label="Page One" />
         <q-route-tab to = "/Two" label="Page Two" />
         <q-route-tab to = "/Three" label="Page Three" />
       </q-tabs>
-
+-->
     </q-header>
 
     <!--
@@ -39,8 +48,10 @@
     <q-drawer
     content-class="bg-secondary"
      :breakpoint = "600"
-    show-if-above v-model="left" side="left" elevated>
-             <q-scroll-area class="fit">
+    show-if-above v-model="left" side="left" elevated
+    :width="250"
+    >
+             <!-- <q-scroll-area class="fit"> -->
           <q-list v-for="(menuItem, index) in menuList" :key="index">
 
             <q-item
@@ -59,7 +70,7 @@
            <q-separator v-if="menuItem.separator" />
 
           </q-list>
-        </q-scroll-area>
+       <!-- </q-scroll-area> -->
 
     </q-drawer>
 
@@ -71,6 +82,7 @@
 </template>
 
 <script>
+
 const menuList = [
   {
     icon: 'person_add',
@@ -137,4 +149,18 @@ export default {
 .q-drawer  .q-router-link--active{
     color : #ffd31d !important
   }
+
+@media screen and (max-width : 500px) {
+.UM_title{
+    font-size: 30px !important;
+  }
+}
+
+@media (max-width: @screen-sm) {
+.UM_title{
+    font-size: 14px;
+    }
+}
+
+
 </style>
