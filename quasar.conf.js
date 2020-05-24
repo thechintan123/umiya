@@ -86,7 +86,7 @@ module.exports = function (/* ctx */) {
         'QBadge',
         'QField',
         'QRadio',
-        'QToggle'
+        'QToggle',
 
         'QForm'
       ],
