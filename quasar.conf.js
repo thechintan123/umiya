@@ -26,7 +26,7 @@ module.exports = function (/* ctx */) {
     extras: [
       // 'ionicons-v4',
       // 'mdi-v5',
-       'fontawesome-v5',
+      'fontawesome-v5',
       // 'eva-icons',
       // 'themify',
       // 'line-awesome',
@@ -38,7 +38,7 @@ module.exports = function (/* ctx */) {
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
     framework: {
-      iconSet: 'fontawesome-v5', //Quasar icon set
+      iconSet: 'fontawesome-v5', // Quasar icon set
       lang: 'en-us', // Quasar language pack
 
       // Possible values for "all":
@@ -80,6 +80,7 @@ module.exports = function (/* ctx */) {
         'QTabPanel',
         'QCard',
         'QSelect',
+<<<<<<< HEAD
         'QImg',
         'QForm',
         'QBadge',
@@ -87,6 +88,9 @@ module.exports = function (/* ctx */) {
         'QRadio',
         'QToggle'
 
+=======
+        'QForm'
+>>>>>>> f7d5e0ace9e40452bbbb58c865435677df69adba
       ],
 
       directives: [
@@ -94,7 +98,10 @@ module.exports = function (/* ctx */) {
       ],
 
       // Quasar plugins
-      plugins: []
+      plugins: [
+        'Dialog',
+        'Notify'
+      ]
     },
 
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie
@@ -128,7 +135,7 @@ module.exports = function (/* ctx */) {
           exclude: /node_modules/,
           options: {
             formatter: require('eslint').CLIEngine.getFormatter('stylish'),
-            fix : true
+            fix: true
           }
         })
       }
