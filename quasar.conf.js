@@ -80,7 +80,7 @@ module.exports = function (/* ctx */) {
         'QTabPanel',
         'QCard',
         'QSelect',
-<<<<<<< HEAD
+
         'QImg',
         'QForm',
         'QBadge',
@@ -88,9 +88,7 @@ module.exports = function (/* ctx */) {
         'QRadio',
         'QToggle'
 
-=======
         'QForm'
->>>>>>> f7d5e0ace9e40452bbbb58c865435677df69adba
       ],
 
       directives: [
