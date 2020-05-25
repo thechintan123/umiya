@@ -88,7 +88,8 @@ module.exports = function (/* ctx */) {
         'QRadio',
         'QToggle',
 
-        'QForm'
+        'QForm',
+        'QCardSection'
       ],
 
       directives: [
