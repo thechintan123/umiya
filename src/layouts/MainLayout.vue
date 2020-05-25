@@ -15,10 +15,18 @@
           </q-avatar>
          </div>
           <div class="col-auto text-secondary UM_title" style="font-family: 'Great Vibes', cursive ;font-size: 36px">
-          UmiyaMatrimony.com
+          Umiya<span class="text-grey-1">Matrimony</span>.com</span>
           </div>
           </div>
         </q-toolbar-title>
+
+        <q-btn
+          flat
+          label="Login"
+          icon-right="account_circle"
+          class="absolute-right"
+          to="/login"
+          />
       </q-toolbar>
 
 <!--
