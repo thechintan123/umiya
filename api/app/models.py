@@ -12,6 +12,7 @@ class User(db.Model):
     email = db.Column(db.String(50), index=True, unique=True, nullable=False)
     password_hash = db.Column(db.String(100))
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'), default=2, nullable=False)
+    update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     create_date = db.Column(db.DateTime,default=datetime.utcnow, nullable=False)
     token = db.Column(db.String(140), index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
@@ -51,8 +52,7 @@ class User(db.Model):
     @staticmethod
     def verify_token(token):
         try:
-            id = jwt.decode(token, current_app.config['SECRET_KEY'],
-                            algorithms=['HS256'])['reset_password']
+            id = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])['reset_password']
         except:
             return
         return User.query.get(id)
@@ -62,10 +62,83 @@ class User(db.Model):
 
 
 class Role(db.Model):
-    __tablename__='role'
+    __tablename__ = 'role'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True, nullable=False)
-    users = db.relationship('User',backref='role',lazy='dynamic')
+    users = db.relationship('User', backref='role', lazy='dynamic')
 
     def __repr__(self):
         return '<Role {}>'.format(self.name)
+
+
+user_marital = db.Table('user_marital',
+    db.Column('user_details_id', db.Integer, db.ForeignKey('user_details.id'), primary_key=True),
+    db.Column('marital_status_id', db.Integer, db.ForeignKey('marital_status.id'), primary_key=True)
+)
+
+
+class UserDetails(db.Model):
+    __tablename__ = 'user_details'
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(50), nullable=False)
+    gender = db.Column(db.Enum('m', 'f'), nullable=False)
+    dob = db.Column(db.String(10), nullable=False)
+    country_id = db.Column(db.Integer, nullable=False)
+    state_india_id = db.Column(db.Integer)
+    state_other = db.Column(db.String(30))
+    city_india_id = db.Column(db.Integer)
+    city_other = db.Column(db.String(30))
+    phone_primary = db.Column(db.String(20), nullable=False)
+    phone_alternate = db.Column(db.String(20))
+    agree_tc = db.Column(db.Boolean, default=False, nullable=False)
+    marital_status = db.relationship('MaritalStatus', secondary=user_marital, lazy='dynamic', \
+        backref=db.backref('user_details', lazy='joined'))
+    height = db.Column(db.String(10), nullable=False)
+    gotra = db.Column(db.String(20), nullable=False)
+    original_surname = db.Column(db.String(20), nullable=False)
+    father_fullname = db.Column(db.String(50), nullable=False)
+    address = db.Column(db.String(100), nullable=False)
+    about_yourself = db.Column(db.String(200))
+    # upload photo
+    # upload id
+    where_know_id = db.Column(db.Integer, nullable=False)
+    last_login = db.Column(db.DateTime)
+    update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    create_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+
+
+class MaritalStatus(db.Model):
+    __tablename__ = 'marital_status'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20), nullable=False)
+    update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+
+
+class Country(db.Model):
+    __tablename__ = 'country'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20), nullable=False)
+    update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+
+
+class StateIndia(db.Model):
+    __tablename__ = 'state_india'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20), nullable=False)
+    update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+
+
+class CityIndia(db.Model):
+    __tablename__ = 'city_india'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20), nullable=False)
+    update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+
+
+class WhereKnow(db.Model):
+    __tablename__ = 'where_know'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20), nullable=False)
+    update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+

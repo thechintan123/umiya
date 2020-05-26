@@ -21,12 +21,22 @@
         </q-toolbar-title>
 
         <q-btn
+          v-if="!loggedIn"
           flat
           label="Login"
           icon-right="account_circle"
           class="absolute-right"
           to="/login"
-          />
+        />
+
+        <q-btn
+          v-else
+          flat
+          label="Logout"
+          icon-right="account_circle"
+          class="absolute-right"
+          @click="logout"
+        />
       </q-toolbar>
 
 <!--
@@ -90,6 +100,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 
 const menuList = [
   {
@@ -151,6 +162,30 @@ export default {
       drawer: false,
       left: false,
       menuList
+    }
+  },
+  computed: {
+    ...mapState('auth', ['loggedIn'])
+  },
+  methods: {
+    ...mapActions('auth', ['logoutUser']),
+    logout () {
+      this.logoutUser()
+    },
+    showNotif (message) {
+      this.$q.notify({
+        message: message,
+        color: 'purple'
+      })
+    }
+  },
+  watch: {
+    loggedIn(newValue) {
+      if (newValue) {
+        this.showNotif('You are now logged in')
+      } else {
+        this.showNotif('You are now logged out')
+      }
     }
   }
 }

@@ -58,8 +58,7 @@ import { mapState, mapActions } from 'vuex'
 import mixinRegisterLogin from 'src/mixins/Mixin_RegisterLogin.js'
 
 export default {
-    mixins : [mixinRegisterLogin]
-,
+  mixins : [mixinRegisterLogin],
   data () {
     return {
 
@@ -72,31 +71,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions('auth', ['loginUser', 'logoutUser']),
+    ...mapActions('auth', ['loginUser']),
     login () {
-      console.log('formData',this.formData);
-      //this.loginUser(this.formData)
-    },
-    logout () {
-      this.logoutUser()
-    },
-    showNotif (message) {
-      this.$q.notify({
-        message: message,
-        color: 'purple'
-      })
-    }
-  },
-  computed: {
-    ...mapState('auth', ['loggedIn'])
-  },
-  watch: {
-    loggedIn(newValue) {
-      if (newValue) {
-        this.showNotif('You are now logged in')
-      } else {
-        this.showNotif('You are now logged out')
-      }
+      this.loginUser(this.formData)
     }
   }
 }
