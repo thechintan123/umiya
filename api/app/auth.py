@@ -16,7 +16,8 @@ def verify_password(email, password):
 
 @basic_auth.error_handler
 def basic_auth_error(status):
-    return error_response(401,'Invalid credentials')
+    # It is actually 401 error, but we use 400 so that browser doesnt do their autopopup
+    return error_response(400,'Invalid credentials')
 
 
 @token_auth.verify_token
@@ -26,4 +27,5 @@ def verify_token(token):
 
 @token_auth.error_handler
 def auth_error():
-    return error_response(401,'Invalid credentials')
+    # It is actually 401 error, but we use 400 so that browser doesnt do their autopopup
+    return error_response(400,'Invalid credentials')
