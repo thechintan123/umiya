@@ -25,7 +25,7 @@ const mutations = {
 const actions = {
   registerUser({ commit }, credentials) {
     return axios.post(
-      "//localhost:5000/api/users", credentials
+      "http://thechintan123.pythonanywhere.com//api/users", credentials
       )
       .then(({ data }) => {
         commit('SET_USER_DATA', data)
@@ -42,7 +42,7 @@ const actions = {
   },
   loginUser({ commit }, credentials) {
     return axios.post (
-      "//localhost:5000/api/tokens", {},
+      "http://thechintan123.pythonanywhere.com/api/tokens", {},
       {
         auth: {
           username: credentials.email,
