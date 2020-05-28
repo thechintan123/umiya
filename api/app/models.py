@@ -12,6 +12,7 @@ class User(db.Model):
     email = db.Column(db.String(50), index=True, unique=True, nullable=False)
     password_hash = db.Column(db.String(100))
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'), default=2, nullable=False)
+    user_det_id = db.Column(db.Integer, db.ForeignKey('user_details.id'))
     update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     create_date = db.Column(db.DateTime,default=datetime.utcnow, nullable=False)
     token = db.Column(db.String(140), index=True, unique=True)
@@ -71,7 +72,7 @@ class Role(db.Model):
         return '<Role {}>'.format(self.name)
 
 
-user_marital = db.Table('user_marital',
+user_partner_marital = db.Table('user_partner_marital',
     db.Column('user_details_id', db.Integer, db.ForeignKey('user_details.id'), primary_key=True),
     db.Column('marital_status_id', db.Integer, db.ForeignKey('marital_status.id'), primary_key=True)
 )
@@ -84,25 +85,29 @@ class UserDetails(db.Model):
     last_name = db.Column(db.String(50), nullable=False)
     gender = db.Column(db.Enum('m', 'f'), nullable=False)
     dob = db.Column(db.String(10), nullable=False)
-    country_id = db.Column(db.Integer, nullable=False)
-    state_india_id = db.Column(db.Integer)
+    country_id = db.Column(db.Integer, db.ForeignKey('country.id'), nullable=False)
+    state_id = db.Column(db.Integer, db.ForeignKey('state.id'))
     state_other = db.Column(db.String(30))
-    city_india_id = db.Column(db.Integer)
-    city_other = db.Column(db.String(30))
+    city = db.Column(db.String(30), nullable=False)
     phone_primary = db.Column(db.String(20), nullable=False)
     phone_alternate = db.Column(db.String(20))
     agree_tc = db.Column(db.Boolean, default=False, nullable=False)
-    marital_status = db.relationship('MaritalStatus', secondary=user_marital, lazy='dynamic', \
-        backref=db.backref('user_details', lazy='joined'))
+    marital_status_id = db.Column(db.Integer, db.ForeignKey('marital_status.id'), nullable=False)
     height = db.Column(db.String(10), nullable=False)
-    gotra = db.Column(db.String(20), nullable=False)
+    gotra_id = db.Column(db.Integer, db.ForeignKey('gotra.id'), nullable=False)
     original_surname = db.Column(db.String(20), nullable=False)
     father_fullname = db.Column(db.String(50), nullable=False)
     address = db.Column(db.String(100), nullable=False)
     about_yourself = db.Column(db.String(200))
     # upload photo
     # upload id
-    where_know_id = db.Column(db.Integer, nullable=False)
+    partner_age_from = db.Column(db.Integer, nullable=False)
+    partner_age_to = db.Column(db.Integer, nullable=False)
+    partner_height_from = db.Column(db.String(10), nullable=False)
+    partner_height_to = db.Column(db.String(10), nullable=False)
+    partner_marital_status = db.relationship('MaritalStatus', secondary=user_partner_marital, lazy='dynamic', \
+        backref=db.backref('user_details', lazy='joined'))
+    where_know_id = db.Column(db.Integer, db.ForeignKey('where_know.id'), nullable=False)
     last_login = db.Column(db.DateTime)
     update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     create_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
@@ -118,19 +123,12 @@ class MaritalStatus(db.Model):
 class Country(db.Model):
     __tablename__ = 'country'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(20), nullable=False)
+    name = db.Column(db.String(30), nullable=False)
     update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
 
-class StateIndia(db.Model):
-    __tablename__ = 'state_india'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(20), nullable=False)
-    update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-
-
-class CityIndia(db.Model):
-    __tablename__ = 'city_india'
+class State(db.Model):
+    __tablename__ = 'state'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False)
     update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
@@ -138,6 +136,13 @@ class CityIndia(db.Model):
 
 class WhereKnow(db.Model):
     __tablename__ = 'where_know'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20), nullable=False)
+    update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+
+
+class Gotra(db.Model):
+    __tablename__ = 'gotra'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False)
     update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)

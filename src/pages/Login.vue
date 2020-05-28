@@ -61,9 +61,7 @@ export default {
   mixins : [mixinRegisterLogin],
   data () {
     return {
-
       isPwd: true,
-
       formData: {
         email: '',
         password: ''

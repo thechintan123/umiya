@@ -496,6 +496,21 @@ export default {
     captilize(value) {
       return value[0].toUpperCase() + value.slice(1);
     }
+  },
+  created: function() {
+    console.log ('in register create')
+    /*
+    axios.get(
+      process.env.API + "/lists"
+
+      )
+      .then(({ data }) => {
+        
+      })
+      .catch(error => {
+        console.log(error)
+      }
+    )*/
   }
 };
 </script>

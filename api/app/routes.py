@@ -2,7 +2,7 @@ from flask import jsonify, request, url_for, g
 from . import app, db
 from .auth import basic_auth, token_auth
 from .errors import error_response, bad_request
-from .models import User, Role
+from .models import User, Role, Country
 
 
 @app.route('/')
@@ -59,6 +59,14 @@ def register():
     response.status_code = 201
     # response.headers['Location'] = url_for('get_user', id=user.id)
     return response
+
+
+@app.route('/api/lists', methods=['GET'])
+def lists():
+    countries = Country.query.all()
+    country = { c.id: c.name for c in countries }
+    print(country)
+    pass
 
 
 @app.route('/api/hello', methods=['GET'])

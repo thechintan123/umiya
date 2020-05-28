@@ -7,7 +7,7 @@
 // https://quasar.dev/quasar-cli/quasar-conf-js
 /* eslint-env node */
 
-module.exports = function (/* ctx */) {
+module.exports = function (ctx) {
   return {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
@@ -137,7 +137,15 @@ module.exports = function (/* ctx */) {
             fix: true
           }
         })
-      }
+      },
+
+      env: ctx.dev
+        ? {
+          API: JSON.stringify('http://localhost:5000/api')
+        }
+        : {
+          API: JSON.stringify('http://thechintan123.pythonanywhere.com/api')
+        }
     },
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
