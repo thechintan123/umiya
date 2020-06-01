@@ -93,7 +93,8 @@ module.exports = function (ctx) {
         'QRange',
         'QExpansionItem',
         'QCarouselSlide',
-        'QCarousel'
+        'QCarousel',
+        'QCarouselControl'
       ],
 
       directives: [

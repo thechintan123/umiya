@@ -5,15 +5,15 @@
    <q-list padding
    v-for="(searchItem,key,index) in searchResults"
    >
-      <q-item>
-        <q-item-section top avatar>
+      <q-item class="row wrap">
+        <q-item-section top avatar class="col-md-4 col-6">
           <!-- <q-avatar rounded> -->
             <!--<img style="max-width:200px;max-height:200px" :src="'statics/photos/' + key + '.jpg'"> -->
           <!-- </q-avatar> -->
           <search-results-photo-slide :profileID= "key"></search-results-photo-slide>
         </q-item-section>
 
-        <q-item-section>
+        <q-item-section class="col-md-8 col-6">
          <q-item-label> <div class="text-h6">{{ searchItem.firstName}} {{searchItem.lastName}}( {{ key }})</div></q-item-label>
           <q-item-label > Date of Birth : {{ searchItem.dateOfBirth}} </q-item-label>
           <q-item-label > Age : {{ searchItem.age}} years </q-item-label>
