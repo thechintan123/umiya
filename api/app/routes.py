@@ -37,30 +37,6 @@ def get_user(id):
     return jsonify(User.query.get_or_404(id).to_dict())
 
 
-'''
-@app.route('/api/users', methods=['POST'])
-def register():
-    data = request.get_json() or {}
-    if 'email' not in data or 'password' not in data:
-        return bad_request('must include email and password fields')
-    if User.query.filter_by(email=data['email']).first():
-        return bad_request('please use a different email address')
-    user = User(email=data['email'])
-    user.set_password(data['password'])
-    # also adds token to user session
-    user.get_token() 
-    db.session.add(user)
-    db.session.commit()
-    
-    payload = { \
-        'email': user.email
-    }
-    response = jsonify(payload)
-    response.status_code = 201
-    # response.headers['Location'] = url_for('get_user', id=user.id)
-    return response
-'''
-
 def get_row(table, id):
     return table.query.filter_by(id=id).first()
  
@@ -68,45 +44,66 @@ def get_row(table, id):
 @app.route('/api/users', methods=['POST'])
 def register():
     data = request.get_json() or {}
-    print('data:', data)
+    print('data from form:', data)
 
     # Get objects from the dropdowns
-    # country = get_row(Country, int(data['country']['id'])) # India
+    country = ''
+    if data['country'] == 'India':
+        country = Country.query.filter_by(name='India').first()
+    else:
+        country = get_row(Country, int(data['country']['id']))
     gotra = get_row(Gotra, int(data['gotra']['id']))
     where_know = get_row(WhereKnow, int(data['sourceOfWebsite']['id']))
     marital_status = get_row(MaritalStatus, int(data['maritalStatus']['id']))
     gender = get_row(Gender, int(data['gender']['id']))
 
-    # testing - http -v POST http://localhost:5000/api/users country:="{""id"": 1, ""name"": ""australia""}" gender:="{""id"": 1, ""name"": ""male""}"
-    # map db model to form data
-    user_detail = UserDetails(
+    # Create db objects
+    user_details = UserDetails(
         first_name=data['firstName'],
         last_name=data['lastName'],
-        gender = gender, \
+        gender=gender,
         dob=data['dateOfBirth'],
-        country=data['country'],
+        country=country,
         state=data['state'],
         city=data['city'],
         phone_primary=data['primaryContact'],
         phone_alternate=data['alternateContact'],
         agree_tc=data['agreeTnC'],
-        marital_status=maritalStatus, \
+        marital_status=marital_status,
         height=data['height'],
         gotra=gotra,
-        original_surname=data['originalSurname'], \
-        father_fullnane=data['fatherName'],
-        address=data['residentialAddres'],
+        original_surname=data['originalSurname'],
+        father_fullname=data['fatherName'],
+        address=data['residentialAddress'],
         about_yourself=data['aboutYourself'],
         partner_age_from=data['ageFrom'],
-        partner_age_to=data['ageTo'], \
+        partner_age_to=data['ageTo'],
         partner_height_from=data['heightFrom'],
-        partner_height_to=data['heightTo'], \
-        #partner_marital_status = , # todo flask
+        partner_height_to=data['heightTo'],
         where_know=where_know
     )
 
-    print('user_detail:', user_detail)
-    return jsonify({ 'message': 'ok'})
+    user = User(
+        email=data['email']
+    )
+    user.set_password(data['password'])
+    user.user_details = user_details
+    # also adds token to user session
+    user.get_token()
+
+    for pms in data['maritalStatusPreference']:
+        ms = MaritalStatus.query.filter_by(id=int(pms['id'])).first()
+        user_details.partner_marital_status.append(ms)
+
+    db.session.add(user)
+    db.session.add(user_details)
+    db.session.commit()
+
+    payload = {'email': user.email}
+    response = jsonify(payload)
+    response.status_code = 201
+    # response.headers['Location'] = url_for('get_user', id=user.id)
+    return response
 
 
 def get_list(table):

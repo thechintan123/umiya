@@ -11,7 +11,7 @@ class User(db.Model):
     email = db.Column(db.String(50), index=True, unique=True, nullable=False)
     password_hash = db.Column(db.String(100))
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'), default=2, nullable=False)
-    user_det_id = db.Column(db.Integer, db.ForeignKey('user_details.id'))
+    user_details = db.relationship("UserDetails", uselist=False, backref="user")
     update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     create_date = db.Column(db.DateTime,default=datetime.utcnow, nullable=False)
     token = db.Column(db.String(140), index=True, unique=True)
@@ -75,6 +75,7 @@ user_partner_marital = db.Table('user_partner_marital',
 class UserDetails(db.Model):
     __tablename__ = 'user_details'
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     gender_id = db.Column(db.Integer, db.ForeignKey('gender.id'), nullable=False)
@@ -86,7 +87,7 @@ class UserDetails(db.Model):
     phone_alternate = db.Column(db.String(20))
     agree_tc = db.Column(db.Boolean, default=False, nullable=False)
     marital_status_id = db.Column(db.Integer, db.ForeignKey('marital_status.id'), nullable=False)
-    height = db.Column(db.String(10), nullable=False)
+    height = db.Column(db.String(20), nullable=False)
     gotra_id = db.Column(db.Integer, db.ForeignKey('gotra.id'), nullable=False)
     original_surname = db.Column(db.String(20), nullable=False)
     father_fullname = db.Column(db.String(50), nullable=False)
@@ -96,11 +97,11 @@ class UserDetails(db.Model):
     # upload id
     partner_age_from = db.Column(db.Integer, nullable=False)
     partner_age_to = db.Column(db.Integer, nullable=False)
-    partner_height_from = db.Column(db.String(10), nullable=False)
-    partner_height_to = db.Column(db.String(10), nullable=False)
+    partner_height_from = db.Column(db.String(20), nullable=False)
+    partner_height_to = db.Column(db.String(20), nullable=False)
     # many to many relationship can be defined on either table
     partner_marital_status = db.relationship('MaritalStatus', secondary=user_partner_marital, lazy='dynamic', \
-        backref=db.backref('partner_user_details', lazy='joined'))
+        backref=db.backref('pms_prefs', lazy='dynamic'))
     where_know_id = db.Column(db.Integer, db.ForeignKey('where_know.id'), nullable=False)
     last_login = db.Column(db.DateTime)
     update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
@@ -128,7 +129,7 @@ class WhereKnow(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False)
     update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-    user_details = db.relationship('UserDetails', backref='whereknow', lazy='dynamic')
+    user_details = db.relationship('UserDetails', backref='where_know', lazy='dynamic')
 
 
 class Gotra(db.Model):

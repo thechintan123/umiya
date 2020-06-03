@@ -336,8 +336,9 @@ export default {
         ageTo: "",
         heightFrom: "",
         heightTo: "",
-        martialStatusPreferences: [],
-        agreeTnC: false
+        maritalStatusPreference: [],
+        agreeTnC: false,
+        sourceOfWebsite: ""
       },
     };
   },
@@ -422,8 +423,8 @@ export default {
       } else {
         this.submitUploadForm();
       }
-      this.primaryContact = '+' + this.tmpData.primaryContactCountryCode + ' ' + this.tmpData.primaryContact
-      this.alternateContact = '+' + this.tmpData.primaryContactCountryCode + ' ' + this.tmpData.alternateContacts
+      this.formData.primaryContact = '+' + this.tmpData.primaryContactCountryCode + ' ' + this.tmpData.primaryContact
+      this.formData.alternateContact = '+' + this.tmpData.primaryContactCountryCode + ' ' + this.tmpData.alternateContacts
       console.log('data to upload:', this.formData)
       this.registerUser(this.formData)
     },
