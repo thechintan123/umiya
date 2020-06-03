@@ -3,7 +3,6 @@ from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 import jwt
-from datetime import datetime, timedelta
 
 
 class User(db.Model):
@@ -17,11 +16,6 @@ class User(db.Model):
     create_date = db.Column(db.DateTime,default=datetime.utcnow, nullable=False)
     token = db.Column(db.String(140), index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
-
-    def __init__(self,**kwargs):
-        # also call parent constructor
-        super(User, self).__init__(**kwargs)
-        self.role = Role.query.filter_by(name='user').first()
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -83,11 +77,10 @@ class UserDetails(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
-    gender = db.Column(db.Enum('m', 'f'), nullable=False)
+    gender_id = db.Column(db.Integer, db.ForeignKey('gender.id'), nullable=False)
     dob = db.Column(db.String(10), nullable=False)
     country_id = db.Column(db.Integer, db.ForeignKey('country.id'), nullable=False)
-    state_id = db.Column(db.Integer, db.ForeignKey('state.id'))
-    state_other = db.Column(db.String(30))
+    state = db.Column(db.String(30), nullable=False)
     city = db.Column(db.String(30), nullable=False)
     phone_primary = db.Column(db.String(20), nullable=False)
     phone_alternate = db.Column(db.String(20))
@@ -105,8 +98,9 @@ class UserDetails(db.Model):
     partner_age_to = db.Column(db.Integer, nullable=False)
     partner_height_from = db.Column(db.String(10), nullable=False)
     partner_height_to = db.Column(db.String(10), nullable=False)
+    # many to many relationship can be defined on either table
     partner_marital_status = db.relationship('MaritalStatus', secondary=user_partner_marital, lazy='dynamic', \
-        backref=db.backref('user_details', lazy='joined'))
+        backref=db.backref('partner_user_details', lazy='joined'))
     where_know_id = db.Column(db.Integer, db.ForeignKey('where_know.id'), nullable=False)
     last_login = db.Column(db.DateTime)
     update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
@@ -118,6 +112,7 @@ class MaritalStatus(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False)
     update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    user_details = db.relationship('UserDetails', backref='marital_status', lazy='dynamic')
 
 
 class Country(db.Model):
@@ -125,13 +120,7 @@ class Country(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False)
     update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-
-
-class State(db.Model):
-    __tablename__ = 'state'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(20), nullable=False)
-    update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    user_details = db.relationship('UserDetails', backref='country', lazy='dynamic')
 
 
 class WhereKnow(db.Model):
@@ -139,6 +128,7 @@ class WhereKnow(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False)
     update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    user_details = db.relationship('UserDetails', backref='whereknow', lazy='dynamic')
 
 
 class Gotra(db.Model):
@@ -146,4 +136,13 @@ class Gotra(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False)
     update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    user_details = db.relationship('UserDetails', backref='gotra', lazy='dynamic')
+
+
+class Gender(db.Model):
+    __tablename__ = 'gender'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20), nullable=False)
+    update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    user_details = db.relationship('UserDetails', backref='gender', lazy='dynamic')
 

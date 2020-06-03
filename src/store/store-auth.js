@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { showErrorMessage } from 'src/functions/function-show-error-message'
+import { showErrorMessage } from 'src/utils/show-error-message'
 
 
 const state = {
@@ -23,24 +23,6 @@ const mutations = {
 }
 
 const actions = {
-  registerUser({ commit }, credentials) {
-    return axios.post(
-      process.env.API + "/users", credentials
-      )
-      .then(({ data }) => {
-        commit('SET_USER_DATA', data)
-      })
-      .catch(error => {
-        let err_msg = ''
-        if ('message' in error.response.data) {
-          err_msg = error.response.data.error + ' - ' + error.response.data.message
-        } else {
-          err_msg = error.response.data.error
-        }
-        showErrorMessage(err_msg)
-      }
-    )
-  },
   loginUser({ commit }, credentials) {
     return axios.post (
       process.env.API + "/tokens", {},
