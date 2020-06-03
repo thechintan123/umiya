@@ -15,11 +15,12 @@
           </q-avatar>
          </div>
           <div class="col-auto text-secondary UM_title" style="font-family: 'Great Vibes', cursive ;font-size: 36px">
-          Umiya<span class="text-grey-1">Matrimony</span>.com</span>
+          UmiyaMatrimony.<span class="text-dark">com</span>
           </div>
           </div>
         </q-toolbar-title>
 
+<!--
         <q-btn
           v-if="!loggedIn"
           flat
@@ -37,6 +38,7 @@
           class="absolute-right"
           @click="logout"
         />
+-->
       </q-toolbar>
 
 <!--
@@ -103,6 +105,13 @@
 import { mapState, mapActions } from 'vuex'
 
 const menuList = [
+
+  {
+    icon: 'account_circle',
+    label: 'Login',
+    link: '/login',
+    separator: true
+  },
   {
     icon: 'person_add',
     label: 'Register',

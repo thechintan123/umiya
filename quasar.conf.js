@@ -89,7 +89,12 @@ module.exports = function (ctx) {
         'QToggle',
 
         'QForm',
-        'QCardSection'
+        'QCardSection',
+        'QRange',
+        'QExpansionItem',
+        'QCarouselSlide',
+        'QCarousel',
+        'QCarouselControl'
       ],
 
       directives: [
