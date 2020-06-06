@@ -97,7 +97,8 @@ module.exports = function (ctx) {
         'QCarouselControl',
         'QPagination',
         'QParallax',
-        'QCardActions'
+        'QCardActions',
+        'QIntersection'
       ],
 
       directives: [

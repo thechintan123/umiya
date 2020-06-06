@@ -15,6 +15,7 @@
       infinite
       control-color="primary"
       padding
+      navigation
       :autoplay="2500"
       class="my-carousel bg-primary"
     >
@@ -37,34 +38,34 @@
 -->
       <q-carousel-slide :name="1" img-src="~assets/images/Success.jpg">
               <div class="absolute-bottom-left custom-caption text-primary">
-          <div class="text-h2">Success</div>
+          <div class="text-h2 my-style" >Success Story</div>
           <div class="text-subtitle1">Chetan and Dhara</div>
         </div>
       </q-carousel-slide>
 
       <q-carousel-slide :name="5" img-src="~assets/images/Wedding.jpg" >
               <div class="absolute-bottom-left custom-caption text-primary">
-          <div class="text-h2">It is FREE</div>
+          <div class="text-h2  my-style">It's Free</div>
           <div class="text-subtitle1">500+ Profiles</div>
         </div>
       </q-carousel-slide>
 
       <q-carousel-slide :name="2" img-src="~assets/images/UmiyaMataji.jpg" >
        <div class="absolute-bottom-left custom-caption text-primary">
-          <div class="text-h2">For Samaj</div>
+          <div class="text-h2  my-style">For Samaj</div>
           <div class="text-subtitle1">Only for Kutch Kadva Patidar Sanatan Samaj</div>
         </div>
       </q-carousel-slide>
 
       <q-carousel-slide :name="3" img-src="~assets/images/Validate1.jpg" >
        <div class="absolute-bottom-left custom-caption text-primary">
-          <div class="text-h2">We VERIFY!!</div>
+          <div class="text-h2  my-style">We Verify</div>
           <div class="text-subtitle1">No Fake. We verify ID proof.</div>
         </div>
       </q-carousel-slide>
       <q-carousel-slide :name="4" img-src="~assets/images/Wedding2.jpg"  >
        <div class="absolute-bottom-left text-center custom-caption text-primary">
-          <div class="text-h2">Join Now</div>
+          <div class="text-h2  my-style">Join Now</div>
           <div class="text-subtitle1">Register FREE</div>
         </div>
       </q-carousel-slide>
@@ -72,7 +73,7 @@
 </div>
 </div>
 
-  <div class="flex flex-center q-pa-md row q-gutter-x-lg q-gutter-y-lg">
+  <div class="flex flex-center q-pa-md row q-gutter-x-xl q-gutter-y-xl">
 
     <q-card flat bordered class="my-card cursor-pointer" @click="register()" align="center">
        <q-card-section class="bg-dark">
@@ -80,7 +81,7 @@
       </q-card-section>
       <q-separator />
        <q-card-section>
-          <div class="text-h6">Register FREE & EASY</div>
+          <div class="text-h6" >Register FREE & EASY</div>
           <div class="text-subtitle1">Only Basic Details. No Bank Details Required.</div>
           <q-btn class="glossy" to="/register" color="secondary" style="width: 100%">Click HERE</q-btn>
       </q-card-section>
@@ -99,8 +100,7 @@
     </q-card>
 
  </div>
-
-   <div class="flex flex-center q-pa-md row q-gutter-x-lg q-gutter-y-lg">
+   <div class="flex flex-center q-pa-md row q-gutter-x-xl q-gutter-y-xl">
 
     <q-card flat bordered class="my-card"  align="center">
        <q-card-section class="bg-dark">
@@ -113,6 +113,8 @@
       </q-card-section>
     </q-card>
 
+
+
    <q-card flat bordered class="my-card"  align="center">
        <q-card-section class="bg-dark">
           <q-icon name="fas fa-search" class="text-secondary" style="font-size: 3rem;" />
@@ -123,18 +125,39 @@
           <div class="text-subtitle1">Easy Search based on Age, Health and Country.</div>
       </q-card-section>
     </q-card>
-
  </div>
 
 </q-page>
 </template>
 
+
+
 <script>
+
 export default {
   name: 'PageIndex',
 data(){
 return{
-slide : 1
+slide : 1,
+cardDetails : [
+{
+icon : 'fas fa-search',
+title : 'Easy Search',
+subtitle : 'Easy Search based on Age, Health and Country.'
+}
+,
+{
+icon : 'fas fa-search',
+title : 'Easy Search',
+subtitle : 'Easy Search based on Age, Health and Country.'
+}
+,
+{
+icon : 'fas fa-search',
+title : 'Easy Search',
+subtitle : 'Easy Search based on Age, Health and Country.'
+}
+]
 }
 }
 ,
@@ -161,7 +184,7 @@ this.$router.push('register');
   .my-card {
   width: 100%;
   max-width: 420px;
-  height: 250px;
+  height: 220px;
   /*transition: width 0.5s;*/
   transition: transform .2s;
   }
@@ -177,6 +200,10 @@ this.$router.push('register');
 {
      height:30vw;
 min-height : 300px;
+}
 
+.my-style
+{
+font-family: 'Great Vibes', cursive ;
 }
 </style>

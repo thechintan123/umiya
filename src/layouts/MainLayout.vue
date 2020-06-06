@@ -1,7 +1,7 @@
 <template>
 
   <q-layout view="hHh lpR fFf">
-      <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar>
