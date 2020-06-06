@@ -15,7 +15,7 @@
           </q-avatar>
          </div>
           <div class="col-auto text-secondary UM_title" style="font-family: 'Great Vibes', cursive ;font-size: 36px">
-          UmiyaMatrimony.<span class="text-dark">com</span>
+          <span class="text-white">Umiya</span>Matrimony.<span class="text-white">com</span>
           </div>
           </div>
         </q-toolbar-title>
@@ -75,6 +75,7 @@
           <q-list v-for="(menuItem, index) in menuList" :key="index">
 
             <q-item
+            exact
              class="text-grey-1"
             clickable :active="menuItem.label === 'Outbox'"
             :to="menuItem.link"
@@ -105,7 +106,12 @@
 import { mapState, mapActions } from 'vuex'
 
 const menuList = [
-
+  {
+    icon: 'home',
+    label: 'Home',
+    link: '/',
+    separator: true
+  },
   {
     icon: 'account_circle',
     label: 'Login',
