@@ -1,6 +1,7 @@
 <template>
-  <div class="q-pa-md fit column">
-    <q-card class="q-pa-md" flat bordered>
+<q-page padding>
+  <div class="fit column">
+    <q-card bordered>
       <!-- <img src="https://cdn.quasar.dev/img/mountains.jpg"> -->
 
       <q-banner class="q-mb-md bg-grey-3">
@@ -50,6 +51,7 @@
     </q-card>
 
   </div>
+  </q-page>
 </template>
 
 <script>

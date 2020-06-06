@@ -71,3 +71,6 @@
         <q-carousel-slide name="second" class="column no-wrap flex-center">
             <img class="my-photo" style="max-width:200px;max-height:200px" src="statics/photos/nature.jpg">
         </q-carousel-slide>
+
+
+          <q-btn flat style="width: 100%">Click HERE</q-btn>

@@ -1,6 +1,6 @@
 <template>
 
-  <div class="q-pa-md  fit column">
+  <div class="fit column">
 
     <!-- <q-card flat bordered class="my-card">--->
 

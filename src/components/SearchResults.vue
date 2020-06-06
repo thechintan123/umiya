@@ -1,19 +1,24 @@
 <template>
 
   <div class="q-mt-md">
+    <q-toolbar class="bg-dark text-secondary shadow-2 rounded-borders">
+      <q-toolbar-title>
+        Results
+      </q-toolbar-title>
+    </q-toolbar>
    <q-card>
    <q-list padding
    v-for="(searchItem,key,index) in searchResults"
    >
-      <q-item class="row wrap">
-        <q-item-section top avatar class="col-md-4 col-6">
+      <div class="q-ma-sm row">
+        <div class="col-md-4 col-9">
           <!-- <q-avatar rounded> -->
             <!--<img style="max-width:200px;max-height:200px" :src="'statics/photos/' + key + '.jpg'"> -->
           <!-- </q-avatar> -->
           <search-results-photo-slide :profileID= "key"></search-results-photo-slide>
-        </q-item-section>
-
-        <q-item-section class="col-md-8 col-6">
+        </div>
+        <q-item class="col-md-8 col-9">
+        <q-item-section >
          <q-item-label> <div class="text-h6">{{ searchItem.firstName}} {{searchItem.lastName}}( {{ key }})</div></q-item-label>
           <q-item-label > Date of Birth : {{ searchItem.dateOfBirth}} </q-item-label>
           <q-item-label > Age : {{ searchItem.age}} years </q-item-label>
@@ -46,10 +51,13 @@
 
       </q-expansion-item>
 
-        </q-item-section>
-
+      </q-item-section>
       </q-item>
-      <q-separator spaced inset />
+
+      </div>
+
+     <q-separator color="secondary" inset />
+
       </q-list>
    </q-card>
   </div>
