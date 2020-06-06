@@ -64,38 +64,35 @@
 </template>
 
 <script>
-import {mapGetters, mapState} from 'vuex';
+import { mapGetters, mapState } from 'vuex'
 
-export default{
-components:{
-    'search-results-photo-slide' :  require('components/SearchResultsPhotoSlide.vue').default,
+export default {
+  components: {
+    'search-results-photo-slide': require('components/SearchResultsPhotoSlide.vue').default
 
-}
-,
-props :['searchResults'],
-data(){
-return {
-slide : 'first',
-loggedIn:  false
-}
-}
-,
-methods: {
-checkLoggedIn(){
-let user = localStorage.getItem("user");
-console.log('checkLoggedIn');
-console.log(user);
-if(user){
-this.loggedIn = true;
-} else{
-this.loggedIn = false;
-}
-}
-}
-,
-created(){
-this.checkLoggedIn();
-}
+  },
+  props: ['searchResults'],
+  data () {
+    return {
+      slide: 'first',
+      loggedIn: false
+    }
+  },
+  methods: {
+    checkLoggedIn () {
+      const user = localStorage.getItem('user')
+      console.log('checkLoggedIn')
+      console.log(user)
+      if (user) {
+        this.loggedIn = true
+      } else {
+        this.loggedIn = false
+      }
+    }
+  },
+  created () {
+    this.checkLoggedIn()
+  }
 /*
 data(){
 return{
@@ -195,8 +192,6 @@ searchResults: {
         martialStatusPreferences: [],
         agreeTnC: false
       }
-
-
 
 }
 

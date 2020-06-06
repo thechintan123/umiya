@@ -129,16 +129,6 @@ const menuList = [
     label: 'Search',
     link: '/search',
     separator: true
-  },
-  {
-    label: 'Test Login',
-    link: '/test_login',
-    separator: false
-  },
-  {
-    label: 'Test Reg',
-    link: '/test_reg',
-    separator: false
   }
   /*
   ,
@@ -186,20 +176,14 @@ export default {
     ...mapActions('auth', ['logoutUser']),
     logout () {
       this.logoutUser()
-    },
-    showNotif (message) {
-      this.$q.notify({
-        message: message,
-        color: 'purple'
-      })
     }
   },
   watch: {
-    loggedIn(newValue) {
+    loggedIn (newValue) {
       if (newValue) {
-        this.showNotif('You are now logged in')
+        this.$q.notify('You are now logged in')
       } else {
-        this.showNotif('You are now logged out')
+        this.$q.notify('You are now logged out')
       }
     }
   }
@@ -229,6 +213,5 @@ export default {
     font-size: 14px;
     }
 }
-
 
 </style>

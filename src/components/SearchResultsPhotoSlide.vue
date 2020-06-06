@@ -51,14 +51,13 @@
 
 <script>
 export default {
-props: ['profileID']
-,
-data(){
-return {
-slide : 'first',
-fullscreen : false
-}
-}
+  props: ['profileID'],
+  data () {
+    return {
+      slide: 'first',
+      fullscreen: false
+    }
+  }
 }
 </script>
 
