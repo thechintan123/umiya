@@ -53,6 +53,7 @@ const actions = {
 
 const getters = {
   loggedIn(state) {
+    // the double - bang returns the boolean true / false association of a value
     return !!state.user
   }
 }

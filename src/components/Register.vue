@@ -93,7 +93,7 @@
                 <q-select
                   outlined
                   :disable="formData.country === 'India'"
-                  v-model="formData.OtherCountry"
+                  v-model="formData.otherCountry"
                   :options="countryOptions"
                   option-value="id"
                   option-label="name"
@@ -394,7 +394,10 @@ export default {
     registerUser(data) {
       axios.post(process.env.API + "/users", data)
       .then(({ data }) => {
-        console.log('return msg', data)
+        this.$q.notify({
+          type: 'positive',
+          message: 'Successfully registered'
+        })
       })
       .catch(error => {
         let err_msg = ''
@@ -403,7 +406,6 @@ export default {
         } else {
           err_msg = error.response.data.error
         }
-        console.log('Error!!!!!!!!!!!!!!!')
         showErrorMessage(err_msg)
       })
     },
@@ -425,7 +427,7 @@ export default {
       }
       this.formData.primaryContact = '+' + this.tmpData.primaryContactCountryCode + ' ' + this.tmpData.primaryContact
       this.formData.alternateContact = '+' + this.tmpData.primaryContactCountryCode + ' ' + this.tmpData.alternateContacts
-      console.log('data to upload:', this.formData)
+      console.log('here', this.formData)
       this.registerUser(this.formData)
     },
     createHeightList() {

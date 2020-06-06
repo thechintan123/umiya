@@ -46,12 +46,33 @@ def register():
     data = request.get_json() or {}
     print('data from form:', data)
 
+    # tuple of mandatory fields
+    mand_fields = ('email', 'password', 'firstName', 'lastName', 'gender', 'dateOfBirth',
+            'country', 'state', 'city', 'primaryContact', 'agreeTnC', 'maritalStatus',
+            'height', 'gotra', 'originalSurname', 'fatherName', 'residentialAddress',
+            'ageFrom', 'ageTo', 'heightTo', 'heightFrom',
+            'sourceOfWebsite')
+    if not all(field in data for field in mand_fields):
+        return bad_request('must include all mandatory fields in database')
+    if 'id' not in data['gotra'] or \
+        'id' not in data['sourceOfWebsite'] or 'id' not in data['maritalStatus'] or \
+        'id' not in data['gender']:
+        return bad_request('must include all mandatory fields in database')
+    if User.query.filter_by(email=data['email']).first():
+        return bad_request('email already registered')
+
     # Get objects from the dropdowns
     country = ''
     if data['country'] == 'India':
+        if 'id' not in data['country']:
+            return bad_request('must include all mandatory fields in database5')
         country = Country.query.filter_by(name='India').first()
     else:
-        country = get_row(Country, int(data['country']['id']))
+        if 'otherCountry' not in data:
+            return bad_request('must include all mandatory fields in database3')
+        if 'id' not in data['otherCountry']:
+            return bad_request('must include all mandatory fields in database4')
+        country = get_row(Country, int(data['otherCountry']['id']))
     gotra = get_row(Gotra, int(data['gotra']['id']))
     where_know = get_row(WhereKnow, int(data['sourceOfWebsite']['id']))
     marital_status = get_row(MaritalStatus, int(data['maritalStatus']['id']))
