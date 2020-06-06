@@ -7,6 +7,8 @@
 
     <q-carousel
       swipeable
+       transition-prev="slide-right"
+      transition-next="slide-left"
        arrows
       animated
       v-model="slide"
@@ -34,34 +36,34 @@
     src="~assets/logos/LogoMakr_Ring_RED.png"
 -->
       <q-carousel-slide :name="1" img-src="~assets/images/Success.jpg">
-              <div class="absolute-bottom custom-caption text-primary">
+              <div class="absolute-bottom-left custom-caption text-primary">
           <div class="text-h2">Success</div>
           <div class="text-subtitle1">Chetan and Dhara</div>
         </div>
       </q-carousel-slide>
 
       <q-carousel-slide :name="5" img-src="~assets/images/Wedding.jpg" >
-              <div class="absolute-bottom custom-caption text-primary">
+              <div class="absolute-bottom-left custom-caption text-primary">
           <div class="text-h2">It is FREE</div>
           <div class="text-subtitle1">500+ Profiles</div>
         </div>
       </q-carousel-slide>
 
       <q-carousel-slide :name="2" img-src="~assets/images/UmiyaMataji.jpg" >
-       <div class="absolute-bottom custom-caption text-primary">
+       <div class="absolute-bottom-left custom-caption text-primary">
           <div class="text-h2">For Samaj</div>
           <div class="text-subtitle1">Only for Kutch Kadva Patidar Sanatan Samaj</div>
         </div>
       </q-carousel-slide>
 
       <q-carousel-slide :name="3" img-src="~assets/images/Validate1.jpg" >
-       <div class="absolute-bottom custom-caption text-primary">
+       <div class="absolute-bottom-left custom-caption text-primary">
           <div class="text-h2">We VERIFY!!</div>
           <div class="text-subtitle1">No Fake. We verify ID proof.</div>
         </div>
       </q-carousel-slide>
       <q-carousel-slide :name="4" img-src="~assets/images/Wedding2.jpg"  >
-       <div class="absolute-bottom text-center custom-caption text-primary">
+       <div class="absolute-bottom-left text-center custom-caption text-primary">
           <div class="text-h2">Join Now</div>
           <div class="text-subtitle1">Register FREE</div>
         </div>

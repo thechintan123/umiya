@@ -78,29 +78,8 @@ computed :{
  components : {
     'search' :  require('components/Search.vue').default,
     'searchResults' :  require('components/SearchResults.vue').default,
-    'searchResultsPagination' :  require('components/SearchResultsPagination.vue').default,
-=======
-  data () {
-    return {
-      searchResultsList: {}
-
+    'searchResultsPagination' :  require('components/SearchResultsPagination.vue').default
     }
-  },
-  methods: {
-    fetchSearchResults () {
-      console.log('fetchSearchResults')
-      this.searchResultsList = this.getSearchResults
-      console.log(this.searchResultsList)
-    }
-  },
-  computed: {
-    ...mapGetters('search', ['getSearchResults']),
-    ...mapState('search', ['searchResults'])
-  },
-  components: {
-    search: require('components/Search.vue').default,
-    searchResults: require('components/SearchResults.vue').default
-  }
 }
 </script>
 
