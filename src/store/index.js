@@ -1,9 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import auth from './store-auth.js';
+import auth from './store-auth.js'
 import search from './store-search.js'
-
 
 // import example from './module-example'
 

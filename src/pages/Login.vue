@@ -47,18 +47,17 @@
         </q-form>
       </q-card-section>
 
-
     </q-card>
 
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 import mixinRegisterLogin from 'src/mixins/Mixin_RegisterLogin.js'
 
 export default {
-  mixins : [mixinRegisterLogin],
+  mixins: [mixinRegisterLogin],
   data () {
     return {
       isPwd: true,

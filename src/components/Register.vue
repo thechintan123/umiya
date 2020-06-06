@@ -40,10 +40,10 @@
         <q-tab-panel name="basic">
           <q-form greedy ref="basicForm">
             <q-input outlined v-model="formData.email" label="Email (Login ID)*" :rules="[ val => !!val || 'Field is required', val => checkEmail(val) || 'Please enter valid email address.']" dense clearable hint="Hint: This Email will be used as login ID" />
-            
+
             <div class="row">
               <div class="col">
-                <q-input outlined v-model="formData.password" :rules="[ val => !!val || 'Field is required']" lazy-rules ref="password" label="Password*" type="password" dense clearable :type="isPwd ? 'password' : 'text'" hint="Password with toggle">
+                <q-input outlined v-model="formData.password" :rules="[ val => !!val || 'Field is required']" lazy-rules ref="password" label="Password*" dense clearable :type="isPwd ? 'password' : 'text'" hint="Password with toggle">
                   <template v-slot:append>
                     <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd" clearable />
                   </template>
@@ -283,19 +283,19 @@ import mixinRegisterLogin from 'src/mixins/Mixin_RegisterLogin.js'
 import { showErrorMessage } from 'src/utils/show-error-message'
 
 export default {
-  mixins : [mixinRegisterLogin],
-  data() {
+  mixins: [mixinRegisterLogin],
+  data () {
     return {
-      //Form Settings
+      // Form Settings
       isPwd: true,
-      tab: "basic",
-      imageSrc: "",
+      tab: 'basic',
+      imageSrc: '',
       dense: true,
       basicHasError: false,
       personalHasError: false,
       uploadHasError: false,
 
-      //Dropdown List
+      // Dropdown List
       countryOptions: [],
       genderOptions: [],
       maritalOptions: [],
@@ -304,223 +304,223 @@ export default {
       gotraOptions: [],
       sourceOfWebsiteOptions: [],
 
-      //formData
+      // formData
       tmpData: {
-        primaryContact: "",
+        primaryContact: '',
         primaryContactCountryCode: '91',
-        alternateContact: ""
+        alternateContact: ''
       },
       formData: {
-        email: "",
-        password: "",
-        confirmPassword: "",
-        firstName: "",
-        lastName: "",
-        gender: "",
-        dateOfBirth: "",
+        email: '',
+        password: '',
+        confirmPassword: '',
+        firstName: '',
+        lastName: '',
+        gender: '',
+        dateOfBirth: '',
         age: 0,
-        country: "India",
-        otherCountry: "",
-        state: "",
-        city: "",
-        primaryContact: "",
-        alternateContact: "",
-        maritalStatus: "",
-        height: "",
-        gotra: "",
-        originalSurname: "",
-        fatherName: "",
-        residentialAddress: "",
-        aboutYourself: "",
-        ageFrom: "",
-        ageTo: "",
-        heightFrom: "",
-        heightTo: "",
+        country: 'India',
+        otherCountry: '',
+        state: '',
+        city: '',
+        primaryContact: '',
+        alternateContact: '',
+        maritalStatus: '',
+        height: '',
+        gotra: '',
+        originalSurname: '',
+        fatherName: '',
+        residentialAddress: '',
+        aboutYourself: '',
+        ageFrom: '',
+        ageTo: '',
+        heightFrom: '',
+        heightTo: '',
         maritalStatusPreference: [],
         agreeTnC: false,
-        sourceOfWebsite: ""
-      },
-    };
+        sourceOfWebsite: ''
+      }
+    }
   },
 
   methods: {
-    tabChange() {
-      if (this.tab == "basic" && this.basicHasError) {
-        this.$refs.basicForm.validate();
-      } else if (this.tab == "personal" && this.personalHasError) {
-        this.$refs.personalForm.validate();
-      } else if (this.tab == "upload" && this.uploadHasError) {
-        this.$refs.uploadForm.validate();
+    tabChange () {
+      if (this.tab === 'basic' && this.basicHasError) {
+        this.$refs.basicForm.validate()
+      } else if (this.tab === 'personal' && this.personalHasError) {
+        this.$refs.personalForm.validate()
+      } else if (this.tab === 'upload' && this.uploadHasError) {
+        this.$refs.uploadForm.validate()
       }
     },
-    submitBasicForm() {
+    submitBasicForm () {
       this.$refs.basicForm.validate().then((success) => {
         if (success) {
-          console.log("Basic Form Success");
-          this.basicHasError = false;
-          this.tab = "personal";
+          console.log('Basic Form Success')
+          this.basicHasError = false
+          this.tab = 'personal'
         } else {
-          console.log("Basic Form Error");
-          this.basicHasError = true;
+          console.log('Basic Form Error')
+          this.basicHasError = true
         }
-      });
-      console.log("hasError", this.$refs.basicForm.hasError);
+      })
+      console.log('hasError', this.$refs.basicForm.hasError)
     },
-    submitPersonalForm() {
+    submitPersonalForm () {
       this.$refs.personalForm.validate().then((success) => {
         if (success) {
-          console.log("Personal Form Success");
-          this.personalHasError = false;
-          this.tab = "upload";
+          console.log('Personal Form Success')
+          this.personalHasError = false
+          this.tab = 'upload'
         } else {
-          console.log("Personal Form Error");
-          this.personalHasError = true;
+          console.log('Personal Form Error')
+          this.personalHasError = true
         }
-      });
-      console.log("hasError", this.$refs.personalForm.hasError);
+      })
+      console.log('hasError', this.$refs.personalForm.hasError)
     },
-    submitUploadForm() {
+    submitUploadForm () {
       this.$refs.uploadForm.validate().then((success) => {
         if (success) {
-          console.log("Upload Form Success");
-          this.uploadHasError = false;
+          console.log('Upload Form Success')
+          this.uploadHasError = false
         } else {
-          console.log("Upload Form Error");
-          this.uploadHasError = true;
+          console.log('Upload Form Error')
+          this.uploadHasError = true
         }
-      });
-      console.log("hasError", this.$refs.uploadForm.hasError);
+      })
+      console.log('hasError', this.$refs.uploadForm.hasError)
     },
-    registerUser(data) {
-      axios.post(process.env.API + "/users", data)
-      .then(({ data }) => {
-        this.$q.notify({
-          type: 'positive',
-          message: 'Successfully registered'
+    registerUser (data) {
+      axios.post(process.env.API + '/users', data)
+        .then(({ data }) => {
+          this.$q.notify({
+            type: 'positive',
+            message: 'Successfully registered'
+          })
         })
-      })
-      .catch(error => {
-        let err_msg = ''
-        if ('message' in error.response.data) {
-          err_msg = error.response.data.error + ' - ' + error.response.data.message
-        } else {
-          err_msg = error.response.data.error
-        }
-        showErrorMessage(err_msg)
-      })
+        .catch(error => {
+          let errMsg = ''
+          if ('message' in error.response.data) {
+            errMsg = error.response.data.error + ' - ' + error.response.data.message
+          } else {
+            errMsg = error.response.data.error
+          }
+          showErrorMessage(errMsg)
+        })
     },
-    submitFinalForm() {
-      if (typeof this.$refs.basicForm === "undefined") {
-        this.basicHasError = true;
+    submitFinalForm () {
+      if (typeof this.$refs.basicForm === 'undefined') {
+        this.basicHasError = true
       } else {
-        this.submitBasicForm();
+        this.submitBasicForm()
       }
-      if (typeof this.$refs.personalForm === "undefined") {
-        this.personalHasError = true;
+      if (typeof this.$refs.personalForm === 'undefined') {
+        this.personalHasError = true
       } else {
-        this.submitPersonalForm();
+        this.submitPersonalForm()
       }
-      if (typeof this.$refs.uploadForm === "undefined") {
-        this.uploadHasError = true;
+      if (typeof this.$refs.uploadForm === 'undefined') {
+        this.uploadHasError = true
       } else {
-        this.submitUploadForm();
+        this.submitUploadForm()
       }
       this.formData.primaryContact = '+' + this.tmpData.primaryContactCountryCode + ' ' + this.tmpData.primaryContact
       this.formData.alternateContact = '+' + this.tmpData.primaryContactCountryCode + ' ' + this.tmpData.alternateContacts
       console.log('here', this.formData)
       this.registerUser(this.formData)
     },
-    createHeightList() {
-      //create height list when component is created
-      let h;
-      let i;
-      let startHeight = 4;
-      let endHeight = 7;
+    createHeightList () {
+      // create height list when component is created
+      let h
+      let i
+      const startHeight = 4
+      const endHeight = 7
       for (h = startHeight; h <= endHeight; h++) {
         for (i = 0; i <= 12; i++) {
-          this.heightOptions.push(h + " ft " + i + " inches");
+          this.heightOptions.push(h + ' ft ' + i + ' inches')
         }
       }
     },
-    createAgeFromToList() {
-      let startAge = 18;
-      let endAge = 60;
-      let a;
+    createAgeFromToList () {
+      const startAge = 18
+      const endAge = 60
+      let a
       for (a = startAge; a <= endAge; a++) {
-        this.ageFromToOptions.push(a);
+        this.ageFromToOptions.push(a)
       }
     },
-    calculateAge() {
-      var dob_inMS = Date.parse(this.formData.dateOfBirth);
-      var diff_ms = Date.now() - dob_inMS;
-      var age_dt = new Date(diff_ms);
-      this.formData.age = Math.abs(age_dt.getUTCFullYear() - 1970) + " years";
+    calculateAge () {
+      var dobInMS = Date.parse(this.formData.dateOfBirth)
+      var diffMs = Date.now() - dobInMS
+      var ageDt = new Date(diffMs)
+      this.formData.age = Math.abs(ageDt.getUTCFullYear() - 1970) + ' years'
     },
 
-    checkOtherCountry(otherCountry) {
-      if (this.formData.country === "Other" && otherCountry === null) {
-        return false;
+    checkOtherCountry (otherCountry) {
+      if (this.formData.country === 'Other' && otherCountry === null) {
+        return false
       } else {
-        return true;
+        return true
       }
     },
-    checkConfirmPassword(confirmPassword) {
+    checkConfirmPassword (confirmPassword) {
       if (this.formData.password === confirmPassword) {
-        return true;
+        return true
       } else {
-        return false;
+        return false
       }
     },
-    checkEmail(email) {
-      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return re.test(String(email).toLowerCase());
+    checkEmail (email) {
+      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      return re.test(String(email).toLowerCase())
     },
-    checkAgeFromAgeTo(ageTo) {
+    checkAgeFromAgeTo (ageTo) {
       if (ageTo < this.formData.ageFrom) {
-        return false;
+        return false
       } else {
-        return true;
+        return true
       }
     },
-    checkHeightFromHeightTo(heightTo) {
-      let heightFrom = this.formData.heightFrom;
-      //let heightTo = this.formData.heightTo;
-      let heightFromFoot = parseInt(heightFrom.charAt(0)); // 0  is position for foot
-      let heightToFoot = parseInt(heightTo.charAt(0));
+    checkHeightFromHeightTo (heightTo) {
+      const heightFrom = this.formData.heightFrom
+      // let heightTo = this.formData.heightTo;
+      const heightFromFoot = parseInt(heightFrom.charAt(0)) // 0  is position for foot
+      const heightToFoot = parseInt(heightTo.charAt(0))
 
       if (heightToFoot < heightFromFoot) {
-        return false;
+        return false
       } else if (heightToFoot === heightFromFoot) {
-        //in case foot is same then check inches
-        let heightFromInches = parseInt(heightFrom.substr(5, 2)); // 5 is position for inches
-        let heightToInches = parseInt(heightTo.substr(5, 2));
+        // in case foot is same then check inches
+        const heightFromInches = parseInt(heightFrom.substr(5, 2)) // 5 is position for inches
+        const heightToInches = parseInt(heightTo.substr(5, 2))
         if (heightToInches < heightFromInches) {
-          return false;
+          return false
         } else {
-          return true;
+          return true
         }
       } else {
-        return true;
+        return true
       }
     },
-    //This is reject message for File Uploader
-    onRejected(rejectedEntries) {
+    // This is reject message for File Uploader
+    onRejected (rejectedEntries) {
       // Notify plugin needs to be installed
       // https://quasar.dev/quasar-plugins/notify#Installation
       this.$q.notify({
-        type: "negative",
+        type: 'negative',
         message: `${rejectedEntries.length} file(s) did not pass validation constraints`
-      });
+      })
     }
   },
-  created() {
-    this.createHeightList();
-    this.createAgeFromToList();
+  created () {
+    this.createHeightList()
+    this.createAgeFromToList()
   },
-  mounted() {
+  mounted () {
     axios
-      .get( process.env.API + '/lists' )
-      .then( response => {
+      .get(process.env.API + '/lists')
+      .then(response => {
         this.countryOptions = response.data.country
         this.gotraOptions = response.data.gotra
         this.sourceOfWebsiteOptions = response.data.where_know
@@ -530,11 +530,10 @@ export default {
       .catch(error => {
         console.log(error)
       }
-    )
+      )
   }
-};
+}
 </script>
-
 
 <style scoped>
 .my-card {

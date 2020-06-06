@@ -173,7 +173,7 @@ export default {
     }
   },
   watch: {
-    loggedIn(newValue) {
+    loggedIn (newValue) {
       if (newValue) {
         this.$q.notify('You are now logged in')
       } else {
@@ -207,6 +207,5 @@ export default {
     font-size: 14px;
     }
 }
-
 
 </style>

@@ -3,14 +3,12 @@
 
     <q-card>
 
-
       <q-banner rounded dense class="bg-grey-3">
         <template v-slot:avatar>
           <q-icon name="search" color="primary" />
         </template>
         Search
       </q-banner>
-
 
       <q-card-section>
 
@@ -31,7 +29,6 @@
            <q-badge color="secondary">
                 Age: {{ searchParams.ageFromTo.min }} to {{ searchParams.ageFromTo.max }}
             </q-badge>
-
 
             <div class="row">
               <div class="col">
@@ -82,70 +79,67 @@
 
 <script>
 
-import { countryList } from "./countryList.js";
+import { countryList } from './countryList.js'
 
-export default{
-  created() {
-    this.createHeightList();
-    this.createAgeFromToList();
-  }
-  ,
-data(){
-return{
-ageFromToOptions : [],
-heightOptions: [],
-countryOptions : countryList,
-martialOptions: [
-        "Never Married",
-        "Divorced",
-        "Widowed",
-        "Awaiting Divorce"
+export default {
+  created () {
+    this.createHeightList()
+    this.createAgeFromToList()
+  },
+  data () {
+    return {
+      ageFromToOptions: [],
+      heightOptions: [],
+      countryOptions: countryList,
+      martialOptions: [
+        'Never Married',
+        'Divorced',
+        'Widowed',
+        'Awaiting Divorce'
       ],
 
-searchParams : {
-ageFromTo: {
-min : 20,
-max: 30
-},
-ageFromTo: {
-min : 20,
-max: 30
-},
-heightFrom : '',
-heightTo : '',
-maritalStatusPreference : [],
-country : ['India'],
-}
-}
-}
-,
-methods: {
-fetchSearchResults(){
-this.$emit('fetchSearchResults');
-},
-
-    createAgeFromToList() {
-      let startAge = 18;
-      let endAge = 60;
-      let a;
-      for (a = startAge; a <= endAge; a++) {
-        this.ageFromToOptions.push(a);
+      searchParams: {
+        ageFromTo: {
+          min: 20,
+          max: 30
+        },
+        ageFromTo: {
+          min: 20,
+          max: 30
+        },
+        heightFrom: '',
+        heightTo: '',
+        maritalStatusPreference: [],
+        country: ['India']
       }
     }
-    ,
-     createHeightList() {
-      //create height list when component is created
-      let h;
-      let i;
-      let startHeight = 4;
-      let endHeight = 7;
+  },
+  methods: {
+    fetchSearchResults () {
+      this.$emit('fetchSearchResults')
+    },
+
+    createAgeFromToList () {
+      const startAge = 18
+      const endAge = 60
+      let a
+      for (a = startAge; a <= endAge; a++) {
+        this.ageFromToOptions.push(a)
+      }
+    },
+    createHeightList () {
+      // create height list when component is created
+      let h
+      let i
+      const startHeight = 4
+      const endHeight = 7
       for (h = startHeight; h <= endHeight; h++) {
         for (i = 0; i <= 12; i++) {
-          this.heightOptions.push(h + " ft " + i + " inches");
+          this.heightOptions.push(h + ' ft ' + i + ' inches')
         }
       }
     }
-}
+  }
 }
 </script>
 
