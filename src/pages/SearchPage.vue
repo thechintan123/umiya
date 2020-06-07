@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <search @fetchSearchResults="fetchSearchResults"/>
+    <searchForm @fetchSearchResults="fetchSearchResults"/>
     <searchResults :searchResults="searchResultsPerPage" v-if="Object.keys(searchResultsPerPage).length"/>
 
 <!-- Not using this function and SearchResults Pagination component since
@@ -40,29 +40,23 @@ searchResultsPerPage : {}
 ,
 methods:{
 checkPage(){
-console.log('page', this.page);
 //use slice of Objects.keys(as array). Pass allowed keys as array to SearchResults
 let keys = Object.keys(this.searchResultsList);
-console.log('keys',keys);
 let selectedKeys;
 selectedKeys = keys.slice(this.page - 1, this.page - 1 + this.resultsPerPage);
-console.log('selectedKeys',selectedKeys);
 this.searchResultsPerPage = Object.assign(
         ...Object
         .keys(this.searchResultsList)
         .slice(this.page - 1 ,  this.page - 1 + this.resultsPerPage)
         .map(k => ({ [k]: this.searchResultsList[k] }))
     );
-console.log(this.searchResultsPerPage);
 }
 
 ,
 fetchSearchResults(){
-console.log('fetchSearchResults');
 this.searchResultsList = this.getSearchResults;
 this.maxPages = Object.keys(this.searchResultsList).length / this.resultsPerPage;
 if (this.maxPages <= 1) { this.maxPages = 1 };
-console.log('MaxPages', this.maxPages);
 this.page=1;
 this.checkPage();
 //this.searchResultsPerPage = this.getSearchResultsPerPage;
@@ -76,7 +70,7 @@ computed :{
 }
   ,
  components : {
-    'search' :  require('components/Search.vue').default,
+    'searchForm' :  require('components/SearchForm.vue').default,
     'searchResults' :  require('components/SearchResults.vue').default,
     'searchResultsPagination' :  require('components/SearchResultsPagination.vue').default
     }

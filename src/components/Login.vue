@@ -1,6 +1,5 @@
 <template>
-<q-page padding>
-  <div class="fit column">
+ <div class="fit column">
     <q-card bordered>
       <!-- <img src="https://cdn.quasar.dev/img/mountains.jpg"> -->
 
@@ -20,12 +19,15 @@
 
           <q-input outlined v-model="formData.email" label="Email"
             lazy-rules
+            tabIndex = 1
             :rules="[ val => !!val || 'Please type something', val => checkEmail(val) || 'Please enter valid email address.']"
             clearable
             dense />
 
           <q-input outlined v-model="formData.password"
             lazy-rules
+           tabIndex = 2
+
             :rules="[ val => !!val || 'Please type something']"
             label="Password"
             :type="isPwd ? 'password' : 'text'"
@@ -43,7 +45,8 @@
           <div class="row">
           <!-- <q-btn label="Submit" type="submit" color="primary"/> -->
           <q-space/>
-          <q-btn label="Login" type="submit" icon-right="keyboard_arrow_right"  color="primary"/>
+          <q-btn            tabIndex = 3
+label="Login" type="submit" icon-right="keyboard_arrow_right"  color="primary"/>
           </div>
         </q-form>
       </q-card-section>
@@ -51,7 +54,6 @@
     </q-card>
 
   </div>
-  </q-page>
 </template>
 
 <script>

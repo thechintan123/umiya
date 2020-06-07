@@ -321,8 +321,8 @@ return searchResultsPerPage;
 }
 
 }
-// Not using Action and mutations since on updating page number and state of Search Results is not changed
 
+// Not using Action and mutations since on updating page number and state of Search Results is not changed
 const mutations = {
 updatePageNumber(state, page){
     state.page = page;
@@ -332,8 +332,6 @@ updatePageNumber(state, page){
 // Not using Action and mutations since on updating page number and state of Search Results is not changed
 const actions = {
   updatePageNumber({ commit }, page){
-  console.log('updatePageNumber action');
-  console.log('page', page);
   commit('updatePageNumber',page);
   }
   }
