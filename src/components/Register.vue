@@ -86,8 +86,16 @@
 
             <div class="row">
               <div class="col">
-                <q-radio v-model="formData.country" val="India" left-label label="Living in : India" />
-                <q-radio v-model="formData.country" val="Other" left-label label="Other" />
+                <q-radio
+                  v-model="formData.country"
+                  val="India"
+                  left-label
+                  label="Living in : India" />
+                <q-radio
+                  v-model="formData.country"
+                  val="Other"
+                  left-label
+                  label="Other" />
               </div>
               <div class="col">
                 <q-select
@@ -426,7 +434,7 @@ export default {
         this.submitUploadForm()
       }
       this.formData.primaryContact = '+' + this.tmpData.primaryContactCountryCode + ' ' + this.tmpData.primaryContact
-      this.formData.alternateContact = '+' + this.tmpData.primaryContactCountryCode + ' ' + this.tmpData.alternateContacts
+      this.formData.alternateContact = '+' + this.tmpData.primaryContactCountryCode + ' ' + this.tmpData.alternateContact
       console.log('here', this.formData)
       this.registerUser(this.formData)
     },

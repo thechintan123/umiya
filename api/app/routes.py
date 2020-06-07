@@ -64,14 +64,12 @@ def register():
     # Get objects from the dropdowns
     country = ''
     if data['country'] == 'India':
-        if 'id' not in data['country']:
-            return bad_request('must include all mandatory fields in database5')
         country = Country.query.filter_by(name='India').first()
     else:
         if 'otherCountry' not in data:
-            return bad_request('must include all mandatory fields in database3')
+            return bad_request('must include all mandatory fields in database')
         if 'id' not in data['otherCountry']:
-            return bad_request('must include all mandatory fields in database4')
+            return bad_request('must include all mandatory fields in database')
         country = get_row(Country, int(data['otherCountry']['id']))
     gotra = get_row(Gotra, int(data['gotra']['id']))
     where_know = get_row(WhereKnow, int(data['sourceOfWebsite']['id']))
