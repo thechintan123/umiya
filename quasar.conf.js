@@ -153,14 +153,14 @@ module.exports = function (ctx) {
           API: JSON.stringify('http://localhost:5000/api')
         }
         : {
-          API: JSON.stringify('http://thechintan123.pythonanywhere.com/api')
+          API: JSON.stringify('https://thechintan123.pythonanywhere.com/api')
         }
     },
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
       https: false,
-      //port: 8080, // Changing to 3000 since Quasar DEV is not starting the localhost server
+      // port: 8080, // Changing to 3000 since Quasar DEV is not starting the localhost server
       port: 3000,
       open: true // opens browser window automatically
     },
