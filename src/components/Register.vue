@@ -474,6 +474,7 @@ export default {
             type: 'positive',
             message: 'Successfully registered'
           })
+          this.$router.push('/login')
         })
         .catch(error => {
           let errMsg = ''

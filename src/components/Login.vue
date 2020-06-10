@@ -86,6 +86,7 @@ export default {
           type: 'positive',
           message: 'You are now logged in'
         })
+        this.$router.push('/')
       })
       .catch(error => {
         let errMsg = ''
