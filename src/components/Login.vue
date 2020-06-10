@@ -45,8 +45,12 @@
           <div class="row">
           <!-- <q-btn label="Submit" type="submit" color="primary"/> -->
           <q-space/>
-          <q-btn            tabIndex = 3
-label="Login" type="submit" icon-right="keyboard_arrow_right"  color="primary"/>
+          <q-btn
+            tabIndex=3
+            label="Login"
+            type="submit"
+            icon-right="keyboard_arrow_right"
+            color="primary" />
           </div>
         </q-form>
       </q-card-section>
@@ -59,6 +63,8 @@ label="Login" type="submit" icon-right="keyboard_arrow_right"  color="primary"/>
 <script>
 import { mapActions } from 'vuex'
 import mixinRegisterLogin from 'src/mixins/Mixin_RegisterLogin.js'
+import { showErrorMessage } from 'src/utils/show-error-message'
+
 
 export default {
   mixins: [mixinRegisterLogin],
@@ -75,6 +81,21 @@ export default {
     ...mapActions('auth', ['loginUser']),
     login () {
       this.loginUser(this.formData)
+      .then(() => {
+        this.$q.notify({
+          type: 'positive',
+          message: 'You are now logged in'
+        })
+      })
+      .catch(error => {
+        let errMsg = ''
+        if ('message' in error.response.data) {
+          errMsg = error.response.data.error + ' - ' + error.response.data.message
+        } else {
+          errMsg = error.response.data.error
+        }
+        showErrorMessage(errMsg)
+      })
     }
   }
 }

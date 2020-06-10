@@ -140,39 +140,21 @@ export default {
       left: false,
       menuList
     }
-  },
-  computed: {
-    ...mapState('auth', ['loggedIn'])
-  },
-  methods: {
-    ...mapActions('auth', ['logoutUser']),
-    logout () {
-      this.logoutUser()
-    }
-  },
-  watch: {
-    loggedIn (newValue) {
-      if (newValue) {
-        this.$q.notify('You are now logged in')
-      } else {
-        this.$q.notify('You are now logged out')
-      }
-    }
   }
 }
 </script>
 
 <style>
 
-@media screen and (min-width : 599px){
-.q-tabs{
-  display: true;
-}
+@media screen and (min-width : 599px) {
+  .q-tabs {
+    display: true;
+  }
 }
 
-.q-drawer  .q-router-link--active{
+.q-drawer  .q-router-link--active {
     color : #ffd31d !important
-  }
+}
 
 @media screen and (max-width : 500px) {
 .UM_title{
@@ -181,7 +163,7 @@ export default {
 }
 
 @media (max-width: @screen-sm) {
-.UM_title{
+.UM_title {
     font-size: 14px;
     }
 }

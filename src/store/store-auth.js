@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { showErrorMessage } from 'src/utils/show-error-message'
+
 
 const state = {
   // format is user.email and user.token
@@ -30,19 +30,9 @@ const actions = {
           username: credentials.email,
           password: credentials.password
         }
-      }
-    )
+      })
       .then(({ data }) => {
         commit('SET_USER_DATA', data)
-      })
-      .catch(error => {
-        let errMsg = ''
-        if ('message' in error.response.data) {
-          errMsg = error.response.data.error + ' - ' + error.response.data.message
-        } else {
-          errMsg = error.response.data.error
-        }
-        showErrorMessage(errMsg)
       })
   },
   logoutUser ({ commit }) {
