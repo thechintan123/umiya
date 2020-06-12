@@ -69,28 +69,55 @@
     content-class="bg-secondary"
      :breakpoint = "600"
     show-if-above v-model="left" side="left" elevated
-    :width="250"
-    >
-             <!-- <q-scroll-area class="fit"> -->
-          <q-list v-for="(menuItem, index) in menuList" :key="index">
+    :width="250" >
+      <!-- <q-scroll-area class="fit"> -->
+      <q-list v-for="(menuItem, index) in menuList" :key="index">
+        <q-item
+        exact
+        class="text-grey-1"
+        :to="menuItem.link"
+        v-ripple>
+          <q-item-section avatar>
+            <q-icon :name="menuItem.icon" />
+          </q-item-section>
+          <q-item-section>
+            {{ menuItem.label }}
+          </q-item-section>
+        </q-item>
 
-            <q-item
-            exact
-             class="text-grey-1"
-            clickable :active="menuItem.label === 'Outbox'"
-            :to="menuItem.link"
-            v-ripple>
-              <q-item-section avatar>
-                <q-icon :name="menuItem.icon" />
-              </q-item-section>
-              <q-item-section>
-                {{ menuItem.label }}
-              </q-item-section>
-            </q-item>
+        <q-separator v-if="menuItem.separator" />
 
-           <q-separator v-if="menuItem.separator" />
+      </q-list>
 
-          </q-list>
+      <q-list>
+        <q-item
+          v-if="!loggedIn"
+          exact
+          class="text-grey-1"
+          to="/login"
+          v-ripple>
+            <q-item-section avatar>
+              <q-icon name="account_circle" />
+            </q-item-section>
+            <q-item-section>
+              Login
+            </q-item-section>
+        </q-item>
+        <q-item
+          v-else
+          exact
+          class="text-grey-1"
+          clickable
+          @click="logout"
+          v-ripple>
+            <q-item-section avatar>
+              <q-icon name="account_circle" />
+            </q-item-section>
+            <q-item-section>
+              Logout
+            </q-item-section>
+        </q-item>
+      </q-list>
        <!-- </q-scroll-area> -->
 
     </q-drawer>
@@ -112,12 +139,13 @@ const menuList = [
     link: '/',
     separator: true
   },
+  /*
   {
     icon: 'account_circle',
     label: 'Login',
     link: '/login',
     separator: true
-  },
+  },*/
   {
     icon: 'person_add',
     label: 'Register',
@@ -140,6 +168,19 @@ export default {
       left: false,
       menuList
     }
+  },
+  methods: {
+    ...mapActions('auth',['logoutUser']),
+    logout() {
+      this.logoutUser()
+      this.$q.notify({
+        type: 'positive',
+        message: 'You are now logged out'
+      })
+    }
+  },
+  computed: {
+    ...mapState('auth', ['loggedIn'])
   }
 }
 </script>

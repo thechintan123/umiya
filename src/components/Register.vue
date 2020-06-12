@@ -168,10 +168,14 @@
               </div>
             </div>
 
-            <q-toggle
-              tabindex = 13
-
-            v-model="formData.agreeTnC" checked-icon="check" color="green" unchecked-icon="clear" label="Agree Terms & Conditions *" dense />
+           <q-toggle
+             tabindex=13
+             v-model="formData.agreeTnC"
+             checked-icon="check"
+             color="green"
+             unchecked-icon="clear"
+             label="Agree Terms & Conditions *"
+             dense />
 
             <div class="row">
               <q-space />
@@ -285,8 +289,8 @@
             </div>
 
             <q-select
-                   tabindex = "27"
-               clearable
+              tabindex = "27"
+              clearable
               v-model="formData.maritalStatusPreference"
               option-value="id"
               option-label="name"

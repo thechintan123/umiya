@@ -16,7 +16,6 @@ const mutations = {
   },
   CLEAR_USER_DATA () {
     localStorage.removeItem('user')
-    location.reload()
     state.loggedIn = false
   }
 }
