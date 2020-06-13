@@ -318,11 +318,22 @@
 
         <q-tab-panel name="upload">
           <q-form ref="uploadForm" greedy>
-            <!--
+            
             <div class="q-mb-xs">
               <q-field borderless :rules="[ val => !!val || 'One Photo is required']" dense>
                 <template v-slot:control>
-                  <q-uploader url="http://localhost:4444/upload" label="Upload Photos" class="my-uploader" multiple batch accept="image/*" @rejected="onRejected" max-files="4" />
+                  <q-uploader
+                    :url="uploadURL"
+                    label="Upload Photos (max 4 total 1MB)"
+                    class="my-uploader"
+                    accept="image/*"
+                    @rejected="onRejected"
+                    @failed="onFailed"
+                    @uploaded="onUploaded"
+                    multiple
+                    max-files="4"
+                    max-total-size="1048576"
+                    field-name="file" />
                 </template>
               </q-field>
             </div>
@@ -333,7 +344,7 @@
                   <q-uploader url="http://localhost:4444/upload" label="Upload ID Proof" class="my-uploader" accept="image/*,.pdf" @rejected="onRejected" color="accent" />
                 </template>
               </q-field>
-            </div>-->
+            </div>
 
             <q-select
               v-model="formData.sourceOfWebsite"
@@ -374,6 +385,9 @@ export default {
   mixins: [mixinRegisterLogin],
   data () {
     return {
+      //upload url
+      uploadURL: process.env.API + '/upload',
+
       // Form Settings
       isPwd: true,
       tab: 'basic',
@@ -584,16 +598,25 @@ export default {
         return true
       }
     },
-    // This is reject message for File Uploader. Currently, it is not used.
+    // File upload results
     onRejected (rejectedEntries) {
-      // Notify plugin needs to be installed
-      // https://quasar.dev/quasar-plugins/notify#Installation
       this.$q.notify({
         type: 'negative',
         message: `${rejectedEntries.length} file(s) did not pass validation constraints`
       })
-    }
-    ,
+    },
+    onFailed (info) {
+      this.$q.notify({
+        type: 'negative',
+        message: 'File has failed to upload'
+      })
+    },
+    onUploaded (info) {
+      this.$q.notify({
+        type: 'positive',
+        message: 'File successfully uploaded'
+      })
+    },
     filterOtherCountry (val, update, abort) {
       update(() => {
         const needle = val.toLowerCase()

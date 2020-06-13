@@ -23,6 +23,9 @@ class User(db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    # If token hasn't expired yet then return existing token
+    # Otherwise create a new token with expiry date 1 hour from now
+    # Update database with token info and return token
     def get_token(self, expires_in=3600):
         now = datetime.utcnow()
         if self.token and self.token_expiration > now + timedelta(seconds=60):

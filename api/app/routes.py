@@ -1,15 +1,21 @@
-from flask import jsonify, request, url_for, g
+from flask import jsonify, request, url_for
 from . import app, db
 from .auth import basic_auth, token_auth
 from .errors import error_response, bad_request
 from .models import User, UserDetails, Role, Country, Gotra, WhereKnow, MaritalStatus, Gender
+from werkzeug.utils import secure_filename
+import os
 
 
+# Serve the Vue file
 @app.route('/')
 def index():
     return app.send_static_file('index.html')
 
 
+# basic auth or token auth is passed so user is now logged in
+# return either a new token or an existing token back to Vue
+# This is the route Vue calls when user first login
 @app.route('/api/tokens', methods=['POST'])
 @basic_auth.login_required
 def get_token():
@@ -22,6 +28,8 @@ def get_token():
     return jsonify(payload)
 
 
+# Revoke a token
+# This is not used ?
 @app.route('/api/tokens', methods=['DELETE'])
 @token_auth.login_required
 def revoke_token():
@@ -31,16 +39,17 @@ def revoke_token():
     return '', 204
 
 
+# Get a specific user
 @app.route('/api/users/<int:id>', methods=['GET'])
 @token_auth.login_required
 def get_user(id):
     return jsonify(User.query.get_or_404(id).to_dict())
 
 
+# handle register form submit
 def get_row(table, id):
     return table.query.filter_by(id=id).first()
  
-
 @app.route('/api/users', methods=['POST'])
 def register():
     data = request.get_json() or {}
@@ -125,13 +134,13 @@ def register():
     return response
 
 
+# Get dropdowns for register form
 def get_list(table):
     results = table.query.all()
     l = []
     for r in results:
         l.append({'id': r.id, 'name': r.name})
     return l
-
 
 @app.route('/api/lists', methods=['GET'])
 def lists():
@@ -146,6 +155,30 @@ def lists():
     return jsonify(payload)
 
 
+# handle file upload
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
+@app.route('/api/upload', methods=['POST'])
+def upload_file():
+    if 'file' not in request.files:
+        return bad_request('No file part')
+    file = request.files['file']
+    print('here',file)
+    if file.filename == '':
+        print('yyyyy')
+        return bad_request('No selected file')
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+     # 204 - successful and no body
+    return '', 204
+
+
+# Testing
 @app.route('/api/hello', methods=['GET'])
 @token_auth.login_required
 def hello():
