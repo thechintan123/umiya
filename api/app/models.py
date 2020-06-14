@@ -110,6 +110,9 @@ class UserDetails(db.Model):
     update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     create_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
+    def __repr__(self):
+        return '<UserDetails {}>'.format(self.first_name)
+
 
 class MaritalStatus(db.Model):
     __tablename__ = 'marital_status'
@@ -125,6 +128,9 @@ class Country(db.Model):
     name = db.Column(db.String(30), nullable=False)
     update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     user_details = db.relationship('UserDetails', backref='country', lazy='dynamic')
+
+    def __repr__(self):
+        return '<Country {}>'.format(self.name)
 
 
 class WhereKnow(db.Model):

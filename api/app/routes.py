@@ -165,16 +165,14 @@ def upload_file():
     if 'file' not in request.files:
         return bad_request('No file part')
     file = request.files['file']
-    print('here',file)
     if file.filename == '':
-        print('yyyyy')
         return bad_request('No selected file')
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
     if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
+        filename = secure_filename(file.filename)      
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-     # 204 - successful and no body
+    # 204 - successful and no body
     return '', 204
 
 
