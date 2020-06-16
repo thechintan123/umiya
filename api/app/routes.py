@@ -2,7 +2,7 @@ from flask import jsonify, request, url_for
 from . import app, db
 from .auth import basic_auth, token_auth
 from .errors import error_response, bad_request
-from .models import User, UserDetails, Role, Country, Gotra, WhereKnow, MaritalStatus, Gender
+from .models import User, UserDetails, Role, Country, Gotra, WhereKnow, MaritalStatus, Gender, UploadPhotos
 from werkzeug.utils import secure_filename
 import os
 
@@ -161,17 +161,44 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 @app.route('/api/upload', methods=['POST'])
+@token_auth.login_required
 def upload_file():
+    if 'filetype' not in request.form:
+        return bad_request('Missing filetype')
+    filetype = request.form.get('filetype')
+    if (filetype not in ['photo', 'proof']):
+        return bad_request('Wrong file type')
     if 'file' not in request.files:
         return bad_request('No file part')
     file = request.files['file']
-    if file.filename == '':
-        return bad_request('No selected file')
-    if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-    if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)      
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    if file is None:
+        return bad_request('No file found')
+    if not allowed_file(file.filename):
+        return bad_request('Unsupported file extension')
+
+    filename = secure_filename(file.filename.lower())
+    fn, ext = filename.split('.')
+    fn = fn[:24]
+    filename = filetype + '_' + fn + '.' + ext
+
+    user_id = str(token_auth.current_user().id)
+    folder = app.config['UPLOAD_FOLDER'] / user_id
+    if not folder.is_dir():
+        folder.mkdir()
+    file.save(os.path.join(folder, filename))
+
+    user_det = token_auth.current_user().user_details
+    if filetype == 'photo':    
+        upl_photo = UploadPhotos(filename=filename)
+        user_det.upload_photos.append(upl_photo)
+        db.session.add(user_det)
+        db.session.add(upl_photo)
+        db.session.commit()
+    elif filetype == 'proof':
+        user_det.upload_proof = filename
+        db.session.add(user_det)
+        db.session.commit()
+
     # 204 - successful and no body
     return '', 204
 

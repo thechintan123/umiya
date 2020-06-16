@@ -74,7 +74,6 @@ user_partner_marital = db.Table('user_partner_marital',
     db.Column('marital_status_id', db.Integer, db.ForeignKey('marital_status.id'), primary_key=True)
 )
 
-
 class UserDetails(db.Model):
     __tablename__ = 'user_details'
     id = db.Column(db.Integer, primary_key=True)
@@ -96,8 +95,8 @@ class UserDetails(db.Model):
     father_fullname = db.Column(db.String(50), nullable=False)
     address = db.Column(db.String(100), nullable=False)
     about_yourself = db.Column(db.String(200))
-    # upload photo
-    # upload id
+    upload_photos=db.relationship('UploadPhotos', backref = 'user_details', lazy = 'dynamic')
+    upload_proof = db.Column(db.String(40))
     partner_age_from = db.Column(db.Integer, nullable=False)
     partner_age_to = db.Column(db.Integer, nullable=False)
     partner_height_from = db.Column(db.String(20), nullable=False)
@@ -112,6 +111,14 @@ class UserDetails(db.Model):
 
     def __repr__(self):
         return '<UserDetails {}>'.format(self.first_name)
+
+
+class UploadPhotos(db.Model):
+    __tablename__ = 'upload_photos'
+    id = db.Column(db.Integer, primary_key=True)
+    filename = db.Column(db.String(40), nullable=False)
+    user_details_id=db.Column(db.Integer, db.ForeignKey('user_details.id'), nullable = False)
+    update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
 
 class MaritalStatus(db.Model):

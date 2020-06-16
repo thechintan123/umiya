@@ -318,18 +318,15 @@
 
         <q-tab-panel name="upload">
           <q-form ref="uploadForm" greedy>
-            
+
             <div class="q-mb-xs">
               <q-field borderless :rules="[ val => !!val || 'One Photo is required']" dense>
                 <template v-slot:control>
                   <q-uploader
-                    :url="uploadURL"
+                    :factory="uploadPhoto"
                     label="Upload Photos (max 4 total 1MB)"
                     class="my-uploader"
                     accept="image/*"
-                    @rejected="onRejected"
-                    @failed="onFailed"
-                    @uploaded="onUploaded"
                     multiple
                     max-files="4"
                     max-total-size="1048576"
@@ -341,7 +338,13 @@
             <div class="q-mb-xs">
               <q-field borderless :rules="[ val => !!val || 'One ID Proof is required']" dense>
                 <template v-slot:control>
-                  <q-uploader url="http://localhost:4444/upload" label="Upload ID Proof" class="my-uploader" accept="image/*,.pdf" @rejected="onRejected" color="accent" />
+                  <q-uploader
+                    :factory="uploadProof"
+                    label="Upload ID Proof (max 256kb)"
+                    class="my-uploader"
+                    accept="image/*,.pdf"
+                    max-total-size="262144"
+                    color="accent" />
                 </template>
               </q-field>
             </div>
@@ -598,24 +601,39 @@ export default {
         return true
       }
     },
-    // File upload results
-    onRejected (rejectedEntries) {
-      this.$q.notify({
-        type: 'negative',
-        message: `${rejectedEntries.length} file(s) did not pass validation constraints`
+    uploadImage (fd) {
+      return axios.post(process.env.API + '/upload', fd, {
+        headers: { 
+          'Content-Type': 'multipart/form-data' 
+        }
+      })
+      .then(resolve => {
+        this.$q.notify({
+          type: 'positive',
+          message: 'Images successfully uploaded'
+        })
+      })
+      .catch(error => {
+        let errMsg = ''
+        if ('message' in error.response.data) {
+          errMsg = error.response.data.error + ' - ' + error.response.data.message
+        } else {
+          errMsg = error.response.data.error
+        }
+        showErrorMessage(errMsg)
       })
     },
-    onFailed (info) {
-      this.$q.notify({
-        type: 'negative',
-        message: 'File has failed to upload'
-      })
+    uploadPhoto(file) {
+     let fd = new FormData()
+      fd.append('file', file[0])
+      fd.append('filetype','photo')
+      this.uploadImage(fd)
     },
-    onUploaded (info) {
-      this.$q.notify({
-        type: 'positive',
-        message: 'File successfully uploaded'
-      })
+    uploadProof(file) {
+     let fd = new FormData()
+      fd.append('file', file[0])
+      fd.append('filetype','proof')
+      this.uploadImage(fd)
     },
     filterOtherCountry (val, update, abort) {
       update(() => {
