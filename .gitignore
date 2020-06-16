@@ -35,5 +35,6 @@ yarn-error.log*
 env
 .env
 __pycache__
-.vscode
+/.vscode
 migrations
+/api/uploads
