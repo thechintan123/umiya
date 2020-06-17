@@ -96,7 +96,7 @@ class UserDetails(db.Model):
     address = db.Column(db.String(100), nullable=False)
     about_yourself = db.Column(db.String(200))
     upload_photos=db.relationship('UploadPhotos', backref = 'user_details', lazy = 'dynamic')
-    upload_proof = db.Column(db.String(40))
+    upload_proof = db.Column(db.String(30))
     partner_age_from = db.Column(db.Integer, nullable=False)
     partner_age_to = db.Column(db.Integer, nullable=False)
     partner_height_from = db.Column(db.String(20), nullable=False)
@@ -116,7 +116,7 @@ class UserDetails(db.Model):
 class UploadPhotos(db.Model):
     __tablename__ = 'upload_photos'
     id = db.Column(db.Integer, primary_key=True)
-    filename = db.Column(db.String(40), nullable=False)
+    filename = db.Column(db.String(30), nullable=False)
     user_details_id=db.Column(db.Integer, db.ForeignKey('user_details.id'), nullable = False)
     update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 

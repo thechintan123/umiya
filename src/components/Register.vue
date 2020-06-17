@@ -324,12 +324,12 @@
                 <template v-slot:control>
                   <q-uploader
                     :factory="uploadPhoto"
-                    label="Upload Photos (max 4 total 1MB)"
+                    label="Upload Photos (max 4 images)"
                     class="my-uploader"
-                    accept="image/*"
+                    accept="image/*,.pdf,.jpg,.jpeg,.gif,.png"
                     multiple
                     max-files="4"
-                    max-total-size="1048576"
+                    max-total-size="20971520"
                     field-name="file" />
                 </template>
               </q-field>
@@ -340,10 +340,10 @@
                 <template v-slot:control>
                   <q-uploader
                     :factory="uploadProof"
-                    label="Upload ID Proof (max 256kb)"
+                    label="Upload ID Proof (only 1 image or PDF)"
                     class="my-uploader"
-                    accept="image/*,.pdf"
-                    max-total-size="262144"
+                    accept="image/*,.pdf,.jpg,.jpeg,.gif,.png"
+                    max-total-size="5242880"
                     color="accent" />
                 </template>
               </q-field>
