@@ -3,8 +3,8 @@ from . import app, db
 from .auth import basic_auth, token_auth
 from .errors import error_response, bad_request
 from .models import User, UserDetails, Role, Country, Gotra, WhereKnow, MaritalStatus, Gender, UploadPhotos
-# from werkzeug.utils import secure_filename
 import os
+from datetime import datetime
 from PIL import Image
 from strgen import StringGenerator
 
@@ -21,11 +21,14 @@ def index():
 @app.route('/api/tokens', methods=['POST'])
 @basic_auth.login_required
 def get_token():
-    token = basic_auth.current_user().get_token()
+    user = basic_auth.current_user()
+    token = user.get_token()
     payload = { \
         'email': basic_auth.current_user().email, \
         'token': token \
     }
+    user.last_login = datetime.now()
+    db.session.add(user)
     db.session.commit()
     return jsonify(payload)
 
@@ -157,7 +160,7 @@ def lists():
     return jsonify(payload)
 
 
-
+# handle file uploads
 @app.route('/api/upload', methods=['POST'])
 @token_auth.login_required
 def upload_file():
@@ -181,8 +184,9 @@ def upload_file():
         filename = 'proof_' + filename
     try:
         # this is the max size, aspect ratio is maintained
-        size = (800, 800)
+        size = (1800, 1800)
         img = Image.open(request.files['file'].stream)
+        # need to convert it for png format otherwise wont convert to jpg
         img = img.convert('RGB')
         img.thumbnail(size)
         img.save(folder / filename)

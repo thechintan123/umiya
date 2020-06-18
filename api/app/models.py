@@ -12,6 +12,7 @@ class User(db.Model):
     password_hash = db.Column(db.String(100))
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'), default=2, nullable=False)
     user_details = db.relationship("UserDetails", uselist=False, backref="user")
+    last_login = db.Column(db.DateTime)
     update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     create_date = db.Column(db.DateTime,default=datetime.utcnow, nullable=False)
     token = db.Column(db.String(140), index=True, unique=True)
@@ -105,7 +106,6 @@ class UserDetails(db.Model):
     partner_marital_status = db.relationship('MaritalStatus', secondary=user_partner_marital, lazy='dynamic', \
         backref=db.backref('pms_prefs', lazy='dynamic'))
     where_know_id = db.Column(db.Integer, db.ForeignKey('where_know.id'), nullable=False)
-    last_login = db.Column(db.DateTime)
     update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     create_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
@@ -120,6 +120,9 @@ class UploadPhotos(db.Model):
     user_details_id=db.Column(db.Integer, db.ForeignKey('user_details.id'), nullable = False)
     update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
+    def __repr__(self):
+        return '<UploadPhotos {}>'.format(self.filename)
+
 
 class MaritalStatus(db.Model):
     __tablename__ = 'marital_status'
@@ -127,6 +130,9 @@ class MaritalStatus(db.Model):
     name = db.Column(db.String(20), nullable=False)
     update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     user_details = db.relationship('UserDetails', backref='marital_status', lazy='dynamic')
+
+    def __repr__(self):
+        return '<MaritalStatus {}>'.format(self.name)
 
 
 class Country(db.Model):
@@ -146,6 +152,9 @@ class WhereKnow(db.Model):
     name = db.Column(db.String(20), nullable=False)
     update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     user_details = db.relationship('UserDetails', backref='where_know', lazy='dynamic')
+    
+    def __repr__(self):
+        return '<WhereKnow {}>'.format(self.name)
 
 
 class Gotra(db.Model):
@@ -155,6 +164,9 @@ class Gotra(db.Model):
     update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     user_details = db.relationship('UserDetails', backref='gotra', lazy='dynamic')
 
+    def __repr__(self):
+        return '<Gotra {}>'.format(self.name)
+
 
 class Gender(db.Model):
     __tablename__ = 'gender'
@@ -163,3 +175,5 @@ class Gender(db.Model):
     update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     user_details = db.relationship('UserDetails', backref='gender', lazy='dynamic')
 
+    def __repr__(self):
+        return '<Gender {}>'.format(self.name)
