@@ -145,7 +145,7 @@ const menuList = [
     label: 'Login',
     link: '/login',
     separator: true
-  },*/
+  }, */
   {
     icon: 'person_add',
     label: 'Register',
@@ -170,8 +170,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions('auth',['logoutUser']),
-    logout() {
+    ...mapActions('auth', ['logoutUser']),
+    logout () {
       this.logoutUser()
       this.$q.notify({
         type: 'positive',

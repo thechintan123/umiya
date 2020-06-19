@@ -6,9 +6,9 @@
 
 <script>
 export default {
-   components : {
-    'login' :  require('components/Login.vue').default
-    }
+  components: {
+    login: require('components/Login.vue').default
+  }
 }
 </script>
 

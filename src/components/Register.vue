@@ -26,7 +26,11 @@
             <q-icon name="warning" color="yellow" class="q-ml-sm" />
           </q-badge>
         </q-tab>
-        <q-tab name="upload" icon="add_a_photo" label="Upload">
+        <q-tab
+          name="upload"
+          icon="add_a_photo"
+          label="Upload"
+          :disable="!loggedIn">
           <q-badge v-if="uploadHasError" align="top" color="blue" floating>
             Error
             <q-icon name="warning" color="yellow" class="q-ml-sm" />
@@ -305,12 +309,24 @@
               input-debounce="0"
               hint="Hint: Multiple Options can be selected" />
 
+            <q-select
+              v-model="formData.sourceOfWebsite"
+              option-value="id"
+              option-label="name"
+              :options="sourceOfWebsiteOptions"
+              label="Where do you come to know?"
+              dense
+              options-dense
+              outlined
+              clearable
+              :rules="[ val => !!val || 'Field is required']" />
+
             <div class="row">
               <q-btn color="secondary" flat label="Back" @click="tab = 'basic'" />
               <q-space />
               <q-btn
                tabindex = "28"
-              color="primary" label="Next>" @click="submitPersonalForm" />
+              color="primary" label="Submit" @click="submitForm" />
             </div>
 
           </q-form>
@@ -349,24 +365,6 @@
               </q-field>
             </div>
 
-            <q-select
-              v-model="formData.sourceOfWebsite"
-              option-value="id"
-              option-label="name"
-              :options="sourceOfWebsiteOptions"
-              label="Where do you come to know?"
-              dense
-              options-dense
-              outlined
-              clearable
-              :rules="[ val => !!val || 'Field is required']" />
-
-            <div class="row">
-              <q-btn color="secondary" label="Back" flat @click="tab = 'personal'" />
-              <q-space />
-              <q-btn color="primary" label="Final Submit" @click="submitFinalForm" />
-            </div>
-
           </q-form>
         </q-tab-panel>
       </q-tab-panels>
@@ -379,6 +377,7 @@
 import axios from 'axios'
 import mixinRegisterLogin from 'src/mixins/Mixin_RegisterLogin.js'
 import { showErrorMessage } from 'src/utils/show-error-message'
+import { mapState } from 'vuex'
 
 const stringOptions = [
   'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
@@ -388,7 +387,7 @@ export default {
   mixins: [mixinRegisterLogin],
   data () {
     return {
-      //upload url
+      // upload url
       uploadURL: process.env.API + '/upload',
 
       // Form Settings
@@ -402,7 +401,7 @@ export default {
 
       // Dropdown List
       countryOptions: [],
-      countryList : [], //This extra dropdown list is required to work with FilterOtherCountry function.
+      countryList: [], // This extra dropdown list is required to work with FilterOtherCountry function.
       genderOptions: [],
       maritalOptions: [],
       heightOptions: [],
@@ -448,15 +447,24 @@ export default {
       }
     }
   },
-
+  computed: {
+    ...mapState('auth', ['loggedIn'])
+  },
   methods: {
-    tabChange () {
+    /* tabChange () {
       if (this.tab === 'basic' && this.basicHasError) {
         this.$refs.basicForm.validate()
       } else if (this.tab === 'personal' && this.personalHasError) {
         this.$refs.personalForm.validate()
       } else if (this.tab === 'upload' && this.uploadHasError) {
         this.$refs.uploadForm.validate()
+      }
+    }, */
+    tabChange () {
+      if (this.tab === 'basic' && this.basicHasError) {
+        this.$refs.basicForm.validate()
+      } else if (this.tab === 'personal' && this.personalHasError) {
+        this.$refs.personalForm.validate()
       }
     },
     submitBasicForm () {
@@ -473,12 +481,23 @@ export default {
       this.$refs.personalForm.validate().then((success) => {
         if (success) {
           this.personalHasError = false
+        } else {
+          this.personalHasError = true
+        }
+      })
+    },
+    /*
+    submitPersonalForm () {
+      this.$refs.personalForm.validate().then((success) => {
+        if (success) {
+          this.personalHasError = false
           this.tab = 'upload'
         } else {
           this.personalHasError = true
         }
       })
     },
+
     submitUploadForm () {
       this.$refs.uploadForm.validate().then((success) => {
         if (success) {
@@ -487,7 +506,7 @@ export default {
           this.uploadHasError = true
         }
       })
-    },
+    }, */
     registerUser (data) {
       axios.post(process.env.API + '/users', data)
         .then(({ data }) => {
@@ -507,6 +526,7 @@ export default {
           showErrorMessage(errMsg)
         })
     },
+    /*
     submitFinalForm () {
       if (typeof this.$refs.basicForm === 'undefined') {
         this.basicHasError = true
@@ -525,7 +545,21 @@ export default {
       }
       this.formData.primaryContact = '+' + this.tmpData.primaryContactCountryCode + ' ' + this.tmpData.primaryContact
       this.formData.alternateContact = '+' + this.tmpData.primaryContactCountryCode + ' ' + this.tmpData.alternateContacts
-      //console.log('Submit Final Form', this.formData)
+      this.registerUser(this.formData)
+    }, */
+    submitForm () {
+      if (typeof this.$refs.basicForm === 'undefined') {
+        this.basicHasError = true
+      } else {
+        this.submitBasicForm()
+      }
+      if (typeof this.$refs.personalForm === 'undefined') {
+        this.personalHasError = true
+      } else {
+        this.submitPersonalForm()
+      }
+      this.formData.primaryContact = '+' + this.tmpData.primaryContactCountryCode + ' ' + this.tmpData.primaryContact
+      this.formData.alternateContact = '+' + this.tmpData.primaryContactCountryCode + ' ' + this.tmpData.alternateContacts
       this.registerUser(this.formData)
     },
     createHeightList () {
@@ -603,51 +637,51 @@ export default {
     },
     uploadImage (fd) {
       return axios.post(process.env.API + '/upload', fd, {
-        headers: { 
-          'Content-Type': 'multipart/form-data' 
+        headers: {
+          'Content-Type': 'multipart/form-data'
         }
       })
-      .then(resolve => {
-        this.$q.notify({
-          type: 'positive',
-          message: 'Images successfully uploaded'
+        .then(resolve => {
+          this.$q.notify({
+            type: 'positive',
+            message: 'Images successfully uploaded'
+          })
         })
-      })
-      .catch(error => {
-        let errMsg = ''
-        if ('message' in error.response.data) {
-          errMsg = error.response.data.error + ' - ' + error.response.data.message
-        } else {
-          errMsg = error.response.data.error
-        }
-        showErrorMessage(errMsg)
-      })
+        .catch(error => {
+          let errMsg = ''
+          if ('message' in error.response.data) {
+            errMsg = error.response.data.error + ' - ' + error.response.data.message
+          } else {
+            errMsg = error.response.data.error
+          }
+          showErrorMessage(errMsg)
+        })
     },
-    uploadPhoto(file) {
-     let fd = new FormData()
+    uploadPhoto (file) {
+      const fd = new FormData()
       fd.append('file', file[0])
-      fd.append('filetype','photo')
+      fd.append('filetype', 'photo')
       this.uploadImage(fd)
     },
-    uploadProof(file) {
-     let fd = new FormData()
+    uploadProof (file) {
+      const fd = new FormData()
       fd.append('file', file[0])
-      fd.append('filetype','proof')
+      fd.append('filetype', 'proof')
       this.uploadImage(fd)
     },
     filterOtherCountry (val, update, abort) {
       update(() => {
         const needle = val.toLowerCase()
-        let countryListFiltered = []
-        for(let country of this.countryList){
-            //console.log('country',country);
-           let countryNameLowerCase = country.name.toLowerCase();
-          if(countryNameLowerCase.includes(needle)){
-            countryListFiltered.push(country);
+        const countryListFiltered = []
+        for (const country of this.countryList) {
+          // console.log('country',country);
+          const countryNameLowerCase = country.name.toLowerCase()
+          if (countryNameLowerCase.includes(needle)) {
+            countryListFiltered.push(country)
           }
         }
-        //console.log('countryListFiltered', countryListFiltered);
-        this.countryOptions = countryListFiltered;
+        // console.log('countryListFiltered', countryListFiltered);
+        this.countryOptions = countryListFiltered
       })
     }
 
@@ -660,8 +694,8 @@ export default {
     axios
       .get(process.env.API + '/lists')
       .then(response => {
-        this.countryList = response.data.country;
-        this.countryOptions = this.countryList;
+        this.countryList = response.data.country
+        this.countryOptions = this.countryList
         this.gotraOptions = response.data.gotra
         this.sourceOfWebsiteOptions = response.data.where_know
         this.maritalOptions = response.data.marital_status

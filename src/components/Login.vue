@@ -65,7 +65,6 @@ import { mapActions } from 'vuex'
 import mixinRegisterLogin from 'src/mixins/Mixin_RegisterLogin.js'
 import { showErrorMessage } from 'src/utils/show-error-message'
 
-
 export default {
   mixins: [mixinRegisterLogin],
   data () {
@@ -81,22 +80,22 @@ export default {
     ...mapActions('auth', ['loginUser']),
     login () {
       this.loginUser(this.formData)
-      .then(() => {
-        this.$q.notify({
-          type: 'positive',
-          message: 'You are now logged in'
+        .then(() => {
+          this.$q.notify({
+            type: 'positive',
+            message: 'You are now logged in'
+          })
+          this.$router.push('/')
         })
-        this.$router.push('/')
-      })
-      .catch(error => {
-        let errMsg = ''
-        if ('message' in error.response.data) {
-          errMsg = error.response.data.error + ' - ' + error.response.data.message
-        } else {
-          errMsg = error.response.data.error
-        }
-        showErrorMessage(errMsg)
-      })
+        .catch(error => {
+          let errMsg = ''
+          if ('message' in error.response.data) {
+            errMsg = error.response.data.error + ' - ' + error.response.data.message
+          } else {
+            errMsg = error.response.data.error
+          }
+          showErrorMessage(errMsg)
+        })
     }
   }
 }
