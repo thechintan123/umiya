@@ -10,11 +10,15 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(50), index=True, unique=True, nullable=False)
     password_hash = db.Column(db.String(100))
-    role_id = db.Column(db.Integer, db.ForeignKey('role.id'), default=2, nullable=False)
-    user_details = db.relationship("UserDetails", uselist=False, backref="user")
+    role_id = db.Column(db.Integer, db.ForeignKey(
+        'role.id'), default=1, nullable=False)
+    user_details = db.relationship(
+        "UserDetails", uselist=False, backref="user", passive_deletes=True)
     last_login = db.Column(db.DateTime)
-    update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-    create_date = db.Column(db.DateTime,default=datetime.utcnow, nullable=False)
+    update_date = db.Column(
+        db.DateTime, default=datetime.utcnow, nullable=False)
+    create_date = db.Column(
+        db.DateTime, default=datetime.utcnow, nullable=False)
     token = db.Column(db.String(140), index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
 
@@ -51,7 +55,8 @@ class User(db.Model):
     @staticmethod
     def verify_token(token):
         try:
-            id = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])['reset_password']
+            id = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=[
+                            'HS256'])['reset_password']
         except:
             return
         return User.query.get(id)
@@ -71,43 +76,54 @@ class Role(db.Model):
 
 
 user_partner_marital = db.Table('user_partner_marital',
-    db.Column('user_details_id', db.Integer, db.ForeignKey('user_details.id'), primary_key=True),
-    db.Column('marital_status_id', db.Integer, db.ForeignKey('marital_status.id'), primary_key=True)
-)
+                                db.Column('user_details_id', db.Integer, db.ForeignKey(
+                                    'user_details.id', ondelete='CASCADE'), primary_key=True),
+                                db.Column('marital_status_id', db.Integer, db.ForeignKey(
+                                    'marital_status.id'), primary_key=True)
+                                )
+
 
 class UserDetails(db.Model):
     __tablename__ = 'user_details'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey(
+        'user.id', ondelete='CASCADE'), nullable=False)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
-    gender_id = db.Column(db.Integer, db.ForeignKey('gender.id'), nullable=False)
+    gender_id = db.Column(db.Integer, db.ForeignKey(
+        'gender.id'), nullable=False)
     dob = db.Column(db.String(10), nullable=False)
-    country_id = db.Column(db.Integer, db.ForeignKey('country.id'), nullable=False)
+    country_id = db.Column(db.Integer, db.ForeignKey(
+        'country.id'), nullable=False)
     state = db.Column(db.String(30), nullable=False)
     city = db.Column(db.String(30), nullable=False)
     phone_primary = db.Column(db.String(20), nullable=False)
     phone_alternate = db.Column(db.String(20))
     agree_tc = db.Column(db.Boolean, default=False, nullable=False)
-    marital_status_id = db.Column(db.Integer, db.ForeignKey('marital_status.id'), nullable=False)
+    marital_status_id = db.Column(db.Integer, db.ForeignKey(
+        'marital_status.id'), nullable=False)
     height = db.Column(db.String(20), nullable=False)
     gotra_id = db.Column(db.Integer, db.ForeignKey('gotra.id'), nullable=False)
     original_surname = db.Column(db.String(20), nullable=False)
     father_fullname = db.Column(db.String(50), nullable=False)
     address = db.Column(db.String(100), nullable=False)
     about_yourself = db.Column(db.String(200))
-    upload_photos=db.relationship('UploadPhotos', backref = 'user_details', lazy = 'dynamic')
+    upload_photos = db.relationship(
+        'UploadPhotos', backref='user_details', lazy='dynamic')
     upload_proof = db.Column(db.String(30))
     partner_age_from = db.Column(db.Integer, nullable=False)
     partner_age_to = db.Column(db.Integer, nullable=False)
     partner_height_from = db.Column(db.String(20), nullable=False)
     partner_height_to = db.Column(db.String(20), nullable=False)
     # many to many relationship can be defined on either table
-    partner_marital_status = db.relationship('MaritalStatus', secondary=user_partner_marital, lazy='dynamic', \
-        backref=db.backref('pms_prefs', lazy='dynamic'))
-    where_know_id = db.Column(db.Integer, db.ForeignKey('where_know.id'), nullable=False)
-    update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-    create_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    partner_marital_status = db.relationship('MaritalStatus', secondary=user_partner_marital, lazy='dynamic',
+                                             backref=db.backref('pms_prefs', lazy='dynamic'))
+    where_know_id = db.Column(db.Integer, db.ForeignKey(
+        'where_know.id'), nullable=False)
+    update_date = db.Column(
+        db.DateTime, default=datetime.utcnow, nullable=False)
+    create_date = db.Column(
+        db.DateTime, default=datetime.utcnow, nullable=False)
 
     def __repr__(self):
         return '<UserDetails {}>'.format(self.first_name)
@@ -117,8 +133,10 @@ class UploadPhotos(db.Model):
     __tablename__ = 'upload_photos'
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(30), nullable=False)
-    user_details_id=db.Column(db.Integer, db.ForeignKey('user_details.id'), nullable = False)
-    update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    user_details_id = db.Column(db.Integer, db.ForeignKey(
+        'user_details.id'), nullable=False)
+    update_date = db.Column(
+        db.DateTime, default=datetime.utcnow, nullable=False)
 
     def __repr__(self):
         return '<UploadPhotos {}>'.format(self.filename)
@@ -128,8 +146,10 @@ class MaritalStatus(db.Model):
     __tablename__ = 'marital_status'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False)
-    update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-    user_details = db.relationship('UserDetails', backref='marital_status', lazy='dynamic')
+    update_date = db.Column(
+        db.DateTime, default=datetime.utcnow, nullable=False)
+    user_details = db.relationship(
+        'UserDetails', backref='marital_status', lazy='dynamic')
 
     def __repr__(self):
         return '<MaritalStatus {}>'.format(self.name)
@@ -139,8 +159,10 @@ class Country(db.Model):
     __tablename__ = 'country'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False)
-    update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-    user_details = db.relationship('UserDetails', backref='country', lazy='dynamic')
+    update_date = db.Column(
+        db.DateTime, default=datetime.utcnow, nullable=False)
+    user_details = db.relationship(
+        'UserDetails', backref='country', lazy='dynamic')
 
     def __repr__(self):
         return '<Country {}>'.format(self.name)
@@ -150,9 +172,11 @@ class WhereKnow(db.Model):
     __tablename__ = 'where_know'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False)
-    update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-    user_details = db.relationship('UserDetails', backref='where_know', lazy='dynamic')
-    
+    update_date = db.Column(
+        db.DateTime, default=datetime.utcnow, nullable=False)
+    user_details = db.relationship(
+        'UserDetails', backref='where_know', lazy='dynamic')
+
     def __repr__(self):
         return '<WhereKnow {}>'.format(self.name)
 
@@ -161,8 +185,10 @@ class Gotra(db.Model):
     __tablename__ = 'gotra'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False)
-    update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-    user_details = db.relationship('UserDetails', backref='gotra', lazy='dynamic')
+    update_date = db.Column(
+        db.DateTime, default=datetime.utcnow, nullable=False)
+    user_details = db.relationship(
+        'UserDetails', backref='gotra', lazy='dynamic')
 
     def __repr__(self):
         return '<Gotra {}>'.format(self.name)
@@ -172,8 +198,10 @@ class Gender(db.Model):
     __tablename__ = 'gender'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False)
-    update_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-    user_details = db.relationship('UserDetails', backref='gender', lazy='dynamic')
+    update_date = db.Column(
+        db.DateTime, default=datetime.utcnow, nullable=False)
+    user_details = db.relationship(
+        'UserDetails', backref='gender', lazy='dynamic')
 
     def __repr__(self):
         return '<Gender {}>'.format(self.name)

@@ -1,0 +1,5 @@
+Well done!
+
+You have successfully registered and may now log into Umiya Matrimony using your email {{ user.email }}.
+
+https://umiyamatrimony.com

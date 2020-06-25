@@ -1,8 +1,9 @@
-from flask import jsonify, request, url_for
+from flask import jsonify, request, url_for, render_template
 from . import app, db
 from .auth import basic_auth, token_auth
 from .errors import error_response, bad_request
 from .models import User, UserDetails, Role, Country, Gotra, WhereKnow, MaritalStatus, Gender, UploadPhotos
+from .email import send_reg_email
 import os
 from datetime import datetime
 from PIL import Image
@@ -23,9 +24,9 @@ def index():
 def get_token():
     user = basic_auth.current_user()
     token = user.get_token()
-    payload = { \
-        'email': basic_auth.current_user().email, \
-        'token': token \
+    payload = {
+        'email': basic_auth.current_user().email,
+        'token': token
     }
     user.last_login = datetime.now()
     db.session.add(user)
@@ -33,8 +34,7 @@ def get_token():
     return jsonify(payload)
 
 
-# Revoke a token
-# This is not used ?
+# Revoke a token immediately .. eg when user logs out
 @app.route('/api/tokens', methods=['DELETE'])
 @token_auth.login_required
 def revoke_token():
@@ -54,23 +54,23 @@ def get_user(id):
 # handle register form submit
 def get_row(table, id):
     return table.query.filter_by(id=id).first()
- 
+
+
 @app.route('/api/users', methods=['POST'])
 def register():
     data = request.get_json() or {}
-    print('data from form:', data)
 
     # tuple of mandatory fields
     mand_fields = ('email', 'password', 'firstName', 'lastName', 'gender', 'dateOfBirth',
-            'country', 'state', 'city', 'primaryContact', 'agreeTnC', 'maritalStatus',
-            'height', 'gotra', 'originalSurname', 'fatherName', 'residentialAddress',
-            'ageFrom', 'ageTo', 'heightTo', 'heightFrom',
-            'sourceOfWebsite')
+                   'country', 'state', 'city', 'primaryContact', 'agreeTnC', 'maritalStatus',
+                   'height', 'gotra', 'originalSurname', 'fatherName', 'residentialAddress',
+                   'ageFrom', 'ageTo', 'heightTo', 'heightFrom',
+                   'sourceOfWebsite')
     if not all(field in data for field in mand_fields):
         return bad_request('must include all mandatory fields in database')
     if 'id' not in data['gotra'] or \
         'id' not in data['sourceOfWebsite'] or 'id' not in data['maritalStatus'] or \
-        'id' not in data['gender']:
+            'id' not in data['gender']:
         return bad_request('must include all mandatory fields in database')
     if User.query.filter_by(email=data['email']).first():
         return bad_request('email already registered')
@@ -121,8 +121,6 @@ def register():
     )
     user.set_password(data['password'])
     user.user_details = user_details
-    # also adds token to user session
-    user.get_token()
 
     for pms in data['maritalStatusPreference']:
         ms = MaritalStatus.query.filter_by(id=int(pms['id'])).first()
@@ -135,7 +133,8 @@ def register():
     payload = {'email': user.email}
     response = jsonify(payload)
     response.status_code = 201
-    # response.headers['Location'] = url_for('get_user', id=user.id)
+
+    send_reg_email(user)
     return response
 
 
@@ -147,6 +146,7 @@ def get_list(table):
         l.append({'id': r.id, 'name': r.name})
     return l
 
+
 @app.route('/api/lists', methods=['GET'])
 def lists():
     payload = {}
@@ -155,8 +155,8 @@ def lists():
     where_know = get_list(WhereKnow)
     marital_status = get_list(MaritalStatus)
     gender = get_list(Gender)
-    payload = {'country': country, 'gotra': gotra, 'where_know': where_know, \
-         'marital_status': marital_status, 'gender': gender}
+    payload = {'country': country, 'gotra': gotra, 'where_know': where_know,
+               'marital_status': marital_status, 'gender': gender}
     return jsonify(payload)
 
 
@@ -194,7 +194,7 @@ def upload_file():
         return bad_request('Unable to convert and save file')
 
     user_det = token_auth.current_user().user_details
-    if filetype == 'photo':    
+    if filetype == 'photo':
         upl_photo = UploadPhotos(filename=filename)
         user_det.upload_photos.append(upl_photo)
         db.session.add(user_det)
@@ -216,3 +216,6 @@ def hello():
     return jsonify({'message': 'hello world!!!'})
 
 
+@app.route('/api/hello2', methods=['GET'])
+def hello2():
+    return render_template('test.html')
