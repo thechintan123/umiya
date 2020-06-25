@@ -13,8 +13,8 @@ def send_email(recipients, subject, text_body, html_body):
         person.add_to(Email(r))
         message.add_personalization(person)
 
-    admin_emails = tuple(current_app.config['MAIL_ADMINS'].split(';'))
-    message.bcc = Bcc(admin_emails)
+    admin_list = current_app.config['MAIL_ADMINS'].split(';')
+    message.bcc = [Bcc(a) for a in admin_list]
     message.subject = Subject(subject)
     message.from_email = From(
         current_app.config['MAIL_FROM'], 'Umiya Matrimony')
