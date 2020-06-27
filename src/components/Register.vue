@@ -374,7 +374,7 @@
 
 <script>
 import axios from 'axios'
-import mixinRegisterLogin from 'src/mixins/Mixin_RegisterLogin.js'
+import mixinFormValidations from 'src/mixins/Mixin_FormValidations.js'
 import { showErrorMessage } from 'src/utils/show-error-message'
 
 const stringOptions = [
@@ -382,7 +382,7 @@ const stringOptions = [
 ]
 
 export default {
-  mixins: [mixinRegisterLogin],
+  mixins: [mixinFormValidations],
   data () {
     return {
       //upload url

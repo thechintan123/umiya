@@ -98,7 +98,8 @@ module.exports = function (ctx) {
         'QPagination',
         'QParallax',
         'QCardActions',
-        'QIntersection'
+        'QIntersection',
+        'QBtnToggle'
       ],
 
       directives: [

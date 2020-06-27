@@ -62,12 +62,13 @@
 
 <script>
 import { mapActions } from 'vuex'
-import mixinRegisterLogin from 'src/mixins/Mixin_RegisterLogin.js'
+import mixinFormValidations from 'src/mixins/Mixin_FormValidations.js'
 import { showErrorMessage } from 'src/utils/show-error-message'
 
 
 export default {
-  mixins: [mixinRegisterLogin],
+  mixins: [mixinFormValidations]
+  ,
   data () {
     return {
       isPwd: true,

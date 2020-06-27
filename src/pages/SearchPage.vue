@@ -3,6 +3,16 @@
     <searchForm @fetchSearchResults="fetchSearchResults"/>
     <searchResults :searchResults="searchResultsPerPage" v-if="Object.keys(searchResultsPerPage).length"/>
 
+    <q-banner
+    v-if="!Object.keys(searchResultsPerPage).length && searchPerformed"
+    class="q-mt-md bg-dark text-secondary shadow-2 rounded-borders">
+        No Search Results. Please change the search criteria and search again
+    </q-banner>
+
+
+    <!-- <searchResults :searchResults="searchResultsList" v-if="Object.keys(searchResultsList).length"/> -->
+    <!-- Use this if you want to send entire SearchResultList and not SearchResultsPage -->
+
 <!-- Not using this function and SearchResults Pagination component since
  On changing the page number and calling update Action. It updates page number and it is not
 able to update the state of the SearchResults
@@ -33,7 +43,8 @@ searchResultsList : {},
 page : 1,
 maxPages : 0,
 resultsPerPage : 3 , //Fixed count
-searchResultsPerPage : {}
+searchResultsPerPage : {},
+searchPerformed: false
 }
 
 }
@@ -55,10 +66,14 @@ this.searchResultsPerPage = Object.assign(
 ,
 fetchSearchResults(){
 this.searchResultsList = this.getSearchResults;
+console.log('searchResultsList', this.searchResultsList);
+if(Object.keys(this.searchResultsList).length > 0){
+this.checkPage();
 this.maxPages = Object.keys(this.searchResultsList).length / this.resultsPerPage;
 if (this.maxPages <= 1) { this.maxPages = 1 };
-this.page=1;
-this.checkPage();
+}
+this.page=1; //To stay on First Page
+this.searchPerformed = true; //This is done to ensure that No Search Results message is displayed for empty Search Results
 //this.searchResultsPerPage = this.getSearchResultsPerPage;
 //console.log('searchResultsPerPage', this.searchResultsPerPage);
 }
