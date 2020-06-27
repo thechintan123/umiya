@@ -1,6 +1,5 @@
 import axios from 'axios'
 
-
 const state = {
   // format is user.email and user.token
   user: null,

@@ -87,7 +87,6 @@
       </q-card-section>
     </q-card>
 
-
     <q-card flat bordered class="my-card"  align="center">
        <q-card-section class="bg-dark">
           <q-icon name="fas fa-user-lock" class="text-secondary" style="font-size: 3rem;" />
@@ -113,8 +112,6 @@
       </q-card-section>
     </q-card>
 
-
-
    <q-card flat bordered class="my-card"  align="center">
        <q-card-section class="bg-dark">
           <q-icon name="fas fa-search" class="text-secondary" style="font-size: 3rem;" />
@@ -130,43 +127,38 @@
 </q-page>
 </template>
 
-
-
 <script>
 
 export default {
   name: 'PageIndex',
-data(){
-return{
-slide : 1,
-cardDetails : [
-{
-icon : 'fas fa-search',
-title : 'Easy Search',
-subtitle : 'Easy Search based on Age, Health and Country.'
-}
-,
-{
-icon : 'fas fa-search',
-title : 'Easy Search',
-subtitle : 'Easy Search based on Age, Health and Country.'
-}
-,
-{
-icon : 'fas fa-search',
-title : 'Easy Search',
-subtitle : 'Easy Search based on Age, Health and Country.'
-}
-]
-}
-}
-,
-methods:{
-register(){
-console.log('Register');
-this.$router.push('register');
-}
-}
+  data () {
+    return {
+      slide: 1,
+      cardDetails: [
+        {
+          icon: 'fas fa-search',
+          title: 'Easy Search',
+          subtitle: 'Easy Search based on Age, Health and Country.'
+        },
+        {
+          icon: 'fas fa-search',
+          title: 'Easy Search',
+          subtitle: 'Easy Search based on Age, Health and Country.'
+        },
+        {
+          icon: 'fas fa-search',
+          title: 'Easy Search',
+          subtitle: 'Easy Search based on Age, Health and Country.'
+        }
+      ]
+    }
+  },
+  methods: {
+    register () {
+      console.log('Register')
+      this.$router.push('register')
+    }
+  }
 }
 </script>
 

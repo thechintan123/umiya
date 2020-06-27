@@ -18,35 +18,29 @@ able to update the state of the SearchResults
 </template>
 
 <script>
-import {mapGetters, mapActions} from 'vuex';
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
-data(){
-return {
-page : 1,
-maxPages : 3,
-resultsPerPage : 3 , //Fixed count
-}
-}
-,
-methods :{
- ...mapActions('search',['updatePageNumber'])
-,
-getSearchResults(){
-//call Getter
-this.getSearchResultsPerPage(this.page, this.resultsPerPage);
-
-
-}
-,
-updatePage(){
-this.updatePageNumber(this.page);
-}
-}
-,
-computed :{
- ...mapGetters('search',['getSearchResultsPerPage']),
-}
+  data () {
+    return {
+      page: 1,
+      maxPages: 3,
+      resultsPerPage: 3 // Fixed count
+    }
+  },
+  methods: {
+    ...mapActions('search', ['updatePageNumber']),
+    getSearchResults () {
+      // call Getter
+      this.getSearchResultsPerPage(this.page, this.resultsPerPage)
+    },
+    updatePage () {
+      this.updatePageNumber(this.page)
+    }
+  },
+  computed: {
+    ...mapGetters('search', ['getSearchResultsPerPage'])
+  }
 }
 </script>
 
