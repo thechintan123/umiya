@@ -2,6 +2,9 @@ from flask import jsonify, request, url_for, render_template
 from . import app, db
 from .auth import basic_auth, token_auth
 from .errors import error_response, bad_request
+from werkzeug.utils import secure_filename
+from sqlalchemy import and_
+from datetime import datetime, timedelta
 from .models import User, UserDetails, Role, Country, Gotra, WhereKnow, MaritalStatus, Gender, UploadPhotos
 from .email import send_reg_email
 import os
@@ -54,6 +57,104 @@ def get_user(id):
 # handle register form submit
 def get_row(table, id):
     return table.query.filter_by(id=id).first()
+
+## Search Function
+@app.route('/api/search', methods=['POST'])
+def search():
+    data = request.get_json() or {}
+    #print('data from form:', data["country"][0])
+    #country = data["country"][0]
+    #print('country:', country["id"])
+    country_id_local =[]
+    countries = data.get("country")
+    if countries is not None:
+        for country in countries:
+            country_id_local.append(country["id"])
+    else:
+        print('Country Else')
+        country_id_local.append(81)
+    #81 - Country Code in DB table for India
+    print('country_id_local:', country_id_local)
+    martial_status_id_local =[]
+    maritalStatusPreferences = data.get("maritalStatusPreference")
+    if len(maritalStatusPreferences) != 0:
+        for maritalStatus in maritalStatusPreferences:
+            martial_status_id_local.append(maritalStatus["id"])
+    else:
+        martial_status_id_local.extend([1,2,3,4]) #1,2,3,4 - all marital statuses in DB values
+    print('martial_status_id_local:', martial_status_id_local)
+    currDate = datetime.now()
+    print('Current Date',currDate)
+    ageFromTo = data["ageFromTo"]
+    if ageFromTo is not None:
+        ageMin = ageFromTo.get("min")
+        ageMax = ageFromTo.get("max")
+    else:
+        ageMin = 18
+        ageMax = 50
+    print('Age Min and Max',ageMin, ageMax)
+    currDatePlusMin = currDate - timedelta(days=(ageMin*365))
+    currDatePlusMax = currDate - timedelta(days=(ageMax*365))
+    print('current Date Plus', currDatePlusMin, currDatePlusMax)
+    #5ft × 30.48 + 5 in × 2.54= 165.1 cm
+    heightMin = data.get("heightFrom")
+    print('heightMin', heightMin)
+    if heightMin is None or heightMin == '':
+      heightMin = "4 ft 0 inches"
+    heightMax = data.get("heightTo")
+    if heightMax is None or heightMax == '':
+      heightMax = "7 ft 0 inches"
+    heightMinInCms = convertToCms(heightMin)
+    heightMaxInCms = convertToCms(heightMax)
+    print('Height Min Max', heightMinInCms, heightMaxInCms)
+    lookingFor = data.get("lookingFor")
+    if lookingFor is None or lookingFor == '':
+      lookingFor = 2 #2 is Looking fór Bride
+    print('lookingFor', lookingFor)
+    #print('data from country:', data.get("country"))
+    #Write Query
+    #users1 = UserDetails.query.filter_by(country_id = country_id_local).all()
+    users = UserDetails.query.filter(and_(UserDetails.country_id.in_(country_id_local),\
+                                          UserDetails.gender_id == lookingFor), \
+                                          UserDetails.dob <= currDatePlusMin, UserDetails.dob >= currDatePlusMax, \
+                                          UserDetails.height.between(heightMinInCms, heightMaxInCms), \
+                                          UserDetails.marital_status_id.in_(martial_status_id_local)).all()
+    print('data from users', users)
+    #Get List of Objects
+    #Convert list to Jsonify format
+    userList =[]
+    for user in users:
+      userList.append({'id': user.id,'firstName': user.first_name,\
+                       'lastName': user.last_name ,\
+                       'gender' : user.gender.name, \
+                       'dob' : user.dob,\
+                       'country' : user.country.name, \
+                       'state' : user.state, \
+                       'city' : user.city,\
+                       'phonePrimary' : user.phone_primary, \
+                       'phoneAlternate': user.phone_alternate, \
+                       'maritalStatus' : user.marital_status.name, \
+                       'height' : user.height, \
+                       'gotra' : user.gotra.name,\
+                       'originalSurname' : user.original_surname, \
+                       'fatherFullname' : user.father_fullname, \
+                       'address' : user.address, \
+                       'aboutYourself' : user.about_yourself \
+                       }) #Need to work on BackReference
+    response = jsonify(userList)
+    response.status_code = 201
+    # response.headers['Location'] = url_for('get_user', id=user.id)
+    return response
+
+
+def convertToCms(heightInFootInches):
+    slice_object1 = slice(0, 1)
+    heightFt = heightInFootInches[slice_object1]
+    slice_object2 = slice(5, 7)
+    heightInches = heightInFootInches[slice_object2]
+    print('Height Ft Inch', heightFt, heightInches)
+    heightCms = float(heightFt) * 30.48 + float(heightInches) * 2.54
+    return heightCms
 
 
 @app.route('/api/users', methods=['POST'])

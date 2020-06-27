@@ -515,16 +515,16 @@
 </template>
 
 <script>
-import axios from "axios";
-import mixinRegisterLogin from "src/mixins/Mixin_RegisterLogin.js";
-import { showErrorMessage } from "src/utils/show-error-message";
+import axios from 'axios'
+import mixinFormValidations from 'src/mixins/Mixin_FormValidations.js'
+import { showErrorMessage } from 'src/utils/show-error-message'
 import { mapState } from "vuex";
 
 const stringOptions = ["Google", "Facebook", "Twitter", "Apple", "Oracle"];
 
 export default {
-  mixins: [mixinRegisterLogin],
-  data() {
+  mixins: [mixinFormValidations],
+  data () {
     return {
       // upload url
       uploadURL: process.env.API + "/upload",
