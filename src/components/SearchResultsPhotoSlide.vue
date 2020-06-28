@@ -32,7 +32,9 @@
          <q-carousel-slide name="first1">
             <img class="fit" src="statics/photos/nature.jpg">
         </q-carousel-slide>
-
+         <q-carousel-slide name="first2">
+            <img class="fit" src="/api/uploads/1/ID1.jpg">
+        </q-carousel-slide>
       <template v-slot:control>
         <q-carousel-control
           position="bottom-right"

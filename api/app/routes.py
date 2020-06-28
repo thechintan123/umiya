@@ -71,10 +71,10 @@ def search():
         for country in countries:
             country_id_local.append(country["id"])
     else:
-        print('Country Else')
+        #print('Country Else')
         country_id_local.append(81)
     #81 - Country Code in DB table for India
-    print('country_id_local:', country_id_local)
+    #print('country_id_local:', country_id_local)
     martial_status_id_local =[]
     maritalStatusPreferences = data.get("maritalStatusPreference")
     if len(maritalStatusPreferences) != 0:
@@ -82,9 +82,9 @@ def search():
             martial_status_id_local.append(maritalStatus["id"])
     else:
         martial_status_id_local.extend([1,2,3,4]) #1,2,3,4 - all marital statuses in DB values
-    print('martial_status_id_local:', martial_status_id_local)
+    #print('martial_status_id_local:', martial_status_id_local)
     currDate = datetime.now()
-    print('Current Date',currDate)
+    #print('Current Date',currDate)
     ageFromTo = data["ageFromTo"]
     if ageFromTo is not None:
         ageMin = ageFromTo.get("min")
@@ -92,13 +92,13 @@ def search():
     else:
         ageMin = 18
         ageMax = 50
-    print('Age Min and Max',ageMin, ageMax)
+    #print('Age Min and Max',ageMin, ageMax)
     currDatePlusMin = currDate - timedelta(days=(ageMin*365))
     currDatePlusMax = currDate - timedelta(days=(ageMax*365))
-    print('current Date Plus', currDatePlusMin, currDatePlusMax)
+    #print('current Date Plus', currDatePlusMin, currDatePlusMax)
     #5ft × 30.48 + 5 in × 2.54= 165.1 cm
     heightMin = data.get("heightFrom")
-    print('heightMin', heightMin)
+    #print('heightMin', heightMin)
     if heightMin is None or heightMin == '':
       heightMin = "4 ft 0 inches"
     heightMax = data.get("heightTo")
@@ -106,11 +106,11 @@ def search():
       heightMax = "7 ft 0 inches"
     heightMinInCms = convertToCms(heightMin)
     heightMaxInCms = convertToCms(heightMax)
-    print('Height Min Max', heightMinInCms, heightMaxInCms)
+    #print('Height Min Max', heightMinInCms, heightMaxInCms)
     lookingFor = data.get("lookingFor")
     if lookingFor is None or lookingFor == '':
       lookingFor = 2 #2 is Looking fór Bride
-    print('lookingFor', lookingFor)
+    #print('lookingFor', lookingFor)
     #print('data from country:', data.get("country"))
     #Write Query
     #users1 = UserDetails.query.filter_by(country_id = country_id_local).all()
@@ -119,7 +119,7 @@ def search():
                                           UserDetails.dob <= currDatePlusMin, UserDetails.dob >= currDatePlusMax, \
                                           UserDetails.height.between(heightMinInCms, heightMaxInCms), \
                                           UserDetails.marital_status_id.in_(martial_status_id_local)).all()
-    print('data from users', users)
+    #print('data from users', users)
     #Get List of Objects
     #Convert list to Jsonify format
     userList =[]
@@ -137,7 +137,7 @@ def search():
                        'height' : user.height, \
                        'gotra' : user.gotra.name,\
                        'originalSurname' : user.original_surname, \
-                       'fatherFullname' : user.father_fullname, \
+                       'fatherFullName' : user.father_fullname, \
                        'address' : user.address, \
                        'aboutYourself' : user.about_yourself \
                        }) #Need to work on BackReference
