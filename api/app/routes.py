@@ -28,16 +28,15 @@ def get_token():
     user = basic_auth.current_user()
     token = user.get_token()
     payload = {
-        'email': basic_auth.current_user().email,
         'token': token
     }
-    user.last_login = datetime.now()
+    user.last_login = datetime.utcnow()
     db.session.add(user)
     db.session.commit()
     return jsonify(payload)
 
 
-# Revoke a token immediately .. eg when user logs out
+# revoke a token immediately .. eg when user logs out
 @app.route('/api/tokens', methods=['DELETE'])
 @token_auth.login_required
 def revoke_token():
@@ -47,16 +46,16 @@ def revoke_token():
     return '', 204
 
 
-# Get a specific user
-@app.route('/api/users/<int:id>', methods=['GET'])
-@token_auth.login_required
-def get_user(id):
-    return jsonify(User.query.get_or_404(id).to_dict())
+# helper function for search
+def convertToCms(heightInFootInches):
+    slice_object1 = slice(0, 1)
+    heightFt = heightInFootInches[slice_object1]
+    slice_object2 = slice(5, 7)
+    heightInches = heightInFootInches[slice_object2]
+    print('Height Ft Inch', heightFt, heightInches)
+    heightCms = float(heightFt) * 30.48 + float(heightInches) * 2.54
+    return heightCms
 
-
-# handle register form submit
-def get_row(table, id):
-    return table.query.filter_by(id=id).first()
 
 ## Search Function
 @app.route('/api/search', methods=['POST'])
@@ -65,7 +64,7 @@ def search():
     #print('data from form:', data["country"][0])
     #country = data["country"][0]
     #print('country:', country["id"])
-    country_id_local =[]
+    country_id_local = []
     countries = data.get("country")
     if countries is not None:
         for country in countries:
@@ -75,16 +74,17 @@ def search():
         country_id_local.append(81)
     #81 - Country Code in DB table for India
     print('country_id_local:', country_id_local)
-    martial_status_id_local =[]
+    martial_status_id_local = []
     maritalStatusPreferences = data.get("maritalStatusPreference")
     if len(maritalStatusPreferences) != 0:
         for maritalStatus in maritalStatusPreferences:
             martial_status_id_local.append(maritalStatus["id"])
     else:
-        martial_status_id_local.extend([1,2,3,4]) #1,2,3,4 - all marital statuses in DB values
+        # 1,2,3,4 - all marital statuses in DB values
+        martial_status_id_local.extend([1, 2, 3, 4])
     print('martial_status_id_local:', martial_status_id_local)
     currDate = datetime.now()
-    print('Current Date',currDate)
+    print('Current Date', currDate)
     ageFromTo = data["ageFromTo"]
     if ageFromTo is not None:
         ageMin = ageFromTo.get("min")
@@ -92,7 +92,7 @@ def search():
     else:
         ageMin = 18
         ageMax = 50
-    print('Age Min and Max',ageMin, ageMax)
+    print('Age Min and Max', ageMin, ageMax)
     currDatePlusMin = currDate - timedelta(days=(ageMin*365))
     currDatePlusMax = currDate - timedelta(days=(ageMax*365))
     print('current Date Plus', currDatePlusMin, currDatePlusMax)
@@ -109,56 +109,60 @@ def search():
     print('Height Min Max', heightMinInCms, heightMaxInCms)
     lookingFor = data.get("lookingFor")
     if lookingFor is None or lookingFor == '':
-      lookingFor = 2 #2 is Looking fór Bride
+      lookingFor = 2  # 2 is Looking fór Bride
     print('lookingFor', lookingFor)
     #print('data from country:', data.get("country"))
     #Write Query
     #users1 = UserDetails.query.filter_by(country_id = country_id_local).all()
-    users = UserDetails.query.filter(and_(UserDetails.country_id.in_(country_id_local),\
-                                          UserDetails.gender_id == lookingFor), \
-                                          UserDetails.dob <= currDatePlusMin, UserDetails.dob >= currDatePlusMax, \
-                                          UserDetails.height.between(heightMinInCms, heightMaxInCms), \
-                                          UserDetails.marital_status_id.in_(martial_status_id_local)).all()
+    users = UserDetails.query.filter(and_(UserDetails.country_id.in_(country_id_local),
+                                          UserDetails.gender_id == lookingFor),
+                                     UserDetails.dob <= currDatePlusMin, UserDetails.dob >= currDatePlusMax,
+                                     UserDetails.height.between(
+                                         heightMinInCms, heightMaxInCms),
+                                     UserDetails.marital_status_id.in_(martial_status_id_local)).all()
     print('data from users', users)
     #Get List of Objects
     #Convert list to Jsonify format
-    userList =[]
+    userList = []
     for user in users:
-      userList.append({'id': user.id,'firstName': user.first_name,\
-                       'lastName': user.last_name ,\
-                       'gender' : user.gender.name, \
-                       'dob' : user.dob,\
-                       'country' : user.country.name, \
-                       'state' : user.state, \
-                       'city' : user.city,\
-                       'phonePrimary' : user.phone_primary, \
-                       'phoneAlternate': user.phone_alternate, \
-                       'maritalStatus' : user.marital_status.name, \
-                       'height' : user.height, \
-                       'gotra' : user.gotra.name,\
-                       'originalSurname' : user.original_surname, \
-                       'fatherFullname' : user.father_fullname, \
-                       'address' : user.address, \
-                       'aboutYourself' : user.about_yourself \
-                       }) #Need to work on BackReference
+        userList.append({'id': user.id, 'firstName': user.first_name,
+                         'lastName': user.last_name,
+                         'gender': user.gender.name,
+                         'dob': user.dob,
+                         'country': user.country.name,
+                         'state': user.state,
+                         'city': user.city,
+                         'phonePrimary': user.phone_primary,
+                         'phoneAlternate': user.phone_alternate,
+                         'maritalStatus': user.marital_status.name,
+                         'height': user.height,
+                         'gotra': user.gotra.name,
+                         'originalSurname': user.original_surname,
+                         'fatherFullname': user.father_fullname,
+                         'address': user.address,
+                         'aboutYourself': user.about_yourself
+                         })  # Need to work on BackReference
     response = jsonify(userList)
     response.status_code = 201
     # response.headers['Location'] = url_for('get_user', id=user.id)
     return response
 
 
-def convertToCms(heightInFootInches):
-    slice_object1 = slice(0, 1)
-    heightFt = heightInFootInches[slice_object1]
-    slice_object2 = slice(5, 7)
-    heightInches = heightInFootInches[slice_object2]
-    print('Height Ft Inch', heightFt, heightInches)
-    heightCms = float(heightFt) * 30.48 + float(heightInches) * 2.54
-    return heightCms
+# get one user
+@app.route('/api/users/<int:id>', methods=['GET'])
+@token_auth.login_required
+def get_user(id):
+    return jsonify(User.query.get_or_404(id).to_dict())
 
 
+# helper function for add new user
+def get_row(table, id):
+    return table.query.filter_by(id=id).first()
+
+
+# add new user
 @app.route('/api/users', methods=['POST'])
-def register():
+def create_user():
     data = request.get_json() or {}
 
     # tuple of mandatory fields
@@ -239,7 +243,7 @@ def register():
     return response
 
 
-# Get dropdowns for register form
+# helper function for dropdowns
 def get_list(table):
     results = table.query.all()
     l = []
@@ -248,6 +252,7 @@ def get_list(table):
     return l
 
 
+# Get dropdowns
 @app.route('/api/lists', methods=['GET'])
 def lists():
     payload = {}
@@ -310,13 +315,9 @@ def upload_file():
     return '', 204
 
 
-# Testing
+# testing
 @app.route('/api/hello', methods=['GET'])
 @token_auth.login_required
 def hello():
     return jsonify({'message': 'hello world!!!'})
 
-
-@app.route('/api/hello2', methods=['GET'])
-def hello2():
-    return render_template('test.html')
