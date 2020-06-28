@@ -25,15 +25,15 @@
           <!-- </q-avatar> -->
           <search-results-photo-slide :profileID= "key"></search-results-photo-slide>
         </div>
-        <q-item class="col-md-8 col-9">
+        <q-item class="col-md-8 col-9 text-capitalize">
         <q-item-section >
-         <q-item-label> <div class="text-h6">{{ searchItem.firstName}} {{searchItem.lastName}}( Profile ID:{{ searchItem.id }})</div></q-item-label>
+         <q-item-label> <div class="text-h6">{{ searchItem.firstName}} {{searchItem.lastName}}(Profile ID :{{ searchItem.id }})</div></q-item-label>
           <q-item-label > Date of Birth : {{ searchItem.dob}} </q-item-label>
-          <q-item-label > Age : {{ searchItem.age}} years </q-item-label>
-          <q-item-label > Height : {{searchItem.height}} </q-item-label>
+          <q-item-label > Age : {{ computeAge(searchItem.dob)}}  </q-item-label>
+          <q-item-label > Height : {{searchItem.height | convertHeightToFoot}} </q-item-label>
           <q-item-label > Marital Status : {{searchItem.maritalStatus}} </q-item-label>
           <q-item-label > Location : {{ searchItem.city}}, {{ searchItem.state}}, {{ searchItem.country}}  </q-item-label>
-          <q-item-label caption v-if="loggedIn"> You need to be registered member to see contact details.  </q-item-label>
+          <q-item-label caption v-if="!loggedIn"> You need to be registered member to see contact details.  </q-item-label>
          <q-expansion-item
          switch-toggle-side
         expand-separator
@@ -45,14 +45,14 @@
 
         <q-card>
           <q-card-section>
-          <q-item-section>
-          <q-item-label > Father Name  : {{searchItem.fatherName}} </q-item-label>
+          <q-item-section >
+          <q-item-label > Father Name  : {{searchItem.fatherFullName}} </q-item-label>
           <q-item-label > Gotra  : {{searchItem.gotra}} </q-item-label>
           <q-item-label > Original Surname  : {{searchItem.originalSurname}} </q-item-label>
           <q-item-label > Address  : {{searchItem.address}} </q-item-label>
           <q-item-label > About {{ searchItem.firstName}} : {{searchItem.aboutYourself}} </q-item-label>
-          <q-item-label > Primary Contact  : {{searchItem.primaryContactCode}} - {{searchItem.primaryContact}}  </q-item-label>
-          <q-item-label > Alternate Contact  : {{searchItem.alternateContactCode}} - {{searchItem.alternateContact}}  </q-item-label>
+          <q-item-label > Primary Contact  : {{searchItem.phonePrimary}}  </q-item-label>
+          <q-item-label > Alternate Contact  : {{searchItem.phoneAlternate}}  </q-item-label>
           </q-item-section>
           </q-card-section>
         </q-card>
@@ -73,8 +73,11 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
+import mixinComputations from 'src/mixins/Mixin_Computations.js'
+
 
 export default {
+  mixins: [mixinComputations],
   components: {
     'search-results-photo-slide': require('components/SearchResultsPhotoSlide.vue').default
 
@@ -89,14 +92,26 @@ export default {
   methods: {
     checkLoggedIn () {
       const user = localStorage.getItem('user')
-      // console.log(user)
+      console.log(user)
       if (user) {
         this.loggedIn = true
       } else {
         this.loggedIn = false
       }
     }
+
   },
+  filters :{
+    convertHeightToFoot(heightInCms){
+    var heigthInInches = heightInCms * 0.39;
+    var heightInFeet = Math.trunc(heigthInInches/12)
+    var onlyInches = Math.trunc(heigthInInches - heightInFeet * 12)
+    console.log(heightInFeet, onlyInches,heigthInInches )
+    return heightInFeet +' feet ' + onlyInches + ' inches'
+    }
+
+  }
+  ,
   created () {
     this.checkLoggedIn()
   }

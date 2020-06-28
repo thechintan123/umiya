@@ -388,7 +388,7 @@
                   options-dense
                   label="Age(From)*"
                   :options="ageFromToOptions"
-                  :rules="[ val => !!val || 'Field is required']"
+                  :rules="[ val => !!val || 'Field is required',  val => checkAgeFrom(val) || 'Age(To) should be greater than Age(From)']"
                 ></q-select>
               </div>
               <div class="col">
@@ -401,7 +401,7 @@
                   options-dense
                   label="Age(To)*"
                   :options="ageFromToOptions"
-                  :rules="[ val => !!val || 'Field is required', val => checkAgeFromAgeTo(val) || 'Age(To) should be greater than Age(From).' ]"
+                  :rules="[ val => !!val || 'Field is required', val => checkAgeTo(val) || 'Age(To) should be greater than Age(From)' ]"
                 ></q-select>
               </div>
             </div>
@@ -417,7 +417,7 @@
                   options-dense
                   label="Height(From)*"
                   :options="heightOptions"
-                  :rules="[ val => !!val || 'Field is required']"
+                  :rules="[ val => !!val || 'Field is required', val => checkHeightFrom(val) || 'Height(To) should be greater than Height(From)']"
                 ></q-select>
               </div>
               <div class="col">
@@ -430,7 +430,7 @@
                   options-dense
                   label="Height(To)*"
                   :options="heightOptions"
-                  :rules="[ val => !!val || 'Field is required' , val => checkHeightFromHeightTo(val) || 'Height(To) should be greater than Height(From).']"
+                  :rules="[ val => !!val || 'Field is required' , val => checkHeightTo(val) || 'Height(To) should be greater than Height(From)']"
                 ></q-select>
               </div>
             </div>
@@ -517,13 +517,14 @@
 <script>
 import axios from 'axios'
 import mixinFormValidations from 'src/mixins/Mixin_FormValidations.js'
+import mixinComputations from 'src/mixins/Mixin_Computations.js'
 import { showErrorMessage } from 'src/utils/show-error-message'
 import { mapState } from "vuex";
 
 const stringOptions = ["Google", "Facebook", "Twitter", "Apple", "Oracle"];
 
 export default {
-  mixins: [mixinFormValidations],
+  mixins: [mixinFormValidations, mixinComputations],
   data () {
     return {
       // upload url
@@ -657,7 +658,7 @@ export default {
         "+" +
         this.tmpData.primaryContactCountryCode +
         " " +
-        this.tmpData.alternateContacts;
+        this.tmpData.alternateContact;
       this.registerUser(this.formData);
     },
     createHeightList() {
@@ -681,10 +682,7 @@ export default {
       }
     },
     calculateAge() {
-      var dobInMS = Date.parse(this.formData.dateOfBirth);
-      var diffMs = Date.now() - dobInMS;
-      var ageDt = new Date(diffMs);
-      this.formData.age = Math.abs(ageDt.getUTCFullYear() - 1970) + " years";
+      this.formData.age = this.computeAge(this.formData.dateOfBirth)
     },
 
     checkOtherCountry(otherCountry) {
@@ -701,38 +699,38 @@ export default {
         return false;
       }
     },
-    checkEmail(email) {
-      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return re.test(String(email).toLowerCase());
-    },
-    checkAgeFromAgeTo(ageTo) {
+    checkAgeTo(ageTo) {
       if (ageTo < this.formData.ageFrom) {
         return false;
       } else {
         return true;
       }
     },
-    checkHeightFromHeightTo(heightTo) {
-      const heightFrom = this.formData.heightFrom;
-      // let heightTo = this.formData.heightTo;
-      const heightFromFoot = parseInt(heightFrom.charAt(0)); // 0  is position for foot
-      const heightToFoot = parseInt(heightTo.charAt(0));
-
-      if (heightToFoot < heightFromFoot) {
+     checkAgeFrom(ageFrom) {
+      if (ageFrom > this.formData.ageTo) {
         return false;
-      } else if (heightToFoot === heightFromFoot) {
-        // in case foot is same then check inches
-        const heightFromInches = parseInt(heightFrom.substr(5, 2)); // 5 is position for inches
-        const heightToInches = parseInt(heightTo.substr(5, 2));
-        if (heightToInches < heightFromInches) {
-          return false;
-        } else {
-          return true;
-        }
       } else {
         return true;
       }
     },
+    checkHeightTo (heightTo) {
+      const heightFrom = this.formData.heightFrom
+      if(heightFrom && heightTo){
+      return this.compareHeightFromHeightTo(heightFrom, heightTo)
+      }
+      else
+      {return true}
+    }
+    ,
+    checkHeightFrom(heightFrom){
+      const heightTo = this.formData.heightTo
+      if(heightFrom && heightTo){
+      return this.compareHeightFromHeightTo(heightFrom, heightTo)
+      }
+      else
+      {return true}
+     }
+  ,
     uploadImage(fd) {
       return axios
         .post(process.env.API + "/upload", fd, {
