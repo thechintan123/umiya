@@ -333,22 +333,20 @@ updatePageNumber(state, page){
     state.page = page;
 },
 saveSearchResults(state, searchResults){
-console.log('Store Search Results', searchResults)
+//console.log('Store Search Results', searchResults)
 //Vue.set(state.tasks, payload.id, payload.task);
 //delete the existing SearchResults Object
 for (var member in state.searchResults)
 {
 delete state.searchResults[member];
 }
-console.log('After Delete State SearchResults', Object.keys(state.searchResults).length);
+//console.log('After Delete State SearchResults', Object.keys(state.searchResults).length);
 var i;
 for (i=0; i<searchResults.length;i++) {
   let newID = uid();
-  console.log('singleSearch', newID, searchResults[i])
-  //state.searchResults.push(searchResults[i])
-  //Vue.set(state.searchResults, newID, singleSearch)
+  //console.log('singleSearch', newID, searchResults[i])
   state.searchResults[newID]= searchResults[i]
-  console.log('State SearchResults', state.searchResults);
+  //console.log('State SearchResults', state.searchResults);
 }
 }
 }

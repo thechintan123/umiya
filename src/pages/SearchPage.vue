@@ -66,7 +66,7 @@ this.searchResultsPerPage = Object.assign(
 ,
 fetchSearchResults(){
 this.searchResultsList = this.getSearchResults;
-console.log('searchResultsList', this.searchResultsList);
+//console.log('searchResultsList', this.searchResultsList);
 if(Object.keys(this.searchResultsList).length > 0){
 this.checkPage();
 this.maxPages = Object.keys(this.searchResultsList).length / this.resultsPerPage;

@@ -36,6 +36,14 @@
     >
     src="~assets/logos/LogoMakr_Ring_RED.png"
 -->
+
+      <q-carousel-slide :name="6" img-src="http://localhost/api/uploads/1/ID1.jpg" >
+              <div class="absolute-bottom-left custom-caption text-primary">
+          <div class="text-h2  my-style">It's Free</div>
+          <div class="text-subtitle1">500+ Profiles</div>
+        </div>
+      </q-carousel-slide>
+
       <q-carousel-slide :name="1" img-src="~assets/images/Success.jpg">
               <div class="absolute-bottom-left custom-caption text-primary">
           <div class="text-h2 my-style" >Success Story</div>

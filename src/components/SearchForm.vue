@@ -178,7 +178,7 @@ export default {
     submitSearchForm(){
          this.$refs.searchForm.validate().then((success) => {
         if (success) {
-        console.log("Success");
+        //console.log("Success");
         this.fetchSearchResults();
         } else {
         console.log("Error");
@@ -189,14 +189,14 @@ export default {
 
     async fetchSearchResults () {
 
-      console.log('searchParams', this.searchParams);
+      //console.log('searchParams', this.searchParams);
       await this.fetchSearch_fromDB(this.searchParams);
       this.$emit('fetchSearchResults')
     },
     fetchSearch_fromDB(data){
           return axios.post(process.env.API + '/search', data)
         .then(({ data }) => {
-          console.log('Search Success', data)
+          //console.log('Search Success', data)
           this.saveSearchResults(data)
           //Store in Stores
           this.$q.notify({
