@@ -1,4 +1,5 @@
-from flask import render_template, current_app
+from flask import render_template
+from . import app
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail, Content, Personalization, Email, From, Bcc, Subject, ReplyTo
 
@@ -13,13 +14,13 @@ def send_email(recipients, subject, text_body, html_body):
         person.add_to(Email(r))
         message.add_personalization(person)
 
-    admin_list = current_app.config['MAIL_ADMINS'].split(';')
+    admin_list = app.config['MAIL_ADMINS'].split(';')
     message.bcc = [Bcc(a) for a in admin_list]
     message.subject = Subject(subject)
     message.from_email = From(
-        current_app.config['MAIL_FROM'], 'Umiya Matrimony')
+        app.config['MAIL_FROM'], 'Umiya Matrimony')
     message.reply_to = ReplyTo(
-        current_app.config['MAIL_REPLY_TO'], 'Umiya Matrimony Reply')
+        app.config['MAIL_REPLY_TO'], 'Umiya Matrimony Reply')
 
     message.content = [
         Content('text/html', html_body),
@@ -27,7 +28,7 @@ def send_email(recipients, subject, text_body, html_body):
     ]
 
     try:
-        sg = SendGridAPIClient(current_app.config['SENDGRID_API_KEY'])
+        sg = SendGridAPIClient(app.config['SENDGRID_API_KEY'])
         response = sg.send(message)
         print(response.status_code)
         print(response.body)

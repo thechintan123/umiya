@@ -57,33 +57,32 @@ def convertToCms(heightInFootInches):
     return heightCms
 
 
-## Search Function
+# search Function
 @app.route('/api/search', methods=['POST'])
 def search():
     data = request.get_json() or {}
-    #print('data from form:', data["country"][0])
-    #country = data["country"][0]
-    #print('country:', country["id"])
+
     country_id_local = []
     countries = data.get("country")
     if countries is not None:
         for country in countries:
-            country_id_local.append(country["id"])
+            country_id_local.append(country['id'])
     else:
-        #print('Country Else')
-        country_id_local.append(81)
-    #81 - Country Code in DB table for India
-    #print('country_id_local:', country_id_local)
-    martial_status_id_local =[]
-    maritalStatusPreferences = data.get("maritalStatusPreference")
+        # otherwise default to India
+        india = Country.query.filter_by(name='India').first()
+        country_id_local.append(india.id)
+    
+    marital_status_id_local =[]
+    maritalStatusPreferences = data.get('maritalStatusPreference')
     if len(maritalStatusPreferences) != 0:
         for maritalStatus in maritalStatusPreferences:
-            martial_status_id_local.append(maritalStatus["id"])
+            marital_status_id_local.append(maritalStatus['id'])
     else:
-        martial_status_id_local.extend([1,2,3,4]) #1,2,3,4 - all marital statuses in DB values
-    #print('martial_status_id_local:', martial_status_id_local)
+        # otherwise default to all marital status
+        ms = MaritalStatus.query.all()
+        marital_status_id_local = [m.id for m in ms]
+        
     currDate = datetime.now()
-    #print('Current Date',currDate)
     ageFromTo = data["ageFromTo"]
     if ageFromTo is not None:
         ageMin = ageFromTo.get("min")
@@ -91,7 +90,8 @@ def search():
     else:
         ageMin = 18
         ageMax = 50
-    #print('Age Min and Max',ageMin, ageMax)
+
+    # Chintan to fix
     currDatePlusMin = currDate - timedelta(days=(ageMin*365))
     currDatePlusMax = currDate - timedelta(days=(ageMax*365))
     #print('current Date Plus', currDatePlusMin, currDatePlusMax)
@@ -99,58 +99,57 @@ def search():
     heightMin = data.get("heightFrom")
     #print('heightMin', heightMin)
     if heightMin is None or heightMin == '':
-      heightMin = "4 ft 0 inches"
+        heightMin = "4 ft 0 inches"
     heightMax = data.get("heightTo")
     if heightMax is None or heightMax == '':
-      heightMax = "7 ft 0 inches"
+        heightMax = "7 ft 0 inches"
     heightMinInCms = convertToCms(heightMin)
     heightMaxInCms = convertToCms(heightMax)
     #print('Height Min Max', heightMinInCms, heightMaxInCms)
+
     lookingFor = data.get("lookingFor")
     if lookingFor is None or lookingFor == '':
-      lookingFor = 2 #2 is Looking fór Bride
-    #print('lookingFor', lookingFor)
-    #print('data from country:', data.get("country"))
-    #Write Query
-    #users1 = UserDetails.query.filter_by(country_id = country_id_local).all()
+        # default to bride if empty
+        female = Gender.query.filter_by(name="Female").first()
+        lookingFor = female.id
+    else:
+        lookingFor = int(lookingFor)
+        
     users = UserDetails.query.filter(and_(UserDetails.country_id.in_(country_id_local),\
                                           UserDetails.gender_id == lookingFor), \
                                           UserDetails.dob <= currDatePlusMin, UserDetails.dob >= currDatePlusMax, \
                                           UserDetails.height.between(heightMinInCms, heightMaxInCms), \
-                                          UserDetails.marital_status_id.in_(martial_status_id_local)).all()
-    #print('data from users', users)
-    #Get List of Objects
-    #Convert list to Jsonify format
+                                          UserDetails.marital_status_id.in_(marital_status_id_local)).all()
+
     userList = []
     for user in users:
-      userList.append({'id': user.id,'firstName': user.first_name,\
-                       'lastName': user.last_name ,\
-                       'gender' : user.gender.name, \
-                       'dob' : user.dob,\
-                       'country' : user.country.name, \
-                       'state' : user.state, \
-                       'city' : user.city,\
-                       'phonePrimary' : user.phone_primary, \
-                       'phoneAlternate': user.phone_alternate, \
-                       'maritalStatus' : user.marital_status.name, \
-                       'height' : user.height, \
-                       'gotra' : user.gotra.name,\
-                       'originalSurname' : user.original_surname, \
-                       'fatherFullName' : user.father_fullname, \
-                       'address' : user.address, \
-                       'aboutYourself' : user.about_yourself \
-                       }) #Need to work on BackReference
-    response = jsonify(userList)
-    response.status_code = 201
-    # response.headers['Location'] = url_for('get_user', id=user.id)
-    return response
+        userList.append({'id': user.id,'firstName': user.first_name,\
+                        'lastName': user.last_name ,\
+                        'gender' : user.gender.name, \
+                        'dob' : user.dob,\
+                        'country' : user.country.name, \
+                        'state' : user.state, \
+                        'city' : user.city,\
+                        'phonePrimary' : user.phone_primary, \
+                        'phoneAlternate': user.phone_alternate, \
+                        'maritalStatus' : user.marital_status.name, \
+                        'height' : user.height, \
+                        'gotra' : user.gotra.name,\
+                        'originalSurname' : user.original_surname, \
+                        'fatherFullName' : user.father_fullname, \
+                        'address' : user.address, \
+                        'aboutYourself' : user.about_yourself \
+                        }) #Need to work on BackReference
+    return jsonify(userList)
+
 
 
 # get one user
 @app.route('/api/users/<int:id>', methods=['GET'])
 @token_auth.login_required
 def get_user(id):
-    return jsonify(User.query.get_or_404(id).to_dict())
+    pass
+    #return jsonify(User.query.get_or_404(id).to_dict())
 
 
 # helper function for add new user
@@ -192,13 +191,14 @@ def create_user():
     where_know = get_row(WhereKnow, int(data['sourceOfWebsite']['id']))
     marital_status = get_row(MaritalStatus, int(data['maritalStatus']['id']))
     gender = get_row(Gender, int(data['gender']['id']))
+    dob = datetime.strptime(data['dateOfBirth'], '%Y-%m-%d')
 
     # Create db objects
     user_details = UserDetails(
         first_name=data['firstName'],
         last_name=data['lastName'],
         gender=gender,
-        dob=data['dateOfBirth'],
+        dob=dob,
         country=country,
         state=data['state'],
         city=data['city'],
@@ -233,10 +233,12 @@ def create_user():
     db.session.add(user_details)
     db.session.commit()
 
-    payload = {'email': user.email}
+    payload = {'user_id': user.id}
     response = jsonify(payload)
     response.status_code = 201
-
+    # the HTTP protocol requires that a 201 response includes a Location header that is set to the URL of the new resource
+    response.headers['Location'] = url_for('get_user', id=user.id)
+    # send welcome email to user
     send_reg_email(user)
     return response
 
@@ -275,8 +277,10 @@ def upload_file():
         return bad_request('Wrong file type')
     if 'file' not in request.files:
         return bad_request('No file part')
+    if 'user_id' not in request.form:
+        return bad_request('Missing user id')
 
-    user_id = str(token_auth.current_user().id)
+    user_id = str(request.form.get('user_id'))
     folder = app.config['UPLOAD_FOLDER'] / user_id
     if not folder.is_dir():
         folder.mkdir()

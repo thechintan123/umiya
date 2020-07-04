@@ -519,21 +519,21 @@ import axios from 'axios'
 import mixinFormValidations from 'src/mixins/Mixin_FormValidations.js'
 import mixinComputations from 'src/mixins/Mixin_Computations.js'
 import { showErrorMessage } from 'src/utils/show-error-message'
-import { mapState } from "vuex";
+import { mapState } from 'vuex'
 
-const stringOptions = ["Google", "Facebook", "Twitter", "Apple", "Oracle"];
+const stringOptions = ['Google', 'Facebook', 'Twitter', 'Apple', 'Oracle']
 
 export default {
   mixins: [mixinFormValidations, mixinComputations],
   data () {
     return {
       // upload url
-      uploadURL: process.env.API + "/upload",
+      uploadURL: process.env.API + '/upload',
 
       // Form Settings
       isPwd: true,
-      tab: "basic",
-      imageSrc: "",
+      tab: 'basic',
+      imageSrc: '',
       dense: true,
       basicHasError: false,
       personalHasError: false,
@@ -551,258 +551,252 @@ export default {
 
       // formData
       tmpData: {
-        primaryContact: "",
-        primaryContactCountryCode: "91",
-        alternateContact: ""
+        primaryContact: '',
+        primaryContactCountryCode: '91',
+        alternateContact: ''
       },
       formData: {
-        email: "",
-        password: "",
-        confirmPassword: "",
-        firstName: "",
-        lastName: "",
-        gender: "",
-        dateOfBirth: "",
+        email: '',
+        password: '',
+        confirmPassword: '',
+        firstName: '',
+        lastName: '',
+        gender: '',
+        dateOfBirth: '',
         age: 0,
-        country: "India",
-        otherCountry: "",
-        state: "",
-        city: "",
-        primaryContact: "",
-        alternateContact: "",
-        maritalStatus: "",
-        height: "",
-        gotra: "",
-        originalSurname: "",
-        fatherName: "",
-        residentialAddress: "",
-        aboutYourself: "",
-        ageFrom: "",
-        ageTo: "",
-        heightFrom: "",
-        heightTo: "",
+        country: 'India',
+        otherCountry: '',
+        state: '',
+        city: '',
+        primaryContact: '',
+        alternateContact: '',
+        maritalStatus: '',
+        height: '',
+        gotra: '',
+        originalSurname: '',
+        fatherName: '',
+        residentialAddress: '',
+        aboutYourself: '',
+        ageFrom: '',
+        ageTo: '',
+        heightFrom: '',
+        heightTo: '',
         maritalStatusPreference: [],
         agreeTnC: false,
-        sourceOfWebsite: ""
+        sourceOfWebsite: ''
       }
-    };
+    }
   },
   computed: {
-    ...mapState("auth", ["loggedIn"])
+    ...mapState('auth', ['loggedIn'])
   },
   methods: {
-    tabChange() {
-      if (this.tab === "basic" && this.basicHasError) {
-        this.$refs.basicForm.validate();
-      } else if (this.tab === "personal" && this.personalHasError) {
-        this.$refs.personalForm.validate();
+    tabChange () {
+      if (this.tab === 'basic' && this.basicHasError) {
+        this.$refs.basicForm.validate()
+      } else if (this.tab === 'personal' && this.personalHasError) {
+        this.$refs.personalForm.validate()
       }
     },
-    submitBasicForm() {
+    submitBasicForm () {
       this.$refs.basicForm.validate().then(success => {
         if (success) {
-          this.basicHasError = false;
-          this.tab = "personal";
+          this.basicHasError = false
+          this.tab = 'personal'
         } else {
-          this.basicHasError = true;
+          this.basicHasError = true
         }
-      });
+      })
     },
-    submitPersonalForm() {
+    submitPersonalForm () {
       this.$refs.personalForm.validate().then(success => {
         if (success) {
-          this.personalHasError = false;
+          this.personalHasError = false
         } else {
-          this.personalHasError = true;
+          this.personalHasError = true
         }
-      });
+      })
     },
-    registerUser(data) {
+    registerUser (data) {
       axios
-        .post(process.env.API + "/users", data)
+        .post(process.env.API + '/users', data)
         .then(({ data }) => {
           this.$q.notify({
-            type: "positive",
-            message: "Successfully registered"
-          });
-          /*this.$router.push('/login')*/
+            type: 'positive',
+            message: 'Successfully registered'
+          })
+          /* this.$router.push('/login') */
         })
         .catch(error => {
-          let errMsg = "";
-          if ("message" in error.response.data) {
+          let errMsg = ''
+          if ('message' in error.response.data) {
             errMsg =
-              error.response.data.error + " - " + error.response.data.message;
+              error.response.data.error + ' - ' + error.response.data.message
           } else {
-            errMsg = error.response.data.error;
+            errMsg = error.response.data.error
           }
-          showErrorMessage(errMsg);
-        });
+          showErrorMessage(errMsg)
+        })
     },
-    submitForm() {
-      if (typeof this.$refs.basicForm === "undefined") {
-        this.basicHasError = true;
+    submitForm () {
+      if (typeof this.$refs.basicForm === 'undefined') {
+        this.basicHasError = true
       } else {
-        this.submitBasicForm();
+        this.submitBasicForm()
       }
-      if (typeof this.$refs.personalForm === "undefined") {
-        this.personalHasError = true;
+      if (typeof this.$refs.personalForm === 'undefined') {
+        this.personalHasError = true
       } else {
-        this.submitPersonalForm();
+        this.submitPersonalForm()
       }
       this.formData.primaryContact =
-        "+" +
+        '+' +
         this.tmpData.primaryContactCountryCode +
-        " " +
-        this.tmpData.primaryContact;
+        ' ' +
+        this.tmpData.primaryContact
       this.formData.alternateContact =
-        "+" +
+        '+' +
         this.tmpData.primaryContactCountryCode +
-        " " +
-        this.tmpData.alternateContact;
-      this.registerUser(this.formData);
+        ' ' +
+        this.tmpData.alternateContact
+      this.registerUser(this.formData)
     },
-    createHeightList() {
+    createHeightList () {
       // create height list when component is created
-      let h;
-      let i;
-      const startHeight = 4;
-      const endHeight = 7;
+      let h
+      let i
+      const startHeight = 4
+      const endHeight = 7
       for (h = startHeight; h <= endHeight; h++) {
         for (i = 0; i <= 12; i++) {
-          this.heightOptions.push(h + " ft " + i + " inches");
+          this.heightOptions.push(h + ' ft ' + i + ' inches')
         }
       }
     },
-    createAgeFromToList() {
-      const startAge = 18;
-      const endAge = 60;
-      let a;
+    createAgeFromToList () {
+      const startAge = 18
+      const endAge = 60
+      let a
       for (a = startAge; a <= endAge; a++) {
-        this.ageFromToOptions.push(a);
+        this.ageFromToOptions.push(a)
       }
     },
-    calculateAge() {
+    calculateAge () {
       this.formData.age = this.computeAge(this.formData.dateOfBirth)
     },
 
-    checkOtherCountry(otherCountry) {
-      if (this.formData.country === "Other" && otherCountry === null) {
-        return false;
+    checkOtherCountry (otherCountry) {
+      if (this.formData.country === 'Other' && otherCountry === null) {
+        return false
       } else {
-        return true;
+        return true
       }
     },
-    checkConfirmPassword(confirmPassword) {
+    checkConfirmPassword (confirmPassword) {
       if (this.formData.password === confirmPassword) {
-        return true;
+        return true
       } else {
-        return false;
+        return false
       }
     },
-    checkAgeTo(ageTo) {
+    checkAgeTo (ageTo) {
       if (ageTo < this.formData.ageFrom) {
-        return false;
+        return false
       } else {
-        return true;
+        return true
       }
     },
-     checkAgeFrom(ageFrom) {
+    checkAgeFrom (ageFrom) {
       if (ageFrom > this.formData.ageTo) {
-        return false;
+        return false
       } else {
-        return true;
+        return true
       }
     },
     checkHeightTo (heightTo) {
       const heightFrom = this.formData.heightFrom
-      if(heightFrom && heightTo){
-      return this.compareHeightFromHeightTo(heightFrom, heightTo)
-      }
-      else
-      {return true}
-    }
-    ,
-    checkHeightFrom(heightFrom){
+      if (heightFrom && heightTo) {
+        return this.compareHeightFromHeightTo(heightFrom, heightTo)
+      } else { return true }
+    },
+    checkHeightFrom (heightFrom) {
       const heightTo = this.formData.heightTo
-      if(heightFrom && heightTo){
-      return this.compareHeightFromHeightTo(heightFrom, heightTo)
-      }
-      else
-      {return true}
-     }
-  ,
-    uploadImage(fd) {
+      if (heightFrom && heightTo) {
+        return this.compareHeightFromHeightTo(heightFrom, heightTo)
+      } else { return true }
+    },
+    uploadImage (fd) {
       return axios
-        .post(process.env.API + "/upload", fd, {
+        .post(process.env.API + '/upload', fd, {
           headers: {
-            "Content-Type": "multipart/form-data"
+            'Content-Type': 'multipart/form-data'
           }
         })
         .then(resolve => {
           this.$q.notify({
-            type: "positive",
-            message: "Images successfully uploaded"
-          });
+            type: 'positive',
+            message: 'Images successfully uploaded'
+          })
         })
         .catch(error => {
-          let errMsg = "";
-          if ("message" in error.response.data) {
+          let errMsg = ''
+          if ('message' in error.response.data) {
             errMsg =
-              error.response.data.error + " - " + error.response.data.message;
+              error.response.data.error + ' - ' + error.response.data.message
           } else {
-            errMsg = error.response.data.error;
+            errMsg = error.response.data.error
           }
-          showErrorMessage(errMsg);
-        });
+          showErrorMessage(errMsg)
+        })
     },
-    uploadPhoto(file) {
-      const fd = new FormData();
-      fd.append("file", file[0]);
-      fd.append("filetype", "photo");
-      this.uploadImage(fd);
+    uploadPhoto (file) {
+      const fd = new FormData()
+      fd.append('file', file[0])
+      fd.append('filetype', 'photo')
+      this.uploadImage(fd)
     },
-    uploadProof(file) {
-      const fd = new FormData();
-      fd.append("file", file[0]);
-      fd.append("filetype", "proof");
-      this.uploadImage(fd);
+    uploadProof (file) {
+      const fd = new FormData()
+      fd.append('file', file[0])
+      fd.append('filetype', 'proof')
+      this.uploadImage(fd)
     },
-    filterOtherCountry(val, update, abort) {
+    filterOtherCountry (val, update, abort) {
       update(() => {
-        const needle = val.toLowerCase();
-        const countryListFiltered = [];
+        const needle = val.toLowerCase()
+        const countryListFiltered = []
         for (const country of this.countryList) {
           // console.log('country',country);
-          const countryNameLowerCase = country.name.toLowerCase();
+          const countryNameLowerCase = country.name.toLowerCase()
           if (countryNameLowerCase.includes(needle)) {
-            countryListFiltered.push(country);
+            countryListFiltered.push(country)
           }
         }
         // console.log('countryListFiltered', countryListFiltered);
-        this.countryOptions = countryListFiltered;
-      });
+        this.countryOptions = countryListFiltered
+      })
     }
   },
-  created() {
-    this.createHeightList();
-    this.createAgeFromToList();
+  created () {
+    this.createHeightList()
+    this.createAgeFromToList()
   },
-  mounted() {
+  mounted () {
     axios
-      .get(process.env.API + "/lists")
+      .get(process.env.API + '/lists')
       .then(response => {
-        this.countryList = response.data.country;
-        this.countryOptions = this.countryList;
-        this.gotraOptions = response.data.gotra;
-        this.sourceOfWebsiteOptions = response.data.where_know;
-        this.maritalOptions = response.data.marital_status;
-        this.genderOptions = response.data.gender;
+        this.countryList = response.data.country
+        this.countryOptions = this.countryList
+        this.gotraOptions = response.data.gotra
+        this.sourceOfWebsiteOptions = response.data.where_know
+        this.maritalOptions = response.data.marital_status
+        this.genderOptions = response.data.gender
       })
       .catch(error => {
-        console.log(error);
-      });
+        console.log(error)
+      })
   }
-};
+}
 </script>
 
 <style scoped>

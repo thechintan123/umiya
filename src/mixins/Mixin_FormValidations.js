@@ -5,12 +5,11 @@ export default {
       var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       //    console.log('checkEmail', re.test(String(email).toLowerCase()));
       return re.test(String(email).toLowerCase())
-    }
-    ,
-    compareHeightFromHeightTo(heightFrom,heightTo){
+    },
+    compareHeightFromHeightTo (heightFrom, heightTo) {
       const heightFromFoot = parseInt(heightFrom.charAt(0)) // 0  is position for foot
       const heightToFoot = parseInt(heightTo.charAt(0))
-      console.log(heightFromFoot,heightToFoot);
+      console.log(heightFromFoot, heightToFoot)
       if (heightToFoot < heightFromFoot) {
         return false
       } else if (heightToFoot === heightFromFoot) {
@@ -25,7 +24,6 @@ export default {
       } else {
         return true
       }
-
     }
   }
 }

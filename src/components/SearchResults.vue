@@ -75,7 +75,6 @@
 import { mapGetters, mapState } from 'vuex'
 import mixinComputations from 'src/mixins/Mixin_Computations.js'
 
-
 export default {
   mixins: [mixinComputations],
   components: {
@@ -101,17 +100,16 @@ export default {
     }
 
   },
-  filters :{
-    convertHeightToFoot(heightInCms){
-    var heigthInInches = heightInCms * 0.39;
-    var heightInFeet = Math.trunc(heigthInInches/12)
-    var onlyInches = Math.trunc(heigthInInches - heightInFeet * 12)
-    console.log(heightInFeet, onlyInches,heigthInInches )
-    return heightInFeet +' feet ' + onlyInches + ' inches'
+  filters: {
+    convertHeightToFoot (heightInCms) {
+      var heigthInInches = heightInCms * 0.39
+      var heightInFeet = Math.trunc(heigthInInches / 12)
+      var onlyInches = Math.trunc(heigthInInches - heightInFeet * 12)
+      console.log(heightInFeet, onlyInches, heigthInInches)
+      return heightInFeet + ' feet ' + onlyInches + ' inches'
     }
 
-  }
-  ,
+  },
   created () {
     this.checkLoggedIn()
   }

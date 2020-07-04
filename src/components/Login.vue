@@ -66,8 +66,7 @@ import mixinFormValidations from 'src/mixins/Mixin_FormValidations.js'
 import { showErrorMessage } from 'src/utils/show-error-message'
 
 export default {
-  mixins: [mixinFormValidations]
-  ,
+  mixins: [mixinFormValidations],
   data () {
     return {
       isPwd: true,

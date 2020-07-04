@@ -9,7 +9,6 @@
         No Search Results. Please change the search criteria and search again
     </q-banner>
 
-
     <!-- <searchResults :searchResults="searchResultsList" v-if="Object.keys(searchResultsList).length"/> -->
     <!-- Use this if you want to send entire SearchResultList and not SearchResultsPage -->
 
@@ -37,58 +36,53 @@ able to update the state of the SearchResults
 import { mapState, mapGetters } from 'vuex'
 
 export default {
-data(){
-return {
-searchResultsList : {},
-page : 1,
-maxPages : 0,
-resultsPerPage : 3 , //Fixed count
-searchResultsPerPage : {},
-searchPerformed: false
-}
-
-}
-,
-methods:{
-checkPage(){
-//use slice of Objects.keys(as array). Pass allowed keys as array to SearchResults
-let keys = Object.keys(this.searchResultsList);
-let selectedKeys;
-selectedKeys = keys.slice(this.page - 1, this.page - 1 + this.resultsPerPage);
-this.searchResultsPerPage = Object.assign(
-        ...Object
-        .keys(this.searchResultsList)
-        .slice(this.page - 1 ,  this.page - 1 + this.resultsPerPage)
-        .map(k => ({ [k]: this.searchResultsList[k] }))
-    );
-}
-
-,
-fetchSearchResults(){
-this.searchResultsList = this.getSearchResults;
-//console.log('searchResultsList', this.searchResultsList);
-if(Object.keys(this.searchResultsList).length > 0){
-this.checkPage();
-this.maxPages = Object.keys(this.searchResultsList).length / this.resultsPerPage;
-if (this.maxPages <= 1) { this.maxPages = 1 };
-}
-this.page=1; //To stay on First Page
-this.searchPerformed = true; //This is done to ensure that No Search Results message is displayed for empty Search Results
-//this.searchResultsPerPage = this.getSearchResultsPerPage;
-//console.log('searchResultsPerPage', this.searchResultsPerPage);
-}
-}
-,
-computed :{
- ...mapGetters('search',['getSearchResults','getSearchResultsPerPage']),
- ...mapState('search', ['searchResults'])
-}
-  ,
- components : {
-    'searchForm' :  require('components/SearchForm.vue').default,
-    'searchResults' :  require('components/SearchResults.vue').default,
-    'searchResultsPagination' :  require('components/SearchResultsPagination.vue').default
+  data () {
+    return {
+      searchResultsList: {},
+      page: 1,
+      maxPages: 0,
+      resultsPerPage: 3, // Fixed count
+      searchResultsPerPage: {},
+      searchPerformed: false
     }
+  },
+  methods: {
+    checkPage () {
+      // use slice of Objects.keys(as array). Pass allowed keys as array to SearchResults
+      const keys = Object.keys(this.searchResultsList)
+      let selectedKeys
+      selectedKeys = keys.slice(this.page - 1, this.page - 1 + this.resultsPerPage)
+      this.searchResultsPerPage = Object.assign(
+        ...Object
+          .keys(this.searchResultsList)
+          .slice(this.page - 1, this.page - 1 + this.resultsPerPage)
+          .map(k => ({ [k]: this.searchResultsList[k] }))
+      )
+    },
+
+    fetchSearchResults () {
+      this.searchResultsList = this.getSearchResults
+      // console.log('searchResultsList', this.searchResultsList);
+      if (Object.keys(this.searchResultsList).length > 0) {
+        this.checkPage()
+        this.maxPages = Object.keys(this.searchResultsList).length / this.resultsPerPage
+        if (this.maxPages <= 1) { this.maxPages = 1 };
+      }
+      this.page = 1 // To stay on First Page
+      this.searchPerformed = true // This is done to ensure that No Search Results message is displayed for empty Search Results
+      // this.searchResultsPerPage = this.getSearchResultsPerPage;
+      // console.log('searchResultsPerPage', this.searchResultsPerPage);
+    }
+  },
+  computed: {
+    ...mapGetters('search', ['getSearchResults', 'getSearchResultsPerPage']),
+    ...mapState('search', ['searchResults'])
+  },
+  components: {
+    searchForm: require('components/SearchForm.vue').default,
+    searchResults: require('components/SearchResults.vue').default,
+    searchResultsPagination: require('components/SearchResultsPagination.vue').default
+  }
 }
 </script>
 

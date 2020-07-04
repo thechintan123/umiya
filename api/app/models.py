@@ -1,7 +1,6 @@
-from flask import current_app
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
-from . import db
+from . import db, app
 import jwt
 
 
@@ -38,7 +37,7 @@ class User(db.Model):
         payload = {'user': self.id, 'exp': now + timedelta(seconds=expires_in)}
         # decode('utf-8') converts token to string
         self.token = jwt.encode(
-            payload, current_app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
+            payload, app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
         self.token_expiration = now + timedelta(seconds=expires_in)
         db.session.add(self)
         return self.token
@@ -55,7 +54,7 @@ class User(db.Model):
     @staticmethod
     def verify_token(token):
         try:
-            id = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=[
+            id = jwt.decode(token, app.config['SECRET_KEY'], algorithms=[
                             'HS256'])['reset_password']
         except:
             return
@@ -92,7 +91,7 @@ class UserDetails(db.Model):
     last_name = db.Column(db.String(50), nullable=False)
     gender_id = db.Column(db.Integer, db.ForeignKey(
         'gender.id'), nullable=False)
-    dob = db.Column(db.String(10), nullable=False)
+    dob = db.Column(db.DateTime, nullable=False)
     country_id = db.Column(db.Integer, db.ForeignKey(
         'country.id'), nullable=False)
     state = db.Column(db.String(30), nullable=False)
@@ -197,7 +196,7 @@ class Gotra(db.Model):
 class Gender(db.Model):
     __tablename__ = 'gender'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(20), nullable=False)
+    name = db.Column(db.String(10), nullable=False)
     update_date = db.Column(
         db.DateTime, default=datetime.utcnow, nullable=False)
     user_details = db.relationship(

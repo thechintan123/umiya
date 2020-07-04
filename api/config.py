@@ -16,7 +16,7 @@ class Config(object):
     SQLALCHEMY_POOL_RECYCLE = 299
 
     # Image upload config
-    UPLOAD_FOLDER = basedir / 'uploads'
+    UPLOAD_FOLDER = basedir / 'app/static/uploads'
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
     # Max 3 MB
     MAX_CONTENT_LENGTH = 3 * 1024 * 1024
