@@ -268,7 +268,6 @@ def lists():
 
 # handle file uploads
 @app.route('/api/upload', methods=['POST'])
-@token_auth.login_required
 def upload_file():
     if 'filetype' not in request.form:
         return bad_request('Missing filetype')
@@ -277,10 +276,14 @@ def upload_file():
         return bad_request('Wrong file type')
     if 'file' not in request.files:
         return bad_request('No file part')
+    
     if 'user_id' not in request.form:
         return bad_request('Missing user id')
+    user_id = str(request.form.get('user_id')) 
+    user_det = db.session.query(UserDetails).join(User).filter(User.id == user_id).first()
+    if not user_det:
+        return bad_request('User details does not exist')
 
-    user_id = str(request.form.get('user_id'))
     folder = app.config['UPLOAD_FOLDER'] / user_id
     if not folder.is_dir():
         folder.mkdir()
@@ -301,7 +304,6 @@ def upload_file():
     except IOError as e:
         return bad_request('Unable to convert and save file')
 
-    user_det = token_auth.current_user().user_details
     if filetype == 'photo':
         upl_photo = UploadPhotos(filename=filename)
         user_det.upload_photos.append(upl_photo)
@@ -315,6 +317,25 @@ def upload_file():
 
     # 204 - successful and no body
     return '', 204
+
+
+# return uploaded images for a user
+@app.route('/api/upload/<int:id>', methods=['GET'])
+def get_upload(id):
+    user_det = db.session.query(UserDetails).join(User).filter(User.id == id).first()
+    if not user_det:
+        return bad_request('User details does not exist')
+
+    # get uploaded photo id proof - only 1 image returns String
+    img_proof = db.session.query(UserDetails.upload_proof).join(User).filter(User.id == id).first()
+    # get uploaded photos - more than 1 image returns List
+    img_photos = db.session.query(UploadPhotos.filename).join(UserDetails).filter(
+        UserDetails.id == UploadPhotos.user_details_id).join(User).filter(User.id == UserDetails.user_id).filter(User.id == id).all()
+    payload = {
+        'img_proof': img_proof,
+        'img_photos': img_photos
+    }
+    return jsonify(payload)
 
 
 # testing

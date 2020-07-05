@@ -25,3 +25,7 @@ VALUES ('Male', now()), ('Female', now())
 /* where_know */
 INSERT INTO where_know (name, update_date)
 VALUES ('Friends', now()), ('Families', now()), ('Facebook', now()), ('Whatsapp', now()), ('Other', now())
+
+/* quick fix */
+update user_details
+set height =180;
