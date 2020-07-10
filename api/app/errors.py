@@ -10,6 +10,12 @@ def page_not_found(e):
     response.status_code = 404
     return response
 
+@app.errorhandler(405)
+def method_not_allowed(e):
+    response = jsonify({'error': 'method not allowed'})
+    response.status_code = 404
+    return response
+
 @app.errorhandler(500)
 def internal_server_error(e):
     response = jsonify({'error': 'internal server error'})
@@ -23,6 +29,9 @@ def error_response(status_code, message=None):
         payload['message'] = message
     response = jsonify(payload)
     response.status_code = status_code
+    # workaround to prevent browser popup for 401 errors
+    if status_code == 401:
+        response.headers['WWW-Authenticate'] = 'None'
     return response
 
 # helper function for 400 error as it is very common
