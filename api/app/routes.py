@@ -335,15 +335,18 @@ def get_upload(id, filename):
         return bad_request('Upload folder not found')
     file_path = folder / filename
 
-    # get PIL image
-    img = Image.open(file_path)
-    # create file-object in memory
-    file_object = io.BytesIO()
-    # write PNG in file-object
-    img.save(file_object, 'JPEG')
-    # move to beginning of file so `send_file()` it will read from start
-    file_object.seek(0)
-    return send_file(file_object, mimetype='image/jpeg')
+    try:
+        # get PIL image
+        img = Image.open(file_path)
+        # create file-object in memory
+        file_object = io.BytesIO()
+        # write PNG in file-object
+        img.save(file_object, 'JPEG')
+        # move to beginning of file so `send_file()` it will read from start
+        file_object.seek(0)
+        return send_file(file_object, mimetype='image/jpeg')
+    except IOError as e:
+        return bad_request('Unable to open file')
 
 
 # testing
