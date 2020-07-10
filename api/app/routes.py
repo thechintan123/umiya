@@ -1,4 +1,4 @@
-from flask import jsonify, request, url_for, render_template, send_file
+from flask import jsonify, request, url_for, render_template, Response
 from . import app, db
 from .auth import basic_auth, token_auth
 from .errors import error_response, bad_request
@@ -11,7 +11,11 @@ import os
 from datetime import datetime
 from PIL import Image
 from strgen import StringGenerator
-import re, io
+import re
+from io import BytesIO
+# workaround needed on Pythonanywhere
+from werkzeug.wsgi import FileWrapper
+
 
 
 # Serve the Vue file
@@ -338,13 +342,11 @@ def get_upload(id, filename):
     try:
         # get PIL image
         img = Image.open(file_path)
-        # create file-object in memory
-        file_object = io.BytesIO()
-        # write PNG in file-object
+        file_object = BytesIO()
         img.save(file_object, 'JPEG')
-        # move to beginning of file so `send_file()` it will read from start
         file_object.seek(0)
-        return send_file(file_object, mimetype='image/jpeg')
+        w = FileWrapper(file_object)
+        return Response(file_object, mimetype='image/jpeg', direct_passthrough=True)
     except IOError as e:
         return bad_request('Unable to open file')
 
