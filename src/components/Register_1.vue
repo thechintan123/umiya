@@ -2,100 +2,33 @@
   <div class="fit column">
     <!-- <q-card flat bordered class="my-card">--->
 
-    <q-linear-progress v-show="showProgressBar" indeterminate size="10px" color="secondary" />
-    <q-spinner
-      v-show="showProgressBar"
-      class="z-top fixed-center"
-      color="secondary"
-      size="3em"
-      :thickness="10"
-    />
-
-    <q-card v-if="successRegistration">
-      <q-banner class="bg-grey-3 q-mb-xs">
-        <template v-slot:avatar>
-          <q-icon name="assignment_turned_in" color="secondary" />
-        </template>
-        Successful Registration!!
-      </q-banner>
-      <q-card-section>
-        Thank you
-        <span class="text-weight-bolder text-capitalize">{{formData.firstName}}</span> for successful registration.
-        <br />Your Profile ID is
-        <b>{{user_id}}</b>.
-        Going forward, you will be notified on your
-        <b>{{formData.email}}</b>.
-        <br />
-        <br />
-        <b>Next Steps:</b>
-        <br />
-        <q-item>
-          <q-item-section avatar>
-            <q-icon color="primary" name="done_outline" />
-          </q-item-section>
-
-          <q-item-section>
-            <q-item-label>Admin Approval</q-item-label>
-            <q-item-label caption>
-              Admin will verify your ID Proof and approve the profile.
-              You will be notified on {{formData.email}}.
-            </q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-section avatar>
-            <q-icon color="secondary" name="fas fa-heart" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Self Search & Contact</q-item-label>
-            <q-item-label caption>Search your match and contact the profile directly.</q-item-label>
-          </q-item-section>
-        </q-item>
-      </q-card-section>
-    </q-card>
-
-    <q-card v-if="!successRegistration">
+    <q-card>
       <q-banner class="bg-grey-3 q-mb-xs">
         <template v-slot:avatar>
           <q-icon name="account_circle" color="primary" />
         </template>
         Register on website!!
       </q-banner>
-
-      <q-tabs
-        v-model="tab"
-        dense
-        class="text-secondary"
-        active-color="primary"
-        indicator-color="primary"
-        narrow-indicator
-        align="justify"
-        @click="tabChange"
+      <q-stepper
+        v-model="step"
+        header-nav
+        ref="stepper"
+        error-icon="error"
+        error-color="red"
+        done-color="deep-orange"
+        active-color="purple"
+        inactive-color="secondary"
+        animated
       >
-        <q-tab name="basic" icon="fas fa-user-cog" label="Basic">
-          <q-badge v-if="basicHasError" align="top" color="blue" floating>
-            Error
-            <q-icon name="warning" color="yellow" class="q-ml-sm" />
-          </q-badge>
-        </q-tab>
-        <q-tab name="personal" icon="ballot" label="Personal">
-          <q-badge v-if="personalHasError" align="top" color="blue" floating>
-            Error
-            <q-icon name="warning" color="yellow" class="q-ml-sm" />
-          </q-badge>
-        </q-tab>
-        <q-tab name="upload" icon="add_a_photo" label="Upload">
-          <q-badge v-if="isErrorPhoto || isErrorProof" align="top" color="blue" floating>
-            Error
-            <q-icon name="warning" color="yellow" class="q-ml-sm" />
-          </q-badge>
-        </q-tab>
-      </q-tabs>
-
-      <q-separator />
-
-      <q-tab-panels v-model="tab" keep-alive animated>
-        <q-tab-panel name="basic">
+        <q-step
+          :name="1"
+          title="Basic"
+          icon="fas fa-user-cog"
+          error-icon="error"
+          :done="step > 1"
+          :header-nav="step > 1"
+          :error="basicHasError"
+        >
           <q-form greedy ref="basicForm">
             <q-input
               outlined
@@ -310,25 +243,17 @@
               </div>
             </div>
 
-            <q-field
-              borderless
-              :value="formData.agreeTnC"
-              :rules="[ val => val === true || 'Field is required']"
-            >
-              <template v-slot:control>
-                <q-toggle
-                  tabindex="13"
-                  v-model="formData.agreeTnC"
-                  checked-icon="check"
-                  color="green"
-                  unchecked-icon="clear"
-                  label="Agree Terms & Conditions *"
-                  dense
-                />
-              </template>
-            </q-field>
+            <q-toggle
+              tabindex="13"
+              v-model="formData.agreeTnC"
+              checked-icon="check"
+              color="green"
+              unchecked-icon="clear"
+              label="Agree Terms & Conditions *"
+              dense
+            />
 
-            <div class="row">
+            <q-stepper-navigation>
               <q-space />
               <q-btn
                 tabindex="14"
@@ -337,11 +262,20 @@
                 label="Next >"
                 @click="submitBasicForm()"
               />
-            </div>
+              <q-btn @click="() => { done1 = true; step = 2 }" color="primary" label="Continue" />
+            </q-stepper-navigation>
           </q-form>
-        </q-tab-panel>
+        </q-step>
 
-        <q-tab-panel name="personal">
+        <q-step
+          :name="2"
+          title="Personal"
+          caption="Optional"
+          icon="ballot"
+          :done="step > 2"
+          :header-nav="step > 2"
+          :error="personalHasError"
+        >
           <q-form greedy ref="personalForm">
             <div class="row">
               <div class="col">
@@ -379,7 +313,6 @@
                 <q-select
                   tabindex="17"
                   v-model="formData.gotra"
-                  :rules="[ val => !!val || 'Field is required']"
                   outlined
                   dense
                   clearable
@@ -387,7 +320,7 @@
                   option-value="id"
                   option-label="name"
                   :options="gotraOptions"
-                  label="Gotra*"
+                  label="Gotra"
                 />
               </div>
 
@@ -498,6 +431,7 @@
 
             <q-select
               tabindex="27"
+              clearable
               v-model="formData.maritalStatusPreference"
               option-value="id"
               option-label="name"
@@ -505,8 +439,8 @@
               outlined
               dense
               options-dense
-              label="Marital Statuses*"
-              :rules="[ val => val.length > 0 || 'Field is required']"
+              label="Marital Status*"
+              :rules="[ val => !!val || 'Field is required']"
               multiple
               use-chips
               input-debounce="0"
@@ -529,20 +463,22 @@
             <div class="row">
               <q-btn color="secondary" flat label="Back" @click="tab = 'basic'" />
               <q-space />
-              <q-btn tabindex="28" color="primary" label="Next >" @click="submitPersonalForm" />
+              <q-btn tabindex="28" color="primary" label="Submit" @click="submitForm" />
             </div>
+            <q-stepper-navigation>
+              <q-btn @click="() => { done2 = true; step = 3 }" color="primary" label="Continue" />
+              <q-btn flat @click="step = 1" color="primary" label="Back" class="q-ml-sm" />
+              <q-btn color="secondary" flat label="Back" @click="tab = 'basic'" />
+              <q-space />
+              <q-btn tabindex="28" color="primary" label="Submit" @click="submitForm" />
+            </q-stepper-navigation>
           </q-form>
-        </q-tab-panel>
+        </q-step>
 
-        <q-tab-panel name="upload">
+        <q-step :name="3" title="Upload" icon="add_a_photo" :header-nav="step > 3">
           <q-form ref="uploadForm" greedy>
             <div class="q-mb-xs">
-              <q-field
-                error-message="Please upload atleast One Photo."
-                :error="isErrorPhoto"
-                borderless
-                dense
-              >
+              <q-field borderless :rules="[ val => !!val || 'One Photo is required']" dense>
                 <template v-slot:control>
                   <q-uploader
                     :factory="uploadPhoto"
@@ -551,45 +487,34 @@
                     accept="image/*, .pdf, .jpg, .jpeg, .gif, .png"
                     multiple
                     max-files="4"
-                    ref="photo"
-                    hide-upload-btn
-                    @added="checkPhoto"
-                    @removed="checkPhoto"
+                    max-total-size="20971520"
+                    field-name="file"
                   />
                 </template>
               </q-field>
             </div>
 
             <div class="q-mb-xs">
-              <q-field
-                error-message="Please upload ID Proof."
-                :error="isErrorProof"
-                borderless
-                dense
-              >
+              <q-field borderless :rules="[ val => !!val || 'One ID Proof is required']" dense>
                 <template v-slot:control>
                   <q-uploader
                     :factory="uploadProof"
                     label="Upload ID Proof (only 1 image or PDF)"
                     class="my-uploader"
                     accept="image/*, .pdf, .jpg, .jpeg, .gif, .png"
+                    max-total-size="5242880"
                     color="accent"
-                    ref="proof"
-                    hide-upload-btn
-                    @added="checkProof"
-                    @removed="checkProof"
                   />
                 </template>
               </q-field>
             </div>
-            <div class="row">
-              <q-btn color="secondary" flat label="Back" @click="tab = 'personal'" />
-              <q-space />
-              <q-btn color="primary" label="Submit" @click="submitForm" />
-            </div>
+            <q-stepper-navigation>
+              <q-btn color="primary" @click="done3 = true" label="Finish" />
+              <q-btn flat @click="step = 2" color="primary" label="Back" class="q-ml-sm" />
+            </q-stepper-navigation>
           </q-form>
-        </q-tab-panel>
-      </q-tab-panels>
+        </q-step>
+      </q-stepper>
     </q-card>
   </div>
 </template>
@@ -601,6 +526,8 @@ import mixinComputations from "src/mixins/Mixin_Computations.js";
 import { showErrorMessage } from "src/utils/show-error-message";
 import { mapState } from "vuex";
 
+const stringOptions = ["Google", "Facebook", "Twitter", "Apple", "Oracle"];
+
 export default {
   mixins: [mixinFormValidations, mixinComputations],
   data() {
@@ -608,12 +535,7 @@ export default {
       // upload url
       uploadURL: process.env.API + "/upload",
 
-      //to show Progress Bar between click of Submit Button and Success Registrion,
-      showProgressBar: false,
-
-      //to show Registration form or Success message
-      successRegistration: false,
-
+      step: 1,
       // Form Settings
       isPwd: true,
       tab: "basic",
@@ -622,12 +544,6 @@ export default {
       basicHasError: false,
       personalHasError: false,
       uploadHasError: false,
-
-      //Error for Photo and Proofs
-      isErrorProof: false,
-      isErrorPhoto: false,
-
-      user_id: "", // this user_id is populated after user is registered in DB
 
       // Dropdown List
       countryOptions: [],
@@ -641,41 +557,10 @@ export default {
 
       // formData
       tmpData: {
-        primaryContact: "11111111111",
+        primaryContact: "",
         primaryContactCountryCode: "91",
-        alternateContact: "22222222222"
+        alternateContact: ""
       },
-      formData: {
-        email: "test9@test.com",
-        password: "password",
-        confirmPassword: "password",
-        firstName: "first",
-        lastName: "last",
-        gender: "",
-        dateOfBirth: "1983-09-01",
-        age: 36,
-        country: "India",
-        otherCountry: "",
-        state: "state",
-        city: "city",
-        primaryContact: "11111111111",
-        alternateContact: "22222222222",
-        maritalStatus: "",
-        height: "5 ft 0 inch",
-        gotra: "",
-        originalSurname: "Surname",
-        fatherName: "father",
-        residentialAddress: "address",
-        aboutYourself: "about yourself",
-        ageFrom: "30",
-        ageTo: "40",
-        heightFrom: "5 ft 0 inch",
-        heightTo: "6 ft 0 inch",
-        maritalStatusPreference: [],
-        agreeTnC: false,
-        sourceOfWebsite: ""
-      }
-      /*
       formData: {
         email: "",
         password: "",
@@ -705,7 +590,7 @@ export default {
         maritalStatusPreference: [],
         agreeTnC: false,
         sourceOfWebsite: ""
-      }*/
+      }
     };
   },
   computed: {
@@ -723,7 +608,8 @@ export default {
       this.$refs.basicForm.validate().then(success => {
         if (success) {
           this.basicHasError = false;
-          this.tab = "personal";
+          this.done1 = true;
+          this.step = 2;
         } else {
           this.basicHasError = true;
         }
@@ -733,64 +619,35 @@ export default {
       this.$refs.personalForm.validate().then(success => {
         if (success) {
           this.personalHasError = false;
-          this.tab = "upload";
+          this.done2 = true;
+          this.step = 3;
         } else {
           this.personalHasError = true;
         }
       });
     },
     registerUser(data) {
-      return axios
+      axios
         .post(process.env.API + "/users", data)
         .then(({ data }) => {
-          console.log("Search Success", data);
-          this.user_id = data.user_id;
           this.$q.notify({
             type: "positive",
             message: "Successfully registered"
           });
-          /* this.$router.push('/login') */
+          /*this.$router.push('/login')*/
         })
         .catch(error => {
           let errMsg = "";
           if ("message" in error.response.data) {
-            //errMsg = error.response.data.error + " - " + error.response.data.message;
-
-            errMsg = error.response.data.message;
+            errMsg =
+              error.response.data.error + " - " + error.response.data.message;
           } else {
             errMsg = error.response.data.error;
           }
-          console.log(errMsg);
           showErrorMessage(errMsg);
         });
     },
-
-    checkPhoto() {
-      console.log("Photo", this.$refs.photo);
-      console.log(this.$refs.photo.files.length);
-      if (this.$refs.photo.files.length === 0) {
-        this.isErrorPhoto = true;
-        //this.uploadHasError = true;
-      } else {
-        this.isErrorPhoto = false;
-        //this.uploadHasError = true;
-      }
-    },
-    checkProof() {
-      console.log("Proof", this.$refs.photo);
-      console.log(this.$refs.photo.files.length);
-
-      if (this.$refs.proof.files.length === 0) {
-        this.isErrorProof = true;
-        //this.uploadHasError = true;
-      } else {
-        this.isErrorProof = false;
-        //this.uploadHasError = true;
-      }
-    },
-    async submitForm() {
-      this.showProgressBar = true;
-
+    submitForm() {
       if (typeof this.$refs.basicForm === "undefined") {
         this.basicHasError = true;
       } else {
@@ -801,36 +658,17 @@ export default {
       } else {
         this.submitPersonalForm();
       }
-
-      this.checkPhoto();
-      this.checkProof();
-
-      if (
-        !this.basicHasError &&
-        !this.personalHasError &&
-        !this.isErrorPhoto &&
-        !this.isErrorProof
-      ) {
-        this.formData.primaryContact =
-          "+" +
-          this.tmpData.primaryContactCountryCode +
-          " " +
-          this.tmpData.primaryContact;
-        this.formData.alternateContact =
-          "+" +
-          this.tmpData.primaryContactCountryCode +
-          " " +
-          this.tmpData.alternateContact;
-
-        await this.registerUser(this.formData);
-
-        if (this.user_id !== "") {
-          this.$refs.photo.upload();
-          this.$refs.proof.upload();
-          this.successRegistration = true;
-        }
-      }
-      this.showProgressBar = false;
+      this.formData.primaryContact =
+        "+" +
+        this.tmpData.primaryContactCountryCode +
+        " " +
+        this.tmpData.primaryContact;
+      this.formData.alternateContact =
+        "+" +
+        this.tmpData.primaryContactCountryCode +
+        " " +
+        this.tmpData.alternateContact;
+      this.registerUser(this.formData);
     },
     createHeightList() {
       // create height list when component is created
@@ -900,7 +738,7 @@ export default {
         return true;
       }
     },
-    uploadImage(fd, file) {
+    uploadImage(fd) {
       return axios
         .post(process.env.API + "/upload", fd, {
           headers: {
@@ -908,39 +746,33 @@ export default {
           }
         })
         .then(resolve => {
-          console.log("uploadImage - Then");
           this.$q.notify({
             type: "positive",
-            message: file + " successfully uploaded"
+            message: "Images successfully uploaded"
           });
         })
         .catch(error => {
           let errMsg = "";
           if ("message" in error.response.data) {
-            //errMsg = error.response.data.error + " - " + error.response.data.message;
-            errMsg = rror.response.data.message;
+            errMsg =
+              error.response.data.error + " - " + error.response.data.message;
           } else {
             errMsg = error.response.data.error;
           }
           showErrorMessage(errMsg);
-          console.log("uploadImage - Error - Error Message", errMsg);
         });
     },
-    async uploadPhoto(file) {
+    uploadPhoto(file) {
       const fd = new FormData();
       fd.append("file", file[0]);
       fd.append("filetype", "photo");
-      fd.append("user_id", this.user_id);
-      console.log("Upload Photo", fd, file);
-      await this.uploadImage(fd, "Photo");
+      this.uploadImage(fd);
     },
-    async uploadProof(file) {
+    uploadProof(file) {
       const fd = new FormData();
       fd.append("file", file[0]);
       fd.append("filetype", "proof");
-      fd.append("user_id", this.user_id);
-      console.log("Upload Proof", fd, file[0]);
-      await this.uploadImage(fd, "Proof");
+      this.uploadImage(fd);
     },
     filterOtherCountry(val, update, abort) {
       update(() => {
