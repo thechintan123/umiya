@@ -19,7 +19,7 @@ def verify_password(email, password):
 @basic_auth.error_handler
 def basic_auth_error(status):
     # It is actually 401 error, but we use 400 so that browser doesnt do their autopopup
-    return error_response(400,'Invalid credentials')
+    return error_response(401,'Invalid credentials')
 
 # this funcion receives the token sent by Vue
 # If valid it will return a user object
@@ -32,4 +32,4 @@ def verify_token(token):
 @token_auth.error_handler
 def auth_error():
     # It is actually 401 error, but we use 400 so that browser doesnt do their autopopup
-    return error_response(400,'Invalid credentials')
+    return error_response(401,'Invalid token')

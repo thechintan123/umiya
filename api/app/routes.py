@@ -1,4 +1,4 @@
-from flask import jsonify, request, url_for, render_template
+from flask import jsonify, request, url_for, render_template, Response
 from . import app, db
 from .auth import basic_auth, token_auth
 from .errors import error_response, bad_request
@@ -11,6 +11,11 @@ import os
 from datetime import datetime
 from PIL import Image
 from strgen import StringGenerator
+import re
+from io import BytesIO
+# workaround needed on Pythonanywhere
+from werkzeug.wsgi import FileWrapper
+
 
 from sqlalchemy import exc
 
@@ -126,8 +131,10 @@ def search():
 
     userList = []
     for user in users:
-        userList.append({'id': user.id,'firstName': user.first_name,\
-                        'lastName': user.last_name ,\
+        upload_photos = user.upload_photos.all()
+        filenames = [u.filename for u in upload_photos]
+        userList.append({'id': user.id, 'firstName': user.first_name, \
+                        'lastName': user.last_name, \
                         'gender' : user.gender.name, \
                         'dob' : user.dob,\
                         'country' : user.country.name, \
@@ -141,10 +148,11 @@ def search():
                         'originalSurname' : user.original_surname, \
                         'fatherFullName' : user.father_fullname, \
                         'address' : user.address, \
-                        'aboutYourself' : user.about_yourself \
+                        'aboutYourself': user.about_yourself, \
+                        'uploadProof': user.upload_proof, \
+                        'uploadPhotos': filenames \
                         }) 
     return jsonify(userList)
-
 
 
 # get one user
@@ -177,6 +185,9 @@ def create_user():
         'id' not in data['sourceOfWebsite'] or 'id' not in data['maritalStatus'] or \
             'id' not in data['gender']:
         return bad_request('Please provide all mandatory fields.')
+    email = data['email'].lower()
+    if re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', email) is None:
+        return bad_request('Email provided is not valid')
     if User.query.filter_by(email=data['email']).first():
         return bad_request('Email already registered. Please use another email ID.')
 
@@ -223,7 +234,7 @@ def create_user():
     )
 
     user = User(
-        email=data['email']
+        email=email
     )
     user.set_password(data['password'])
     user.user_details = user_details
@@ -325,23 +336,24 @@ def upload_file():
     return '', 204
 
 
-# return uploaded images for a user
-@app.route('/api/upload/<int:id>', methods=['GET'])
-def get_upload(id):
-    user_det = db.session.query(UserDetails).join(User).filter(User.id == id).first()
-    if not user_det:
-        return bad_request('User details does not exist')
+# return uploaded photos for a user
+@app.route('/api/upload/<int:id>/<string:filename>', methods=['GET'])
+def get_upload(id, filename): 
+    folder = app.config['UPLOAD_FOLDER'] / str(id)
+    if not folder.is_dir():
+        return bad_request('Upload folder not found')
+    file_path = folder / filename
 
-    # get uploaded photo id proof - only 1 image returns String
-    img_proof = db.session.query(UserDetails.upload_proof).join(User).filter(User.id == id).first()
-    # get uploaded photos - more than 1 image returns List
-    img_photos = db.session.query(UploadPhotos.filename).join(UserDetails).filter(
-        UserDetails.id == UploadPhotos.user_details_id).join(User).filter(User.id == UserDetails.user_id).filter(User.id == id).all()
-    payload = {
-        'img_proof': img_proof,
-        'img_photos': img_photos
-    }
-    return jsonify(payload)
+    try:
+        # get PIL image
+        img = Image.open(file_path)
+        file_object = BytesIO()
+        img.save(file_object, 'JPEG')
+        file_object.seek(0)
+        w = FileWrapper(file_object)
+        return Response(file_object, mimetype='image/jpeg', direct_passthrough=True)
+    except IOError as e:
+        return bad_request('Unable to open file')
 
 
 # testing
