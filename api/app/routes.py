@@ -17,6 +17,9 @@ from io import BytesIO
 from werkzeug.wsgi import FileWrapper
 
 
+from sqlalchemy import exc
+
+
 
 # Serve the Vue file
 @app.route('/')
@@ -177,17 +180,16 @@ def create_user():
                    'ageFrom', 'ageTo', 'heightTo', 'heightFrom',
                    'sourceOfWebsite')
     if not all(field in data for field in mand_fields):
-        return bad_request('must include all mandatory fields in database')
+        return bad_request('Please provide all mandatory fields.')
     if 'id' not in data['gotra'] or \
         'id' not in data['sourceOfWebsite'] or 'id' not in data['maritalStatus'] or \
             'id' not in data['gender']:
-        return bad_request('must include all mandatory fields in database')
-    
+        return bad_request('Please provide all mandatory fields.')
     email = data['email'].lower()
     if re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', email) is None:
         return bad_request('Email provided is not valid')
     if User.query.filter_by(email=data['email']).first():
-        return bad_request('email already registered')
+        return bad_request('Email already registered. Please use another email ID.')
 
     # Get objects from the dropdowns
     country = ''
@@ -238,8 +240,11 @@ def create_user():
     user.user_details = user_details
 
     for pms in data['maritalStatusPreference']:
-        ms = MaritalStatus.query.filter_by(id=int(pms['id'])).first()
-        user_details.partner_marital_status.append(ms)
+      try:
+          ms = MaritalStatus.query.filter_by(id=int(pms['id'])).first()
+          user_details.partner_marital_status.append(ms)
+      except exc.SQLAlchemyError as e:
+        print('Error',type(e))
 
     db.session.add(user)
     db.session.add(user_details)

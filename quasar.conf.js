@@ -7,39 +7,37 @@
 // https://quasar.dev/quasar-cli/quasar-conf-js
 /* eslint-env node */
 
-module.exports = function (ctx) {
+module.exports = function(ctx) {
   return {
+    // this is a configuration passed on
+    // to the underlying Webpack
+    devtool: "source-map",
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://quasar.dev/quasar-cli/cli-documentation/boot-files
-    boot: [
-
-      'axios'
-    ],
+    boot: ["axios"],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
-    css: [
-      'app.scss'
-    ],
+    css: ["app.scss"],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
       // 'ionicons-v4',
       // 'mdi-v5',
-      'fontawesome-v5',
+      "fontawesome-v5",
       // 'eva-icons',
       // 'themify',
       // 'line-awesome',
       // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
 
-      'roboto-font', // optional, you are not bound to it
-      'material-icons' // optional, you are not bound to it
+      "roboto-font", // optional, you are not bound to it
+      "material-icons" // optional, you are not bound to it
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
     framework: {
-      iconSet: 'fontawesome-v5', // Quasar icon set
-      lang: 'en-us', // Quasar language pack
+      iconSet: "fontawesome-v5", // Quasar icon set
+      lang: "en-us", // Quasar language pack
 
       // Possible values for "all":
       // * 'auto' - Auto-import needed Quasar components & directives
@@ -51,66 +49,64 @@ module.exports = function (ctx) {
       all: false,
 
       components: [
-        'QLayout',
-        'QHeader',
-        'QDrawer',
-        'QPageContainer',
-        'QPage',
-        'QToolbar',
-        'QToolbarTitle',
-        'QBtn',
-        'QIcon',
-        'QList',
-        'QItem',
-        'QItemSection',
-        'QItemLabel',
-        'QAvatar',
-        'QFooter',
+        "QLayout",
+        "QHeader",
+        "QDrawer",
+        "QPageContainer",
+        "QPage",
+        "QToolbar",
+        "QToolbarTitle",
+        "QBtn",
+        "QIcon",
+        "QList",
+        "QItem",
+        "QItemSection",
+        "QItemLabel",
+        "QAvatar",
+        "QFooter",
 
-        'QTabs',
-        'QTab',
-        'QRouteTab',
-        'QInput',
-        'QBanner',
-        'QSpace',
-        'QScrollArea',
-        'QSeparator',
-        'QUploader',
-        'QTabPanels',
-        'QTabPanel',
-        'QCard',
-        'QSelect',
+        "QTabs",
+        "QTab",
+        "QRouteTab",
+        "QInput",
+        "QBanner",
+        "QSpace",
+        "QScrollArea",
+        "QSeparator",
+        "QUploader",
+        "QTabPanels",
+        "QTabPanel",
+        "QCard",
+        "QSelect",
 
-        'QImg',
-        'QForm',
-        'QBadge',
-        'QField',
-        'QRadio',
-        'QToggle',
+        "QImg",
+        "QForm",
+        "QBadge",
+        "QField",
+        "QRadio",
+        "QToggle",
 
-        'QForm',
-        'QCardSection',
-        'QRange',
-        'QExpansionItem',
-        'QCarouselSlide',
-        'QCarousel',
-        'QCarouselControl',
-        'QPagination',
-        'QParallax',
-        'QCardActions',
-        'QIntersection',
-        'QBtnToggle'
+        "QForm",
+        "QCardSection",
+        "QRange",
+        "QExpansionItem",
+        "QCarouselSlide",
+        "QCarousel",
+        "QCarouselControl",
+        "QPagination",
+        "QParallax",
+        "QCardActions",
+        "QIntersection",
+        "QBtnToggle",
+
+        "QSpinner",
+        "QLinearProgress"
       ],
 
-      directives: [
-        'Ripple'
-      ],
+      directives: ["Ripple"],
 
       // Quasar plugins
-      plugins: [
-        'Dialog',
-        'Notify'
-      ]
+      plugins: ["Dialog", "Notify"]
     },
 
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie
@@ -124,7 +120,7 @@ module.exports = function (ctx) {
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
+      vueRouterMode: "hash", // available values: 'hash', 'history'
 
       // rtl: false, // https://quasar.dev/options/rtl-support
       // preloadChunks: true,
@@ -136,39 +132,39 @@ module.exports = function (ctx) {
       // extractCSS: false,
 
       // https://quasar.dev/quasar-cli/cli-documentation/handling-webpack
-      extendWebpack (cfg) {
+      extendWebpack(cfg) {
         cfg.module.rules.push({
-          enforce: 'pre',
+          enforce: "pre",
           test: /\.(js|vue)$/,
-          loader: 'eslint-loader',
+          loader: "eslint-loader",
           exclude: /node_modules/,
           options: {
-            formatter: require('eslint').CLIEngine.getFormatter('stylish'),
+            formatter: require("eslint").CLIEngine.getFormatter("stylish"),
             fix: true
           }
-        })
+        });
       },
 
       env: ctx.dev
         ? {
-          API: JSON.stringify('http://localhost:5000/api')
-        }
+            API: JSON.stringify("http://localhost:5000/api")
+          }
         : {
-          API: JSON.stringify('https://thechintan123.pythonanywhere.com/api')
-        }
+            API: JSON.stringify("https://thechintan123.pythonanywhere.com/api")
+          }
     },
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
       https: false,
-      // port: 8080, // Changing to 3000 since Quasar DEV is not starting the localhost server
-      port: 3000,
+      port: 8080, // Changing to 3000 since Quasar DEV is not starting the localhost server
+      //port: 3000,
       open: true // opens browser window automatically
     },
 
     // animations: 'all', // --- includes all animations
     // https://quasar.dev/options/animations
-    animations: 'all',
+    animations: "all",
 
     // https://quasar.dev/quasar-cli/developing-ssr/configuring-ssr
     ssr: {
@@ -177,41 +173,41 @@ module.exports = function (ctx) {
 
     // https://quasar.dev/quasar-cli/developing-pwa/configuring-pwa
     pwa: {
-      workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
+      workboxPluginMode: "GenerateSW", // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {}, // only for GenerateSW
       manifest: {
-        name: 'UmiyaMatrimony.com',
-        short_name: 'UmiyaMatrimony.com',
-        description: 'Umiya Matrimony',
-        display: 'standalone',
-        orientation: 'portrait',
-        background_color: '#ffffff',
-        theme_color: '#027be3',
+        name: "UmiyaMatrimony.com",
+        short_name: "UmiyaMatrimony.com",
+        description: "Umiya Matrimony",
+        display: "standalone",
+        orientation: "portrait",
+        background_color: "#ffffff",
+        theme_color: "#027be3",
         icons: [
           {
-            src: 'statics/icons/icon-128x128.png',
-            sizes: '128x128',
-            type: 'image/png'
+            src: "statics/icons/icon-128x128.png",
+            sizes: "128x128",
+            type: "image/png"
           },
           {
-            src: 'statics/icons/icon-192x192.png',
-            sizes: '192x192',
-            type: 'image/png'
+            src: "statics/icons/icon-192x192.png",
+            sizes: "192x192",
+            type: "image/png"
           },
           {
-            src: 'statics/icons/icon-256x256.png',
-            sizes: '256x256',
-            type: 'image/png'
+            src: "statics/icons/icon-256x256.png",
+            sizes: "256x256",
+            type: "image/png"
           },
           {
-            src: 'statics/icons/icon-384x384.png',
-            sizes: '384x384',
-            type: 'image/png'
+            src: "statics/icons/icon-384x384.png",
+            sizes: "384x384",
+            type: "image/png"
           },
           {
-            src: 'statics/icons/icon-512x512.png',
-            sizes: '512x512',
-            type: 'image/png'
+            src: "statics/icons/icon-512x512.png",
+            sizes: "512x512",
+            type: "image/png"
           }
         ]
       }
@@ -220,7 +216,7 @@ module.exports = function (ctx) {
     // Full list of options: https://quasar.dev/quasar-cli/developing-cordova-apps/configuring-cordova
     cordova: {
       // noIosLegacyBuildFlag: true, // uncomment only if you know what you are doing
-      id: 'org.cordova.quasar.app'
+      id: "org.cordova.quasar.app"
     },
 
     // Full list of options: https://quasar.dev/quasar-cli/developing-capacitor-apps/configuring-capacitor
@@ -230,17 +226,15 @@ module.exports = function (ctx) {
 
     // Full list of options: https://quasar.dev/quasar-cli/developing-electron-apps/configuring-electron
     electron: {
-      bundler: 'packager', // 'packager' or 'builder'
+      bundler: "packager", // 'packager' or 'builder'
 
       packager: {
         // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
-
         // OS X / Mac App Store
         // appBundleId: '',
         // appCategoryType: '',
         // osxSign: '',
         // protocol: 'myapp://path',
-
         // Windows only
         // win32metadata: { ... }
       },
@@ -248,16 +242,16 @@ module.exports = function (ctx) {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        appId: 'umiya'
+        appId: "umiya"
       },
 
       // More info: https://quasar.dev/quasar-cli/developing-electron-apps/node-integration
       nodeIntegration: true,
 
-      extendWebpack (/* cfg */) {
+      extendWebpack(/* cfg */) {
         // do something with Electron main process Webpack cfg
         // chainWebpack also available besides this extendWebpack
       }
     }
-  }
-}
+  };
+};

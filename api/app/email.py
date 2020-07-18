@@ -44,7 +44,7 @@ def send_reg_email(user):
     recipients = [user.email]
     return send_email(
         recipients=recipients,
-        subject='You have successfully registered on UmiyaMatrimony!',
+        subject='Welcome to UmiyaMatrimony Family!',
         text_body=render_template('email_reg.txt',
                                   user=user),
         html_body=render_template('email_reg.html',
