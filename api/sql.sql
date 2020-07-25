@@ -26,6 +26,21 @@ VALUES ('Male', now()), ('Female', now())
 INSERT INTO where_know (name, update_date)
 VALUES ('Friends', now()), ('Families', now()), ('Facebook', now()), ('Whatsapp', now()), ('Other', now())
 
+
+
 /* quick fix */
 update user_details
 set height =180;
+
+/* development use only */
+SELECT c.filename
+FROM user_details a
+INNER JOIN user b ON (b.id = a.user_id)
+LEFT JOIN upload_photos c ON (c.user_details_id = a.id)
+WHERE b.id = 7;
+
+SELECT a.filename
+FROM upload_photos a
+INNER JOIN user_details b ON (b.id = a.user_details_id)
+INNER JOIN user c ON (c.id = b.user_id)
+WHERE c.id = 7;

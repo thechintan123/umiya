@@ -11,9 +11,10 @@ import os
 from datetime import datetime
 from PIL import Image
 from strgen import StringGenerator
+import re
 from io import BytesIO
+# workaround needed on Pythonanywhere
 from werkzeug.wsgi import FileWrapper
-
 
 
 from sqlalchemy import exc
@@ -130,8 +131,10 @@ def search():
 
     userList = []
     for user in users:
-        userList.append({'id': user.id,'firstName': user.first_name,\
-                        'lastName': user.last_name ,\
+        upload_photos = user.upload_photos.all()
+        filenames = [u.filename for u in upload_photos]
+        userList.append({'id': user.id, 'firstName': user.first_name, \
+                        'lastName': user.last_name, \
                         'gender' : user.gender.name, \
                         'dob' : user.dob,\
                         'country' : user.country.name, \
@@ -145,10 +148,11 @@ def search():
                         'originalSurname' : user.original_surname, \
                         'fatherFullName' : user.father_fullname, \
                         'address' : user.address, \
-                        'aboutYourself' : user.about_yourself \
+                        'aboutYourself': user.about_yourself, \
+                        'uploadProof': user.upload_proof, \
+                        'uploadPhotos': filenames \
                         }) 
     return jsonify(userList)
-
 
 
 # get one user
@@ -181,6 +185,9 @@ def create_user():
         'id' not in data['sourceOfWebsite'] or 'id' not in data['maritalStatus'] or \
             'id' not in data['gender']:
         return bad_request('Please provide all mandatory fields.')
+    email = data['email'].lower()
+    if re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', email) is None:
+        return bad_request('Email provided is not valid')
     if User.query.filter_by(email=data['email']).first():
         return bad_request('Email already registered. Please use another email ID.')
 
@@ -227,7 +234,7 @@ def create_user():
     )
 
     user = User(
-        email=data['email']
+        email=email
     )
     user.set_password(data['password'])
     user.user_details = user_details

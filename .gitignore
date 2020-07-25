@@ -38,3 +38,4 @@ __pycache__
 /.vscode
 migrations
 /api/app/static/uploads/*
+/api/uploads/*
