@@ -220,7 +220,7 @@ def create_user():
         phone_alternate=data['alternateContact'],
         agree_tc=data['agreeTnC'],
         marital_status=marital_status,
-        height=data['height'],
+        height=data['heightCms'],
         gotra=gotra,
         original_surname=data['originalSurname'],
         father_fullname=data['fatherName'],
@@ -228,8 +228,8 @@ def create_user():
         about_yourself=data['aboutYourself'],
         partner_age_from=data['ageFrom'],
         partner_age_to=data['ageTo'],
-        partner_height_from=data['heightFrom'],
-        partner_height_to=data['heightTo'],
+        partner_height_from=data['heightFromCms'],
+        partner_height_to=data['heightToCms'],
         where_know=where_know
     )
 

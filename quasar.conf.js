@@ -100,10 +100,13 @@ module.exports = function(ctx) {
         "QBtnToggle",
 
         "QSpinner",
-        "QLinearProgress"
+        "QLinearProgress",
+        "QDialog",
+        "QSplitter",
+        "QTree"
       ],
 
-      directives: ["Ripple"],
+      directives: ["Ripple", "ClosePopup"],
 
       // Quasar plugins
       plugins: ["Dialog", "Notify"]
