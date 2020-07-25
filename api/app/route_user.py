@@ -1,158 +1,17 @@
-from flask import jsonify, request, url_for, render_template, Response
+from flask import jsonify, request, url_for, Response
 from . import app, db
-from .auth import basic_auth, token_auth
-from .errors import error_response, bad_request
-from werkzeug.utils import secure_filename
-from sqlalchemy import and_
-from datetime import datetime, timedelta
-from .models import User, UserDetails, Role, Country, Gotra, WhereKnow, MaritalStatus, Gender, UploadPhotos
-from .email import send_reg_email
-import os
+from .auth import token_auth
+from .errors import bad_request
 from datetime import datetime
+from .models import User, UserDetails, Country, Gotra, WhereKnow, MaritalStatus, Gender, UploadPhotos
+from .email import send_reg_email
 from PIL import Image
 from strgen import StringGenerator
 import re
 from io import BytesIO
 # workaround needed on Pythonanywhere
 from werkzeug.wsgi import FileWrapper
-
-
 from sqlalchemy import exc
-
-
-
-# Serve the Vue file
-@app.route('/')
-def index():
-    return app.send_static_file('index.html')
-
-
-# basic auth or token auth is passed so user is now logged in
-# return either a new token or an existing token back to Vue
-# This is the route Vue calls when user first login
-@app.route('/api/tokens', methods=['POST'])
-@basic_auth.login_required
-def get_token():
-    user = basic_auth.current_user()
-    token = user.get_token()
-    payload = {
-        'token': token
-    }
-    user.last_login = datetime.utcnow()
-    db.session.add(user)
-    db.session.commit()
-    return jsonify(payload)
-
-
-# revoke a token immediately .. eg when user logs out
-@app.route('/api/tokens', methods=['DELETE'])
-@token_auth.login_required
-def revoke_token():
-    token_auth.current_user().revoke_token()
-    db.session.commit()
-    # 204 - successful and no body
-    return '', 204
-
-
-# helper function for search
-def convertToCms(heightInFootInches):
-    slice_object1 = slice(0, 1)
-    heightFt = heightInFootInches[slice_object1]
-    slice_object2 = slice(5, 7)
-    heightInches = heightInFootInches[slice_object2]
-    print('Height Ft Inch', heightFt, heightInches)
-    heightCms = float(heightFt) * 30.48 + float(heightInches) * 2.54
-    return heightCms
-
-
-# search Function
-@app.route('/api/search', methods=['POST'])
-def search():
-    data = request.get_json() or {}
-
-    country_id_local = []
-    countries = data.get("country")
-    if countries is not None:
-        for country in countries:
-            country_id_local.append(country['id'])
-    else:
-        # otherwise default to India
-        india = Country.query.filter_by(name='India').first()
-        country_id_local.append(india.id)
-    
-    marital_status_id_local =[]
-    maritalStatusPreferences = data.get('maritalStatusPreference')
-    if len(maritalStatusPreferences) != 0:
-        for maritalStatus in maritalStatusPreferences:
-            marital_status_id_local.append(maritalStatus['id'])
-    else:
-        # otherwise default to all marital status
-        ms = MaritalStatus.query.all()
-        marital_status_id_local = [m.id for m in ms]
-        
-    currDate = datetime.now()
-    ageFromTo = data["ageFromTo"]
-    if ageFromTo is not None:
-        ageMin = ageFromTo.get("min")
-        ageMax = ageFromTo.get("max")
-    else:
-        ageMin = 18
-        ageMax = 50
-
-    # Chintan to fix
-    currDatePlusMin = currDate - timedelta(days=(ageMin*365))
-    currDatePlusMax = currDate - timedelta(days=(ageMax*365))
-    #print('current Date Plus', currDatePlusMin, currDatePlusMax)
-    #5ft × 30.48 + 5 in × 2.54= 165.1 cm
-    heightMin = data.get("heightFrom")
-    #print('heightMin', heightMin)
-    if heightMin is None or heightMin == '':
-        heightMin = "4 ft 0 inches"
-    heightMax = data.get("heightTo")
-    if heightMax is None or heightMax == '':
-        heightMax = "7 ft 0 inches"
-    heightMinInCms = convertToCms(heightMin)
-    heightMaxInCms = convertToCms(heightMax)
-    #print('Height Min Max', heightMinInCms, heightMaxInCms)
-
-    lookingFor = data.get("lookingFor")
-    if lookingFor is None or lookingFor == '':
-        # default to bride if empty
-        female = Gender.query.filter_by(name="Female").first()
-        lookingFor = female.id
-    else:
-        lookingFor = int(lookingFor)
-        
-    users = UserDetails.query.filter(and_(UserDetails.country_id.in_(country_id_local),\
-                                          UserDetails.gender_id == lookingFor), \
-                                          UserDetails.dob <= currDatePlusMin, UserDetails.dob >= currDatePlusMax, \
-                                          UserDetails.height.between(heightMinInCms, heightMaxInCms), \
-                                          UserDetails.marital_status_id.in_(marital_status_id_local)).all()
-
-    userList = []
-    for user in users:
-        upload_photos = user.upload_photos.all()
-        filenames = [u.filename for u in upload_photos]
-        userList.append({'id': user.id, 'firstName': user.first_name, \
-                        'lastName': user.last_name, \
-                        'gender' : user.gender.name, \
-                        'dob' : user.dob,\
-                        'country' : user.country.name, \
-                        'state' : user.state, \
-                        'city' : user.city,\
-                        'phonePrimary' : user.phone_primary, \
-                        'phoneAlternate': user.phone_alternate, \
-                        'maritalStatus' : user.marital_status.name, \
-                        'height' : user.height, \
-                        'gotra' : user.gotra.name,\
-                        'originalSurname' : user.original_surname, \
-                        'fatherFullName' : user.father_fullname, \
-                        'address' : user.address, \
-                        'aboutYourself': user.about_yourself, \
-                        'uploadProof': user.upload_proof, \
-                        'uploadPhotos': filenames \
-                        }) 
-    return jsonify(userList)
 
 
 # get one user
@@ -240,11 +99,11 @@ def create_user():
     user.user_details = user_details
 
     for pms in data['maritalStatusPreference']:
-      try:
-          ms = MaritalStatus.query.filter_by(id=int(pms['id'])).first()
-          user_details.partner_marital_status.append(ms)
-      except exc.SQLAlchemyError as e:
-        print('Error',type(e))
+        try:
+            ms = MaritalStatus.query.filter_by(id=int(pms['id'])).first()
+            user_details.partner_marital_status.append(ms)
+        except exc.SQLAlchemyError as e:
+            print('Error', type(e))
 
     db.session.add(user)
     db.session.add(user_details)
@@ -258,6 +117,12 @@ def create_user():
     # send welcome email to user
     send_reg_email(user)
     return response
+
+
+# update user
+@app.route('/api/users', methods=['PUT'])
+def update_user():
+    pass
 
 
 # helper function for dropdowns
@@ -354,11 +219,3 @@ def get_upload(id, filename):
         return Response(file_object, mimetype='image/jpeg', direct_passthrough=True)
     except IOError as e:
         return bad_request('Unable to open file')
-
-
-# testing
-@app.route('/api/hello', methods=['GET'])
-@token_auth.login_required
-def hello():
-    return jsonify({'message': 'hello world!!!'})
-
