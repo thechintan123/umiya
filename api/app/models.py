@@ -67,7 +67,7 @@ class User(db.Model):
 class Role(db.Model):
     __tablename__ = 'role'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), unique=True, nullable=False)
+    name = db.Column(db.String(20), unique=True, nullable=False)
     users = db.relationship('User', backref='role', lazy='dynamic')
 
     def __repr__(self):
@@ -119,6 +119,10 @@ class UserDetails(db.Model):
                                              backref=db.backref('pms_prefs', lazy='dynamic'))
     where_know_id = db.Column(db.Integer, db.ForeignKey(
         'where_know.id'), nullable=False)
+
+    status_id = db.Column(db.Integer, db.ForeignKey(
+        'profile_status.id'), default=1, nullable=False)
+
     update_date = db.Column(
         db.DateTime, default=datetime.utcnow, nullable=False)
     create_date = db.Column(
@@ -126,6 +130,17 @@ class UserDetails(db.Model):
 
     def __repr__(self):
         return '<UserDetails {}>'.format(self.first_name)
+
+
+class ProfileStatus(db.Model):
+    __tablename__ = 'profile_status'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20), unique=True, nullable=False)
+    user_details = db.relationship(
+        'UserDetails', backref='status', lazy='dynamic')
+
+    def __repr__(self):
+        return '<ProfileStatus {}>'.format(self.name)
 
 
 class UploadPhotos(db.Model):
