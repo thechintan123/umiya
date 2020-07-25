@@ -106,6 +106,7 @@
               dense
               clearable
               hint="Hint: This Email will be used as login ID"
+              maxlength="50"
             />
 
             <div class="row">
@@ -122,6 +123,7 @@
                   clearable
                   :type="isPwd ? 'password' : 'text'"
                   hint="Password with toggle"
+                  maxlength="50"
                 >
                   <template v-slot:append>
                     <q-icon
@@ -144,6 +146,7 @@
                   type="password"
                   dense
                   clearable
+                  maxlength="50"
                 />
               </div>
             </div>
@@ -158,6 +161,7 @@
                   :rules="[ val => !!val || 'Field is required']"
                   dense
                   clearable
+                  maxlength="50"
                 />
               </div>
               <div class="col">
@@ -169,6 +173,7 @@
                   :rules="[ val => !!val || 'Field is required']"
                   dense
                   clearable
+                  maxlength="50"
                 />
               </div>
             </div>
@@ -185,6 +190,7 @@
               clearable
               label="Gender*"
               :rules="[ val => !!val || 'Field is required']"
+              @blur="defaultHeightAgeFromTo"
             />
 
             <div class="row">
@@ -257,6 +263,7 @@
                   label="State*"
                   :rules="[ val => !!val || 'Field is required']"
                   clearable
+                  maxlength="20"
                 />
               </div>
               <div class="col">
@@ -268,24 +275,24 @@
                   label="City*"
                   :rules="[ val => !!val || 'Field is required']"
                   clearable
+                  maxlength="30"
                 />
               </div>
             </div>
 
             <div class="row">
-              <div class="col-1">
+              <div class="col-3">
                 <q-input
                   v-model="tmpData.primaryContactCountryCode"
                   outlined
                   dense
-                  label="Code"
-                  mask="##"
-                  fill-mask
+                  label="Country Code"
                   type="tel"
                   :rules="[ val => !!val || 'Field is required']"
+                  hint="Don't add + or ( )"
                 />
               </div>
-              <div class="col-5">
+              <div class="col-9">
                 <q-input
                   tabindex="11"
                   v-model="tmpData.primaryContact"
@@ -295,38 +302,73 @@
                   type="number"
                   :rules="[ val => !!val || 'Field is required']"
                   clearable
+                  maxlength="12"
+                  hint="Contact Numbers will be only shared to Approved profiles."
+                />
+                <!-- maxlength of 12 since DB maxlength is 20; 1 for +; 1 for Space; 4 for Country Code; -->
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3">
+                <q-input
+                  v-model="tmpData.alternateContactCountryCode"
+                  tabindex="12"
+                  outlined
+                  dense
+                  label="Country Code"
+                  type="tel"
+                  :rules="[ val => !!val || 'Field is required']"
+                  hint="Don't add + or ( )"
                 />
               </div>
-              <div class="col">
+              <div class="col-9">
                 <q-input
-                  tabindex="12"
+                  tabindex="13"
                   v-model="tmpData.alternateContact"
                   outlined
                   dense
                   label="Alternate Contact"
                   type="number"
                   clearable
+                  maxlength="12"
+                  hint="Contact Numbers will be only shared to Approved profiles."
                 />
+                <!-- maxlength of 12 since DB maxlength is 20; 1 for +; 1 for Space; 4 for Country Code; -->
               </div>
             </div>
 
-            <q-field
-              borderless
-              :value="formData.agreeTnC"
-              :rules="[ val => val === true || 'Field is required']"
-            >
-              <template v-slot:control>
-                <q-toggle
-                  tabindex="13"
-                  v-model="formData.agreeTnC"
-                  checked-icon="check"
-                  color="green"
-                  unchecked-icon="clear"
-                  label="Agree Terms & Conditions *"
-                  dense
-                />
-              </template>
-            </q-field>
+            <div class="row">
+              <div class="col-6">
+                <q-field
+                  borderless
+                  :value="formData.agreeTnC"
+                  :rules="[ val => val === true || 'Field is required']"
+                >
+                  <template v-slot:control>
+                    <q-toggle
+                      tabindex="13"
+                      v-model="formData.agreeTnC"
+                      checked-icon="check"
+                      color="green"
+                      unchecked-icon="clear"
+                      label="Agree Terms & Conditions *"
+                      dense
+                    />
+                  </template>
+                </q-field>
+              </div>
+              <div class="col-6">
+                <termsConditionsDialog />
+              </div>
+            </div>
+            <p class="text-caption text-weight-light">
+              <i>
+                UmiyaMatrimony.com and its team are only providing online platform for brige-groom search.
+                The team only validates the name and date of birth based on ID Proof.
+                The team does not perform any background check on any details.
+                Requesting to perform the background check before proceeding with any profile.
+              </i>
+            </p>
 
             <div class="row">
               <q-space />
@@ -357,6 +399,7 @@
                   label="Marital Status*"
                   clearable
                   :rules="[ val => !!val || 'Field is required']"
+                  @blur="defaultMaritalStatusPreferences"
                 />
               </div>
               <div class="col">
@@ -370,6 +413,7 @@
                   label="Height*"
                   :options="heightOptions"
                   :rules="[ val => !!val || 'Field is required']"
+                  @blur="defaultHeightFromHeightTo"
                 ></q-select>
               </div>
             </div>
@@ -400,6 +444,7 @@
                   dense
                   label="Original Surname*"
                   :rules="[ val => !!val || 'Field is required']"
+                  maxlength="20"
                 />
               </div>
             </div>
@@ -412,9 +457,10 @@
               label="Father Name*"
               :rules="[ val => !!val || 'Field is required']"
               dense
+              maxlength="50"
             />
             <q-input
-              tabindex="21"
+              tabindex="20"
               clearable
               outlined
               v-model="formData.residentialAddress"
@@ -423,9 +469,10 @@
               dense
               placeholder="Flat/House no, Building Name, Street Name, City, State"
               hint="Hint: Flat/House no, Building Name, Street Name, City, State"
+              maxlength="100"
             />
             <q-input
-              tabindex="22"
+              tabindex="21"
               clearable
               v-model="formData.aboutYourself"
               outlined
@@ -434,9 +481,26 @@
               type="textarea"
               placeholder="Your education, profession, Interest and family"
               hint="Hint: Your education, profession, Interest and family"
+              maxlength="200"
             />
-
+            <q-select
+              tabindex="22"
+              v-model="formData.sourceOfWebsite"
+              option-value="id"
+              option-label="name"
+              :options="sourceOfWebsiteOptions"
+              label="Where do you come to know?"
+              dense
+              options-dense
+              outlined
+              clearable
+              :rules="[ val => !!val || 'Field is required']"
+            />
             <div class="text-subtitle1">Partner Preferences</div>
+            <div class="text-caption text-italic">
+              We have defaulted some of the options.
+              Please feel free to change as per your preference.
+            </div>
 
             <div class="row">
               <div class="col">
@@ -510,20 +574,8 @@
               multiple
               use-chips
               input-debounce="0"
+              ref="maritalStatusPreference"
               hint="Hint: Multiple Options can be selected"
-            />
-
-            <q-select
-              v-model="formData.sourceOfWebsite"
-              option-value="id"
-              option-label="name"
-              :options="sourceOfWebsiteOptions"
-              label="Where do you come to know?"
-              dense
-              options-dense
-              outlined
-              clearable
-              :rules="[ val => !!val || 'Field is required']"
             />
 
             <div class="row">
@@ -555,6 +607,7 @@
                     hide-upload-btn
                     @added="checkPhoto"
                     @removed="checkPhoto"
+                    @rejected="onRejected"
                   />
                 </template>
               </q-field>
@@ -582,6 +635,7 @@
                 </template>
               </q-field>
             </div>
+
             <div class="row">
               <q-btn color="secondary" flat label="Back" @click="tab = 'personal'" />
               <q-space />
@@ -639,10 +693,16 @@ export default {
       gotraOptions: [],
       sourceOfWebsiteOptions: [],
 
+      //this is to default ageFrom and ageTo. Defaulting to 5 years
+      ageDifference: 5,
+      heightDifference: 12,
+      heightDifference: 15.24, //15.24 cms is 6 inches
+
       // formData
       tmpData: {
         primaryContact: "11111111111",
         primaryContactCountryCode: "91",
+        alternateContactCountryCode: "91",
         alternateContact: "22222222222"
       },
       formData: {
@@ -662,6 +722,7 @@ export default {
         alternateContact: "22222222222",
         maritalStatus: "",
         height: "5 ft 0 inch",
+        heightCms: "",
         gotra: "",
         originalSurname: "Surname",
         fatherName: "father",
@@ -670,7 +731,9 @@ export default {
         ageFrom: "30",
         ageTo: "40",
         heightFrom: "5 ft 0 inch",
+        heightFromCms: "",
         heightTo: "6 ft 0 inch",
+        heightToCms: "",
         maritalStatusPreference: [],
         agreeTnC: false,
         sourceOfWebsite: ""
@@ -693,6 +756,7 @@ export default {
         alternateContact: "",
         maritalStatus: "",
         height: "",
+        heightCms : "",
         gotra: "",
         originalSurname: "",
         fatherName: "",
@@ -701,7 +765,9 @@ export default {
         ageFrom: "",
         ageTo: "",
         heightFrom: "",
+        heightFromCms: "",
         heightTo: "",
+        heightToCms: "",
         maritalStatusPreference: [],
         agreeTnC: false,
         sourceOfWebsite: ""
@@ -743,7 +809,7 @@ export default {
       return axios
         .post(process.env.API + "/users", data)
         .then(({ data }) => {
-          console.log("Search Success", data);
+          //console.log("Search Success", data);
           this.user_id = data.user_id;
           this.$q.notify({
             type: "positive",
@@ -760,14 +826,14 @@ export default {
           } else {
             errMsg = error.response.data.error;
           }
-          console.log(errMsg);
+          //console.log(errMsg);
           showErrorMessage(errMsg);
         });
     },
 
     checkPhoto() {
-      console.log("Photo", this.$refs.photo);
-      console.log(this.$refs.photo.files.length);
+      //console.log("Photo", this.$refs.photo);
+      //console.log(this.$refs.photo.files.length);
       if (this.$refs.photo.files.length === 0) {
         this.isErrorPhoto = true;
         //this.uploadHasError = true;
@@ -777,8 +843,8 @@ export default {
       }
     },
     checkProof() {
-      console.log("Proof", this.$refs.photo);
-      console.log(this.$refs.photo.files.length);
+      //console.log("Proof", this.$refs.photo);
+      //console.log(this.$refs.photo.files.length);
 
       if (this.$refs.proof.files.length === 0) {
         this.isErrorProof = true;
@@ -818,9 +884,25 @@ export default {
           this.tmpData.primaryContact;
         this.formData.alternateContact =
           "+" +
-          this.tmpData.primaryContactCountryCode +
+          this.tmpData.alternateContactCountryCode +
           " " +
           this.tmpData.alternateContact;
+
+        //console.log("Submit form 1", this.formData);
+        //convert Height To Cms
+        this.formData.heightFromCms = this.convertHeightToCms(
+          this.formData.heightFrom
+        );
+        this.formData.heightToCms = this.convertHeightToCms(
+          this.formData.heightTo
+        );
+        if (this.formData.heightCms === "") {
+          this.formData.heightCms = this.convertHeightToCms(
+            this.formData.height
+          );
+        }
+
+        //console.log("Submit Form", this.formData);
 
         await this.registerUser(this.formData);
 
@@ -839,7 +921,7 @@ export default {
       const startHeight = 4;
       const endHeight = 7;
       for (h = startHeight; h <= endHeight; h++) {
-        for (i = 0; i <= 12; i++) {
+        for (i = 0; i <= 11; i++) {
           this.heightOptions.push(h + " ft " + i + " inches");
         }
       }
@@ -854,8 +936,78 @@ export default {
     },
     calculateAge() {
       this.formData.age = this.computeAge(this.formData.dateOfBirth);
+      this.defaultAgeFromAgeTo();
     },
 
+    defaultHeightAgeFromTo() {
+      this.defaultAgeFromAgeTo();
+      this.defaultHeightFromHeightTo();
+    },
+    defaultAgeFromAgeTo() {
+      //console.log("Gender", this.formData.gender);
+      if (this.formData.age !== "") {
+        if (this.formData.gender.name == "Male") {
+          //Defaulting Age for Partner
+          this.formData.ageFrom = this.formData.age - this.ageDifference;
+          this.formData.ageTo = this.formData.age;
+        } else if (this.formData.gender.name == "Female") {
+          //Defaulting Age for Partner
+          this.formData.ageFrom = this.formData.age;
+          this.formData.ageTo = this.formData.age + this.ageDifference;
+        } else {
+          this.formData.ageFrom = "";
+          this.formData.ageTo = "";
+        }
+      } else {
+        this.formData.ageFrom = "";
+        this.formData.ageTo = "";
+      }
+    },
+    defaultHeightFromHeightTo() {
+      this.formData.heightCms = this.convertHeightToCms(this.formData.height);
+      var heightCms = this.formData.heightCms;
+      var heightFromCms, heightToCms;
+      this.convertHeightToFtInch(heightCms);
+      if (this.formData.gender.name == "Male") {
+        //Defaulting Age for Partner
+        heightFromCms = heightCms - this.heightDifference;
+        heightToCms = heightCms;
+      } else if (this.formData.gender.name == "Female") {
+        //Defaulting Age for Partner
+        heightFromCms = heightCms;
+        heightToCms = heightCms + this.heightDifference;
+      } else {
+        heightFromCms = heightCms;
+        heightToCms = heightCms;
+      }
+      this.formData.heightFromCms = heightFromCms;
+      this.formData.heightToCms = heightToCms;
+      this.formData.heightFrom = this.convertHeightToFtInch(heightFromCms);
+      this.formData.heightTo = this.convertHeightToFtInch(heightToCms);
+    },
+
+    defaultMaritalStatusPreferences() {
+      //console.log("Martial Status", this.formData.maritalStatus);
+      //console.log("MSP", this.formData.maritalStatusPreference);
+      this.formData.maritalStatusPreference.length = 0;
+      this.formData.maritalStatusPreference.push(this.formData.maritalStatus);
+    },
+    convertHeightToCms(heightFtInch) {
+      var heightFt = heightFtInch.substr(0, 1);
+      var heightInches = heightFtInch.substr(5, 7);
+      //console.log("Height Ft Inch", heightFt, heightInches);
+      var heightCms =
+        parseFloat(heightFt) * 30.48 + parseFloat(heightInches) * 2.54;
+      //console.log("heightCms", heightCms);
+      return heightCms;
+    },
+    convertHeightToFtInch(heightCms) {
+      var heightTotalInches = heightCms * 0.393701;
+      var heightFt = Math.floor(heightTotalInches / 12);
+      var heightInches = Math.floor(heightTotalInches - heightFt * 12);
+      //console.log("Height Ft Inch", heightFt, heightInches);
+      return heightFt + " ft " + heightInches + " inches";
+    },
     checkOtherCountry(otherCountry) {
       if (this.formData.country === "Other" && otherCountry === null) {
         return false;
@@ -908,7 +1060,7 @@ export default {
           }
         })
         .then(resolve => {
-          console.log("uploadImage - Then");
+          //console.log("uploadImage - Then");
           this.$q.notify({
             type: "positive",
             message: file + " successfully uploaded"
@@ -923,7 +1075,7 @@ export default {
             errMsg = error.response.data.error;
           }
           showErrorMessage(errMsg);
-          console.log("uploadImage - Error - Error Message", errMsg);
+          //console.log("uploadImage - Error - Error Message", errMsg);
         });
     },
     async uploadPhoto(file) {
@@ -931,7 +1083,7 @@ export default {
       fd.append("file", file[0]);
       fd.append("filetype", "photo");
       fd.append("user_id", this.user_id);
-      console.log("Upload Photo", fd, file);
+      //console.log("Upload Photo", fd, file);
       await this.uploadImage(fd, "Photo");
     },
     async uploadProof(file) {
@@ -939,7 +1091,7 @@ export default {
       fd.append("file", file[0]);
       fd.append("filetype", "proof");
       fd.append("user_id", this.user_id);
-      console.log("Upload Proof", fd, file[0]);
+      //console.log("Upload Proof", fd, file[0]);
       await this.uploadImage(fd, "Proof");
     },
     filterOtherCountry(val, update, abort) {
@@ -955,6 +1107,15 @@ export default {
         }
         // console.log('countryListFiltered', countryListFiltered);
         this.countryOptions = countryListFiltered;
+      });
+    },
+    //Photo Upload - Error Message
+    onRejected(rejectedEntries) {
+      // Notify plugin needs to be installed
+      // https://quasar.dev/quasar-plugins/notify#Installation
+      this.$q.notify({
+        type: "negative",
+        message: `${rejectedEntries.length} file(s) did not pass validation constraints`
       });
     }
   },
@@ -974,8 +1135,12 @@ export default {
         this.genderOptions = response.data.gender;
       })
       .catch(error => {
-        console.log(error);
+        //console.log(error);
       });
+  },
+  components: {
+    termsConditionsDialog: require("./terms_privacy/TermsConditionsDialog.vue")
+      .default
   }
 };
 </script>

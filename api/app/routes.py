@@ -1,4 +1,4 @@
-from flask import jsonify, request, url_for, render_template
+from flask import jsonify, request, url_for, render_template, Response
 from . import app, db
 from .auth import basic_auth, token_auth
 from .errors import error_response, bad_request
@@ -11,6 +11,10 @@ import os
 from datetime import datetime
 from PIL import Image
 from strgen import StringGenerator
+from io import BytesIO
+from werkzeug.wsgi import FileWrapper
+
+
 
 from sqlalchemy import exc
 
@@ -209,7 +213,7 @@ def create_user():
         phone_alternate=data['alternateContact'],
         agree_tc=data['agreeTnC'],
         marital_status=marital_status,
-        height=data['height'],
+        height=data['heightCms'],
         gotra=gotra,
         original_surname=data['originalSurname'],
         father_fullname=data['fatherName'],
@@ -217,8 +221,8 @@ def create_user():
         about_yourself=data['aboutYourself'],
         partner_age_from=data['ageFrom'],
         partner_age_to=data['ageTo'],
-        partner_height_from=data['heightFrom'],
-        partner_height_to=data['heightTo'],
+        partner_height_from=data['heightFromCms'],
+        partner_height_to=data['heightToCms'],
         where_know=where_know
     )
 
@@ -325,23 +329,24 @@ def upload_file():
     return '', 204
 
 
-# return uploaded images for a user
-@app.route('/api/upload/<int:id>', methods=['GET'])
-def get_upload(id):
-    user_det = db.session.query(UserDetails).join(User).filter(User.id == id).first()
-    if not user_det:
-        return bad_request('User details does not exist')
+# return uploaded photos for a user
+@app.route('/api/upload/<int:id>/<string:filename>', methods=['GET'])
+def get_upload(id, filename): 
+    folder = app.config['UPLOAD_FOLDER'] / str(id)
+    if not folder.is_dir():
+        return bad_request('Upload folder not found')
+    file_path = folder / filename
 
-    # get uploaded photo id proof - only 1 image returns String
-    img_proof = db.session.query(UserDetails.upload_proof).join(User).filter(User.id == id).first()
-    # get uploaded photos - more than 1 image returns List
-    img_photos = db.session.query(UploadPhotos.filename).join(UserDetails).filter(
-        UserDetails.id == UploadPhotos.user_details_id).join(User).filter(User.id == UserDetails.user_id).filter(User.id == id).all()
-    payload = {
-        'img_proof': img_proof,
-        'img_photos': img_photos
-    }
-    return jsonify(payload)
+    try:
+        # get PIL image
+        img = Image.open(file_path)
+        file_object = BytesIO()
+        img.save(file_object, 'JPEG')
+        file_object.seek(0)
+        w = FileWrapper(file_object)
+        return Response(file_object, mimetype='image/jpeg', direct_passthrough=True)
+    except IOError as e:
+        return bad_request('Unable to open file')
 
 
 # testing
