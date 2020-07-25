@@ -119,10 +119,8 @@ class UserDetails(db.Model):
                                              backref=db.backref('pms_prefs', lazy='dynamic'))
     where_know_id = db.Column(db.Integer, db.ForeignKey(
         'where_know.id'), nullable=False)
-
     status_id = db.Column(db.Integer, db.ForeignKey(
         'profile_status.id'), default=1, nullable=False)
-
     update_date = db.Column(
         db.DateTime, default=datetime.utcnow, nullable=False)
     create_date = db.Column(
