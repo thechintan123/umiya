@@ -101,12 +101,12 @@ def create_user():
     for pms in data['maritalStatusPreference']:
         try:
             ms = MaritalStatus.query.filter_by(id=int(pms['id'])).first()
-            user_details.partner_marital_status.append(ms)
+            user_det.partner_marital_status.append(ms)
         except exc.SQLAlchemyError as e:
             print('Error', type(e))
 
     db.session.add(user)
-    db.session.add(user_details)
+    db.session.add(user_det)
     db.session.commit()
 
     payload = {'user_id': user.id}
