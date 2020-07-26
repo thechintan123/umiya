@@ -126,6 +126,44 @@ class UserDetails(db.Model):
     create_date = db.Column(
         db.DateTime, default=datetime.utcnow, nullable=False)
 
+    def to_dict(self):
+        # many to many
+        pms = []
+        for p in self.partner_marital_status:
+            pms.append(p.to_dict())
+
+        data = {
+            'id': self.id,
+            'email': self.user.email,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'gender': self.gender.to_dict(),
+            'dob': self.dob,
+            'country': self.country.to_dict(),
+            'state': self.state,
+            'city': self.city,
+            'phone_primary': self.phone_primary,
+            'phone_alternate': self.phone_alternate,
+            'agree_tc': self.agree_tc,
+            'marital_status': self.marital_status.to_dict(),
+            'height': self.height,
+            'gotra': self.gotra.to_dict(),
+            'original_surname': self.original_surname,
+            'father_fullname': self.father_fullname,
+            'address': self.address,
+            'about_yourself': self.about_yourself,
+            # upload photos & proof ?
+            'partner_age_from': self.partner_age_from,
+            'partner_age_to': self.partner_age_to,
+            'partner_height_from': self.partner_height_from,
+            'partner_height_to': self.partner_height_to,
+            'partner_marital_status': pms,
+            'where_know': self.where_know.to_dict(),
+            'status': self.status.to_dict(),
+            'last_login': self.user.last_login.isoformat() + 'Z' if self.user.last_login else None,
+        }
+        return data
+
     def __repr__(self):
         return '<UserDetails {}>'.format(self.first_name)
 
@@ -136,6 +174,9 @@ class ProfileStatus(db.Model):
     name = db.Column(db.String(20), unique=True, nullable=False)
     user_details = db.relationship(
         'UserDetails', backref='status', lazy='dynamic')
+
+    def to_dict(self):
+        return {'id': self.id, 'name': self.name}
 
     def __repr__(self):
         return '<ProfileStatus {}>'.format(self.name)
@@ -163,6 +204,9 @@ class MaritalStatus(db.Model):
     user_details = db.relationship(
         'UserDetails', backref='marital_status', lazy='dynamic')
 
+    def to_dict(self):
+        return {'id': self.id, 'name': self.name}
+
     def __repr__(self):
         return '<MaritalStatus {}>'.format(self.name)
 
@@ -175,6 +219,9 @@ class Country(db.Model):
         db.DateTime, default=datetime.utcnow, nullable=False)
     user_details = db.relationship(
         'UserDetails', backref='country', lazy='dynamic')
+
+    def to_dict(self):
+        return {'id': self.id, 'name': self.name}
 
     def __repr__(self):
         return '<Country {}>'.format(self.name)
@@ -189,6 +236,9 @@ class WhereKnow(db.Model):
     user_details = db.relationship(
         'UserDetails', backref='where_know', lazy='dynamic')
 
+    def to_dict(self):
+        return {'id': self.id, 'name': self.name}
+
     def __repr__(self):
         return '<WhereKnow {}>'.format(self.name)
 
@@ -202,6 +252,9 @@ class Gotra(db.Model):
     user_details = db.relationship(
         'UserDetails', backref='gotra', lazy='dynamic')
 
+    def to_dict(self):
+        return {'id': self.id, 'name': self.name}
+
     def __repr__(self):
         return '<Gotra {}>'.format(self.name)
 
@@ -214,6 +267,9 @@ class Gender(db.Model):
         db.DateTime, default=datetime.utcnow, nullable=False)
     user_details = db.relationship(
         'UserDetails', backref='gender', lazy='dynamic')
+
+    def to_dict(self):
+        return {'id': self.id, 'name': self.name}
 
     def __repr__(self):
         return '<Gender {}>'.format(self.name)

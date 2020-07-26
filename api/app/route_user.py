@@ -18,8 +18,8 @@ from sqlalchemy import exc
 @app.route('/api/users/<int:id>', methods=['GET'])
 @token_auth.login_required
 def get_user(id):
-    pass
-    #return jsonify(User.query.get_or_404(id).to_dict())
+    user_det = UserDetails.query.get_or_404(id)
+    return jsonify(user_det.to_dict())
 
 
 # helper function for add new user
@@ -67,7 +67,7 @@ def create_user():
     dob = datetime.strptime(data['dateOfBirth'], '%Y-%m-%d')
 
     # Create db objects
-    user_details = UserDetails(
+    user_det = UserDetails(
         first_name=data['firstName'],
         last_name=data['lastName'],
         gender=gender,
@@ -96,7 +96,7 @@ def create_user():
         email=email
     )
     user.set_password(data['password'])
-    user.user_details = user_details
+    user.user_details = user_det
 
     for pms in data['maritalStatusPreference']:
         try:
@@ -120,9 +120,20 @@ def create_user():
 
 
 # update user
-@app.route('/api/users', methods=['PUT'])
-def update_user():
-    pass
+@app.route('/api/users/<int:id>', methods=['PUT'])
+@token_auth.login_required
+def update_user(id):
+    user_det = UserDetails.query.get_or_404(id)
+    data = request.get_json() or {}
+
+    for key in data:
+        if hasattr(user_det, key) and data[key] is not None:
+            setattr(user_det, key, data[key])
+
+    user_det.update_date = datetime.utcnow()
+    db.session.add(user_det)
+    db.session.commit()
+    return jsonify(user_det.to_dict())
 
 
 # helper function for dropdowns
