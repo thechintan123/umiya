@@ -27,6 +27,10 @@ INSERT INTO where_know (name, update_date)
 VALUES ('Friends', now()), ('Families', now()), ('Facebook', now()), ('Whatsapp', now()), ('Other', now())
 
 
+/* profile status */
+INSERT INTO profile_status(name)
+VALUES('Registered'), ('Approved'), ('Correction'), ('Deactivated')
+
 
 /* quick fix */
 update user_details

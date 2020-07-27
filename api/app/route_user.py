@@ -1,25 +1,20 @@
-from flask import jsonify, request, url_for, render_template, Response
+from flask import jsonify, request, url_for, Response
 from . import app, db
-from .auth import basic_auth, token_auth
-from .errors import error_response, bad_request
-from werkzeug.utils import secure_filename
-from sqlalchemy import and_
-from datetime import datetime, timedelta
-from .models import User, UserDetails, Role, Country, Gotra, WhereKnow, MaritalStatus, Gender, UploadPhotos
-from .email import send_reg_email
-import os
+from .auth import token_auth
+from .errors import bad_request
 from datetime import datetime
+from .models import User, UserDetails, Country, Gotra, WhereKnow, MaritalStatus, Gender, UploadPhotos
+from .email import send_reg_email
 from PIL import Image
 from strgen import StringGenerator
 import re
 from io import BytesIO
 # workaround needed on Pythonanywhere
 from werkzeug.wsgi import FileWrapper
-
-
 from sqlalchemy import exc
 
 
+<<<<<<< HEAD:api/app/routes.py
 
 # Serve the Vue file
 @app.route('/')
@@ -155,12 +150,14 @@ def search():
     return jsonify(userList)
 
 
+=======
+>>>>>>> 7272a5dd2617856e86b74efe859dffdee31a1655:api/app/route_user.py
 # get one user
 @app.route('/api/users/<int:id>', methods=['GET'])
 @token_auth.login_required
 def get_user(id):
-    pass
-    #return jsonify(User.query.get_or_404(id).to_dict())
+    user_det = UserDetails.query.get_or_404(id)
+    return jsonify(user_det.to_dict())
 
 
 # helper function for add new user
@@ -208,7 +205,7 @@ def create_user():
     dob = datetime.strptime(data['dateOfBirth'], '%Y-%m-%d')
 
     # Create db objects
-    user_details = UserDetails(
+    user_det = UserDetails(
         first_name=data['firstName'],
         last_name=data['lastName'],
         gender=gender,
@@ -237,17 +234,17 @@ def create_user():
         email=email
     )
     user.set_password(data['password'])
-    user.user_details = user_details
+    user.user_details = user_det
 
     for pms in data['maritalStatusPreference']:
-      try:
-          ms = MaritalStatus.query.filter_by(id=int(pms['id'])).first()
-          user_details.partner_marital_status.append(ms)
-      except exc.SQLAlchemyError as e:
-        print('Error',type(e))
+        try:
+            ms = MaritalStatus.query.filter_by(id=int(pms['id'])).first()
+            user_det.partner_marital_status.append(ms)
+        except exc.SQLAlchemyError as e:
+            print('Error', type(e))
 
     db.session.add(user)
-    db.session.add(user_details)
+    db.session.add(user_det)
     db.session.commit()
 
     payload = {'user_id': user.id}
@@ -258,6 +255,23 @@ def create_user():
     # send welcome email to user
     send_reg_email(user)
     return response
+
+
+# update user
+@app.route('/api/users/<int:id>', methods=['PUT'])
+@token_auth.login_required
+def update_user(id):
+    user_det = UserDetails.query.get_or_404(id)
+    data = request.get_json() or {}
+
+    for key in data:
+        if hasattr(user_det, key) and data[key] is not None:
+            setattr(user_det, key, data[key])
+
+    user_det.update_date = datetime.utcnow()
+    db.session.add(user_det)
+    db.session.commit()
+    return jsonify(user_det.to_dict())
 
 
 # helper function for dropdowns
@@ -354,11 +368,3 @@ def get_upload(id, filename):
         return Response(file_object, mimetype='image/jpeg', direct_passthrough=True)
     except IOError as e:
         return bad_request('Unable to open file')
-
-
-# testing
-@app.route('/api/hello', methods=['GET'])
-@token_auth.login_required
-def hello():
-    return jsonify({'message': 'hello world!!!'})
-

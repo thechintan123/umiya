@@ -9,4 +9,6 @@
   "python.autoComplete.extraPaths": [
     "./api"
   ],
+  "python.linting.pylintEnabled": true,
+  "python.linting.enabled": true,
 }
