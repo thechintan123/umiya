@@ -60,7 +60,7 @@ def convertToCms(heightInFootInches):
     heightFt = heightInFootInches[slice_object1]
     slice_object2 = slice(5, 7)
     heightInches = heightInFootInches[slice_object2]
-    print('Height Ft Inch', heightFt, heightInches)
+    #print('Height Ft Inch', heightFt, heightInches)
     heightCms = float(heightFt) * 30.48 + float(heightInches) * 2.54
     return heightCms
 

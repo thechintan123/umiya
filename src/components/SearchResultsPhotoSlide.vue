@@ -20,45 +20,33 @@
     arrows
     navigation
     infinite
-    control-color="secondary"
-    :fullscreen.sync="fullscreen"
+    control-color="primary"
     height="200px"
-    class="bg-dark text-accent rounded-borders"
+    class="text-primary rounded-borders"
+    transition-prev="slide-right"
+    transition-next="slide-left"
   >
-    <q-carousel-slide name="first">
-      <img class="fit" src="http://localhost:5000/api/upload/23/photo_10_Z7SU8b7.jpg" />
+    <q-carousel-slide class="no-padding" v-for="(photo,index) in photos" :key="index" :name="index">
+      <img class="fit" :src="computeURL(photo)" />
     </q-carousel-slide>
-    <q-carousel-slide name="first1">
-      <img class="fit" src="statics/photos/nature.jpg" />
-    </q-carousel-slide>
-    <q-carousel-slide name="first2">
-      <img class="fit" src="/api/uploads/1/ID1.jpg" />
-    </q-carousel-slide>
-    <template v-slot:control>
-      <q-carousel-control position="bottom-right" :offset="[18, 18]">
-        <q-btn
-          push
-          round
-          dense
-          color="white"
-          text-color="primary"
-          :icon="fullscreen ? 'fullscreen_exit' : 'fullscreen'"
-          @click="fullscreen = !fullscreen"
-        />
-      </q-carousel-control>
-    </template>
   </q-carousel>
 </template>
 
 <script>
 export default {
-  props: ["profileID"],
+  props: ["profileID", "photos"],
   data() {
     return {
-      slide: "first",
-      fullscreen: false
+      slide: 0,
+      fullscreen: false,
+      imageURL: process.env.API + "/upload/",
     };
-  }
+  },
+  computed: {
+    computeURL() {
+      return (photo) => this.imageURL + this.profileID + "/" + photo;
+    },
+  },
 };
 </script>
 

@@ -55,32 +55,37 @@ export default {
       startingIndex = (this.page - 1) * this.resultsPerPage;
       endingIndex = startingIndex + this.resultsPerPage;
       selectedKeys = keys.slice(startingIndex, endingIndex);
-      console.log("Page", this.page, startingIndex, endingIndex);
+      //console.log("Page", this.page, startingIndex, endingIndex);
       this.searchResultsPerPage = Object.assign(
         ...Object.keys(this.searchResultsList)
           .slice(startingIndex, endingIndex)
           .map(k => ({ [k]: this.searchResultsList[k] }))
       );
-      console.log("Page", this.page, startingIndex, endingIndex);
-      console.log("Check Page", selectedKeys, this.searchResultsPerPage);
+      //console.log("Page", this.page, startingIndex, endingIndex);
+      //console.log("Check Page", selectedKeys, this.searchResultsPerPage);
     },
 
     fetchSearchResults() {
+      this.searchResultsList = {};
       this.searchResultsList = this.getSearchResults;
       this.page = 1; // initalizing to page 1
-      console.log("searchResultsList", this.searchResultsList);
+      //console.log("searchResultsList", this.searchResultsList);
       if (Object.keys(this.searchResultsList).length > 0) {
         this.checkPage();
-        this.maxPages =
-          Object.keys(this.searchResultsList).length / this.resultsPerPage;
+        this.maxPages = Math.ceil(
+          Object.keys(this.searchResultsList).length / this.resultsPerPage
+        );
         if (this.maxPages <= 1) {
           this.maxPages = 1;
         }
+      } else {
+        this.searchResultsPerPage = {};
+        this.maxPages = 0;
       }
       this.page = 1; // To stay on First Page
       this.searchPerformed = true; // This is done to ensure that No Search Results message is displayed for empty Search Results
       // this.searchResultsPerPage = this.getSearchResultsPerPage;
-      // console.log('searchResultsPerPage', this.searchResultsPerPage);
+      //console.log("searchResultsPerPage", this.searchResultsPerPage);
     }
   },
   computed: {
