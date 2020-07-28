@@ -14,7 +14,7 @@ from werkzeug.wsgi import FileWrapper
 from sqlalchemy import exc
 
 
-<<<<<<< HEAD:api/app/routes.py
+HEAD:api/app/routes.py
 
 # Serve the Vue file
 @app.route('/')
@@ -150,8 +150,6 @@ def search():
     return jsonify(userList)
 
 
-=======
->>>>>>> 7272a5dd2617856e86b74efe859dffdee31a1655:api/app/route_user.py
 # get one user
 @app.route('/api/users/<int:id>', methods=['GET'])
 @token_auth.login_required
