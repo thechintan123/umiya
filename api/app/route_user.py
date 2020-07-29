@@ -13,7 +13,7 @@ from io import BytesIO
 from werkzeug.wsgi import FileWrapper
 from sqlalchemy import exc
 
-++
+
 # get one user
 @app.route('/api/users/<int:id>', methods=['GET'])
 @token_auth.login_required
