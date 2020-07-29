@@ -1,25 +1,22 @@
 <template>
-
   <q-page padding>
-
-   <div class="flex flex-center row">
-   <div class= "rounded-borders col-md-10 col-12">
-
-    <q-carousel
-      swipeable
-       transition-prev="slide-right"
-      transition-next="slide-left"
-       arrows
-      animated
-      v-model="slide"
-      infinite
-      control-color="primary"
-      padding
-      navigation
-      :autoplay="2500"
-      class="my-carousel bg-primary"
-    >
-<!--
+    <div class="flex flex-center row">
+      <div class="rounded-borders col-md-10 col-12">
+        <q-carousel
+          swipeable
+          transition-prev="slide-right"
+          transition-next="slide-left"
+          arrows
+          animated
+          v-model="slide"
+          infinite
+          control-color="primary"
+          padding
+          navigation
+          :autoplay="2500"
+          class="my-carousel bg-primary"
+        >
+          <!--
       style="height:30vw"
 
           <q-carousel
@@ -35,175 +32,168 @@
 
     >
     src="~assets/logos/LogoMakr_Ring_RED.png"
--->
+          -->
 
-      <q-carousel-slide :name="6" img-src="http://localhost/api/uploads/1/ID1.jpg" >
-              <div class="absolute-bottom-left custom-caption text-primary">
-          <div class="text-h2  my-style">It's Free</div>
-          <div class="text-subtitle1">500+ Profiles</div>
-        </div>
-      </q-carousel-slide>
+          <q-carousel-slide :name="1" img-src="~assets/images/Success.jpg">
+            <div class="absolute-bottom-left custom-caption text-primary">
+              <div class="text-h2 my-style">Success Story</div>
+              <div class="text-subtitle1">Chetan and Dhara</div>
+            </div>
+          </q-carousel-slide>
 
-      <q-carousel-slide :name="1" img-src="~assets/images/Success.jpg">
-              <div class="absolute-bottom-left custom-caption text-primary">
-          <div class="text-h2 my-style" >Success Story</div>
-          <div class="text-subtitle1">Chetan and Dhara</div>
-        </div>
-      </q-carousel-slide>
+          <q-carousel-slide :name="5" img-src="~assets/images/Wedding.jpg">
+            <div class="absolute-bottom-left custom-caption text-primary">
+              <div class="text-h2 my-style">It's Free</div>
+              <div class="text-subtitle1">500+ Profiles</div>
+            </div>
+          </q-carousel-slide>
 
-      <q-carousel-slide :name="5" img-src="~assets/images/Wedding.jpg" >
-              <div class="absolute-bottom-left custom-caption text-primary">
-          <div class="text-h2  my-style">It's Free</div>
-          <div class="text-subtitle1">500+ Profiles</div>
-        </div>
-      </q-carousel-slide>
+          <q-carousel-slide :name="2" img-src="~assets/images/UmiyaMataji.jpg">
+            <div class="absolute-bottom-left custom-caption text-primary">
+              <div class="text-h2 my-style">For Samaj</div>
+              <div class="text-subtitle1">Only for Kutch Kadva Patidar Sanatan Samaj</div>
+            </div>
+          </q-carousel-slide>
 
-      <q-carousel-slide :name="2" img-src="~assets/images/UmiyaMataji.jpg" >
-       <div class="absolute-bottom-left custom-caption text-primary">
-          <div class="text-h2  my-style">For Samaj</div>
-          <div class="text-subtitle1">Only for Kutch Kadva Patidar Sanatan Samaj</div>
-        </div>
-      </q-carousel-slide>
+          <q-carousel-slide :name="3" img-src="~assets/images/Validate1.jpg">
+            <div class="absolute-bottom-left custom-caption text-primary">
+              <div class="text-h2 my-style">We Verify</div>
+              <div class="text-subtitle1">No Fake. We verify ID proof.</div>
+            </div>
+          </q-carousel-slide>
+          <q-carousel-slide :name="4" img-src="~assets/images/Wedding2.jpg">
+            <div class="absolute-bottom-left text-center custom-caption text-primary">
+              <div class="text-h2 my-style">Join Now</div>
+              <div class="text-subtitle1">Register FREE</div>
+            </div>
+          </q-carousel-slide>
+        </q-carousel>
+      </div>
+    </div>
 
-      <q-carousel-slide :name="3" img-src="~assets/images/Validate1.jpg" >
-       <div class="absolute-bottom-left custom-caption text-primary">
-          <div class="text-h2  my-style">We Verify</div>
-          <div class="text-subtitle1">No Fake. We verify ID proof.</div>
-        </div>
-      </q-carousel-slide>
-      <q-carousel-slide :name="4" img-src="~assets/images/Wedding2.jpg"  >
-       <div class="absolute-bottom-left text-center custom-caption text-primary">
-          <div class="text-h2  my-style">Join Now</div>
-          <div class="text-subtitle1">Register FREE</div>
-        </div>
-      </q-carousel-slide>
-    </q-carousel>
-</div>
-</div>
-
-  <div class="flex flex-center q-pa-md row q-gutter-x-xl q-gutter-y-xl">
-
-    <q-card flat bordered class="my-card cursor-pointer" @click="register()" align="center">
-       <q-card-section class="bg-dark">
+    <div class="flex flex-center q-pa-md row q-gutter-x-xl q-gutter-y-xl">
+      <q-card flat bordered class="my-card cursor-pointer" @click="register()" align="center">
+        <q-card-section class="bg-dark">
           <q-icon name="far fa-edit" class="text-secondary" style="font-size: 3rem;" />
-      </q-card-section>
-      <q-separator />
-       <q-card-section>
-          <div class="text-h6" >Register FREE & EASY</div>
+        </q-card-section>
+        <q-separator />
+        <q-card-section>
+          <div class="text-h6">Register FREE & EASY</div>
           <div class="text-subtitle1">Only Basic Details. No Bank Details Required.</div>
           <q-btn class="glossy" to="/register" color="secondary" style="width: 100%">Click HERE</q-btn>
-      </q-card-section>
-    </q-card>
+        </q-card-section>
+      </q-card>
 
-    <q-card flat bordered class="my-card"  align="center">
-       <q-card-section class="bg-dark">
+      <q-card flat bordered class="my-card" align="center">
+        <q-card-section class="bg-dark">
           <q-icon name="fas fa-user-lock" class="text-secondary" style="font-size: 3rem;" />
-      </q-card-section>
-      <q-separator />
-       <q-card-section >
+        </q-card-section>
+        <q-separator />
+        <q-card-section>
           <div class="text-h6">100% Secure</div>
-          <div class="text-subtitle1">Your details are secured. It is not shared with any other website.</div>
-      </q-card-section>
-    </q-card>
-
- </div>
-   <div class="flex flex-center q-pa-md row q-gutter-x-xl q-gutter-y-xl">
-
-    <q-card flat bordered class="my-card"  align="center">
-       <q-card-section class="bg-dark">
+          <div
+            class="text-subtitle1"
+          >Your details are secured. It is not shared with any other website.</div>
+        </q-card-section>
+      </q-card>
+    </div>
+    <div class="flex flex-center q-pa-md row q-gutter-x-xl q-gutter-y-xl">
+      <q-card flat bordered class="my-card" align="center">
+        <q-card-section class="bg-dark">
           <q-icon name="fas fa-user-check" class="text-secondary" style="font-size: 3rem;" />
-      </q-card-section>
-      <q-separator />
-       <q-card-section>
+        </q-card-section>
+        <q-separator />
+        <q-card-section>
           <div class="text-h6">User Verified</div>
-          <div class="text-subtitle1">User needs to register with one ID Proof. We ensure that profile is genuine and not fake.</div>
-      </q-card-section>
-    </q-card>
+          <div
+            class="text-subtitle1"
+          >User needs to register with one ID Proof. We ensure that profile is genuine and not fake.</div>
+        </q-card-section>
+      </q-card>
 
-   <q-card flat bordered class="my-card"  align="center">
-       <q-card-section class="bg-dark">
+      <q-card flat bordered class="my-card" align="center">
+        <q-card-section class="bg-dark">
           <q-icon name="fas fa-search" class="text-secondary" style="font-size: 3rem;" />
-      </q-card-section>
-      <q-separator />
-       <q-card-section >
+        </q-card-section>
+        <q-separator />
+        <q-card-section>
           <div class="text-h6">Easy Search</div>
           <div class="text-subtitle1">Easy Search based on Age, Health and Country.</div>
-      </q-card-section>
-    </q-card>
- </div>
-
-</q-page>
+        </q-card-section>
+      </q-card>
+    </div>
+  </q-page>
 </template>
 
 <script>
-
 export default {
-  name: 'PageIndex',
-  data () {
+  name: "PageIndex",
+  data() {
     return {
       slide: 1,
       cardDetails: [
         {
-          icon: 'fas fa-search',
-          title: 'Easy Search',
-          subtitle: 'Easy Search based on Age, Health and Country.'
+          icon: "fas fa-search",
+          title: "Easy Search",
+          subtitle: "Easy Search based on Age, Health and Country.",
         },
         {
-          icon: 'fas fa-search',
-          title: 'Easy Search',
-          subtitle: 'Easy Search based on Age, Health and Country.'
+          icon: "fas fa-search",
+          title: "Easy Search",
+          subtitle: "Easy Search based on Age, Health and Country.",
         },
         {
-          icon: 'fas fa-search',
-          title: 'Easy Search',
-          subtitle: 'Easy Search based on Age, Health and Country.'
-        }
-      ]
-    }
+          icon: "fas fa-search",
+          title: "Easy Search",
+          subtitle: "Easy Search based on Age, Health and Country.",
+        },
+      ],
+    };
   },
   methods: {
-    register () {
-      console.log('Register')
-      this.$router.push('register')
-    }
-  }
-}
+    register() {
+      console.log("Register");
+      this.$router.push("register");
+    },
+  },
+};
 </script>
 
 <style>
-.custom-caption
-  {
+.custom-caption {
   text-align: center;
   padding: 5px;
   color: white;
-  background-color: rgba(214, 52, 71, .4); /*/* $secondary : #d63447;- This is secondary color*/
+  background-color: rgba(
+    214,
+    52,
+    71,
+    0.4
+  ); /*/* $secondary : #d63447;- This is secondary color*/
   /*background-color :  #d63447; */ /* $primary   : #ffd31d; */ /* $secondary : #d63447;*/
   /*opacity: 0.1;*/
-  }
+}
 
-  .my-card {
+.my-card {
   width: 100%;
   max-width: 420px;
   height: 220px;
   /*transition: width 0.5s;*/
-  transition: transform .2s;
-  }
+  transition: transform 0.2s;
+}
 
-  .my-card:hover
-  {
+.my-card:hover {
   /*max-width: 425px;*/
   /* border-color: #d63447; */ /*$secondary : #d63447;*/
   transform: scale(1.1);
-  }
-
-.my-carousel
-{
-     height:30vw;
-min-height : 300px;
 }
 
-.my-style
-{
-font-family: 'Great Vibes', cursive ;
+.my-carousel {
+  height: 30vw;
+  min-height: 300px;
+}
+
+.my-style {
+  font-family: "Great Vibes", cursive;
 }
 </style>

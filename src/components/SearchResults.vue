@@ -10,7 +10,7 @@
     </q-toolbar>
       -->
       <!--<q-card>-->
-      <q-list padding v-for="(searchItem,key,index) in searchResults">
+      <q-list padding v-for="(searchItem,key,index) in searchResults" :key="index">
         <div class="q-ma-sm row justify-center">
           <div class="col-md-4 col-9">
             <!-- <q-avatar rounded> -->
@@ -19,6 +19,7 @@
             <search-results-photo-slide
               :profileID="searchItem.id"
               :photos="searchItem.uploadPhotos"
+              :gender="searchItem.gender"
             ></search-results-photo-slide>
           </div>
           <q-item class="col-md-8 col-9 text-capitalize">
