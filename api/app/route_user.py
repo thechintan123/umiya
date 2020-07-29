@@ -14,142 +14,6 @@ from werkzeug.wsgi import FileWrapper
 from sqlalchemy import exc
 
 
-HEAD:api/app/routes.py
-
-# Serve the Vue file
-@app.route('/')
-def index():
-    return app.send_static_file('index.html')
-
-
-# basic auth or token auth is passed so user is now logged in
-# return either a new token or an existing token back to Vue
-# This is the route Vue calls when user first login
-@app.route('/api/tokens', methods=['POST'])
-@basic_auth.login_required
-def get_token():
-    user = basic_auth.current_user()
-    token = user.get_token()
-    payload = {
-        'token': token
-    }
-    user.last_login = datetime.utcnow()
-    db.session.add(user)
-    db.session.commit()
-    return jsonify(payload)
-
-
-# revoke a token immediately .. eg when user logs out
-@app.route('/api/tokens', methods=['DELETE'])
-@token_auth.login_required
-def revoke_token():
-    token_auth.current_user().revoke_token()
-    db.session.commit()
-    # 204 - successful and no body
-    return '', 204
-
-
-# helper function for search
-def convertToCms(heightInFootInches):
-    slice_object1 = slice(0, 1)
-    heightFt = heightInFootInches[slice_object1]
-    slice_object2 = slice(5, 7)
-    heightInches = heightInFootInches[slice_object2]
-    #print('Height Ft Inch', heightFt, heightInches)
-    heightCms = float(heightFt) * 30.48 + float(heightInches) * 2.54
-    return heightCms
-
-
-# search Function
-@app.route('/api/search', methods=['POST'])
-def search():
-    data = request.get_json() or {}
-
-    country_id_local = []
-    countries = data.get("country")
-    if countries is not None:
-        for country in countries:
-            country_id_local.append(country['id'])
-    else:
-        # otherwise default to India
-        india = Country.query.filter_by(name='India').first()
-        country_id_local.append(india.id)
-    
-    marital_status_id_local =[]
-    maritalStatusPreferences = data.get('maritalStatusPreference')
-    if len(maritalStatusPreferences) != 0:
-        for maritalStatus in maritalStatusPreferences:
-            marital_status_id_local.append(maritalStatus['id'])
-    else:
-        # otherwise default to all marital status
-        ms = MaritalStatus.query.all()
-        marital_status_id_local = [m.id for m in ms]
-        
-    currDate = datetime.now()
-    ageFromTo = data["ageFromTo"]
-    if ageFromTo is not None:
-        ageMin = ageFromTo.get("min")
-        ageMax = ageFromTo.get("max")
-    else:
-        ageMin = 18
-        ageMax = 50
-
-    # Chintan to fix
-    currDatePlusMin = currDate - timedelta(days=(ageMin*365))
-    currDatePlusMax = currDate - timedelta(days=(ageMax*365))
-    #print('current Date Plus', currDatePlusMin, currDatePlusMax)
-    #5ft × 30.48 + 5 in × 2.54= 165.1 cm
-    heightMin = data.get("heightFrom")
-    #print('heightMin', heightMin)
-    if heightMin is None or heightMin == '':
-        heightMin = "4 ft 0 inches"
-    heightMax = data.get("heightTo")
-    if heightMax is None or heightMax == '':
-        heightMax = "7 ft 0 inches"
-    heightMinInCms = convertToCms(heightMin)
-    heightMaxInCms = convertToCms(heightMax)
-    #print('Height Min Max', heightMinInCms, heightMaxInCms)
-
-    lookingFor = data.get("lookingFor")
-    if lookingFor is None or lookingFor == '':
-        # default to bride if empty
-        female = Gender.query.filter_by(name="Female").first()
-        lookingFor = female.id
-    else:
-        lookingFor = int(lookingFor)
-        
-    users = UserDetails.query.filter(and_(UserDetails.country_id.in_(country_id_local),\
-                                          UserDetails.gender_id == lookingFor), \
-                                          UserDetails.dob <= currDatePlusMin, UserDetails.dob >= currDatePlusMax, \
-                                          UserDetails.height.between(heightMinInCms, heightMaxInCms), \
-                                          UserDetails.marital_status_id.in_(marital_status_id_local)).all()
-
-    userList = []
-    for user in users:
-        upload_photos = user.upload_photos.all()
-        filenames = [u.filename for u in upload_photos]
-        userList.append({'id': user.id, 'firstName': user.first_name, \
-                        'lastName': user.last_name, \
-                        'gender' : user.gender.name, \
-                        'dob' : user.dob,\
-                        'country' : user.country.name, \
-                        'state' : user.state, \
-                        'city' : user.city,\
-                        'phonePrimary' : user.phone_primary, \
-                        'phoneAlternate': user.phone_alternate, \
-                        'maritalStatus' : user.marital_status.name, \
-                        'height' : user.height, \
-                        'gotra' : user.gotra.name,\
-                        'originalSurname' : user.original_surname, \
-                        'fatherFullName' : user.father_fullname, \
-                        'address' : user.address, \
-                        'aboutYourself': user.about_yourself, \
-                        'uploadProof': user.upload_proof, \
-                        'uploadPhotos': filenames \
-                        }) 
-    return jsonify(userList)
-
-
 # get one user
 @app.route('/api/users/<int:id>', methods=['GET'])
 @token_auth.login_required
@@ -167,26 +31,25 @@ def get_row(table, id):
 @app.route('/api/users', methods=['POST'])
 def create_user():
     data = request.get_json() or {}
-
     # tuple of mandatory fields
     mand_fields = ('email', 'password', 'firstName', 'lastName', 'gender', 'dateOfBirth',
-                   'country', 'state', 'city', 'primaryContact', 'agreeTnC', 'maritalStatus',
-                   'height', 'gotra', 'originalSurname', 'fatherName', 'residentialAddress',
-                   'ageFrom', 'ageTo', 'heightTo', 'heightFrom',
-                   'sourceOfWebsite')
+                    'country', 'state', 'city', 'primaryContact', 'agreeTnC', 'maritalStatus',
+                    'height', 'gotra', 'originalSurname', 'fatherName', 'residentialAddress',
+                    'ageFrom', 'ageTo', 'heightTo', 'heightFrom',
+                    'sourceOfWebsite')
     if not all(field in data for field in mand_fields):
         return bad_request('Please provide all mandatory fields.')
     if 'id' not in data['gotra'] or \
-        'id' not in data['sourceOfWebsite'] or 'id' not in data['maritalStatus'] or \
-            'id' not in data['gender']:
-        return bad_request('Please provide all mandatory fields.')
+       'id' not in data['sourceOfWebsite'] or 'id' not in data['maritalStatus'] or \
+       'id' not in data['gender']:
+          return bad_request('Please provide all mandatory fields.')
     email = data['email'].lower()
     if re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', email) is None:
         return bad_request('Email provided is not valid')
     if User.query.filter_by(email=data['email']).first():
         return bad_request('Email already registered. Please use another email ID.')
 
-    # Get objects from the dropdowns
+# Get objects from the dropdowns
     country = ''
     if data['country'] == 'India':
         country = Country.query.filter_by(name='India').first()
@@ -195,41 +58,40 @@ def create_user():
             return bad_request('must include all mandatory fields in database')
         if 'id' not in data['otherCountry']:
             return bad_request('must include all mandatory fields in database')
-        country = get_row(Country, int(data['otherCountry']['id']))
+    country = get_row(Country, int(data['otherCountry']['id']))
     gotra = get_row(Gotra, int(data['gotra']['id']))
     where_know = get_row(WhereKnow, int(data['sourceOfWebsite']['id']))
     marital_status = get_row(MaritalStatus, int(data['maritalStatus']['id']))
     gender = get_row(Gender, int(data['gender']['id']))
     dob = datetime.strptime(data['dateOfBirth'], '%Y-%m-%d')
-
     # Create db objects
     user_det = UserDetails(
-        first_name=data['firstName'],
-        last_name=data['lastName'],
-        gender=gender,
-        dob=dob,
-        country=country,
-        state=data['state'],
-        city=data['city'],
-        phone_primary=data['primaryContact'],
-        phone_alternate=data['alternateContact'],
-        agree_tc=data['agreeTnC'],
-        marital_status=marital_status,
-        height=data['heightCms'],
-        gotra=gotra,
-        original_surname=data['originalSurname'],
-        father_fullname=data['fatherName'],
-        address=data['residentialAddress'],
-        about_yourself=data['aboutYourself'],
-        partner_age_from=data['ageFrom'],
-        partner_age_to=data['ageTo'],
-        partner_height_from=data['heightFromCms'],
-        partner_height_to=data['heightToCms'],
-        where_know=where_know
+    first_name=data['firstName'],
+    last_name=data['lastName'],
+    gender=gender,
+    dob=dob,
+    country=country,
+    state=data['state'],
+    city=data['city'],
+    phone_primary=data['primaryContact'],
+    phone_alternate=data['alternateContact'],
+    agree_tc=data['agreeTnC'],
+    marital_status=marital_status,
+    height=data['heightCms'],
+    gotra=gotra,
+    original_surname=data['originalSurname'],
+    father_fullname=data['fatherName'],
+    address=data['residentialAddress'],
+    about_yourself=data['aboutYourself'],
+    partner_age_from=data['ageFrom'],
+    partner_age_to=data['ageTo'],
+    partner_height_from=data['heightFromCms'],
+    partner_height_to=data['heightToCms'],
+    where_know=where_know
     )
 
     user = User(
-        email=email
+    email=email
     )
     user.set_password(data['password'])
     user.user_details = user_det
@@ -240,7 +102,6 @@ def create_user():
             user_det.partner_marital_status.append(ms)
         except exc.SQLAlchemyError as e:
             print('Error', type(e))
-
     db.session.add(user)
     db.session.add(user_det)
     db.session.commit()
@@ -255,16 +116,15 @@ def create_user():
     return response
 
 
-# update user
+ # update user
 @app.route('/api/users/<int:id>', methods=['PUT'])
 @token_auth.login_required
 def update_user(id):
     user_det = UserDetails.query.get_or_404(id)
     data = request.get_json() or {}
-
     for key in data:
-        if hasattr(user_det, key) and data[key] is not None:
-            setattr(user_det, key, data[key])
+            if hasattr(user_det, key) and data[key] is not None:
+                setattr(user_det, key, data[key])
 
     user_det.update_date = datetime.utcnow()
     db.session.add(user_det)
@@ -280,7 +140,6 @@ def get_list(table):
         l.append({'id': r.id, 'name': r.name})
     return l
 
-
 # Get dropdowns
 @app.route('/api/lists', methods=['GET'])
 def lists():
@@ -291,7 +150,7 @@ def lists():
     marital_status = get_list(MaritalStatus)
     gender = get_list(Gender)
     payload = {'country': country, 'gotra': gotra, 'where_know': where_know,
-               'marital_status': marital_status, 'gender': gender}
+             'marital_status': marital_status, 'gender': gender}
     return jsonify(payload)
 
 
@@ -305,18 +164,15 @@ def upload_file():
         return bad_request('Wrong file type')
     if 'file' not in request.files:
         return bad_request('No file part')
-    
     if 'user_id' not in request.form:
         return bad_request('Missing user id')
     user_id = str(request.form.get('user_id')) 
     user_det = db.session.query(UserDetails).join(User).filter(User.id == user_id).first()
     if not user_det:
         return bad_request('User details does not exist')
-
     folder = app.config['UPLOAD_FOLDER'] / user_id
     if not folder.is_dir():
-        folder.mkdir()
-
+            folder.mkdir()
     filename = StringGenerator("[\d\w]{10}").render() + ".jpg"
     if filetype == 'photo':
         filename = 'photo_' + filename
@@ -332,7 +188,6 @@ def upload_file():
         img.save(folder / filename)
     except IOError as e:
         return bad_request('Unable to convert and save file')
-
     if filetype == 'photo':
         upl_photo = UploadPhotos(filename=filename)
         user_det.upload_photos.append(upl_photo)
@@ -348,12 +203,12 @@ def upload_file():
     return '', 204
 
 
-# return uploaded photos for a user
+    # return uploaded photos for a user
 @app.route('/api/upload/<int:id>/<string:filename>', methods=['GET'])
 def get_upload(id, filename): 
     folder = app.config['UPLOAD_FOLDER'] / str(id)
     if not folder.is_dir():
-        return bad_request('Upload folder not found')
+       return bad_request('Upload folder not found')
     file_path = folder / filename
 
     try:
