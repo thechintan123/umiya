@@ -22,7 +22,7 @@
         Thank you
         <span class="text-weight-bolder text-capitalize">{{formData.firstName}}</span> for successful registration.
         <br />Your Profile ID is
-        <b>{{user_id}}</b>.
+        <b>{{user_detials_id}}</b>.
         Going forward, you will be notified on your
         <b>{{formData.email}}</b>.
         <br />
@@ -681,7 +681,10 @@ export default {
       isErrorProof: false,
       isErrorPhoto: false,
 
-      user_id: "", // this user_id is populated after user is registered in DB
+      user_detials_id: "",
+      // this user_detials_id is populated after user is registered in DB - user_details.
+      // This is same as id in user_details DB table
+      // This is visile as profile ID on screen
 
       // Dropdown List
       countryOptions: [],
@@ -703,7 +706,7 @@ export default {
         primaryContact: "11111111111",
         primaryContactCountryCode: "91",
         alternateContactCountryCode: "91",
-        alternateContact: "22222222222"
+        alternateContact: "22222222222",
       },
       formData: {
         email: "test9@test.com",
@@ -736,8 +739,8 @@ export default {
         heightToCms: "",
         maritalStatusPreference: [],
         agreeTnC: false,
-        sourceOfWebsite: ""
-      }
+        sourceOfWebsite: "",
+      },
       /*
       formData: {
         email: "",
@@ -775,7 +778,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("auth", ["loggedIn"])
+    ...mapState("auth", ["loggedIn"]),
   },
   methods: {
     tabChange() {
@@ -786,7 +789,7 @@ export default {
       }
     },
     submitBasicForm() {
-      this.$refs.basicForm.validate().then(success => {
+      this.$refs.basicForm.validate().then((success) => {
         if (success) {
           this.basicHasError = false;
           this.tab = "personal";
@@ -796,7 +799,7 @@ export default {
       });
     },
     submitPersonalForm() {
-      this.$refs.personalForm.validate().then(success => {
+      this.$refs.personalForm.validate().then((success) => {
         if (success) {
           this.personalHasError = false;
           this.tab = "upload";
@@ -810,14 +813,14 @@ export default {
         .post(process.env.API + "/users", data)
         .then(({ data }) => {
           //console.log("Search Success", data);
-          this.user_id = data.user_id;
+          this.user_detials_id = data.user_detials_id;
           this.$q.notify({
             type: "positive",
-            message: "Successfully registered"
+            message: "Successfully registered",
           });
           /* this.$router.push('/login') */
         })
-        .catch(error => {
+        .catch((error) => {
           let errMsg = "";
           if ("message" in error.response.data) {
             //errMsg = error.response.data.error + " - " + error.response.data.message;
@@ -906,7 +909,7 @@ export default {
 
         await this.registerUser(this.formData);
 
-        if (this.user_id !== "") {
+        if (this.user_detials_id !== "") {
           this.$refs.photo.upload();
           this.$refs.proof.upload();
           this.successRegistration = true;
@@ -1056,17 +1059,17 @@ export default {
       return axios
         .post(process.env.API + "/upload", fd, {
           headers: {
-            "Content-Type": "multipart/form-data"
-          }
+            "Content-Type": "multipart/form-data",
+          },
         })
-        .then(resolve => {
+        .then((resolve) => {
           //console.log("uploadImage - Then");
           this.$q.notify({
             type: "positive",
-            message: file + " successfully uploaded"
+            message: file + " successfully uploaded",
           });
         })
-        .catch(error => {
+        .catch((error) => {
           let errMsg = "";
           if ("message" in error.response.data) {
             //errMsg = error.response.data.error + " - " + error.response.data.message;
@@ -1082,7 +1085,7 @@ export default {
       const fd = new FormData();
       fd.append("file", file[0]);
       fd.append("filetype", "photo");
-      fd.append("user_id", this.user_id);
+      fd.append("user_detials_id", this.user_detials_id);
       //console.log("Upload Photo", fd, file);
       await this.uploadImage(fd, "Photo");
     },
@@ -1090,7 +1093,7 @@ export default {
       const fd = new FormData();
       fd.append("file", file[0]);
       fd.append("filetype", "proof");
-      fd.append("user_id", this.user_id);
+      fd.append("user_detials_id", this.user_detials_id);
       //console.log("Upload Proof", fd, file[0]);
       await this.uploadImage(fd, "Proof");
     },
@@ -1115,9 +1118,9 @@ export default {
       // https://quasar.dev/quasar-plugins/notify#Installation
       this.$q.notify({
         type: "negative",
-        message: `${rejectedEntries.length} file(s) did not pass validation constraints`
+        message: `${rejectedEntries.length} file(s) did not pass validation constraints`,
       });
-    }
+    },
   },
   created() {
     this.createHeightList();
@@ -1126,7 +1129,7 @@ export default {
   mounted() {
     axios
       .get(process.env.API + "/lists")
-      .then(response => {
+      .then((response) => {
         this.countryList = response.data.country;
         this.countryOptions = this.countryList;
         this.gotraOptions = response.data.gotra;
@@ -1134,14 +1137,14 @@ export default {
         this.maritalOptions = response.data.marital_status;
         this.genderOptions = response.data.gender;
       })
-      .catch(error => {
+      .catch((error) => {
         //console.log(error);
       });
   },
   components: {
     termsConditionsDialog: require("./terms_privacy/TermsConditionsDialog.vue")
-      .default
-  }
+      .default,
+  },
 };
 </script>
 

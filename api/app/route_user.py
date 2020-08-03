@@ -58,7 +58,7 @@ def create_user():
             return bad_request('must include all mandatory fields in database')
         if 'id' not in data['otherCountry']:
             return bad_request('must include all mandatory fields in database')
-    country = get_row(Country, int(data['otherCountry']['id']))
+        country = get_row(Country, int(data['otherCountry']['id']))
     gotra = get_row(Gotra, int(data['gotra']['id']))
     where_know = get_row(WhereKnow, int(data['sourceOfWebsite']['id']))
     marital_status = get_row(MaritalStatus, int(data['maritalStatus']['id']))
@@ -106,7 +106,8 @@ def create_user():
     db.session.add(user_det)
     db.session.commit()
 
-    payload = {'user_id': user.id}
+    payload = {'user_detials_id': user_det.id}
+    #user_details_id is profile ID visible on screen
     response = jsonify(payload)
     response.status_code = 201
     # the HTTP protocol requires that a 201 response includes a Location header that is set to the URL of the new resource
@@ -164,20 +165,22 @@ def upload_file():
         return bad_request('Wrong file type')
     if 'file' not in request.files:
         return bad_request('No file part')
-    if 'user_id' not in request.form:
-        return bad_request('Missing user id')
-    user_id = str(request.form.get('user_id')) 
-    user_det = db.session.query(UserDetails).join(User).filter(User.id == user_id).first()
+    if 'user_detials_id' not in request.form:
+        return bad_request('Missing user_detials_id')
+    user_detials_id = str(request.form.get('user_detials_id')) 
+    #user_det = db.session.query(UserDetails).join(User).filter(User.id == user_id).first()
+    user_det = db.session.query(UserDetails).filter(UserDetails.id == user_detials_id).first()
     if not user_det:
         return bad_request('User details does not exist')
-    folder = app.config['UPLOAD_FOLDER'] / user_id
+    folder = app.config['UPLOAD_FOLDER'] / user_detials_id
     if not folder.is_dir():
             folder.mkdir()
-    filename = StringGenerator("[\d\w]{10}").render() + ".jpg"
+    filename = StringGenerator("[\d\w]{10}").render() 
+    truncated_filename = filename[0:5] + ".jpg"
     if filetype == 'photo':
-        filename = 'photo_' + filename
+        filename = 'photo_' + user_detials_id + '_' + user_det.first_name + '_' + truncated_filename
     elif filetype == 'proof':
-        filename = 'proof_' + filename
+        filename = 'proof_' + user_detials_id + '_'  + user_det.first_name + '_' + truncated_filename
     try:
         # this is the max size, aspect ratio is maintained
         size = (1800, 1800)
