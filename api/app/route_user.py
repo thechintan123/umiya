@@ -16,7 +16,7 @@ from sqlalchemy import exc
 
 # get one user
 @app.route('/api/users/<int:id>', methods=['GET'])
-@token_auth.login_required
+#@token_auth.login_required
 def get_user(id):
     user_det = UserDetails.query.get_or_404(id)
     return jsonify(user_det.to_dict())
@@ -106,7 +106,7 @@ def create_user():
     db.session.add(user_det)
     db.session.commit()
 
-    payload = {'user_detials_id': user_det.id}
+    payload = {'user_details_id': user_det.id}
     #user_details_id is profile ID visible on screen
     response = jsonify(payload)
     response.status_code = 201
@@ -124,9 +124,8 @@ def update_user(id):
     user_det = UserDetails.query.get_or_404(id)
     data = request.get_json() or {}
     for key in data:
-            if hasattr(user_det, key) and data[key] is not None:
-                setattr(user_det, key, data[key])
-
+        if hasattr(user_det, key) and data[key] is not None:
+            setattr(user_det, key, data[key])
     user_det.update_date = datetime.utcnow()
     db.session.add(user_det)
     db.session.commit()

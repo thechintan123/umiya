@@ -352,13 +352,13 @@
               <div class="col-6">
                 <q-field
                   borderless
-                  :value="formData.agreeTnC"
+                  :value="formData.agreeTc"
                   :rules="[ val => val === true || 'Field is required']"
                 >
                   <template v-slot:control>
                     <q-toggle
                       tabindex="13"
-                      v-model="formData.agreeTnC"
+                      v-model="formData.agreeTc"
                       checked-icon="check"
                       color="green"
                       unchecked-icon="clear"
@@ -496,7 +496,7 @@
             />
             <q-select
               tabindex="22"
-              v-model="formData.sourceOfWebsite"
+              v-model="formData.whereKnow"
               option-value="id"
               option-label="name"
               :options="sourceOfWebsiteOptions"
@@ -1181,6 +1181,53 @@ export default {
         //console.log(error);
       });
   },
+
+  //This beforeCreate is used for UpdateProfile Code
+  beforeCreate(){
+    var user = JSON.parse(localStorage.getItem("user"));
+    var userDetail;
+    //console.log(JSON.parse(localStorage.getItem("user")));
+    //var keysArray = Object.keys(user);
+    //console.log(typeof user, user, user.email, user.user_details_id);
+    if(user !== null){
+    var user_details_id = user.user_details_id;
+    //user_details_id is same profile_Id share on UI
+    axios.get(process.env.API + "/users/" + user_details_id)
+      .then(({ data }) => {
+        
+        console.log("data", data, data.first_name);
+
+        //this code replaces key in data Object from Snake Case to Camel Case
+         userDetail = JSON.parse(JSON.stringify(data).replace(
+                /(_\w)\w+":/g,
+                match => match[1].toUpperCase() + match.substring(2)
+              ));
+        console.log("userDetail", userDetail);    
+        this.formData = userDetail;
+        console.log("formData",  this.formData);   
+        
+     //Converting the data to match the form fields requirements
+      
+      /* for Primary Phone and Alternate Phone. It is stored in the following format "+91 1234567890" 
+      so extracting the information */
+      this.tmpData.primaryContactCountryCode = this.formData.phonePrimary.substr(1,2);
+      this.tmpData.primaryContact = this.formData.phonePrimary.substr(4);
+      this.tmpData.alternateContactCountryCode = this.formData.phoneAlternate.substr(1,2);
+      this.tmpData.alternateContact = this.formData.phoneAlternate.substr(4);
+
+        
+      })
+      .catch((error) => {
+        //console.log(error);
+      });
+
+
+
+}
+
+
+}
+    ,
   components: {
     termsConditionsDialog: require("./terms_privacy/TermsConditionsDialog.vue")
       .default,

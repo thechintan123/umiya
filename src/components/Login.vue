@@ -71,8 +71,8 @@ export default {
     return {
       isPwd: true,
       formData: {
-        email: '',
-        password: ''
+        email: 'chin1@gmail.com',
+        password: 'password'
       }
     }
   },
@@ -83,11 +83,12 @@ export default {
         .then(() => {
           this.$q.notify({
             type: 'positive',
-            message: 'You are now logged in'
+            message: 'Welcome ! You are now logged in.'
           })
-          this.$router.push('/')
+          this.$router.push('/profile')
         })
         .catch(error => {
+          //console.log('error',error);
           let errMsg = ''
           if ('message' in error.response.data) {
             errMsg = error.response.data.error + ' - ' + error.response.data.message
@@ -95,6 +96,7 @@ export default {
             errMsg = error.response.data.error
           }
           showErrorMessage(errMsg)
+          
         })
     }
   }

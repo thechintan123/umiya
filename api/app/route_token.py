@@ -19,7 +19,9 @@ def get_token():
     user = basic_auth.current_user()
     token = user.get_token()
     payload = {
-        'token': token
+        'token': token,
+        'email': user.email,
+        'user_details_id': user.user_details.id
     }
     user.last_login = datetime.utcnow()
     db.session.add(user)
