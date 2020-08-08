@@ -1,26 +1,29 @@
 <template>
-
   <q-layout view="hHh lpR fFf">
-     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
 
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="left = !left" />
 
-        <q-toolbar-title >
-        <div class="row">
-        <div class="col-auto q-mr-xs">
-          <q-avatar square size="42px">
-            <img src="~assets/logos/LogoMakr_Ring_RED.png" size=50%>
-          </q-avatar>
-         </div>
-          <div class="col-auto text-secondary UM_title" style="font-family: 'Great Vibes', cursive ;font-size: 36px">
-          <span class="text-white">Umiya</span>Matrimony.<span class="text-white">com</span>
-          </div>
+        <q-toolbar-title>
+          <div class="row">
+            <div class="col-auto q-mr-xs">
+              <q-avatar square size="42px">
+                <img src="~assets/logos/LogoMakr_Ring_RED.png" size="50%" />
+              </q-avatar>
+            </div>
+            <div
+              class="col-auto text-secondary UM_title"
+              style="font-family: 'Great Vibes', cursive ;font-size: 36px"
+            >
+              <span class="text-white">Umiya</span>Matrimony.
+              <span class="text-white">com</span>
+            </div>
           </div>
         </q-toolbar-title>
 
-<!--
+        <!--
         <q-btn
           v-if="!loggedIn"
           flat
@@ -38,16 +41,16 @@
           class="absolute-right"
           @click="logout"
         />
--->
+        -->
       </q-toolbar>
 
-<!--
+      <!--
       <q-tabs align="left">
         <q-route-tab to = "/One" label="Page One" />
         <q-route-tab to = "/Two" label="Page Two" />
         <q-route-tab to = "/Three" label="Page Three" />
       </q-tabs>
--->
+      -->
     </q-header>
 
     <!--
@@ -63,150 +66,182 @@
       </q-tabs>
       </q-footer>
 
--->
+    -->
 
     <q-drawer
-    content-class="bg-secondary"
-     :breakpoint = "600"
-    show-if-above v-model="left" side="left" elevated
-    :width="250" >
+      content-class="bg-secondary"
+      :breakpoint="600"
+      show-if-above
+      v-model="left"
+      side="left"
+      elevated
+      :width="250"
+    >
       <!-- <q-scroll-area class="fit"> -->
-      <q-list v-for="(menuItem, index) in menuList" :key="index">
-        <q-item
-        exact
-        class="text-grey-1"
-        :to="menuItem.link"
-        v-ripple>
+      <q-list v-for="(menuItem, index) in menuList" :key="index"
+      v-if="showMenuItem(menuItem)" 
+      >
+        <q-item exact class="text-grey-1" :to="menuItem.link" 
+         v-ripple>
           <q-item-section avatar>
             <q-icon :name="menuItem.icon" />
           </q-item-section>
-          <q-item-section>
-            {{ menuItem.label }}
-          </q-item-section>
+          <q-item-section>{{ menuItem.label }}</q-item-section>
         </q-item>
 
         <q-separator v-if="menuItem.separator" />
-
       </q-list>
-
+<!--
       <q-list>
-        <q-item
-          v-if="!loggedIn"
-          exact
-          class="text-grey-1"
-          to="/login"
-          v-ripple>
-            <q-item-section avatar>
-              <q-icon name="account_circle" />
-            </q-item-section>
-            <q-item-section>
-              Login
-            </q-item-section>
+        <q-item v-if="!loggedIn" exact class="text-grey-1" to="/login" v-ripple>
+          <q-item-section avatar>
+            <q-icon name="account_circle" />
+          </q-item-section>
+          <q-item-section>Login</q-item-section>
         </q-item>
-        <q-item
-          v-else
-          exact
-          class="text-grey-1"
-          clickable
-          @click="logout"
-          v-ripple>
-            <q-item-section avatar>
-              <q-icon name="account_circle" />
-            </q-item-section>
-            <q-item-section>
-              Logout
-            </q-item-section>
+        <q-item v-else exact class="text-grey-1" clickable @click="logout" v-ripple>
+          <q-item-section avatar>
+            <q-icon name="account_circle" />
+          </q-item-section>
+          <q-item-section>Logout</q-item-section>
         </q-item>
+        -->
       </q-list>
-       <!-- </q-scroll-area> -->
-
+      <!-- </q-scroll-area> -->
     </q-drawer>
 
     <q-page-container>
       <router-view />
     </q-page-container>
-
   </q-layout>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions } from "vuex";
 
 const menuList = [
   {
-    icon: 'home',
-    label: 'Home',
-    link: '/',
-    separator: true
+    icon: "home",
+    label: "Home",
+    link: "/",
+    separator: true,
   },
-  /*
   {
-    icon: 'account_circle',
+    icon: 'toggle_on',
     label: 'Login',
     link: '/login',
-    separator: true
-  }, */
+    separator: true,
+    loggedIn: false,
+
+  }, 
+    {
+    icon: 'toggle_off',
+    label: 'Logout',
+    link: '/logout',
+    separator: true,
+    loggedIn: true,
+    clicable : true
+  }, 
   {
-    icon: 'person_add',
-    label: 'Register',
-    link: '/register',
-    separator: true
+    icon: "person_add",
+    label: "Register",
+    link: "/register",
+    separator: true,
   },
   {
-    icon: 'search',
-    label: 'Search',
-    link: '/search',
-    separator: true
-  }
-
-]
+    icon: "search",
+    label: "Search",
+    link: "/search",
+    separator: true,
+  },
+    {
+    icon: "assignment_ind",
+    label: "Profile",
+    link: "/profile",
+    loggedIn: true,
+    separator: true,
+  },
+  {
+    icon: "edit",
+    label: "Update Profile",
+    link: "/updateProfile",
+    loggedIn: true,
+    separator: true,
+  },
+];
 
 export default {
-  data () {
+  data() {
     return {
       drawer: false,
       left: false,
-      menuList
-    }
+      menuList,
+    };
   },
   methods: {
-    ...mapActions('auth', ['logoutUser']),
-    logout () {
-      this.logoutUser()
+    ...mapActions("auth", ["logoutUser"]),
+    logout() {
+      this.logoutUser();
       this.$q.notify({
-        type: 'positive',
-        message: 'You are now logged out'
-      })
-    }
+        type: "positive",
+        message: "You are now logged out",
+      });
+     this.$router.push('/')
+
+    },
+    showMenuItem(menuItem){
+      var loggedInStatus = this.loggedIn;
+      var menuItemLoginStatus = menuItem.loggedIn;
+      if (menuItemLoginStatus === undefined || menuItemLoginStatus === null){
+        return true
+      }
+      else if(menuItemLoginStatus === false){
+        if(loggedInStatus === false) {
+          return true
+        }else{
+          return false
+        }
+      }
+      else if(menuItemLoginStatus === true){
+        if(loggedInStatus === true) {
+          return true
+        }else{
+          return false
+        }
+      }
+        else{
+          return false
+        }
+
+    } //end of showMenuItem
+
   },
   computed: {
-    ...mapState('auth', ['loggedIn'])
-  }
-}
+    ...mapState("auth", ["loggedIn"]),
+  },
+};
 </script>
 
 <style>
-
-@media screen and (min-width : 599px) {
+@media screen and (min-width: 599px) {
   .q-tabs {
     display: true;
   }
 }
 
-.q-drawer  .q-router-link--active {
-    color : #ffd31d !important
+.q-drawer .q-router-link--active {
+  color: #ffd31d !important;
 }
 
-@media screen and (max-width : 500px) {
-.UM_title{
+@media screen and (max-width: 500px) {
+  .UM_title {
     font-size: 30px !important;
   }
 }
 
 @media (max-width: @screen-sm) {
-.UM_title {
+  .UM_title {
     font-size: 14px;
-    }
+  }
 }
-
 </style>

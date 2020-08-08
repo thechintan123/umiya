@@ -142,7 +142,7 @@ export default {
   methods: {
     checkLoggedIn() {
       const user = localStorage.getItem("user");
-      console.log(user);
+      //console.log(user);
       if (user) {
         this.loggedIn = true;
       } else {
