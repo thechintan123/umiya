@@ -164,22 +164,22 @@ def upload_file():
         return bad_request('Wrong file type')
     if 'file' not in request.files:
         return bad_request('No file part')
-    if 'user_detials_id' not in request.form:
-        return bad_request('Missing user_detials_id')
-    user_detials_id = str(request.form.get('user_detials_id')) 
+    if 'user_details_id' not in request.form:
+        return bad_request('Missing user_details_id')
+    user_details_id = str(request.form.get('user_details_id')) 
     #user_det = db.session.query(UserDetails).join(User).filter(User.id == user_id).first()
-    user_det = db.session.query(UserDetails).filter(UserDetails.id == user_detials_id).first()
+    user_det = db.session.query(UserDetails).filter(UserDetails.id == user_details_id).first()
     if not user_det:
         return bad_request('User details does not exist')
-    folder = app.config['UPLOAD_FOLDER'] / user_detials_id
+    folder = app.config['UPLOAD_FOLDER'] / user_details_id
     if not folder.is_dir():
             folder.mkdir()
     filename = StringGenerator("[\d\w]{10}").render() 
     truncated_filename = filename[0:5] + ".jpg"
     if filetype == 'photo':
-        filename = 'photo_' + user_detials_id + '_' + user_det.first_name + '_' + truncated_filename
+        filename = 'photo_' + user_details_id + '_' + user_det.first_name + '_' + truncated_filename
     elif filetype == 'proof':
-        filename = 'proof_' + user_detials_id + '_'  + user_det.first_name + '_' + truncated_filename
+        filename = 'proof_' + user_details_id + '_'  + user_det.first_name + '_' + truncated_filename
     try:
         # this is the max size, aspect ratio is maintained
         size = (1800, 1800)
