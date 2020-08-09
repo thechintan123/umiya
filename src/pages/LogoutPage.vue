@@ -14,7 +14,7 @@ methods:{
       this.logoutUser();
       this.$q.notify({
         type: "positive",
-        message: "Thank you. You have succesffuly logged out",
+        message: "Thank you. You have succesfully logged out",
       });
      this.$router.push('/')
 

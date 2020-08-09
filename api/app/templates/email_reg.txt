@@ -1,5 +1,29 @@
-Well done!
+     UmiyaMatrimony.com - The exclusive matrimony service for Kutch Kadva
+      Patidar Sanatan Samaj
 
-You have successfully registered and may now log into Umiya Matrimony using your email {{ user.email }}.
+  Dear {{user.user_details.first_name}},
+ 
+  Welcome to UmiyaMatrimony.com. You have created profile for {{user.user_details.first_name}} {{user.user_details.last_name}}.
 
-https://umiyamatrimony.com
+  Your Profile ID is {{user.user_details.id}}
+
+  Going forward, UmiyaMatrimony.com will notify you on your email {{user.email}}.
+  
+  The other profile will contact you on your primary Contact {{user.user_details.phone_primary}}
+  
+  NOTE: Your Profile will not be Approved without ID Proof. This is to avoid any
+  fake/fraud profiles. 
+ 
+  In case of any query, please feel free to contact us . We are happy to hear
+  from you. To know more about our service, visit the website - UmiyaMatrimony.com.
+  
+  Hope you find your Life partner soon. 
+  
+  Best Regards, 
+  Your Friends at UmiyaMatrimony.com
+
+      P.S: If you have not registered on UmiyaMatrimony.com using this email,
+      then inform us on help@umiyamatrimony.com. UmiyaMatrimony.com will never
+      share your personal info with a 3rd party. This email follows
+      UmiyaMatrimony.com's Privacy Policy . Copyright © UmiyaMatrimony.com - All
+      Rights Reserved.

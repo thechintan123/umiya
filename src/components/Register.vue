@@ -20,11 +20,13 @@
       </q-banner>
       <q-card-section>
         Thank you
-        <span class="text-weight-bolder text-capitalize">{{formData.firstName}}</span> for successful registration.
+        <span class="text-weight-bolder text-capitalize">{{formData.firstName}} {{formData.lastName}}</span> for successful registration.
         <br />Your Profile ID is
-        <b>{user_details_id}</b>.
-        Going forward, you will be notified on your
+        <b>{{user_details_id}}</b>.<br>
+        Going forward, UmiyaMatrimony.com will notify you on your email 
         <b>{{formData.email}}</b>.
+        <br/>
+        The other profile will contact you on your primary contact <b>{{formData.primaryContact}}</b>
         <br />
         <br />
         <b>Next Steps:</b>
@@ -613,7 +615,7 @@
                     class="my-uploader"
                     accept="image/*, .pdf, .jpg, .jpeg, .gif, .png"
                     multiple
-                    max-files="4"
+                    :max-files="4"
                     ref="photo"
                     hide-upload-btn
                     @added="checkPhoto"
@@ -844,8 +846,11 @@ export default {
       return axios
         .post(process.env.API + "/users", data)
         .then(({ data }) => {
-          //console.log("Search Success", data);
+          //console.log("Register User", data);
           this.user_details_id = data.user_details_id;
+
+          //console.log("this.user_details_id", this.user_details_id, typeof(data));
+
           this.$q.notify({
             type: "positive",
             message: "Successfully registered",
@@ -869,7 +874,13 @@ export default {
     checkPhoto() {
       //console.log("Photo", this.$refs.photo);
       //console.log(this.$refs.photo.files.length);
-      if (this.$refs.photo.files.length === 0) {
+      if(this.$refs.photo.files.length > 4){
+        this.$refs.photo.files.length = 4; // This will reduce the allowed files to 4 photos;
+        this.$q.notify({
+        type: 'negative',
+        message: `Only 4 Photos are allowed. Addtional ones are removed`
+      })
+      } else if (this.$refs.photo.files.length === 0) {
         this.isErrorPhoto = true;
         //this.uploadHasError = true;
       } else {
@@ -891,6 +902,8 @@ export default {
     },
     async submitForm() {
       this.showProgressBar = true;
+
+      //console.log('SubmitForm', this.$refs);
 
       if (typeof this.$refs.basicForm === "undefined") {
         this.basicHasError = true;
@@ -1160,13 +1173,14 @@ export default {
   },
   mounted() {
     //for updateProfile
+    /*
     console.log('this.updateProfile',this.updateProfile);
 
     if(this.updateProfile === true){
       this.formData = this.userDetail;
     }
     console.log('FormData',this.formData);
-
+*/
     axios
       .get(process.env.API + "/lists")
       .then((response) => {
