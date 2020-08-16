@@ -168,6 +168,13 @@ const menuList = [
     loggedIn: true,
     separator: true,
   },
+    {
+    icon: "fas fa-key",
+    label: "Change Password",
+    link: "/changePassword",
+    loggedIn: true,
+    separator: true,
+  },
 ];
 
 export default {

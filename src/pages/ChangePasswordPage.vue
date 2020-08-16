@@ -1,6 +1,6 @@
 <template>
   <q-page padding class="flex">
-    <register_update :updateProfile="true"/>
+    Change Password
   </q-page>
 </template>
 

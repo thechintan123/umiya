@@ -20,11 +20,15 @@
       </q-banner>
       <q-card-section>
         Thank you
-        <span class="text-weight-bolder text-capitalize">{{formData.firstName}}</span> for successful registration.
+        <span
+          class="text-weight-bolder text-capitalize"
+        >{{formData.firstName}} {{formData.lastName}}</span> for successful registration.
         <br />Your Profile ID is
-        <b>{user_details_id}</b>.
-        Going forward, you will be notified on your
+        <b>{{user_details_id}}</b>.
+        <br />Going forward, UmiyaMatrimony.com will notify you on your email
         <b>{{formData.email}}</b>.
+        <br />The other profile will contact you on your primary contact
+        <b>{{formData.primaryContact}}</b>
         <br />
         <br />
         <b>Next Steps:</b>
@@ -57,9 +61,10 @@
     <q-card v-if="!successRegistration">
       <q-banner class="bg-grey-3 q-mb-xs">
         <template v-slot:avatar>
-          <q-icon name="account_circle" color="primary" />
+          <q-icon :name="updateProfile ? 'edit' : 'account_circle'" color="primary" />
         </template>
-        Register on website!!
+        <template v-if="updateProfile">Update Profile</template>
+        <template v-else>Register on website!!</template>
       </q-banner>
 
       <q-tabs
@@ -108,6 +113,7 @@
               />
             </div>
             <!-- End - This button is only visible in Testing Mode -->
+
             <q-input
               outlined
               tabindex="1"
@@ -118,9 +124,10 @@
               clearable
               hint="Hint: This Email will be used as login ID"
               maxlength="50"
+              :disable="updateProfile"
             />
 
-            <div class="row">
+            <div class="row" v-if="!updateProfile">
               <div class="col">
                 <q-input
                   tabindex="2"
@@ -352,18 +359,19 @@
               <div class="col-6">
                 <q-field
                   borderless
-                  :value="formData.agreeTnC"
+                  :value="formData.agreeTc"
                   :rules="[ val => val === true || 'Field is required']"
                 >
                   <template v-slot:control>
                     <q-toggle
                       tabindex="13"
-                      v-model="formData.agreeTnC"
+                      v-model="formData.agreeTc"
                       checked-icon="check"
                       color="green"
                       unchecked-icon="clear"
                       label="Agree Terms & Conditions *"
                       dense
+                      :disable="updateProfile"
                     />
                   </template>
                 </q-field>
@@ -410,7 +418,7 @@
                   label="Marital Status*"
                   clearable
                   :rules="[ val => !!val || 'Field is required']"
-                  @blur="defaultMaritalStatusPreferences"
+                  @blur="defaultPartnerMartialStatus"
                 />
               </div>
               <div class="col">
@@ -519,7 +527,7 @@
                   tabindex="23"
                   clearable
                   outlined
-                  v-model="formData.ageFrom"
+                  v-model="formData.partnerAgeFrom"
                   dense
                   options-dense
                   label="Age(From)*"
@@ -532,7 +540,7 @@
                   tabindex="24"
                   clearable
                   outlined
-                  v-model="formData.ageTo"
+                  v-model="formData.partnerAgeTo"
                   dense
                   options-dense
                   label="Age(To)*"
@@ -548,7 +556,7 @@
                   tabindex="25"
                   clearable
                   outlined
-                  v-model="formData.heightFrom"
+                  v-model="formData.partnerHeightFrom"
                   dense
                   options-dense
                   label="Height(From)*"
@@ -561,7 +569,7 @@
                   tabindex="26"
                   clearable
                   outlined
-                  v-model="formData.heightTo"
+                  v-model="formData.partnerHeightTo"
                   dense
                   options-dense
                   label="Height(To)*"
@@ -573,7 +581,7 @@
 
             <q-select
               tabindex="27"
-              v-model="formData.maritalStatusPreference"
+              v-model="formData.partnerMaritalStatus"
               option-value="id"
               option-label="name"
               :options="maritalOptions"
@@ -585,7 +593,7 @@
               multiple
               use-chips
               input-debounce="0"
-              ref="maritalStatusPreference"
+              ref="partnerMartialStatus"
               hint="Hint: Multiple Options can be selected"
             />
 
@@ -599,12 +607,22 @@
 
         <q-tab-panel name="upload">
           <q-form ref="uploadForm" greedy>
-            <div class="q-mb-xs">
+            
+          <div class="q-mb-xs" >
+            <q-toggle 
+            v-model="updatePhoto" 
+            checked-icon="check" 
+            color="green" unchecked-icon="clear" 
+            label="Do you want to update Photos?"
+            @input="getPhotos"
+            />
+        <q-slide-transition>
               <q-field
                 error-message="Please upload atleast One Photo."
                 :error="isErrorPhoto"
                 borderless
                 dense
+                v-show="(updateProfile && updatePhoto) || !updateProfile"
               >
                 <template v-slot:control>
                   <q-uploader
@@ -613,7 +631,7 @@
                     class="my-uploader"
                     accept="image/*, .pdf, .jpg, .jpeg, .gif, .png"
                     multiple
-                    max-files="4"
+                    :max-files="4"
                     ref="photo"
                     hide-upload-btn
                     @added="checkPhoto"
@@ -622,14 +640,29 @@
                   />
                 </template>
               </q-field>
-            </div>
+    </q-slide-transition>
+                </div>
 
-            <div class="q-mb-xs">
+
+            <div class="q-mb-xs" >
+
+            <q-toggle 
+            v-model="updateProof" 
+            checked-icon="check" 
+            color="green" unchecked-icon="clear" 
+            label="Do you want to update Proofs?"
+            @input="getProof"
+            />
+
+        <q-slide-transition>
+
+
               <q-field
                 error-message="Please upload ID Proof."
                 :error="isErrorProof"
                 borderless
                 dense
+                v-show="(updateProfile && updateProof) || !updateProfile"
               >
                 <template v-slot:control>
                   <q-uploader
@@ -645,12 +678,21 @@
                   />
                 </template>
               </q-field>
-            </div>
+
+        </q-slide-transition>
+                    <p v-if = "formData.status.name === 'Approved'"> 
+              Your profile is already Approved so you cannot update your ID Proof</p>
+                    </div>
+
 
             <div class="row">
               <q-btn color="secondary" flat label="Back" @click="tab = 'personal'" />
               <q-space />
-              <q-btn color="primary" label="Submit" @click="submitForm" />
+              <q-btn v-if="updateProfile" color="primary" label="Update"  @click="updateForm"/>
+
+              <q-btn v-else color="primary" label="Submit" @click="submitForm" />
+
+
             </div>
           </q-form>
         </q-tab-panel>
@@ -668,7 +710,8 @@ import { mapState } from "vuex";
 
 export default {
   mixins: [mixinFormValidations, mixinComputations],
-  props : ['userDetails','updateProfile'],
+  //This prop is for UpDateProfile. It will be true for UpdateProfile
+  props: ["updateProfile"],
   data() {
     return {
       // upload url
@@ -740,14 +783,14 @@ export default {
         fatherName: "father",
         residentialAddress: "address",
         aboutYourself: "about yourself",
-        ageFrom: "30",
-        ageTo: "40",
-        heightFrom: "5 ft 0 inch",
-        heightFromCms: "",
-        heightTo: "6 ft 0 inch",
-        heightToCms: "",
-        maritalStatusPreference: [{ id: 1, name: "Never Married" }],
-        agreeTnC: true,
+        partnerAgeFrom: "30",
+        partnerAgeTo: "40",
+        partnerHeightFrom: "5 ft 0 inch",
+        partnerHeightFromCms: "",
+        partnerHeightTo: "6 ft 0 inch",
+        partnerHeightToCms: "",
+        partnerMartialStatus: [{ id: 1, name: "Never Married" }],
+        agreeTc: true,
         sourceOfWebsite: { id: 1, name: "Friends" },
       },
       testTmpData: {
@@ -781,14 +824,14 @@ export default {
         fatherName: "",
         residentialAddress: "",
         aboutYourself: "",
-        ageFrom: "",
-        ageTo: "",
-        heightFrom: "",
-        heightFromCms: "",
-        heightTo: "",
-        heightToCms: "",
-        maritalStatusPreference: [],
-        agreeTnC: false,
+        partnerAgeFrom: "",
+        partnerAgeTo: "",
+        partnerHeightFrom: "",
+        partnerHeightFromCms: "",
+        partnerHeightTo: "",
+        partnerHeightToCms: "",
+        partnerMartialStatus: [],
+        agreeTc: false,
         sourceOfWebsite: "",
       },
 
@@ -799,6 +842,10 @@ export default {
         alternateContactCountryCode: "",
         alternateContact: "",
       },
+
+      //These fields are used for updateProfile
+      updatePhoto : false,
+      updateProof : false
     };
   },
   computed: {
@@ -844,8 +891,11 @@ export default {
       return axios
         .post(process.env.API + "/users", data)
         .then(({ data }) => {
-          //console.log("Search Success", data);
+          //console.log("Register User", data);
           this.user_details_id = data.user_details_id;
+
+          //console.log("this.user_details_id", this.user_details_id, typeof(data));
+
           this.$q.notify({
             type: "positive",
             message: "Successfully registered",
@@ -869,7 +919,13 @@ export default {
     checkPhoto() {
       //console.log("Photo", this.$refs.photo);
       //console.log(this.$refs.photo.files.length);
-      if (this.$refs.photo.files.length === 0) {
+      if (this.$refs.photo.files.length > 4) {
+        this.$refs.photo.files.length = 4; // This will reduce the allowed files to 4 photos;
+        this.$q.notify({
+          type: "negative",
+          message: `Only 4 Photos are allowed. Addtional ones are removed`,
+        });
+      } else if (this.$refs.photo.files.length === 0) {
         this.isErrorPhoto = true;
         //this.uploadHasError = true;
       } else {
@@ -891,6 +947,8 @@ export default {
     },
     async submitForm() {
       this.showProgressBar = true;
+
+      //console.log('SubmitForm', this.$refs);
 
       if (typeof this.$refs.basicForm === "undefined") {
         this.basicHasError = true;
@@ -925,14 +983,14 @@ export default {
 
         //console.log("Submit form 1", this.formData);
         //convert Height To Cms
-        this.formData.heightFromCms = this.convertHeightToCms(
-          this.formData.heightFrom
+        this.formData.partnerHeightFromCms = this.convertHeightToCms(
+          this.formData.partnerHeightFrom
         );
-        this.formData.heightToCms = this.convertHeightToCms(
-          this.formData.heightTo
+        this.formData.partnerHeightToCms = this.convertHeightToCms(
+          this.formData.partnerHeightTo
         );
         if (this.formData.heightCms === "") {
-          this.formData.heightCms = this.convertHeightToCms(
+          this.formData.heightCms = this.convertpartnerHeightToCms(
             this.formData.height
           );
         }
@@ -983,18 +1041,18 @@ export default {
       if (this.formData.age !== "") {
         if (this.formData.gender.name == "Male") {
           //Defaulting Age for Partner
-          this.formData.ageFrom = this.formData.age - this.ageDifference;
+          this.formData.partnerAgeFrom = this.formData.age - this.ageDifference;
           this.formData.ageTo = this.formData.age;
         } else if (this.formData.gender.name == "Female") {
           //Defaulting Age for Partner
-          this.formData.ageFrom = this.formData.age;
+          this.formData.partnerAgeFrom = this.formData.age;
           this.formData.ageTo = this.formData.age + this.ageDifference;
         } else {
-          this.formData.ageFrom = "";
+          this.formData.partnerAgeFrom = "";
           this.formData.ageTo = "";
         }
       } else {
-        this.formData.ageFrom = "";
+        this.formData.partnerAgeFrom = "";
         this.formData.ageTo = "";
       }
     },
@@ -1015,17 +1073,19 @@ export default {
         heightFromCms = heightCms;
         heightToCms = heightCms;
       }
-      this.formData.heightFromCms = heightFromCms;
-      this.formData.heightToCms = heightToCms;
-      this.formData.heightFrom = this.convertHeightToFtInch(heightFromCms);
-      this.formData.heightTo = this.convertHeightToFtInch(heightToCms);
+      this.formData.partnerHeightFromCms = heightFromCms;
+      this.formData.partnerHeightToCms = heightToCms;
+      this.formData.partnerHeightFrom = this.convertHeightToFtInch(
+        heightFromCms
+      );
+      this.formData.partnerHeightTo = this.convertHeightToFtInch(heightToCms);
     },
 
-    defaultMaritalStatusPreferences() {
+    defaultPartnerMartialStatus() {
       //console.log("Martial Status", this.formData.maritalStatus);
-      //console.log("MSP", this.formData.maritalStatusPreference);
-      this.formData.maritalStatusPreference.length = 0;
-      this.formData.maritalStatusPreference.push(this.formData.maritalStatus);
+      //console.log("MSP", this.formData.partnerMartialStatus);
+      this.formData.partnerMartialStatus.length = 0;
+      this.formData.partnerMartialStatus.push(this.formData.maritalStatus);
     },
     convertHeightToCms(heightFtInch) {
       var heightFt = heightFtInch.substr(0, 1);
@@ -1040,7 +1100,7 @@ export default {
       var heightTotalInches = heightCms * 0.393701;
       var heightFt = Math.floor(heightTotalInches / 12);
       var heightInches = Math.floor(heightTotalInches - heightFt * 12);
-      //console.log("Height Ft Inch", heightFt, heightInches);
+      console.log("Height Ft Inch", heightFt, heightInches);
       return heightFt + " ft " + heightInches + " inches";
     },
     checkOtherCountry(otherCountry) {
@@ -1058,21 +1118,21 @@ export default {
       }
     },
     checkAgeTo(ageTo) {
-      if (ageTo < this.formData.ageFrom) {
+      if (ageTo < this.formData.partnerAgeFrom) {
         return false;
       } else {
         return true;
       }
     },
-    checkAgeFrom(ageFrom) {
-      if (ageFrom > this.formData.ageTo) {
+    checkAgeFrom(partnerAgeFrom) {
+      if (partnerAgeFrom > this.formData.ageTo) {
         return false;
       } else {
         return true;
       }
     },
     checkHeightTo(heightTo) {
-      const heightFrom = this.formData.heightFrom;
+      const heightFrom = this.formData.partnerHeightFrom;
       if (heightFrom && heightTo) {
         return this.compareHeightFromHeightTo(heightFrom, heightTo);
       } else {
@@ -1153,6 +1213,333 @@ export default {
         message: `${rejectedEntries.length} file(s) did not pass validation constraints`,
       });
     },
+
+    //For Update Profile
+    getUserDetail() {
+      var user = JSON.parse(localStorage.getItem("user"));
+      var userDetail;
+      //console.log(JSON.parse(localStorage.getItem("user")));
+      //var keysArray = Object.keys(user);
+      //console.log(typeof user, user, user.email, user.user_details_id);
+      if (user !== null) {
+        var user_details_id = user.user_details_id;
+        //user_details_id is same profile_Id share on UI
+
+        this.user_details_id = user_details_id;
+
+        axios
+          .get(process.env.API + "/users/" + user_details_id)
+          .then(({ data }) => {
+            console.log("data", data, data.upload_proof);
+
+            //this code replaces key in data Object from Snake Case to Camel Case
+            userDetail = JSON.parse(
+              JSON.stringify(data).replace(
+                /(_\w)\w+":/g,
+                (match) => match[1].toUpperCase() + match.substring(2)
+              )
+            );
+
+            //need to parse again since there were variables likes partner_age_from
+            userDetail = JSON.parse(
+              JSON.stringify(userDetail).replace(
+                /(_\w)\w+":/g,
+                (match) => match[1].toUpperCase() + match.substring(2)
+              )
+            );
+
+            //console.log("userDetail", userDetail);
+            this.formData = userDetail;
+            //console.log("formData", this.formData);
+
+            //Converting the data to match the form fields requirements
+
+            /* for Primary Phone and Alternate Phone. It is stored in the following format "+91 1234567890" 
+      so extracting the information */
+            this.tmpData.primaryContactCountryCode = this.formData.phonePrimary.substr(
+              1,
+              2
+            );
+            this.tmpData.primaryContact = this.formData.phonePrimary.substr(4);
+            this.tmpData.alternateContactCountryCode = this.formData.phoneAlternate.substr(
+              1,
+              2
+            );
+            this.tmpData.alternateContact = this.formData.phoneAlternate.substr(
+              4
+            );
+
+            //Mapping Height in Cms to Ft and Inch
+            this.formData.height = this.convertHeightToFtInch(
+              this.formData.height
+            );
+            //console.log('Height',this.formData.height);
+
+            //Mapping Date of birth correctly. Date of birth will be mapped
+            //from "Tue, 20 Sep 1983 00:00:00 GMT"(returned from DB) to YYYY-MM-DD(required for mapping in UI)
+            this.formData["dateOfBirth"] = new Date(this.formData.dob)
+              .toISOString()
+              .split("T")[0];
+            console.log(
+              "date of Birth",
+              this.formData,
+              this.formData.dateOfBirth
+            );
+
+            //Calculate Age
+            this.formData["age"] = this.computeAge(this.formData.dateOfBirth);
+
+            //Map country and other country
+            var country = this.formData.country;
+            if (country.Name === "India") {
+              this.formData.country = "India";
+            } else {
+              this.formData.country = "Other";
+              this.formData.otherCountry = country; //mapping entire country object
+            }
+
+            //Map Address and father
+            this.formData["residentialAddress"] = this.formData.address;
+            this.formData["fatherName"] = this.formData.fatherFullname;
+
+            //Map Source of Website
+            this.formData["sourceOfWebsite"] = this.formData.whereKnow;
+
+            //Map Partner Height From and To. First, Convert to Ft and Inches
+            this.formData.partnerHeightFrom = this.convertHeightToFtInch(
+              this.formData.partnerHeightFrom
+            );
+            this.formData.partnerHeightTo = this.convertHeightToFtInch(
+              this.formData.partnerHeightTo
+            );
+          })
+          .catch((error) => {
+            //console.log(error);
+          });
+      } //end of if user!==null
+    }, //end of getUser Detail method
+
+
+//get Photos for update profile
+getPhotos(){
+
+  //Get Photos
+           // console.log("Get Photo", this.formData.uploadPhotos);
+            if (
+              this.updatePhoto && (
+              this.formData.uploadPhotos.length != 0 &&
+              this.formData.uploadPhotos != null &&
+              typeof this.formData.uploadPhotos !== "undefined")
+              && (this.$refs.photo.files.length != this.formData.uploadPhotos.length) 
+              //if photos are already loaded then no need to fetch it from Axios
+            ) {
+              //var user_d_id = this.user_details_id;
+              //console.log("Before Photo Loop", this.formData.uploadPhotos);
+              var fileList = [];
+              var i = 0;
+              var photos = this.formData.uploadPhotos;
+              var len = photos.length;
+              var photo = {};
+              var fileObj = {};
+              var blobObject = {};
+              var user_d_id = this.formData.id;
+
+              for (photo of photos) {
+                //var filename = photo.filename;
+                //axios.get(process.env.API + "/upload/"+ user_details_id +"/" + filename,
+                //photo = photos[i];
+                //console.log("Photo Loop", photo, photo.filename, fileList[0], fileList.length);
+
+                axios({
+                  url:
+                    process.env.API +
+                    "/upload/" +
+                    this.user_details_id +
+                    "/" +
+                    photo.filename,
+                  method: "GET",
+                  responseType: "blob", // important
+                })
+                  .then((response) => {
+                    var pos = response.config.url.indexOf("photo");
+                    var file = response.config.url.substr(pos); //get file name from URL
+
+                    // console.log(
+                    //   "Photo Details",
+                    //   pos,
+                    //   response.config.url,
+                    //   file,
+                    //   photo.filename,
+                    //   response
+                    // );
+
+                    blobObject = new Blob([response.data]);
+                    fileObj = new File([blobObject], file, {
+                      type: "image/jpeg",
+                    });
+                    //var fileObj =  new File([response.data]);
+                    // fileObj.lastModifiedDate = new Date();
+                    // fileObj.name = filename;
+                    //fileObj.type = "image/jpeg";
+                    //console.log('File Obj', blobObject, fileObj);
+                    //var fileList = [fileObj]
+                    fileList.push(fileObj);
+                    //this.$refs.photo1.files.push(fileObj);
+                    this.$refs.photo.addFiles(fileList);
+                    //console.log("Photos in Uploader", this.$refs.photo);
+                  })
+                  .catch((error) => {
+                    //console.log(error);
+                  });
+
+                //console.log("File List", fileList);
+              } //for of Photo loop
+            } // end of if for photos
+
+}//end of getPhotos
+,
+//get Proofs for UpdateProfile
+getProof(){
+   //get Proofs
+      
+      //console.log("getProof", this.updateProof,  this.formData.uploadProof);
+      if(this.updateProof && 
+      (this.formData.uploadProof !== "" && this.formData.uploadProof !== null 
+      && (typeof this.formData.uploadProof !== "undefined"))
+      && (this.$refs.proof.files.length == 0) 
+      ){
+      var user_d_id = this.user_details_id;
+      var filename = this.formData.uploadProof;
+
+      axios({
+        url: process.env.API + "/upload/"+ user_d_id +"/" + filename,
+        method: 'GET',
+        responseType: 'blob', // important
+      }).then((response) => {
+       // console.log("Called Upload", response);
+
+        var blobObject = new Blob([response.data]);
+        var fileObj = new File([blobObject], filename,  { type:"image/jpeg" });
+
+        //console.log('File Obj', blobObject, fileObj);
+        var fileList = [fileObj]
+        this.$refs.proof.addFiles(fileList);
+        //console.log('Proof', this.$refs.proof)
+        if(this.formData.status.name === 'Approved'){
+              this.$refs.proof.disable = true;
+        }   
+      }).catch((error) => {
+        //console.log(error);
+      });
+}
+} //end of getphotos
+,
+//function called on updateForm
+async updateForm(){
+
+      this.showProgressBar = true;
+
+      console.log("Update Form", this.formData);
+
+
+      if (typeof this.$refs.basicForm === "undefined") {
+        this.basicHasError = true;
+      } else {
+        this.submitBasicForm();
+      }
+      if (typeof this.$refs.personalForm === "undefined") {
+        this.personalHasError = true;
+      } else {
+        this.submitPersonalForm();
+      }
+
+      this.checkPhoto();
+      this.checkProof();
+
+      if (
+        !this.basicHasError &&
+        !this.personalHasError &&
+        !this.isErrorPhoto &&
+        !this.isErrorProof
+      ) {
+        this.formData.primaryContact =
+          "+" +
+          this.tmpData.primaryContactCountryCode +
+          " " +
+          this.tmpData.primaryContact;
+        this.formData.alternateContact =
+          "+" +
+          this.tmpData.alternateContactCountryCode +
+          " " +
+          this.tmpData.alternateContact;
+
+        //console.log("Submit form 1", this.formData);
+        //convert Height To Cms
+        this.formData.partnerHeightFromCms = this.convertHeightToCms(
+          this.formData.partnerHeightFrom
+        );
+        this.formData.partnerHeightToCms = this.convertHeightToCms(
+          this.formData.partnerHeightTo
+        );
+        if (this.formData.heightCms === "") {
+          this.formData.heightCms = this.convertHeightToCms(
+            this.formData.height
+          );
+        }
+
+
+        //converting from CamelCase to SnakeCase
+        var formDataSnakeCase = {}
+      for(var camel in this.formData) {
+          //console.log("Key", camel);
+          formDataSnakeCase[this.camelToSnake(camel)] = this.formData[camel];
+      }
+
+  	  console.log('Converted to Snake Case', formDataSnakeCase);
+
+
+        await this.updateUser(formDataSnakeCase);
+
+      this.showProgressBar = false;
+
+
+      }
+}// end of  UpdateForm
+,
+camelToSnake(key) {
+    return key.replace( /([A-Z])/g, "_$1" ).toLowerCase();
+}
+
+,
+updateUser(data) {
+      return axios
+        .put(process.env.API + "/users/" +this.user_details_id, data)
+        .then(({ data }) => {
+          console.log("Search Success", data);
+          //this.user_details_id = data.user_details_id;
+          this.$q.notify({
+            type: "positive",
+            message: "Successfully registered",
+          });
+          /* this.$router.push('/login') */
+        })
+        .catch((error) => {
+          let errMsg = "";
+          if ("message" in error.response.data) {
+            //errMsg = error.response.data.error + " - " + error.response.data.message;
+
+            errMsg = error.response.data.message;
+          } else {
+            errMsg = error.response.data.error;
+          }
+          //console.log(errMsg);
+          showErrorMessage(errMsg);
+        });
+    }
+,
+    checkPhoto1() {
+      console.log("Check Photo", this.$refs.photo1);
+    },
   },
   created() {
     this.createHeightList();
@@ -1160,13 +1547,9 @@ export default {
   },
   mounted() {
     //for updateProfile
-    console.log('this.updateProfile',this.updateProfile);
-
-    if(this.updateProfile === true){
-      this.formData = this.userDetail;
+    if (this.updateProfile === true) {
+      this.getUserDetail();
     }
-    console.log('FormData',this.formData);
-
     axios
       .get(process.env.API + "/lists")
       .then((response) => {
