@@ -15,6 +15,11 @@ const routes = [
       }
       ,
       {
+        path: "/changePassword",
+        component: () => import("pages/ChangePasswordPage.vue")
+      }
+      ,
+      {
         path: "/profile",
         component: () => import("pages/ProfilePage.vue")
       }
