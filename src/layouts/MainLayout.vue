@@ -166,15 +166,16 @@ const menuList = [
     label: 'Update Profile',
     link: '/updateProfile',
     loggedIn: true,
-    separator: true
-  }
-]
+    link: "/changePassword",
+    loggedIn: true,
+    separator: true,
+  },
+];
 
 export default {
   data () {
     return {
       drawer: false,
-      left: false,
       menuList
     }
   },

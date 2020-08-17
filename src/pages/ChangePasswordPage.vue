@@ -1,11 +1,11 @@
 <template>
   <q-page padding class="flex">
-    <register_update :updateProfile="true"/>
+    Change Password
   </q-page>
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios";
 export default {
   components: {
     register_update: require("components/Register_Update.vue").default,

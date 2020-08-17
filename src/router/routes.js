@@ -14,13 +14,12 @@ const routes = [
         component: () => import('pages/UpdateProfilePage.vue')
       },
       {
-        path: '/profile',
-        component: () => import('pages/ProfilePage.vue')
+        path: "/profile",
+        component: () => import("pages/ProfilePage.vue")
       }
     ]
   }
 ]
-
 // Always leave this as last one
 if (process.env.MODE !== 'ssr') {
   routes.push({
