@@ -79,9 +79,9 @@
     >
       <!-- <q-scroll-area class="fit"> -->
       <q-list v-for="(menuItem, index) in menuList" :key="index"
-      v-if="showMenuItem(menuItem)" 
+      v-if="showMenuItem(menuItem)"
       >
-        <q-item exact class="text-grey-1" :to="menuItem.link" 
+        <q-item exact class="text-grey-1" :to="menuItem.link"
          v-ripple>
           <q-item-section avatar>
             <q-icon :name="menuItem.icon" />
@@ -117,109 +117,104 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from 'vuex'
 
 const menuList = [
   {
-    icon: "home",
-    label: "Home",
-    link: "/",
-    separator: true,
+    icon: 'home',
+    label: 'Home',
+    link: '/',
+    separator: true
   },
   {
     icon: 'toggle_on',
     label: 'Login',
     link: '/login',
     separator: true,
-    loggedIn: false,
+    loggedIn: false
 
-  }, 
-    {
+  },
+  {
     icon: 'toggle_off',
     label: 'Logout',
     link: '/logout',
     separator: true,
     loggedIn: true,
-    clicable : true
-  }, 
-  {
-    icon: "person_add",
-    label: "Register",
-    link: "/register",
-    separator: true,
+    clicable: true
   },
   {
-    icon: "search",
-    label: "Search",
-    link: "/search",
-    separator: true,
+    icon: 'person_add',
+    label: 'Register',
+    link: '/register',
+    separator: true
   },
-    {
-    icon: "assignment_ind",
-    label: "Profile",
-    link: "/profile",
+  {
+    icon: 'search',
+    label: 'Search',
+    link: '/search',
+    separator: true
+  },
+  {
+    icon: 'assignment_ind',
+    label: 'Profile',
+    link: '/profile',
     loggedIn: true,
-    separator: true,
+    separator: true
   },
   {
-    icon: "edit",
-    label: "Update Profile",
-    link: "/updateProfile",
+    icon: 'edit',
+    label: 'Update Profile',
+    link: '/updateProfile',
     loggedIn: true,
-    separator: true,
-  },
-];
+    separator: true
+  }
+]
 
 export default {
-  data() {
+  data () {
     return {
       drawer: false,
       left: false,
-      menuList,
-    };
+      menuList
+    }
   },
   methods: {
-    ...mapActions("auth", ["logoutUser"]),
-    logout() {
-      this.logoutUser();
+    ...mapActions('auth', ['logoutUser']),
+    logout () {
+      this.logoutUser()
       this.$q.notify({
-        type: "positive",
-        message: "You are now logged out",
-      });
-     this.$router.push('/')
-
+        type: 'positive',
+        message: 'You are now logged out'
+      })
+      this.$router.push('/')
     },
-    showMenuItem(menuItem){
-      var loggedInStatus = this.loggedIn;
-      var menuItemLoginStatus = menuItem.loggedIn;
-      if (menuItemLoginStatus === undefined || menuItemLoginStatus === null){
+    showMenuItem (menuItem) {
+      var loggedInStatus = this.loggedIn
+      var menuItemLoginStatus = menuItem.loggedIn
+      if (menuItemLoginStatus === undefined || menuItemLoginStatus === null) {
         return true
-      }
-      else if(menuItemLoginStatus === false){
-        if(loggedInStatus === false) {
+      } else if (menuItemLoginStatus === false) {
+        if (loggedInStatus === false) {
           return true
-        }else{
+        } else {
           return false
         }
-      }
-      else if(menuItemLoginStatus === true){
-        if(loggedInStatus === true) {
+      } else if (menuItemLoginStatus === true) {
+        if (loggedInStatus === true) {
           return true
-        }else{
+        } else {
           return false
         }
+      } else {
+        return false
       }
-        else{
-          return false
-        }
-
-    } //end of showMenuItem
+    } // end of showMenuItem
 
   },
   computed: {
-    ...mapState("auth", ["loggedIn"]),
-  },
-};
+    ...mapState('auth', ['loggedIn'])
+  }
+}
 </script>
 
 <style>

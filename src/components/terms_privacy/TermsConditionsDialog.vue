@@ -52,43 +52,43 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       termsDialog: false,
       moreContent: true,
 
       lorem:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Natus, ratione eum minus fuga, quasi dicta facilis corporis magnam, suscipit at quo nostrum!",
+        'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Natus, ratione eum minus fuga, quasi dicta facilis corporis magnam, suscipit at quo nostrum!',
       splitterModel: 40,
-      selected: "Terms & Conditions",
+      selected: 'Terms & Conditions',
       simple: [
         {
-          label: "Details",
+          label: 'Details',
           selectable: false,
           children: [
             {
-              label: "Terms & Conditions",
-              icon: "settings"
+              label: 'Terms & Conditions',
+              icon: 'settings'
             },
             {
-              label: "Privacy",
-              icon: "rss_feed"
+              label: 'Privacy',
+              icon: 'rss_feed'
             }
           ]
         }
       ]
-    };
+    }
   },
   computed: {
-    contentSize() {
-      return this.moreContent ? 150 : 5;
+    contentSize () {
+      return this.moreContent ? 150 : 5
     }
   },
   components: {
-    terms: require("./Terms.vue").default,
-    privacy: require("./Privacy.vue").default
+    terms: require('./Terms.vue').default,
+    privacy: require('./Privacy.vue').default
   }
-};
+}
 </script>
 
 <style>

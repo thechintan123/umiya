@@ -33,10 +33,10 @@ able to update the state of the SearchResults
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters } from 'vuex'
 
 export default {
-  data() {
+  data () {
     return {
       searchResultsList: {},
       page: 1,
@@ -44,61 +44,61 @@ export default {
       resultsPerPage: 3, // Fixed count
       searchResultsPerPage: {},
       searchPerformed: false
-    };
+    }
   },
   methods: {
-    checkPage() {
+    checkPage () {
       // use slice of Objects.keys(as array). Pass allowed keys as array to SearchResults
-      const keys = Object.keys(this.searchResultsList);
-      let selectedKeys;
-      let startingIndex, endingIndex;
-      startingIndex = (this.page - 1) * this.resultsPerPage;
-      endingIndex = startingIndex + this.resultsPerPage;
-      selectedKeys = keys.slice(startingIndex, endingIndex);
-      //console.log("Page", this.page, startingIndex, endingIndex);
+      const keys = Object.keys(this.searchResultsList)
+      let selectedKeys
+      let startingIndex, endingIndex
+      startingIndex = (this.page - 1) * this.resultsPerPage
+      endingIndex = startingIndex + this.resultsPerPage
+      selectedKeys = keys.slice(startingIndex, endingIndex)
+      // console.log("Page", this.page, startingIndex, endingIndex);
       this.searchResultsPerPage = Object.assign(
         ...Object.keys(this.searchResultsList)
           .slice(startingIndex, endingIndex)
           .map(k => ({ [k]: this.searchResultsList[k] }))
-      );
-      //console.log("Page", this.page, startingIndex, endingIndex);
-      //console.log("Check Page", selectedKeys, this.searchResultsPerPage);
+      )
+      // console.log("Page", this.page, startingIndex, endingIndex);
+      // console.log("Check Page", selectedKeys, this.searchResultsPerPage);
     },
 
-    fetchSearchResults() {
-      this.searchResultsList = {};
-      this.searchResultsList = this.getSearchResults;
-      this.page = 1; // initalizing to page 1
-      //console.log("searchResultsList", this.searchResultsList);
+    fetchSearchResults () {
+      this.searchResultsList = {}
+      this.searchResultsList = this.getSearchResults
+      this.page = 1 // initalizing to page 1
+      // console.log("searchResultsList", this.searchResultsList);
       if (Object.keys(this.searchResultsList).length > 0) {
-        this.checkPage();
+        this.checkPage()
         this.maxPages = Math.ceil(
           Object.keys(this.searchResultsList).length / this.resultsPerPage
-        );
+        )
         if (this.maxPages <= 1) {
-          this.maxPages = 1;
+          this.maxPages = 1
         }
       } else {
-        this.searchResultsPerPage = {};
-        this.maxPages = 0;
+        this.searchResultsPerPage = {}
+        this.maxPages = 0
       }
-      this.page = 1; // To stay on First Page
-      this.searchPerformed = true; // This is done to ensure that No Search Results message is displayed for empty Search Results
+      this.page = 1 // To stay on First Page
+      this.searchPerformed = true // This is done to ensure that No Search Results message is displayed for empty Search Results
       // this.searchResultsPerPage = this.getSearchResultsPerPage;
-      //console.log("searchResultsPerPage", this.searchResultsPerPage);
+      // console.log("searchResultsPerPage", this.searchResultsPerPage);
     }
   },
   computed: {
-    ...mapGetters("search", ["getSearchResults", "getSearchResultsPerPage"]),
-    ...mapState("search", ["searchResults"])
+    ...mapGetters('search', ['getSearchResults', 'getSearchResultsPerPage']),
+    ...mapState('search', ['searchResults'])
   },
   components: {
-    searchForm: require("components/SearchForm.vue").default,
-    searchResults: require("components/SearchResults.vue").default,
-    searchResultsPagination: require("components/SearchResultsPagination.vue")
+    searchForm: require('components/SearchForm.vue').default,
+    searchResults: require('components/SearchResults.vue').default,
+    searchResultsPagination: require('components/SearchResultsPagination.vue')
       .default
   }
-};
+}
 </script>
 
 <style scoped>

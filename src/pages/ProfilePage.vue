@@ -7,7 +7,7 @@
 <script>
 export default {
   components: {
-    profile: require("components/Profile.vue").default,
+    profile: require('components/Profile.vue').default
   }
-};
+}
 </script>

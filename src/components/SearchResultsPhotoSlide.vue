@@ -42,36 +42,36 @@
 
 <script>
 export default {
-  props: ["profileID", "photos", "gender"],
-  data() {
+  props: ['profileID', 'photos', 'gender'],
+  data () {
     return {
       slide: 0,
       fullscreen: false,
-      imageURL: process.env.API + "/upload/",
-    };
+      imageURL: process.env.API + '/upload/'
+    }
   },
   computed: {
-    computeURL() {
-      return (photo) => this.imageURL + this.profileID + "/" + photo;
+    computeURL () {
+      return (photo) => this.imageURL + this.profileID + '/' + photo
     },
-    avatarURL() {
-      //console.log("Gender", this.gender);
-      if (this.gender === "Male") {
-        return "statics/avatars/male1.png";
+    avatarURL () {
+      // console.log("Gender", this.gender);
+      if (this.gender === 'Male') {
+        return 'statics/avatars/male1.png'
       } else {
-        return "statics/avatars/female1.png";
+        return 'statics/avatars/female1.png'
       }
     },
-    checkPhotos() {
-      //console.log("checkPhotos", this.photos.length);
+    checkPhotos () {
+      // console.log("checkPhotos", this.photos.length);
       if (this.photos.length > 1) {
-        return true;
+        return true
       } else {
-        return false;
+        return false
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style>

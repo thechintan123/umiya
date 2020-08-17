@@ -123,30 +123,30 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios'
 // import { countryList } from './countryList.js'
-import { mapActions } from "vuex";
-import mixinFormValidations from "src/mixins/Mixin_FormValidations.js";
+import { mapActions } from 'vuex'
+import mixinFormValidations from 'src/mixins/Mixin_FormValidations.js'
 
 export default {
   mixins: [mixinFormValidations],
-  created() {
-    this.createHeightList();
-    this.createAgeFromToList();
+  created () {
+    this.createHeightList()
+    this.createAgeFromToList()
   },
-  mounted() {
+  mounted () {
     axios
-      .get(process.env.API + "/lists")
+      .get(process.env.API + '/lists')
       .then(response => {
-        this.countryList = response.data.country;
-        this.countryOptions = this.countryList;
-        this.maritalOptions = response.data.marital_status;
+        this.countryList = response.data.country
+        this.countryOptions = this.countryList
+        this.maritalOptions = response.data.marital_status
       })
       .catch(error => {
-        console.log(error);
-      });
+        console.log(error)
+      })
   },
-  data() {
+  data () {
     return {
       // To show Progress bar when loading
       showProgressBar: false,
@@ -156,10 +156,10 @@ export default {
       countryOptions: [],
       countryList: [],
       martialOptions1: [
-        "Never Married",
-        "Divorced",
-        "Widowed",
-        "Awaiting Divorce"
+        'Never Married',
+        'Divorced',
+        'Widowed',
+        'Awaiting Divorce'
       ],
       maritalOptions: [],
       searchParams: {
@@ -171,106 +171,106 @@ export default {
           min: 20,
           max: 30
         },
-        lookingFor: "2",
-        heightFrom: "",
-        heightTo: "",
+        lookingFor: '2',
+        heightFrom: '',
+        heightTo: '',
         maritalStatusPreference: [],
-        country: [{ id: 81, name: "India" }] // defaulted to India
+        country: [{ id: 81, name: 'India' }] // defaulted to India
       }
-    };
+    }
   },
   methods: {
-    ...mapActions("search", ["saveSearchResults"]),
+    ...mapActions('search', ['saveSearchResults']),
 
-    submitSearchForm() {
-      this.showProgressBar = true;
-      //console.log("showProgressBar", this.showProgressBar);
+    submitSearchForm () {
+      this.showProgressBar = true
+      // console.log("showProgressBar", this.showProgressBar);
       this.$refs.searchForm.validate().then(success => {
         if (success) {
           // console.log("Success");
-          this.fetchSearchResults();
+          this.fetchSearchResults()
         } else {
-          console.log("Error");
+          console.log('Error')
         }
-      });
+      })
     },
 
-    async fetchSearchResults() {
+    async fetchSearchResults () {
       // console.log('searchParams', this.searchParams);
-      await this.fetchSearch_fromDB(this.searchParams);
-      this.$emit("fetchSearchResults");
-      this.showProgressBar = false;
-      //console.log("showProgressBar", this.showProgressBar);
+      await this.fetchSearch_fromDB(this.searchParams)
+      this.$emit('fetchSearchResults')
+      this.showProgressBar = false
+      // console.log("showProgressBar", this.showProgressBar);
     },
-    fetchSearch_fromDB(data) {
+    fetchSearch_fromDB (data) {
       return axios
-        .post(process.env.API + "/search", data)
+        .post(process.env.API + '/search', data)
         .then(({ data }) => {
-          //console.log("Search Success", data);
-          this.saveSearchResults(data);
+          // console.log("Search Success", data);
+          this.saveSearchResults(data)
           // Store in Stores
           this.$q.notify({
-            type: "positive",
-            message: "Successfully search"
-          });
+            type: 'positive',
+            message: 'Successfully search'
+          })
         })
         .catch(error => {
-          let errMsg = "";
-          if ("message" in error.response.data) {
+          let errMsg = ''
+          if ('message' in error.response.data) {
             errMsg =
-              error.response.data.error + " - " + error.response.data.message;
+              error.response.data.error + ' - ' + error.response.data.message
           } else {
-            errMsg = error.response.data.error;
+            errMsg = error.response.data.error
           }
-          showErrorMessage(errMsg);
-        });
+          showErrorMessage(errMsg)
+        })
     },
-    createAgeFromToList() {
-      const startAge = 18;
-      const endAge = 60;
-      let a;
+    createAgeFromToList () {
+      const startAge = 18
+      const endAge = 60
+      let a
       for (a = startAge; a <= endAge; a++) {
-        this.ageFromToOptions.push(a);
+        this.ageFromToOptions.push(a)
       }
     },
-    createHeightList() {
+    createHeightList () {
       // create height list when component is created
-      let h;
-      let i;
-      const startHeight = 4;
-      const endHeight = 7;
+      let h
+      let i
+      const startHeight = 4
+      const endHeight = 7
       for (h = startHeight; h <= endHeight; h++) {
         for (i = 0; i <= 12; i++) {
-          this.heightOptions.push(h + " ft " + i + " inches");
+          this.heightOptions.push(h + ' ft ' + i + ' inches')
         }
       }
     },
-    checkHeightTo(heightTo) {
-      const heightFrom = this.searchParams.heightFrom;
+    checkHeightTo (heightTo) {
+      const heightFrom = this.searchParams.heightFrom
       if (heightFrom && heightTo) {
-        return this.compareHeightFromHeightTo(heightFrom, heightTo);
+        return this.compareHeightFromHeightTo(heightFrom, heightTo)
       } else {
-        return true;
+        return true
       }
     },
-    checkHeightFrom(heightFrom) {
-      const heightTo = this.searchParams.heightTo;
+    checkHeightFrom (heightFrom) {
+      const heightTo = this.searchParams.heightTo
       if (heightFrom && heightTo) {
-        return this.compareHeightFromHeightTo(heightFrom, heightTo);
+        return this.compareHeightFromHeightTo(heightFrom, heightTo)
       } else {
-        return true;
+        return true
       }
     },
-    checkCountry(val) {
+    checkCountry (val) {
       // console.log('Check Country',val, val.length);
       if (val.length == 0) {
-        return false;
+        return false
       } else {
-        return true;
+        return true
       }
     }
   }
-};
+}
 </script>
 
 <style>

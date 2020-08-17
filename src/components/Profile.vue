@@ -30,14 +30,14 @@
               <q-item-label>Your Email is <b> {{ userDetail.email }}</b> </q-item-label>
                <q-item-label caption>
                   All notifications from UmiyaMatrimony.com will be sent to this email.
-              </q-item-label>             
-            </q-item-section>   
+              </q-item-label>
+            </q-item-section>
           </q-item>
           <q-item>
 
             <q-item-section>
-              <q-item-label>Your Profile Status is  <b>{{ userDetail.status.name }} </b> 
-              <q-icon class="vertical-middle no-padding no-margin" :name="getIcon" color="primary" size="lg"/> 
+              <q-item-label>Your Profile Status is  <b>{{ userDetail.status.name }} </b>
+              <q-icon class="vertical-middle no-padding no-margin" :name="getIcon" color="primary" size="lg"/>
               </q-item-label>
               <q-item-label caption :lines="3">
                 {{getProfileStatusMessage}}
@@ -48,10 +48,10 @@
             <q-item-section>
               <q-item-label>Your Primary Contact is  <b>{{ userDetail.phonePrimary }} </b> </q-item-label>
               <q-item-label caption :lines="2">
-                You will be contacted by other party on this contact number. 
+                You will be contacted by other party on this contact number.
                 Please ensure to keep your contact number active.
               </q-item-label>
-            </q-item-section>            
+            </q-item-section>
           </q-item>
         </q-item>
 
@@ -62,104 +62,89 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios'
 
 export default {
-  
-  data() {
+
+  data () {
     return {
       // To show Progress bar when loading
       showProgressBar: true,
-      showfield : false,
-      userDetail : { },
+      showfield: false,
+      userDetail: { }
 
     }
-  }
-  ,
-  computed : {
-    getIcon(){
-      let status = this.userDetail.status.name;
-      if(status === 'Registered'){
+  },
+  computed: {
+    getIcon () {
+      const status = this.userDetail.status.name
+      if (status === 'Registered') {
         return 'keyboard'
-      }
-      else if(status === 'Approved'){
+      } else if (status === 'Approved') {
         return 'verified_user'
-      }
-      else if(status === 'Correction'){
+      } else if (status === 'Correction') {
         return 'feedback'
-      }
-      else if(status === 'Deactivated'){
+      } else if (status === 'Deactivated') {
         return 'visibility_off'
-      }
-      else{
+      } else {
         return ''
       }
-    }
-    ,
-    getProfileStatusMessage(){
-      let status = this.userDetail.status.name;
-      if(status === 'Registered'){
-          return 'NEXT STEP > Admin team will approve your profile.Once approved, you can search and contact the other profiles.'
-      }
-      else if(status === 'Approved'){
+    },
+    getProfileStatusMessage () {
+      const status = this.userDetail.status.name
+      if (status === 'Registered') {
+        return 'NEXT STEP > Admin team will approve your profile.Once approved, you can search and contact the other profiles.'
+      } else if (status === 'Approved') {
         return 'NEXT STEP > You can search and contact the other profiles.'
-      }      else if(status === 'Correction'){
+      } else if (status === 'Correction') {
         return 'NEXT STEP > We have sent an email for correction steps. Please ensure that your name and date of birth matches to that in your ID Proof. Please correct your profile so that we can verify and approve.'
-      }
-      else if(status === 'Deactivated'){
+      } else if (status === 'Deactivated') {
         return 'NEXT STEP > We have deactivated your profile. Please contact us to Activate your profile. If your profile will be deactivated for long, we will delete your profile completely.'
-      }
-      else{
+      } else {
         return ''
       }
-
     }
 
-  }
-  ,
-  mounted(){
-    //console.log("mounted")
+  },
+  mounted () {
+    // console.log("mounted")
     this.showProgressBar = true
-    var user = JSON.parse(localStorage.getItem("user"));
-    var userDetail;
-    //console.log(JSON.parse(localStorage.getItem("user")));
-    //console.log(typeof user, user);
-    if(user !== null){
-    var user_details_id = user.user_details_id;
-    //user_details_id is same profile_Id share on UI
-    axios.get(process.env.API + "/users/" + user_details_id)
-      .then(({ data }) => {
-        
-        //console.log("data", data, data.first_name);
+    var user = JSON.parse(localStorage.getItem('user'))
+    var userDetail
+    // console.log(JSON.parse(localStorage.getItem("user")));
+    // console.log(typeof user, user);
+    if (user !== null) {
+      var user_details_id = user.user_details_id
+      // user_details_id is same profile_Id share on UI
+      axios.get(process.env.API + '/users/' + user_details_id)
+        .then(({ data }) => {
+        // console.log("data", data, data.first_name);
 
-        //this code replaces key in data Object from Snake Case to Camel Case
-         this.userDetail = JSON.parse(JSON.stringify(data).replace(
-                /(_\w)\w+":/g,
-                match => match[1].toUpperCase() + match.substring(2)
-              ));
-        //console.log("userDetail", this.userDetail);
-        this.showfield = true; 
-        this.showProgressBar = false;
+          // this code replaces key in data Object from Snake Case to Camel Case
+          this.userDetail = JSON.parse(JSON.stringify(data).replace(
+            /(_\w)\w+":/g,
+            match => match[1].toUpperCase() + match.substring(2)
+          ))
+          // console.log("userDetail", this.userDetail);
+          this.showfield = true
+          this.showProgressBar = false
+        }).catch((error) => {
+        // console.log(error);
+        })
+    } else {
+      this.$q.notify({
+        type: 'negative',
+        multiLine: true,
 
+        message: 'You need to login to access this page.You are redirected to Login Page',
+        icon: 'warning'
 
-  }).catch((error) => {
-        //console.log(error);
-      });
+      })
+      this.$router.push('/login')
     }
-    else{
-        this.$q.notify({
-            type: 'negative',
-            multiLine: true,
+  }
 
-            message: 'You need to login to access this page.You are redirected to Login Page',
-            icon: 'warning'
-
-          })
-          this.$router.push('/login')
-    }
-    }
- 
-};
+}
 </script>
 
 <style>

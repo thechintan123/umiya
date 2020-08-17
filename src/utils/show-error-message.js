@@ -1,13 +1,13 @@
-import { Dialog } from "quasar";
+import { Dialog } from 'quasar'
 
-export function showErrorMessage(errorMessage) {
+export function showErrorMessage (errorMessage) {
   Dialog.create({
     title: "<font color='red'><b><u>Error!</u></b></font>",
     persistent: true,
-    transitionShow: "scale",
-    transitionHide: "scale",
+    transitionShow: 'scale',
+    transitionHide: 'scale',
     message: errorMessage,
-    backgroundColor: "blue",
+    backgroundColor: 'blue',
     html: true
-  });
+  })
 }

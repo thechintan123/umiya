@@ -1,5 +1,4 @@
-import Vue from "vue";
-import { uid } from "quasar";
+import { uid } from 'quasar'
 
 const state = {
   searchResults: {
@@ -295,70 +294,69 @@ const state = {
   },
   page: 1,
   resultsPerPage: 3 // Can Change this
-};
+}
 
 const getters = {
   getSearchResults: state => {
-    return state.searchResults;
+    return state.searchResults
   },
   // Not using this function and SearchResults Pagination component since
   // On changing the page number and calling update Action. It updates page number and it is not
   // able to update the state of the SearchResults
   getSearchResultsPerPage: state => {
     console.log(
-      "getSearchResultsPerPage - page",
+      'getSearchResultsPerPage - page',
       state.page,
       state.resultsPerPage
-    );
-    const keys = Object.keys(state.searchResults);
-    console.log("keys", keys);
-    let selectedKeys;
-    selectedKeys = keys.slice(
+    )
+    const keys = Object.keys(state.searchResults)
+    console.log('keys', keys)
+    const selectedKeys = keys.slice(
       state.page - 1,
       state.page - 1 + state.resultsPerPage
-    );
-    console.log("selectedKeys", selectedKeys);
+    )
+    console.log('selectedKeys', selectedKeys)
     const searchResultsPerPage = Object.assign(
       ...Object.keys(state.searchResults)
         .slice(state.page - 1, state.page - 1 + state.resultsPerPage)
         .map(k => ({ [k]: state.searchResults[k] }))
-    );
-    return searchResultsPerPage;
+    )
+    return searchResultsPerPage
   }
-};
+}
 
 // Not using Action and mutations since on updating page number and state of Search Results is not changed
 const mutations = {
-  updatePageNumber(state, page) {
-    state.page = page;
+  updatePageNumber (state, page) {
+    state.page = page
   },
-  saveSearchResults(state, searchResults) {
+  saveSearchResults (state, searchResults) {
     // console.log('Store Search Results', searchResults)
     // Vue.set(state.tasks, payload.id, payload.task);
     // delete the existing SearchResults Object
     for (var member in state.searchResults) {
-      delete state.searchResults[member];
+      delete state.searchResults[member]
     }
-    //console.log("After Delete State SearchResults", Object.keys(state.searchResults).length);
-    var i;
+    // console.log("After Delete State SearchResults", Object.keys(state.searchResults).length);
+    var i
     for (i = 0; i < searchResults.length; i++) {
-      const newID = uid();
+      const newID = uid()
       // console.log('singleSearch', newID, searchResults[i])
-      state.searchResults[newID] = searchResults[i];
+      state.searchResults[newID] = searchResults[i]
       // console.log('State SearchResults', state.searchResults);
     }
   }
-};
+}
 
 // Not using Action and mutations since on updating page number and state of Search Results is not changed
 const actions = {
-  updatePageNumber({ commit }, page) {
-    commit("updatePageNumber", page);
+  updatePageNumber ({ commit }, page) {
+    commit('updatePageNumber', page)
   },
-  saveSearchResults({ commit }, searchResults) {
-    commit("saveSearchResults", searchResults);
+  saveSearchResults ({ commit }, searchResults) {
+    commit('saveSearchResults', searchResults)
   }
-};
+}
 
 export default {
   namespaced: true,
@@ -366,4 +364,4 @@ export default {
   getters,
   mutations,
   actions
-};
+}

@@ -132,6 +132,10 @@ class UserDetails(db.Model):
         for p in self.partner_marital_status:
             pms.append(p.to_dict())
 
+        upload_photos = []
+        for u in self.upload_photos:
+            upload_photos.append(u.to_dict())
+
         data = {
             'id': self.id,
             'email': self.user.email,
@@ -152,7 +156,6 @@ class UserDetails(db.Model):
             'father_fullname': self.father_fullname,
             'address': self.address,
             'about_yourself': self.about_yourself,
-            # upload photos & proof ?
             'partner_age_from': self.partner_age_from,
             'partner_age_to': self.partner_age_to,
             'partner_height_from': self.partner_height_from,
@@ -161,11 +164,69 @@ class UserDetails(db.Model):
             'where_know': self.where_know.to_dict(),
             'status': self.status.to_dict(),
             'last_login': self.user.last_login.isoformat() + 'Z' if self.user.last_login else None,
+            'upload_proof': self.upload_proof,
+            'upload_photos': upload_photos
         }
         return data
 
+    def from_dict(self, data, new_user=False):
+        if new_user:
+            user = User(email = data['email'])
+            user.set_password(data['password'])
+            self.user = user
+        else:
+            if 'password' in data and data['password'] is not None:
+                self.user.set_password(data['password'])
+                self.user.update_date = datetime.utcnow()
+
+        for key in data:
+            if data[key] is not None and key not in \
+                    ['password', 'country', 'other_country', \
+                    'gotra', 'where_know', 'marital_status', 'gender', \
+                    'dob', 'partner_marital_status']:
+                setattr(self, key, data[key])
+    
+        # had to separate queries and assign to self otherwise SQLachemy seems to commit too early???
+        country = gotra = where_know = marital_status = gender = None
+        partner_marital_status = []
+        if 'country' in data and data['country'] is not None:
+            country = Country.query.filter_by(
+                id=int(data['country']['id'])).first()
+        if 'gotra' in data and data['gotra'] is not None:
+            gotra = Gotra.query.filter_by(id=int(data['gotra']['id'])).first()
+        if 'where_know' in data and data['where_know'] is not None:
+            where_know = WhereKnow.query.filter_by(
+            id=int(data['where_know']['id'])).first()
+        if 'marital_status' in data and data['marital_status'] is not None:
+            marital_status = MaritalStatus.query.filter_by(
+                id=int(data['marital_status']['id'])).first()
+        if 'gender' in data and data['gender'] is not None:
+            gender = Gender.query.filter_by(
+                id=int(data['gender']['id'])).first()
+        if 'partner_marital_status' in data and data['partner_marital_status'] is not None:
+            for pms in data['partner_marital_status']:
+                partner_marital_status.append(MaritalStatus.query.filter_by(id=int(pms['id'])).first())
+        if country is not None:
+            self.country = country
+        if gotra is not None:
+            self.gotra = gotra
+        if where_know is not None:
+            self.where_know = where_know
+        if marital_status is not None:
+            self.marital_status = marital_status
+        if gender is not None:
+            self.gender = gender
+        if 'dob' in data and data['dob'] != '':
+            self.dob = datetime.strptime(data['dob'], '%Y-%m-%d')
+        if len(partner_marital_status) > 0:
+            for pms in partner_marital_status:
+                self.partner_marital_status.append(pms)
+
+        self.update_date = datetime.utcnow()
+        
     def __repr__(self):
         return '<UserDetails {}>'.format(self.first_name)
+
 
 
 class ProfileStatus(db.Model):
@@ -190,6 +251,9 @@ class UploadPhotos(db.Model):
         'user_details.id'), nullable=False)
     update_date = db.Column(
         db.DateTime, default=datetime.utcnow, nullable=False)
+
+    def to_dict(self):
+        return {'id': self.id, 'user_details_id': self.user_details_id, 'filename': self.filename}
 
     def __repr__(self):
         return '<UploadPhotos {}>'.format(self.filename)

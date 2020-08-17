@@ -122,51 +122,51 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
-import mixinComputations from "src/mixins/Mixin_Computations.js";
+import { mapGetters, mapState } from 'vuex'
+import mixinComputations from 'src/mixins/Mixin_Computations.js'
 
 export default {
   mixins: [mixinComputations],
   components: {
-    "search-results-photo-slide": require("components/SearchResultsPhotoSlide.vue")
-      .default,
+    'search-results-photo-slide': require('components/SearchResultsPhotoSlide.vue')
+      .default
   },
 
-  props: ["searchResults"],
-  data() {
+  props: ['searchResults'],
+  data () {
     return {
-      slide: "first",
-      loggedIn: false,
-    };
+      slide: 'first',
+      loggedIn: false
+    }
   },
   methods: {
-    checkLoggedIn() {
-      const user = localStorage.getItem("user");
-      //console.log(user);
+    checkLoggedIn () {
+      const user = localStorage.getItem('user')
+      // console.log(user);
       if (user) {
-        this.loggedIn = true;
+        this.loggedIn = true
       } else {
-        this.loggedIn = false;
+        this.loggedIn = false
       }
-    },
+    }
   },
   filters: {
-    convertHeightToFoot(heightInCms) {
-      var heigthInInches = heightInCms * 0.39;
-      var heightInFeet = Math.trunc(heigthInInches / 12);
-      var onlyInches = Math.trunc(heigthInInches - heightInFeet * 12);
-      //console.log(heightInFeet, onlyInches, heigthInInches);
-      return heightInFeet + " feet " + onlyInches + " inches";
+    convertHeightToFoot (heightInCms) {
+      var heigthInInches = heightInCms * 0.39
+      var heightInFeet = Math.trunc(heigthInInches / 12)
+      var onlyInches = Math.trunc(heigthInInches - heightInFeet * 12)
+      // console.log(heightInFeet, onlyInches, heigthInInches);
+      return heightInFeet + ' feet ' + onlyInches + ' inches'
     },
-    convertToDate(val) {
-      //console.log('ConvertToDate', val);
-      return val.substring(0, 17);
-    },
+    convertToDate (val) {
+      // console.log('ConvertToDate', val);
+      return val.substring(0, 17)
+    }
   },
-  created() {
-    this.checkLoggedIn();
-  },
-};
+  created () {
+    this.checkLoggedIn()
+  }
+}
 </script>
 
 <style>

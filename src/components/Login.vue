@@ -88,7 +88,7 @@ export default {
           this.$router.push('/profile')
         })
         .catch(error => {
-          //console.log('error',error);
+          // console.log('error',error);
           let errMsg = ''
           if ('message' in error.response.data) {
             errMsg = error.response.data.error + ' - ' + error.response.data.message
@@ -96,7 +96,6 @@ export default {
             errMsg = error.response.data.error
           }
           showErrorMessage(errMsg)
-          
         })
     }
   }

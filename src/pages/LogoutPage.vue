@@ -5,25 +5,23 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from 'vuex'
 
 export default {
-methods:{
-...mapActions("auth", ["logoutUser"]),
-    logout() {
-      this.logoutUser();
+  methods: {
+    ...mapActions('auth', ['logoutUser']),
+    logout () {
+      this.logoutUser()
       this.$q.notify({
-        type: "positive",
-        message: "Thank you. You have succesfully logged out",
-      });
-     this.$router.push('/')
-
+        type: 'positive',
+        message: 'Thank you. You have succesfully logged out'
+      })
+      this.$router.push('/')
     }
-}
-,
-mounted(){
-    this.logout();
-}
+  },
+  mounted () {
+    this.logout()
+  }
 }
 </script>
 

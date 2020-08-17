@@ -127,36 +127,36 @@
 
 <script>
 export default {
-  name: "PageIndex",
-  data() {
+  name: 'PageIndex',
+  data () {
     return {
       slide: 1,
       cardDetails: [
         {
-          icon: "fas fa-search",
-          title: "Easy Search",
-          subtitle: "Easy Search based on Age, Health and Country.",
+          icon: 'fas fa-search',
+          title: 'Easy Search',
+          subtitle: 'Easy Search based on Age, Health and Country.'
         },
         {
-          icon: "fas fa-search",
-          title: "Easy Search",
-          subtitle: "Easy Search based on Age, Health and Country.",
+          icon: 'fas fa-search',
+          title: 'Easy Search',
+          subtitle: 'Easy Search based on Age, Health and Country.'
         },
         {
-          icon: "fas fa-search",
-          title: "Easy Search",
-          subtitle: "Easy Search based on Age, Health and Country.",
-        },
-      ],
-    };
+          icon: 'fas fa-search',
+          title: 'Easy Search',
+          subtitle: 'Easy Search based on Age, Health and Country.'
+        }
+      ]
+    }
   },
   methods: {
-    register() {
-      console.log("Register");
-      this.$router.push("register");
-    },
-  },
-};
+    register () {
+      console.log('Register')
+      this.$router.push('register')
+    }
+  }
+}
 </script>
 
 <style>
