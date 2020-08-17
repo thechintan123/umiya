@@ -49,12 +49,10 @@ export default {
   methods: {
     checkPage () {
       // use slice of Objects.keys(as array). Pass allowed keys as array to SearchResults
-      const keys = Object.keys(this.searchResultsList)
-      let selectedKeys
-      let startingIndex, endingIndex
-      startingIndex = (this.page - 1) * this.resultsPerPage
-      endingIndex = startingIndex + this.resultsPerPage
-      selectedKeys = keys.slice(startingIndex, endingIndex)
+      // const keys = Object.keys(this.searchResultsList)
+      const startingIndex = (this.page - 1) * this.resultsPerPage
+      const endingIndex = startingIndex + this.resultsPerPage
+      // const selectedKeys = keys.slice(startingIndex, endingIndex)
       // console.log("Page", this.page, startingIndex, endingIndex);
       this.searchResultsPerPage = Object.assign(
         ...Object.keys(this.searchResultsList)
@@ -94,9 +92,8 @@ export default {
   },
   components: {
     searchForm: require('components/SearchForm.vue').default,
-    searchResults: require('components/SearchResults.vue').default,
-    searchResultsPagination: require('components/SearchResultsPagination.vue')
-      .default
+    searchResults: require('components/SearchResults.vue').default
+    // searchResultsPagination: require('components/SearchResultsPagination.vue').default
   }
 }
 </script>

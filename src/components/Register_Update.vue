@@ -607,12 +607,12 @@
 
         <q-tab-panel name="upload">
           <q-form ref="uploadForm" greedy>
-            
+
           <div class="q-mb-xs" >
-            <q-toggle 
-            v-model="updatePhoto" 
-            checked-icon="check" 
-            color="green" unchecked-icon="clear" 
+            <q-toggle
+            v-model="updatePhoto"
+            checked-icon="check"
+            color="green" unchecked-icon="clear"
             label="Do you want to update Photos?"
             @input="getPhotos"
             />
@@ -643,19 +643,17 @@
     </q-slide-transition>
                 </div>
 
-
             <div class="q-mb-xs" >
 
-            <q-toggle 
-            v-model="updateProof" 
-            checked-icon="check" 
-            color="green" unchecked-icon="clear" 
+            <q-toggle
+            v-model="updateProof"
+            checked-icon="check"
+            color="green" unchecked-icon="clear"
             label="Do you want to update Proofs?"
             @input="getProof"
             />
 
         <q-slide-transition>
-
 
               <q-field
                 error-message="Please upload ID Proof."
@@ -680,10 +678,9 @@
               </q-field>
 
         </q-slide-transition>
-                    <p v-if = "formData.status.name === 'Approved'"> 
+                    <p v-if = "formData.status.name === 'Approved'">
               Your profile is already Approved so you cannot update your ID Proof</p>
                     </div>
-
 
             <div class="row">
               <q-btn color="secondary" flat label="Back" @click="tab = 'personal'" />
@@ -691,7 +688,6 @@
               <q-btn v-if="updateProfile" color="primary" label="Update"  @click="updateForm"/>
 
               <q-btn v-else color="primary" label="Submit" @click="submitForm" />
-
 
             </div>
           </q-form>
@@ -702,41 +698,41 @@
 </template>
 
 <script>
-import axios from "axios";
-import mixinFormValidations from "src/mixins/Mixin_FormValidations.js";
-import mixinComputations from "src/mixins/Mixin_Computations.js";
-import { showErrorMessage } from "src/utils/show-error-message";
-import { mapState } from "vuex";
+import axios from 'axios'
+import mixinFormValidations from 'src/mixins/Mixin_FormValidations.js'
+import mixinComputations from 'src/mixins/Mixin_Computations.js'
+import { showErrorMessage } from 'src/utils/show-error-message'
+import { mapState } from 'vuex'
 
 export default {
   mixins: [mixinFormValidations, mixinComputations],
-  //This prop is for UpDateProfile. It will be true for UpdateProfile
-  props: ["updateProfile"],
-  data() {
+  // This prop is for UpDateProfile. It will be true for UpdateProfile
+  props: ['updateProfile'],
+  data () {
     return {
       // upload url
-      uploadURL: process.env.API + "/upload",
+      uploadURL: process.env.API + '/upload',
 
-      //to show Progress Bar between click of Submit Button and Success Registrion,
+      // to show Progress Bar between click of Submit Button and Success Registrion,
       showProgressBar: false,
 
-      //to show Registration form or Success message
+      // to show Registration form or Success message
       successRegistration: false,
 
       // Form Settings
       isPwd: true,
-      tab: "basic",
-      imageSrc: "",
+      tab: 'basic',
+      imageSrc: '',
       dense: true,
       basicHasError: false,
       personalHasError: false,
       uploadHasError: false,
 
-      //Error for Photo and Proofs
+      // Error for Photo and Proofs
       isErrorProof: false,
       isErrorPhoto: false,
 
-      user_details_id: "",
+      user_details_id: '',
       // this user_details_id is populated after user is registered in DB - user_details.
       // This is same as id in user_details DB table
       // This is visile as profile ID on screen
@@ -751,218 +747,218 @@ export default {
       gotraOptions: [],
       sourceOfWebsiteOptions: [],
 
-      //this is to default ageFrom and ageTo. Defaulting to 5 years
+      // this is to default ageFrom and ageTo. Defaulting to 5 years
       ageDifference: 5,
       heightDifference: 12,
-      heightDifference: 15.24, //15.24 cms is 6 inches
+      heightDifference: 15.24, // 15.24 cms is 6 inches
 
-      //For testing Purpose only
+      // For testing Purpose only
       testingMode: true,
 
       // testData for Defaulting Option
       testData: {
-        email: "test9@test.com",
-        password: "password",
-        confirmPassword: "password",
-        firstName: "first",
-        lastName: "last",
-        gender: { id: 1, name: "Male" },
-        dateOfBirth: "1983-09-01",
+        email: 'test9@test.com',
+        password: 'password',
+        confirmPassword: 'password',
+        firstName: 'first',
+        lastName: 'last',
+        gender: { id: 1, name: 'Male' },
+        dateOfBirth: '1983-09-01',
         age: 36,
-        country: "India",
-        otherCountry: "",
-        state: "state",
-        city: "city",
-        primaryContact: "11111111111",
-        alternateContact: "22222222222",
-        maritalStatus: { id: 1, name: "Never Married" },
-        height: "5 ft 0 inch",
-        heightCms: "",
-        gotra: { id: 1, name: "Aditya" },
-        originalSurname: "Surname",
-        fatherName: "father",
-        residentialAddress: "address",
-        aboutYourself: "about yourself",
-        partnerAgeFrom: "30",
-        partnerAgeTo: "40",
-        partnerHeightFrom: "5 ft 0 inch",
-        partnerHeightFromCms: "",
-        partnerHeightTo: "6 ft 0 inch",
-        partnerHeightToCms: "",
-        partnerMartialStatus: [{ id: 1, name: "Never Married" }],
+        country: 'India',
+        otherCountry: '',
+        state: 'state',
+        city: 'city',
+        primaryContact: '11111111111',
+        alternateContact: '22222222222',
+        maritalStatus: { id: 1, name: 'Never Married' },
+        height: '5 ft 0 inch',
+        heightCms: '',
+        gotra: { id: 1, name: 'Aditya' },
+        originalSurname: 'Surname',
+        fatherName: 'father',
+        residentialAddress: 'address',
+        aboutYourself: 'about yourself',
+        partnerAgeFrom: '30',
+        partnerAgeTo: '40',
+        partnerHeightFrom: '5 ft 0 inch',
+        partnerHeightFromCms: '',
+        partnerHeightTo: '6 ft 0 inch',
+        partnerHeightToCms: '',
+        partnerMartialStatus: [{ id: 1, name: 'Never Married' }],
         agreeTc: true,
-        sourceOfWebsite: { id: 1, name: "Friends" },
+        sourceOfWebsite: { id: 1, name: 'Friends' }
       },
       testTmpData: {
-        primaryContact: "11111111111",
-        primaryContactCountryCode: "91",
-        alternateContactCountryCode: "91",
-        alternateContact: "22222222222",
+        primaryContact: '11111111111',
+        primaryContactCountryCode: '91',
+        alternateContactCountryCode: '91',
+        alternateContact: '22222222222'
       },
 
-      //form fields
+      // form fields
       formData: {
-        email: "",
-        password: "",
-        confirmPassword: "",
-        firstName: "",
-        lastName: "",
-        gender: "",
-        dateOfBirth: "",
+        email: '',
+        password: '',
+        confirmPassword: '',
+        firstName: '',
+        lastName: '',
+        gender: '',
+        dateOfBirth: '',
         age: 0,
-        country: "India",
-        otherCountry: "",
-        state: "",
-        city: "",
-        primaryContact: "",
-        alternateContact: "",
-        maritalStatus: "",
-        height: "",
-        heightCms: "",
-        gotra: "",
-        originalSurname: "",
-        fatherName: "",
-        residentialAddress: "",
-        aboutYourself: "",
-        partnerAgeFrom: "",
-        partnerAgeTo: "",
-        partnerHeightFrom: "",
-        partnerHeightFromCms: "",
-        partnerHeightTo: "",
-        partnerHeightToCms: "",
+        country: 'India',
+        otherCountry: '',
+        state: '',
+        city: '',
+        primaryContact: '',
+        alternateContact: '',
+        maritalStatus: '',
+        height: '',
+        heightCms: '',
+        gotra: '',
+        originalSurname: '',
+        fatherName: '',
+        residentialAddress: '',
+        aboutYourself: '',
+        partnerAgeFrom: '',
+        partnerAgeTo: '',
+        partnerHeightFrom: '',
+        partnerHeightFromCms: '',
+        partnerHeightTo: '',
+        partnerHeightToCms: '',
         partnerMartialStatus: [],
         agreeTc: false,
-        sourceOfWebsite: "",
+        sourceOfWebsite: ''
       },
 
-      //This fields are used to later club them into form fields of primaryContact and alternateContcts
+      // This fields are used to later club them into form fields of primaryContact and alternateContcts
       tmpData: {
-        primaryContact: "",
-        primaryContactCountryCode: "",
-        alternateContactCountryCode: "",
-        alternateContact: "",
+        primaryContact: '',
+        primaryContactCountryCode: '',
+        alternateContactCountryCode: '',
+        alternateContact: ''
       },
 
-      //These fields are used for updateProfile
-      updatePhoto : false,
-      updateProof : false
-    };
+      // These fields are used for updateProfile
+      updatePhoto: false,
+      updateProof: false
+    }
   },
   computed: {
-    ...mapState("auth", ["loggedIn"]),
+    ...mapState('auth', ['loggedIn'])
   },
   methods: {
-    //This is for testing purpose. To default the fields on click on default Button
-    defaultFields() {
-      this.formData = this.testData;
-      this.tmpData = this.testTmpData;
-      //defaults email with random string
+    // This is for testing purpose. To default the fields on click on default Button
+    defaultFields () {
+      this.formData = this.testData
+      this.tmpData = this.testTmpData
+      // defaults email with random string
       this.formData.email =
-        "test" + Math.random().toString(20).substr(2, 6) + "@test.com";
+        'test' + Math.random().toString(20).substr(2, 6) + '@test.com'
     },
-    tabChange() {
-      if (this.tab === "basic" && this.basicHasError) {
-        this.$refs.basicForm.validate();
-      } else if (this.tab === "personal" && this.personalHasError) {
-        this.$refs.personalForm.validate();
+    tabChange () {
+      if (this.tab === 'basic' && this.basicHasError) {
+        this.$refs.basicForm.validate()
+      } else if (this.tab === 'personal' && this.personalHasError) {
+        this.$refs.personalForm.validate()
       }
     },
-    submitBasicForm() {
+    submitBasicForm () {
       this.$refs.basicForm.validate().then((success) => {
         if (success) {
-          this.basicHasError = false;
-          this.tab = "personal";
+          this.basicHasError = false
+          this.tab = 'personal'
         } else {
-          this.basicHasError = true;
+          this.basicHasError = true
         }
-      });
+      })
     },
-    submitPersonalForm() {
+    submitPersonalForm () {
       this.$refs.personalForm.validate().then((success) => {
         if (success) {
-          this.personalHasError = false;
-          this.tab = "upload";
+          this.personalHasError = false
+          this.tab = 'upload'
         } else {
-          this.personalHasError = true;
+          this.personalHasError = true
         }
-      });
+      })
     },
-    registerUser(data) {
+    registerUser (data) {
       return axios
-        .post(process.env.API + "/users", data)
+        .post(process.env.API + '/users', data)
         .then(({ data }) => {
-          //console.log("Register User", data);
-          this.user_details_id = data.user_details_id;
+          // console.log("Register User", data);
+          this.user_details_id = data.user_details_id
 
-          //console.log("this.user_details_id", this.user_details_id, typeof(data));
+          // console.log("this.user_details_id", this.user_details_id, typeof(data));
 
           this.$q.notify({
-            type: "positive",
-            message: "Successfully registered",
-          });
+            type: 'positive',
+            message: 'Successfully registered'
+          })
           /* this.$router.push('/login') */
         })
         .catch((error) => {
-          let errMsg = "";
-          if ("message" in error.response.data) {
-            //errMsg = error.response.data.error + " - " + error.response.data.message;
+          let errMsg = ''
+          if ('message' in error.response.data) {
+            // errMsg = error.response.data.error + " - " + error.response.data.message;
 
-            errMsg = error.response.data.message;
+            errMsg = error.response.data.message
           } else {
-            errMsg = error.response.data.error;
+            errMsg = error.response.data.error
           }
-          //console.log(errMsg);
-          showErrorMessage(errMsg);
-        });
+          // console.log(errMsg);
+          showErrorMessage(errMsg)
+        })
     },
 
-    checkPhoto() {
-      //console.log("Photo", this.$refs.photo);
-      //console.log(this.$refs.photo.files.length);
+    checkPhoto () {
+      // console.log("Photo", this.$refs.photo);
+      // console.log(this.$refs.photo.files.length);
       if (this.$refs.photo.files.length > 4) {
-        this.$refs.photo.files.length = 4; // This will reduce the allowed files to 4 photos;
+        this.$refs.photo.files.length = 4 // This will reduce the allowed files to 4 photos;
         this.$q.notify({
-          type: "negative",
-          message: `Only 4 Photos are allowed. Addtional ones are removed`,
-        });
+          type: 'negative',
+          message: 'Only 4 Photos are allowed. Addtional ones are removed'
+        })
       } else if (this.$refs.photo.files.length === 0) {
-        this.isErrorPhoto = true;
-        //this.uploadHasError = true;
+        this.isErrorPhoto = true
+        // this.uploadHasError = true;
       } else {
-        this.isErrorPhoto = false;
-        //this.uploadHasError = true;
+        this.isErrorPhoto = false
+        // this.uploadHasError = true;
       }
     },
-    checkProof() {
-      //console.log("Proof", this.$refs.photo);
-      //console.log(this.$refs.photo.files.length);
+    checkProof () {
+      // console.log("Proof", this.$refs.photo);
+      // console.log(this.$refs.photo.files.length);
 
       if (this.$refs.proof.files.length === 0) {
-        this.isErrorProof = true;
-        //this.uploadHasError = true;
+        this.isErrorProof = true
+        // this.uploadHasError = true;
       } else {
-        this.isErrorProof = false;
-        //this.uploadHasError = true;
+        this.isErrorProof = false
+        // this.uploadHasError = true;
       }
     },
-    async submitForm() {
-      this.showProgressBar = true;
+    async submitForm () {
+      this.showProgressBar = true
 
-      //console.log('SubmitForm', this.$refs);
+      // console.log('SubmitForm', this.$refs);
 
-      if (typeof this.$refs.basicForm === "undefined") {
-        this.basicHasError = true;
+      if (typeof this.$refs.basicForm === 'undefined') {
+        this.basicHasError = true
       } else {
-        this.submitBasicForm();
+        this.submitBasicForm()
       }
-      if (typeof this.$refs.personalForm === "undefined") {
-        this.personalHasError = true;
+      if (typeof this.$refs.personalForm === 'undefined') {
+        this.personalHasError = true
       } else {
-        this.submitPersonalForm();
+        this.submitPersonalForm()
       }
 
-      this.checkPhoto();
-      this.checkProof();
+      this.checkPhoto()
+      this.checkProof()
 
       if (
         !this.basicHasError &&
@@ -971,490 +967,483 @@ export default {
         !this.isErrorProof
       ) {
         this.formData.primaryContact =
-          "+" +
+          '+' +
           this.tmpData.primaryContactCountryCode +
-          " " +
-          this.tmpData.primaryContact;
+          ' ' +
+          this.tmpData.primaryContact
         this.formData.alternateContact =
-          "+" +
+          '+' +
           this.tmpData.alternateContactCountryCode +
-          " " +
-          this.tmpData.alternateContact;
+          ' ' +
+          this.tmpData.alternateContact
 
-        //console.log("Submit form 1", this.formData);
-        //convert Height To Cms
+        // console.log("Submit form 1", this.formData);
+        // convert Height To Cms
         this.formData.partnerHeightFromCms = this.convertHeightToCms(
           this.formData.partnerHeightFrom
-        );
+        )
         this.formData.partnerHeightToCms = this.convertHeightToCms(
           this.formData.partnerHeightTo
-        );
-        if (this.formData.heightCms === "") {
+        )
+        if (this.formData.heightCms === '') {
           this.formData.heightCms = this.convertpartnerHeightToCms(
             this.formData.height
-          );
+          )
         }
 
-        //console.log("Submit Form", this.formData);
+        // console.log("Submit Form", this.formData);
 
-        await this.registerUser(this.formData);
+        await this.registerUser(this.formData)
 
-        if (this.user_details_id !== "") {
-          this.$refs.photo.upload();
-          this.$refs.proof.upload();
-          this.successRegistration = true;
+        if (this.user_details_id !== '') {
+          this.$refs.photo.upload()
+          this.$refs.proof.upload()
+          this.successRegistration = true
         }
       }
-      this.showProgressBar = false;
+      this.showProgressBar = false
     },
-    createHeightList() {
+    createHeightList () {
       // create height list when component is created
-      let h;
-      let i;
-      const startHeight = 4;
-      const endHeight = 7;
+      let h
+      let i
+      const startHeight = 4
+      const endHeight = 7
       for (h = startHeight; h <= endHeight; h++) {
         for (i = 0; i <= 11; i++) {
-          this.heightOptions.push(h + " ft " + i + " inches");
+          this.heightOptions.push(h + ' ft ' + i + ' inches')
         }
       }
     },
-    createAgeFromToList() {
-      const startAge = 18;
-      const endAge = 60;
-      let a;
+    createAgeFromToList () {
+      const startAge = 18
+      const endAge = 60
+      let a
       for (a = startAge; a <= endAge; a++) {
-        this.ageFromToOptions.push(a);
+        this.ageFromToOptions.push(a)
       }
     },
-    calculateAge() {
-      this.formData.age = this.computeAge(this.formData.dateOfBirth);
-      this.defaultAgeFromAgeTo();
+    calculateAge () {
+      this.formData.age = this.computeAge(this.formData.dateOfBirth)
+      this.defaultAgeFromAgeTo()
     },
 
-    defaultHeightAgeFromTo() {
-      this.defaultAgeFromAgeTo();
-      this.defaultHeightFromHeightTo();
+    defaultHeightAgeFromTo () {
+      this.defaultAgeFromAgeTo()
+      this.defaultHeightFromHeightTo()
     },
-    defaultAgeFromAgeTo() {
-      //console.log("Gender", this.formData.gender);
-      if (this.formData.age !== "") {
-        if (this.formData.gender.name == "Male") {
-          //Defaulting Age for Partner
-          this.formData.partnerAgeFrom = this.formData.age - this.ageDifference;
-          this.formData.ageTo = this.formData.age;
-        } else if (this.formData.gender.name == "Female") {
-          //Defaulting Age for Partner
-          this.formData.partnerAgeFrom = this.formData.age;
-          this.formData.ageTo = this.formData.age + this.ageDifference;
+    defaultAgeFromAgeTo () {
+      // console.log("Gender", this.formData.gender);
+      if (this.formData.age !== '') {
+        if (this.formData.gender.name == 'Male') {
+          // Defaulting Age for Partner
+          this.formData.partnerAgeFrom = this.formData.age - this.ageDifference
+          this.formData.ageTo = this.formData.age
+        } else if (this.formData.gender.name == 'Female') {
+          // Defaulting Age for Partner
+          this.formData.partnerAgeFrom = this.formData.age
+          this.formData.ageTo = this.formData.age + this.ageDifference
         } else {
-          this.formData.partnerAgeFrom = "";
-          this.formData.ageTo = "";
+          this.formData.partnerAgeFrom = ''
+          this.formData.ageTo = ''
         }
       } else {
-        this.formData.partnerAgeFrom = "";
-        this.formData.ageTo = "";
+        this.formData.partnerAgeFrom = ''
+        this.formData.ageTo = ''
       }
     },
-    defaultHeightFromHeightTo() {
-      this.formData.heightCms = this.convertHeightToCms(this.formData.height);
-      var heightCms = this.formData.heightCms;
-      var heightFromCms, heightToCms;
-      this.convertHeightToFtInch(heightCms);
-      if (this.formData.gender.name == "Male") {
-        //Defaulting Age for Partner
-        heightFromCms = heightCms - this.heightDifference;
-        heightToCms = heightCms;
-      } else if (this.formData.gender.name == "Female") {
-        //Defaulting Age for Partner
-        heightFromCms = heightCms;
-        heightToCms = heightCms + this.heightDifference;
+    defaultHeightFromHeightTo () {
+      this.formData.heightCms = this.convertHeightToCms(this.formData.height)
+      var heightCms = this.formData.heightCms
+      var heightFromCms, heightToCms
+      this.convertHeightToFtInch(heightCms)
+      if (this.formData.gender.name == 'Male') {
+        // Defaulting Age for Partner
+        heightFromCms = heightCms - this.heightDifference
+        heightToCms = heightCms
+      } else if (this.formData.gender.name == 'Female') {
+        // Defaulting Age for Partner
+        heightFromCms = heightCms
+        heightToCms = heightCms + this.heightDifference
       } else {
-        heightFromCms = heightCms;
-        heightToCms = heightCms;
+        heightFromCms = heightCms
+        heightToCms = heightCms
       }
-      this.formData.partnerHeightFromCms = heightFromCms;
-      this.formData.partnerHeightToCms = heightToCms;
+      this.formData.partnerHeightFromCms = heightFromCms
+      this.formData.partnerHeightToCms = heightToCms
       this.formData.partnerHeightFrom = this.convertHeightToFtInch(
         heightFromCms
-      );
-      this.formData.partnerHeightTo = this.convertHeightToFtInch(heightToCms);
+      )
+      this.formData.partnerHeightTo = this.convertHeightToFtInch(heightToCms)
     },
 
-    defaultPartnerMartialStatus() {
-      //console.log("Martial Status", this.formData.maritalStatus);
-      //console.log("MSP", this.formData.partnerMartialStatus);
-      this.formData.partnerMartialStatus.length = 0;
-      this.formData.partnerMartialStatus.push(this.formData.maritalStatus);
+    defaultPartnerMartialStatus () {
+      // console.log("Martial Status", this.formData.maritalStatus);
+      // console.log("MSP", this.formData.partnerMartialStatus);
+      this.formData.partnerMartialStatus.length = 0
+      this.formData.partnerMartialStatus.push(this.formData.maritalStatus)
     },
-    convertHeightToCms(heightFtInch) {
-      var heightFt = heightFtInch.substr(0, 1);
-      var heightInches = heightFtInch.substr(5, 7);
-      //console.log("Height Ft Inch", heightFt, heightInches);
+    convertHeightToCms (heightFtInch) {
+      var heightFt = heightFtInch.substr(0, 1)
+      var heightInches = heightFtInch.substr(5, 7)
+      // console.log("Height Ft Inch", heightFt, heightInches);
       var heightCms =
-        parseFloat(heightFt) * 30.48 + parseFloat(heightInches) * 2.54;
-      //console.log("heightCms", heightCms);
-      return heightCms;
+        parseFloat(heightFt) * 30.48 + parseFloat(heightInches) * 2.54
+      // console.log("heightCms", heightCms);
+      return heightCms
     },
-    convertHeightToFtInch(heightCms) {
-      var heightTotalInches = heightCms * 0.393701;
-      var heightFt = Math.floor(heightTotalInches / 12);
-      var heightInches = Math.floor(heightTotalInches - heightFt * 12);
-      console.log("Height Ft Inch", heightFt, heightInches);
-      return heightFt + " ft " + heightInches + " inches";
+    convertHeightToFtInch (heightCms) {
+      var heightTotalInches = heightCms * 0.393701
+      var heightFt = Math.floor(heightTotalInches / 12)
+      var heightInches = Math.floor(heightTotalInches - heightFt * 12)
+      console.log('Height Ft Inch', heightFt, heightInches)
+      return heightFt + ' ft ' + heightInches + ' inches'
     },
-    checkOtherCountry(otherCountry) {
-      if (this.formData.country === "Other" && otherCountry === null) {
-        return false;
+    checkOtherCountry (otherCountry) {
+      if (this.formData.country === 'Other' && otherCountry === null) {
+        return false
       } else {
-        return true;
+        return true
       }
     },
-    checkConfirmPassword(confirmPassword) {
+    checkConfirmPassword (confirmPassword) {
       if (this.formData.password === confirmPassword) {
-        return true;
+        return true
       } else {
-        return false;
+        return false
       }
     },
-    checkAgeTo(ageTo) {
+    checkAgeTo (ageTo) {
       if (ageTo < this.formData.partnerAgeFrom) {
-        return false;
+        return false
       } else {
-        return true;
+        return true
       }
     },
-    checkAgeFrom(partnerAgeFrom) {
+    checkAgeFrom (partnerAgeFrom) {
       if (partnerAgeFrom > this.formData.ageTo) {
-        return false;
+        return false
       } else {
-        return true;
+        return true
       }
     },
-    checkHeightTo(heightTo) {
-      const heightFrom = this.formData.partnerHeightFrom;
+    checkHeightTo (heightTo) {
+      const heightFrom = this.formData.partnerHeightFrom
       if (heightFrom && heightTo) {
-        return this.compareHeightFromHeightTo(heightFrom, heightTo);
+        return this.compareHeightFromHeightTo(heightFrom, heightTo)
       } else {
-        return true;
+        return true
       }
     },
-    checkHeightFrom(heightFrom) {
-      const heightTo = this.formData.heightTo;
+    checkHeightFrom (heightFrom) {
+      const heightTo = this.formData.heightTo
       if (heightFrom && heightTo) {
-        return this.compareHeightFromHeightTo(heightFrom, heightTo);
+        return this.compareHeightFromHeightTo(heightFrom, heightTo)
       } else {
-        return true;
+        return true
       }
     },
-    uploadImage(fd, file) {
+    uploadImage (fd, file) {
       return axios
-        .post(process.env.API + "/upload", fd, {
+        .post(process.env.API + '/upload', fd, {
           headers: {
-            "Content-Type": "multipart/form-data",
-          },
+            'Content-Type': 'multipart/form-data'
+          }
         })
         .then((resolve) => {
-          //console.log("uploadImage - Then");
+          // console.log("uploadImage - Then");
           this.$q.notify({
-            type: "positive",
-            message: file + " successfully uploaded",
-          });
+            type: 'positive',
+            message: file + ' successfully uploaded'
+          })
         })
         .catch((error) => {
-          let errMsg = "";
-          if ("message" in error.response.data) {
-            //errMsg = error.response.data.error + " - " + error.response.data.message;
-            errMsg = rror.response.data.message;
+          let errMsg = ''
+          if ('message' in error.response.data) {
+            // errMsg = error.response.data.error + " - " + error.response.data.message;
+            errMsg = rror.response.data.message
           } else {
-            errMsg = error.response.data.error;
+            errMsg = error.response.data.error
           }
-          showErrorMessage(errMsg);
-          //console.log("uploadImage - Error - Error Message", errMsg);
-        });
+          showErrorMessage(errMsg)
+          // console.log("uploadImage - Error - Error Message", errMsg);
+        })
     },
-    async uploadPhoto(file) {
-      const fd = new FormData();
-      fd.append("file", file[0]);
-      fd.append("filetype", "photo");
-      fd.append("user_details_id", this.user_details_id);
-      //console.log("Upload Photo", fd, file);
-      await this.uploadImage(fd, "Photo");
+    async uploadPhoto (file) {
+      const fd = new FormData()
+      fd.append('file', file[0])
+      fd.append('filetype', 'photo')
+      fd.append('user_details_id', this.user_details_id)
+      // console.log("Upload Photo", fd, file);
+      await this.uploadImage(fd, 'Photo')
     },
-    async uploadProof(file) {
-      const fd = new FormData();
-      fd.append("file", file[0]);
-      fd.append("filetype", "proof");
-      fd.append("user_details_id", this.user_details_id);
-      //console.log("Upload Proof", fd, file[0]);
-      await this.uploadImage(fd, "Proof");
+    async uploadProof (file) {
+      const fd = new FormData()
+      fd.append('file', file[0])
+      fd.append('filetype', 'proof')
+      fd.append('user_details_id', this.user_details_id)
+      // console.log("Upload Proof", fd, file[0]);
+      await this.uploadImage(fd, 'Proof')
     },
-    filterOtherCountry(val, update, abort) {
+    filterOtherCountry (val, update, abort) {
       update(() => {
-        const needle = val.toLowerCase();
-        const countryListFiltered = [];
+        const needle = val.toLowerCase()
+        const countryListFiltered = []
         for (const country of this.countryList) {
           // console.log('country',country);
-          const countryNameLowerCase = country.name.toLowerCase();
+          const countryNameLowerCase = country.name.toLowerCase()
           if (countryNameLowerCase.includes(needle)) {
-            countryListFiltered.push(country);
+            countryListFiltered.push(country)
           }
         }
         // console.log('countryListFiltered', countryListFiltered);
-        this.countryOptions = countryListFiltered;
-      });
+        this.countryOptions = countryListFiltered
+      })
     },
-    //Photo Upload - Error Message
-    onRejected(rejectedEntries) {
+    // Photo Upload - Error Message
+    onRejected (rejectedEntries) {
       // Notify plugin needs to be installed
       // https://quasar.dev/quasar-plugins/notify#Installation
       this.$q.notify({
-        type: "negative",
-        message: `${rejectedEntries.length} file(s) did not pass validation constraints`,
-      });
+        type: 'negative',
+        message: `${rejectedEntries.length} file(s) did not pass validation constraints`
+      })
     },
 
-    //For Update Profile
-    getUserDetail() {
-      var user = JSON.parse(localStorage.getItem("user"));
-      var userDetail;
-      //console.log(JSON.parse(localStorage.getItem("user")));
-      //var keysArray = Object.keys(user);
-      //console.log(typeof user, user, user.email, user.user_details_id);
+    // For Update Profile
+    getUserDetail () {
+      var user = JSON.parse(localStorage.getItem('user'))
+      var userDetail
+      // console.log(JSON.parse(localStorage.getItem("user")));
+      // var keysArray = Object.keys(user);
+      // console.log(typeof user, user, user.email, user.user_details_id);
       if (user !== null) {
-        var user_details_id = user.user_details_id;
-        //user_details_id is same profile_Id share on UI
+        var user_details_id = user.user_details_id
+        // user_details_id is same profile_Id share on UI
 
-        this.user_details_id = user_details_id;
+        this.user_details_id = user_details_id
 
         axios
-          .get(process.env.API + "/users/" + user_details_id)
+          .get(process.env.API + '/users/' + user_details_id)
           .then(({ data }) => {
-            console.log("data", data, data.upload_proof);
+            console.log('data', data, data.upload_proof)
 
-            //this code replaces key in data Object from Snake Case to Camel Case
+            // this code replaces key in data Object from Snake Case to Camel Case
             userDetail = JSON.parse(
               JSON.stringify(data).replace(
                 /(_\w)\w+":/g,
                 (match) => match[1].toUpperCase() + match.substring(2)
               )
-            );
+            )
 
-            //need to parse again since there were variables likes partner_age_from
+            // need to parse again since there were variables likes partner_age_from
             userDetail = JSON.parse(
               JSON.stringify(userDetail).replace(
                 /(_\w)\w+":/g,
                 (match) => match[1].toUpperCase() + match.substring(2)
               )
-            );
+            )
 
-            //console.log("userDetail", userDetail);
-            this.formData = userDetail;
-            //console.log("formData", this.formData);
+            // console.log("userDetail", userDetail);
+            this.formData = userDetail
+            // console.log("formData", this.formData);
 
-            //Converting the data to match the form fields requirements
+            // Converting the data to match the form fields requirements
 
-            /* for Primary Phone and Alternate Phone. It is stored in the following format "+91 1234567890" 
+            /* for Primary Phone and Alternate Phone. It is stored in the following format "+91 1234567890"
       so extracting the information */
             this.tmpData.primaryContactCountryCode = this.formData.phonePrimary.substr(
               1,
               2
-            );
-            this.tmpData.primaryContact = this.formData.phonePrimary.substr(4);
+            )
+            this.tmpData.primaryContact = this.formData.phonePrimary.substr(4)
             this.tmpData.alternateContactCountryCode = this.formData.phoneAlternate.substr(
               1,
               2
-            );
+            )
             this.tmpData.alternateContact = this.formData.phoneAlternate.substr(
               4
-            );
+            )
 
-            //Mapping Height in Cms to Ft and Inch
+            // Mapping Height in Cms to Ft and Inch
             this.formData.height = this.convertHeightToFtInch(
               this.formData.height
-            );
-            //console.log('Height',this.formData.height);
+            )
+            // console.log('Height',this.formData.height);
 
-            //Mapping Date of birth correctly. Date of birth will be mapped
-            //from "Tue, 20 Sep 1983 00:00:00 GMT"(returned from DB) to YYYY-MM-DD(required for mapping in UI)
-            this.formData["dateOfBirth"] = new Date(this.formData.dob)
+            // Mapping Date of birth correctly. Date of birth will be mapped
+            // from "Tue, 20 Sep 1983 00:00:00 GMT"(returned from DB) to YYYY-MM-DD(required for mapping in UI)
+            this.formData.dateOfBirth = new Date(this.formData.dob)
               .toISOString()
-              .split("T")[0];
+              .split('T')[0]
             console.log(
-              "date of Birth",
+              'date of Birth',
               this.formData,
               this.formData.dateOfBirth
-            );
+            )
 
-            //Calculate Age
-            this.formData["age"] = this.computeAge(this.formData.dateOfBirth);
+            // Calculate Age
+            this.formData.age = this.computeAge(this.formData.dateOfBirth)
 
-            //Map country and other country
-            var country = this.formData.country;
-            if (country.Name === "India") {
-              this.formData.country = "India";
+            // Map country and other country
+            var country = this.formData.country
+            if (country.Name === 'India') {
+              this.formData.country = 'India'
             } else {
-              this.formData.country = "Other";
-              this.formData.otherCountry = country; //mapping entire country object
+              this.formData.country = 'Other'
+              this.formData.otherCountry = country // mapping entire country object
             }
 
-            //Map Address and father
-            this.formData["residentialAddress"] = this.formData.address;
-            this.formData["fatherName"] = this.formData.fatherFullname;
+            // Map Address and father
+            this.formData.residentialAddress = this.formData.address
+            this.formData.fatherName = this.formData.fatherFullname
 
-            //Map Source of Website
-            this.formData["sourceOfWebsite"] = this.formData.whereKnow;
+            // Map Source of Website
+            this.formData.sourceOfWebsite = this.formData.whereKnow
 
-            //Map Partner Height From and To. First, Convert to Ft and Inches
+            // Map Partner Height From and To. First, Convert to Ft and Inches
             this.formData.partnerHeightFrom = this.convertHeightToFtInch(
               this.formData.partnerHeightFrom
-            );
+            )
             this.formData.partnerHeightTo = this.convertHeightToFtInch(
               this.formData.partnerHeightTo
-            );
+            )
           })
           .catch((error) => {
-            //console.log(error);
-          });
-      } //end of if user!==null
-    }, //end of getUser Detail method
+            // console.log(error);
+          })
+      } // end of if user!==null
+    }, // end of getUser Detail method
 
-
-//get Photos for update profile
-getPhotos(){
-
-  //Get Photos
-           // console.log("Get Photo", this.formData.uploadPhotos);
-            if (
-              this.updatePhoto && (
-              this.formData.uploadPhotos.length != 0 &&
+    // get Photos for update profile
+    getPhotos () {
+      // Get Photos
+      // console.log("Get Photo", this.formData.uploadPhotos);
+      if (
+        this.updatePhoto && (
+          this.formData.uploadPhotos.length != 0 &&
               this.formData.uploadPhotos != null &&
-              typeof this.formData.uploadPhotos !== "undefined")
-              && (this.$refs.photo.files.length != this.formData.uploadPhotos.length) 
-              //if photos are already loaded then no need to fetch it from Axios
-            ) {
-              //var user_d_id = this.user_details_id;
-              //console.log("Before Photo Loop", this.formData.uploadPhotos);
-              var fileList = [];
-              var i = 0;
-              var photos = this.formData.uploadPhotos;
-              var len = photos.length;
-              var photo = {};
-              var fileObj = {};
-              var blobObject = {};
-              var user_d_id = this.formData.id;
+              typeof this.formData.uploadPhotos !== 'undefined') &&
+              (this.$refs.photo.files.length != this.formData.uploadPhotos.length)
+              // if photos are already loaded then no need to fetch it from Axios
+      ) {
+        // var user_d_id = this.user_details_id;
+        // console.log("Before Photo Loop", this.formData.uploadPhotos);
+        var fileList = []
+        var i = 0
+        var photos = this.formData.uploadPhotos
+        var len = photos.length
+        var photo = {}
+        var fileObj = {}
+        var blobObject = {}
+        var user_d_id = this.formData.id
 
-              for (photo of photos) {
-                //var filename = photo.filename;
-                //axios.get(process.env.API + "/upload/"+ user_details_id +"/" + filename,
-                //photo = photos[i];
-                //console.log("Photo Loop", photo, photo.filename, fileList[0], fileList.length);
+        for (photo of photos) {
+          // var filename = photo.filename;
+          // axios.get(process.env.API + "/upload/"+ user_details_id +"/" + filename,
+          // photo = photos[i];
+          // console.log("Photo Loop", photo, photo.filename, fileList[0], fileList.length);
 
-                axios({
-                  url:
+          axios({
+            url:
                     process.env.API +
-                    "/upload/" +
+                    '/upload/' +
                     this.user_details_id +
-                    "/" +
+                    '/' +
                     photo.filename,
-                  method: "GET",
-                  responseType: "blob", // important
-                })
-                  .then((response) => {
-                    var pos = response.config.url.indexOf("photo");
-                    var file = response.config.url.substr(pos); //get file name from URL
+            method: 'GET',
+            responseType: 'blob' // important
+          })
+            .then((response) => {
+              var pos = response.config.url.indexOf('photo')
+              var file = response.config.url.substr(pos) // get file name from URL
 
-                    // console.log(
-                    //   "Photo Details",
-                    //   pos,
-                    //   response.config.url,
-                    //   file,
-                    //   photo.filename,
-                    //   response
-                    // );
+              // console.log(
+              //   "Photo Details",
+              //   pos,
+              //   response.config.url,
+              //   file,
+              //   photo.filename,
+              //   response
+              // );
 
-                    blobObject = new Blob([response.data]);
-                    fileObj = new File([blobObject], file, {
-                      type: "image/jpeg",
-                    });
-                    //var fileObj =  new File([response.data]);
-                    // fileObj.lastModifiedDate = new Date();
-                    // fileObj.name = filename;
-                    //fileObj.type = "image/jpeg";
-                    //console.log('File Obj', blobObject, fileObj);
-                    //var fileList = [fileObj]
-                    fileList.push(fileObj);
-                    //this.$refs.photo1.files.push(fileObj);
-                    this.$refs.photo.addFiles(fileList);
-                    //console.log("Photos in Uploader", this.$refs.photo);
-                  })
-                  .catch((error) => {
-                    //console.log(error);
-                  });
+              blobObject = new Blob([response.data])
+              fileObj = new File([blobObject], file, {
+                type: 'image/jpeg'
+              })
+              // var fileObj =  new File([response.data]);
+              // fileObj.lastModifiedDate = new Date();
+              // fileObj.name = filename;
+              // fileObj.type = "image/jpeg";
+              // console.log('File Obj', blobObject, fileObj);
+              // var fileList = [fileObj]
+              fileList.push(fileObj)
+              // this.$refs.photo1.files.push(fileObj);
+              this.$refs.photo.addFiles(fileList)
+              // console.log("Photos in Uploader", this.$refs.photo);
+            })
+            .catch((error) => {
+              // console.log(error);
+            })
 
-                //console.log("File List", fileList);
-              } //for of Photo loop
-            } // end of if for photos
+          // console.log("File List", fileList);
+        } // for of Photo loop
+      } // end of if for photos
+    }, // end of getPhotos
+    // get Proofs for UpdateProfile
+    getProof () {
+      // get Proofs
 
-}//end of getPhotos
-,
-//get Proofs for UpdateProfile
-getProof(){
-   //get Proofs
-      
-      //console.log("getProof", this.updateProof,  this.formData.uploadProof);
-      if(this.updateProof && 
-      (this.formData.uploadProof !== "" && this.formData.uploadProof !== null 
-      && (typeof this.formData.uploadProof !== "undefined"))
-      && (this.$refs.proof.files.length == 0) 
-      ){
-      var user_d_id = this.user_details_id;
-      var filename = this.formData.uploadProof;
+      // console.log("getProof", this.updateProof,  this.formData.uploadProof);
+      if (this.updateProof &&
+      (this.formData.uploadProof !== '' && this.formData.uploadProof !== null &&
+      (typeof this.formData.uploadProof !== 'undefined')) &&
+      (this.$refs.proof.files.length == 0)
+      ) {
+        var user_d_id = this.user_details_id
+        var filename = this.formData.uploadProof
 
-      axios({
-        url: process.env.API + "/upload/"+ user_d_id +"/" + filename,
-        method: 'GET',
-        responseType: 'blob', // important
-      }).then((response) => {
-       // console.log("Called Upload", response);
+        axios({
+          url: process.env.API + '/upload/' + user_d_id + '/' + filename,
+          method: 'GET',
+          responseType: 'blob' // important
+        }).then((response) => {
+          // console.log("Called Upload", response);
 
-        var blobObject = new Blob([response.data]);
-        var fileObj = new File([blobObject], filename,  { type:"image/jpeg" });
+          var blobObject = new Blob([response.data])
+          var fileObj = new File([blobObject], filename, { type: 'image/jpeg' })
 
-        //console.log('File Obj', blobObject, fileObj);
-        var fileList = [fileObj]
-        this.$refs.proof.addFiles(fileList);
-        //console.log('Proof', this.$refs.proof)
-        if(this.formData.status.name === 'Approved'){
-              this.$refs.proof.disable = true;
-        }   
-      }).catch((error) => {
-        //console.log(error);
-      });
-}
-} //end of getphotos
-,
-//function called on updateForm
-async updateForm(){
-
-      this.showProgressBar = true;
-
-      console.log("Update Form", this.formData);
-
-
-      if (typeof this.$refs.basicForm === "undefined") {
-        this.basicHasError = true;
-      } else {
-        this.submitBasicForm();
+          // console.log('File Obj', blobObject, fileObj);
+          var fileList = [fileObj]
+          this.$refs.proof.addFiles(fileList)
+          // console.log('Proof', this.$refs.proof)
+          if (this.formData.status.name === 'Approved') {
+            this.$refs.proof.disable = true
+          }
+        }).catch((error) => {
+        // console.log(error);
+        })
       }
-      if (typeof this.$refs.personalForm === "undefined") {
-        this.personalHasError = true;
+    }, // end of getphotos
+    // function called on updateForm
+    async updateForm () {
+      this.showProgressBar = true
+
+      console.log('Update Form', this.formData)
+
+      if (typeof this.$refs.basicForm === 'undefined') {
+        this.basicHasError = true
       } else {
-        this.submitPersonalForm();
+        this.submitBasicForm()
+      }
+      if (typeof this.$refs.personalForm === 'undefined') {
+        this.personalHasError = true
+      } else {
+        this.submitPersonalForm()
       }
 
-      this.checkPhoto();
-      this.checkProof();
+      this.checkPhoto()
+      this.checkProof()
 
       if (
         !this.basicHasError &&
@@ -1463,112 +1452,105 @@ async updateForm(){
         !this.isErrorProof
       ) {
         this.formData.primaryContact =
-          "+" +
+          '+' +
           this.tmpData.primaryContactCountryCode +
-          " " +
-          this.tmpData.primaryContact;
+          ' ' +
+          this.tmpData.primaryContact
         this.formData.alternateContact =
-          "+" +
+          '+' +
           this.tmpData.alternateContactCountryCode +
-          " " +
-          this.tmpData.alternateContact;
+          ' ' +
+          this.tmpData.alternateContact
 
-        //console.log("Submit form 1", this.formData);
-        //convert Height To Cms
+        // console.log("Submit form 1", this.formData);
+        // convert Height To Cms
         this.formData.partnerHeightFromCms = this.convertHeightToCms(
           this.formData.partnerHeightFrom
-        );
+        )
         this.formData.partnerHeightToCms = this.convertHeightToCms(
           this.formData.partnerHeightTo
-        );
-        if (this.formData.heightCms === "") {
+        )
+        if (this.formData.heightCms === '') {
           this.formData.heightCms = this.convertHeightToCms(
             this.formData.height
-          );
+          )
         }
 
-
-        //converting from CamelCase to SnakeCase
+        // converting from CamelCase to SnakeCase
         var formDataSnakeCase = {}
-      for(var camel in this.formData) {
-          //console.log("Key", camel);
-          formDataSnakeCase[this.camelToSnake(camel)] = this.formData[camel];
+        for (var camel in this.formData) {
+          // console.log("Key", camel);
+          formDataSnakeCase[this.camelToSnake(camel)] = this.formData[camel]
+        }
+
+  	  console.log('Converted to Snake Case', formDataSnakeCase)
+
+        await this.updateUser(formDataSnakeCase)
+
+        this.showProgressBar = false
       }
+    }, // end of  UpdateForm
+    camelToSnake (key) {
+      return key.replace(/([A-Z])/g, '_$1').toLowerCase()
+    },
 
-  	  console.log('Converted to Snake Case', formDataSnakeCase);
-
-
-        await this.updateUser(formDataSnakeCase);
-
-      this.showProgressBar = false;
-
-
-      }
-}// end of  UpdateForm
-,
-camelToSnake(key) {
-    return key.replace( /([A-Z])/g, "_$1" ).toLowerCase();
-}
-
-,
-updateUser(data) {
+    updateUser (data) {
       return axios
-        .put(process.env.API + "/users/" +this.user_details_id, data)
+        .put(process.env.API + '/users/' + this.user_details_id, data)
         .then(({ data }) => {
-          console.log("Search Success", data);
-          //this.user_details_id = data.user_details_id;
+          console.log('Search Success', data)
+          // this.user_details_id = data.user_details_id;
           this.$q.notify({
-            type: "positive",
-            message: "Successfully registered",
-          });
+            type: 'positive',
+            message: 'Successfully registered'
+          })
           /* this.$router.push('/login') */
         })
         .catch((error) => {
-          let errMsg = "";
-          if ("message" in error.response.data) {
-            //errMsg = error.response.data.error + " - " + error.response.data.message;
+          let errMsg = ''
+          if ('message' in error.response.data) {
+            // errMsg = error.response.data.error + " - " + error.response.data.message;
 
-            errMsg = error.response.data.message;
+            errMsg = error.response.data.message
           } else {
-            errMsg = error.response.data.error;
+            errMsg = error.response.data.error
           }
-          //console.log(errMsg);
-          showErrorMessage(errMsg);
-        });
-    }
-,
-    checkPhoto1() {
-      console.log("Check Photo", this.$refs.photo1);
+          // console.log(errMsg);
+          showErrorMessage(errMsg)
+        })
     },
+    checkPhoto1 () {
+      console.log('Check Photo', this.$refs.photo1)
+    }
   },
-  created() {
-    this.createHeightList();
-    this.createAgeFromToList();
+  created () {
+    this.createHeightList()
+    this.createAgeFromToList()
   },
-  mounted() {
-    //for updateProfile
+  mounted () {
+    // for updateProfile
     if (this.updateProfile === true) {
-      this.getUserDetail();
+      this.getUserDetail()
     }
     axios
-      .get(process.env.API + "/lists")
+      .get(process.env.API + '/lists')
       .then((response) => {
-        this.countryList = response.data.country;
-        this.countryOptions = this.countryList;
-        this.gotraOptions = response.data.gotra;
-        this.sourceOfWebsiteOptions = response.data.where_know;
-        this.maritalOptions = response.data.marital_status;
-        this.genderOptions = response.data.gender;
+        this.countryList = response.data.country
+        this.countryOptions = this.countryList
+        this.gotraOptions = response.data.gotra
+        this.sourceOfWebsiteOptions = response.data.where_know
+        this.maritalOptions = response.data.marital_status
+        this.genderOptions = response.data.gender
       })
       .catch((error) => {
-        //console.log(error);
-      });
+        // console.log(error);
+      })
   },
   components: {
-    termsConditionsDialog: require("./terms_privacy/TermsConditionsDialog.vue")
-      .default,
-  },
-};
+    termsConditionsDialog: require('./terms_privacy/TermsConditionsDialog.vue')
+      .default
+  }
+}
 </script>
 
 <style scoped>

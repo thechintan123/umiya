@@ -78,8 +78,10 @@
       :width="250"
     >
       <!-- <q-scroll-area class="fit"> -->
-      <q-list v-for="(menuItem, index) in menuList" :key="index"
-      v-if="showMenuItem(menuItem)"
+      <q-list
+        v-for="(menuItem, index) in menuList"
+        :key="index"
+        v-if="showMenuItem(menuItem)"
       >
         <q-item exact class="text-grey-1" :to="menuItem.link"
          v-ripple>
@@ -105,8 +107,8 @@
           </q-item-section>
           <q-item-section>Logout</q-item-section>
         </q-item>
-        -->
-      </q-list>
+
+      </q-list> -->
       <!-- </q-scroll-area> -->
     </q-drawer>
 
@@ -166,11 +168,9 @@ const menuList = [
     label: 'Update Profile',
     link: '/updateProfile',
     loggedIn: true,
-    link: "/changePassword",
-    loggedIn: true,
-    separator: true,
-  },
-];
+    separator: true
+  }
+]
 
 export default {
   data () {

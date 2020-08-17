@@ -844,8 +844,8 @@ export default {
       return axios
         .post(process.env.API + '/users', data)
         .then(({ data }) => {
-          //console.log("Search Success", data);
-          this.user_details_id = data.user_details_id;
+          // console.log("Search Success", data);
+          this.user_details_id = data.user_details_id
           this.$q.notify({
             type: 'positive',
             message: 'Successfully registered'
@@ -866,12 +866,12 @@ export default {
         })
     },
 
-    checkPhoto() {
-      //console.log("Photo", this.$refs.photo);
-      //console.log(this.$refs.photo.files.length);
+    checkPhoto () {
+      // console.log("Photo", this.$refs.photo);
+      // console.log(this.$refs.photo.files.length);
       if (this.$refs.photo.files.length === 0) {
-        this.isErrorPhoto = true;
-        //this.uploadHasError = true;
+        this.isErrorPhoto = true
+        // this.uploadHasError = true;
       } else {
         this.isErrorPhoto = false
         // this.uploadHasError = true;
@@ -892,8 +892,8 @@ export default {
     async submitForm () {
       this.showProgressBar = true
 
-      if (typeof this.$refs.basicForm === "undefined") {
-        this.basicHasError = true;
+      if (typeof this.$refs.basicForm === 'undefined') {
+        this.basicHasError = true
       } else {
         this.submitBasicForm()
       }
@@ -1158,14 +1158,14 @@ export default {
     this.createHeightList()
     this.createAgeFromToList()
   },
-  mounted() {
-    //for updateProfile
-    console.log('this.updateProfile',this.updateProfile);
+  mounted () {
+    // for updateProfile
+    console.log('this.updateProfile', this.updateProfile)
 
-    if(this.updateProfile === true){
-      this.formData = this.userDetail;
+    if (this.updateProfile === true) {
+      this.formData = this.userDetail
     }
-    console.log('FormData',this.formData);
+    console.log('FormData', this.formData)
 
     axios
       .get(process.env.API + '/lists')
