@@ -122,7 +122,6 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
 import mixinComputations from 'src/mixins/Mixin_Computations.js'
 
 export default {

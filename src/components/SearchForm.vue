@@ -127,6 +127,7 @@ import axios from 'axios'
 // import { countryList } from './countryList.js'
 import { mapActions } from 'vuex'
 import mixinFormValidations from 'src/mixins/Mixin_FormValidations.js'
+import { showErrorMessage } from 'src/utils/show-error-message'
 
 export default {
   mixins: [mixinFormValidations],
@@ -167,10 +168,7 @@ export default {
           min: 20,
           max: 30
         },
-        ageFromTo: {
-          min: 20,
-          max: 30
-        },
+
         lookingFor: '2',
         heightFrom: '',
         heightTo: '',
@@ -262,8 +260,7 @@ export default {
       }
     },
     checkCountry (val) {
-      // console.log('Check Country',val, val.length);
-      if (val.length == 0) {
+      if (val.length === 0) {
         return false
       } else {
         return true

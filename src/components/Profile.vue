@@ -53,7 +53,6 @@
               </q-item-label>
             </q-item-section>
           </q-item>
-        </q-item>
 
         </q-card-section>
 
@@ -63,6 +62,8 @@
 
 <script>
 import axios from 'axios'
+import { showErrorMessage } from 'src/utils/show-error-message'
+
 
 export default {
 
@@ -110,13 +111,13 @@ export default {
     // console.log("mounted")
     this.showProgressBar = true
     var user = JSON.parse(localStorage.getItem('user'))
-    var userDetail
+    // var userDetail
     // console.log(JSON.parse(localStorage.getItem("user")));
     // console.log(typeof user, user);
     if (user !== null) {
-      var user_details_id = user.user_details_id
+      var userDetailsId = user.user_details_id
       // user_details_id is same profile_Id share on UI
-      axios.get(process.env.API + '/users/' + user_details_id)
+      axios.get(process.env.API + '/users/' + userDetailsId)
         .then(({ data }) => {
         // console.log("data", data, data.first_name);
 
@@ -129,7 +130,15 @@ export default {
           this.showfield = true
           this.showProgressBar = false
         }).catch((error) => {
-        // console.log(error);
+          let errMsg = ''
+          if ('message' in error.response.data) {
+            // errMsg = error.response.data.error + " - " + error.response.data.message;
+            errMsg = error.response.data.message
+          } else {
+            errMsg = error.response.data.error
+          }
+          showErrorMessage(errMsg)
+          // console.log('uploadImage - Error - Error Message', errMsg)
         })
     } else {
       this.$q.notify({
