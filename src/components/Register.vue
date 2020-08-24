@@ -710,7 +710,6 @@ export default {
 
       // this is to default ageFrom and ageTo. Defaulting to 5 years
       ageDifference: 5,
-      heightDifference: 12,
       heightDifference: 15.24, // 15.24 cms is 6 inches
 
       // For testing Purpose only
@@ -981,11 +980,11 @@ export default {
     defaultAgeFromAgeTo () {
       // console.log("Gender", this.formData.gender);
       if (this.formData.age !== '') {
-        if (this.formData.gender.name == 'Male') {
+        if (this.formData.gender.name === 'Male') {
           // Defaulting Age for Partner
           this.formData.ageFrom = this.formData.age - this.ageDifference
           this.formData.ageTo = this.formData.age
-        } else if (this.formData.gender.name == 'Female') {
+        } else if (this.formData.gender.name === 'Female') {
           // Defaulting Age for Partner
           this.formData.ageFrom = this.formData.age
           this.formData.ageTo = this.formData.age + this.ageDifference
@@ -1003,11 +1002,11 @@ export default {
       var heightCms = this.formData.heightCms
       var heightFromCms, heightToCms
       this.convertHeightToFtInch(heightCms)
-      if (this.formData.gender.name == 'Male') {
+      if (this.formData.gender.name === 'Male') {
         // Defaulting Age for Partner
         heightFromCms = heightCms - this.heightDifference
         heightToCms = heightCms
-      } else if (this.formData.gender.name == 'Female') {
+      } else if (this.formData.gender.name === 'Female') {
         // Defaulting Age for Partner
         heightFromCms = heightCms
         heightToCms = heightCms + this.heightDifference
@@ -1105,7 +1104,7 @@ export default {
           let errMsg = ''
           if ('message' in error.response.data) {
             // errMsg = error.response.data.error + " - " + error.response.data.message;
-            errMsg = rror.response.data.message
+            errMsg = error.response.data.message
           } else {
             errMsg = error.response.data.error
           }
@@ -1178,7 +1177,16 @@ export default {
         this.genderOptions = response.data.gender
       })
       .catch((error) => {
-        // console.log(error);
+        let errMsg = ''
+        if ('message' in error.response.data) {
+          // errMsg = error.response.data.error + " - " + error.response.data.message;
+
+          errMsg = error.response.data.message
+        } else {
+          errMsg = error.response.data.error
+        }
+        // console.log(errMsg);
+        showErrorMessage(errMsg)
       })
   },
   components: {

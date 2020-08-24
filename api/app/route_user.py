@@ -29,9 +29,9 @@ def get_user(id):
 def create_user():
     data = request.get_json() or {}
 
-    mand_fields = ('email', 'password', 'first_name', 'last_name', 'gender', 'dob',
-                   'country', 'state', 'city', 'phone_primary', 'agree_tc', 'marital_status',
-                   'height', 'gotra', 'original_surname', 'father_fullname', 'address',
+    mand_fields = ('email', 'password', 'first_name', 'last_name', 'gender', 'date_of_birth',
+                   'country', 'state', 'city', 'primary_contact', 'agree_tc', 'marital_status',
+                   'height', 'gotra', 'original_surname', 'father_fullname', 'residential_address',
                    'partner_age_from', 'partner_age_to', 'partner_height_from', 'partner_height_to',
                    'where_know')
     if not all(field in data for field in mand_fields):
@@ -71,20 +71,19 @@ def update_user(id):
     curr_user = token_auth.current_user()
     if curr_user.user_details.id != id:
         return error_response(401, 'You are not authorised')
-
     data = request.get_json() or {}
-
+    print('Update User', user_det,data)
+    '''
     if 'email' in data and data['email'] is not None:
         email = data['email'].lower()
         if re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', email) is None:
             return bad_request('Email provided is not valid')
         if User.query.filter_by(email=data['email']).first():
             return bad_request('Email already registered. Please use another email ID.')
-        data['email'] = email
-
+        data['email'] = 
+    '''
     user_det.from_dict(data=data)
     db.session.commit()
-    
     return jsonify(user_det.to_dict())
 
 

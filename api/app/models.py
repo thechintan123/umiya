@@ -91,21 +91,21 @@ class UserDetails(db.Model):
     last_name = db.Column(db.String(50), nullable=False)
     gender_id = db.Column(db.Integer, db.ForeignKey(
         'gender.id'), nullable=False)
-    dob = db.Column(db.DateTime, nullable=False)
+    date_of_birth = db.Column(db.DateTime, nullable=False)
     country_id = db.Column(db.Integer, db.ForeignKey(
         'country.id'), nullable=False)
     state = db.Column(db.String(30), nullable=False)
     city = db.Column(db.String(30), nullable=False)
-    phone_primary = db.Column(db.String(20), nullable=False)
-    phone_alternate = db.Column(db.String(20))
+    primary_contact = db.Column(db.String(20), nullable=False)
+    alternate_contact = db.Column(db.String(20))
     agree_tc = db.Column(db.Boolean, default=False, nullable=False)
     marital_status_id = db.Column(db.Integer, db.ForeignKey(
         'marital_status.id'), nullable=False)
     height = db.Column(db.String(20), nullable=False)
     gotra_id = db.Column(db.Integer, db.ForeignKey('gotra.id'), nullable=False)
     original_surname = db.Column(db.String(20), nullable=False)
-    father_fullname = db.Column(db.String(50), nullable=False)
-    address = db.Column(db.String(100), nullable=False)
+    father_name = db.Column(db.String(50), nullable=False)
+    residential_address = db.Column(db.String(100), nullable=False)
     about_yourself = db.Column(db.String(200))
     upload_photos = db.relationship(
         'UploadPhotos', backref='user_details', lazy='dynamic')
@@ -142,19 +142,19 @@ class UserDetails(db.Model):
             'first_name': self.first_name,
             'last_name': self.last_name,
             'gender': self.gender.to_dict(),
-            'dob': self.dob,
+            'date_of_birth': self.date_of_birth,
             'country': self.country.to_dict(),
             'state': self.state,
             'city': self.city,
-            'phone_primary': self.phone_primary,
-            'phone_alternate': self.phone_alternate,
+            'primary_contact': self.primary_contact,
+            'alternate_contact': self.alternate_contact,
             'agree_tc': self.agree_tc,
             'marital_status': self.marital_status.to_dict(),
             'height': self.height,
             'gotra': self.gotra.to_dict(),
             'original_surname': self.original_surname,
-            'father_fullname': self.father_fullname,
-            'address': self.address,
+            'father_name': self.father_name,
+            'residential_address': self.residential_address,
             'about_yourself': self.about_yourself,
             'partner_age_from': self.partner_age_from,
             'partner_age_to': self.partner_age_to,
@@ -183,10 +183,12 @@ class UserDetails(db.Model):
             if data[key] is not None and key not in \
                     ['password', 'country', 'other_country', \
                     'gotra', 'where_know', 'marital_status', 'gender', \
-                    'dob', 'partner_marital_status']:
+                    'date_of_birth', 'partner_marital_status', \
+                    'status', 'id', 'email','upload_photos', 'upload_proof']:
                 setattr(self, key, data[key])
     
         # had to separate queries and assign to self otherwise SQLachemy seems to commit too early???
+        '''
         country = gotra = where_know = marital_status = gender = None
         partner_marital_status = []
         if 'country' in data and data['country'] is not None:
@@ -216,12 +218,12 @@ class UserDetails(db.Model):
             self.marital_status = marital_status
         if gender is not None:
             self.gender = gender
-        if 'dob' in data and data['dob'] != '':
-            self.dob = datetime.strptime(data['dob'], '%Y-%m-%d')
+        if 'date_of_birth' in data and data['date_of_birth'] != '':
+            self.date_of_birth = datetime.strptime(data['date_of_birth'], '%Y-%m-%d')
         if len(partner_marital_status) > 0:
             for pms in partner_marital_status:
                 self.partner_marital_status.append(pms)
-
+        '''
         self.update_date = datetime.utcnow()
         
     def __repr__(self):

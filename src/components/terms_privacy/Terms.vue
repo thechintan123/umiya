@@ -90,7 +90,6 @@
             This Agreement, accepted upon use of the Site and further affirmed by becoming a Member of the UmiyaMatrimony.com service, contains the entire agreement between you and UmiyaMatrimony.com regarding the use of the Site and/or the Service. If any provision of this Agreement is held invalid, the remainder of this Agreement shall continue in full force and effect.
             By becoming a member of UmiyaMatrimony.com and/or using the Services of the Site, you unconditionally and irrevocably confirm that you have read and understood the above provisions and agree to abide by them.
             Please contact us with any questions regarding this service agreement.
-          </q-page>
 </div>
 </template>
 

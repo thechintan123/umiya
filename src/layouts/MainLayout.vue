@@ -79,9 +79,8 @@
     >
       <!-- <q-scroll-area class="fit"> -->
       <q-list
-        v-for="(menuItem, index) in menuList"
+        v-for="(menuItem, index) in filteredMenuList"
         :key="index"
-        v-if="showMenuItem(menuItem)"
       >
         <q-item exact class="text-grey-1" :to="menuItem.link"
          v-ripple>
@@ -176,6 +175,7 @@ export default {
   data () {
     return {
       drawer: false,
+      left :  true,
       menuList
     }
   },
@@ -213,7 +213,37 @@ export default {
 
   },
   computed: {
-    ...mapState('auth', ['loggedIn'])
+    ...mapState('auth', ['loggedIn']),
+    filteredMenuList () {
+      var filterMenuList = []
+      var loggedInStatus = this.loggedIn
+      var menuItemLoginStatus, menuItem
+      for (menuItem of this.menuList) {
+        menuItemLoginStatus = menuItem.loggedIn
+        if (menuItemLoginStatus === undefined || menuItemLoginStatus === null) {
+          filterMenuList.push(menuItem)
+        } else if (menuItemLoginStatus === false) {
+          if (loggedInStatus === false) {
+            filterMenuList.push(menuItem)
+          } else {
+          // Don't add
+            continue
+          }
+        } else if (menuItemLoginStatus === true) {
+          if (loggedInStatus === true) {
+            filterMenuList.push(menuItem)
+          } else {
+          // Don't add
+            continue
+          }
+        } else {
+        // Don't add
+          continue
+        }
+      } // end of showMenuItem
+      return filterMenuList
+    }
+
   }
 }
 </script>

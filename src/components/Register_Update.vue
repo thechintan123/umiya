@@ -24,7 +24,7 @@
           class="text-weight-bolder text-capitalize"
         >{{formData.firstName}} {{formData.lastName}}</span> for successful registration.
         <br />Your Profile ID is
-        <b>{{user_details_id}}</b>.
+        <b>{{userDetailsId}}</b>.
         <br />Going forward, UmiyaMatrimony.com will notify you on your email
         <b>{{formData.email}}</b>.
         <br />The other profile will contact you on your primary contact
@@ -58,7 +58,7 @@
       </q-card-section>
     </q-card>
 
-    <q-card v-if="!successRegistration">
+    <q-card v-if="!showProgressBar || !successRegistration">
       <q-banner class="bg-grey-3 q-mb-xs">
         <template v-slot:avatar>
           <q-icon :name="updateProfile ? 'edit' : 'account_circle'" color="primary" />
@@ -235,14 +235,14 @@
               <div class="col">
                 <q-radio
                   tabindex="8"
-                  v-model="formData.country"
+                  v-model="tmpData.countryRadio"
                   val="India"
                   left-label
                   label="Living in : India"
                 />
                 <q-radio
                   tabindex="8"
-                  v-model="formData.country"
+                  v-model="tmpData.countryRadio"
                   val="Other"
                   left-label
                   label="Other"
@@ -252,8 +252,8 @@
                 <q-select
                   tabindex="8"
                   outlined
-                  :disable="formData.country === 'India'"
-                  v-model="formData.otherCountry"
+                  v-model="tmpData.otherCountry"
+                  :disable="tmpData.countryRadio === 'India'"
                   :options="countryOptions"
                   option-value="id"
                   option-label="name"
@@ -504,10 +504,10 @@
             />
             <q-select
               tabindex="22"
-              v-model="formData.sourceOfWebsite"
+              v-model="formData.whereKnow"
               option-value="id"
               option-label="name"
-              :options="sourceOfWebsiteOptions"
+              :options="whereKnowOptions"
               label="Where do you come to know?"
               dense
               options-dense
@@ -732,8 +732,8 @@ export default {
       isErrorProof: false,
       isErrorPhoto: false,
 
-      user_details_id: '',
-      // this user_details_id is populated after user is registered in DB - user_details.
+      userDetailsId: '',
+      // this userDetailsId is populated after user is registered in DB - user_details.
       // This is same as id in user_details DB table
       // This is visile as profile ID on screen
 
@@ -745,11 +745,10 @@ export default {
       heightOptions: [],
       ageFromToOptions: [],
       gotraOptions: [],
-      sourceOfWebsiteOptions: [],
+      whereKnowOptions: [],
 
       // this is to default ageFrom and ageTo. Defaulting to 5 years
       ageDifference: 5,
-      heightDifference: 12,
       heightDifference: 15.24, // 15.24 cms is 6 inches
 
       // For testing Purpose only
@@ -765,7 +764,8 @@ export default {
         gender: { id: 1, name: 'Male' },
         dateOfBirth: '1983-09-01',
         age: 36,
-        country: 'India',
+        countryRadio: 'India',
+        country : {},
         otherCountry: '',
         state: 'state',
         city: 'city',
@@ -787,7 +787,7 @@ export default {
         partnerHeightToCms: '',
         partnerMartialStatus: [{ id: 1, name: 'Never Married' }],
         agreeTc: true,
-        sourceOfWebsite: { id: 1, name: 'Friends' }
+        whereKnow: { id: 1, name: 'Friends' }
       },
       testTmpData: {
         primaryContact: '11111111111',
@@ -806,8 +806,7 @@ export default {
         gender: '',
         dateOfBirth: '',
         age: 0,
-        country: 'India',
-        otherCountry: '',
+        country : {},
         state: '',
         city: '',
         primaryContact: '',
@@ -828,7 +827,8 @@ export default {
         partnerHeightToCms: '',
         partnerMartialStatus: [],
         agreeTc: false,
-        sourceOfWebsite: ''
+        whereKnow: '',
+        status: {name: ''}
       },
 
       // This fields are used to later club them into form fields of primaryContact and alternateContcts
@@ -836,12 +836,18 @@ export default {
         primaryContact: '',
         primaryContactCountryCode: '',
         alternateContactCountryCode: '',
-        alternateContact: ''
+        alternateContact: '',
+        countryRadio : '',
+        otherCountry : ''
+
       },
 
       // These fields are used for updateProfile
       updatePhoto: false,
-      updateProof: false
+      updateProof: false,
+
+      //This field is used to compare Previous Form Data with updated Form Data
+      previousFormData : {}
     }
   },
   computed: {
@@ -888,9 +894,9 @@ export default {
         .post(process.env.API + '/users', data)
         .then(({ data }) => {
           // console.log("Register User", data);
-          this.user_details_id = data.user_details_id
+          this.userDetailsId = data.user_details_id
 
-          // console.log("this.user_details_id", this.user_details_id, typeof(data));
+          // console.log("this.userDetailsId", this.userDetailsId, typeof(data));
 
           this.$q.notify({
             type: 'positive',
@@ -915,6 +921,8 @@ export default {
     checkPhoto () {
       // console.log("Photo", this.$refs.photo);
       // console.log(this.$refs.photo.files.length);
+      //Below condition is only check for updating Profile
+      if(this.updateProfile !== true || this.updatePhoto === true){
       if (this.$refs.photo.files.length > 4) {
         this.$refs.photo.files.length = 4 // This will reduce the allowed files to 4 photos;
         this.$q.notify({
@@ -928,17 +936,28 @@ export default {
         this.isErrorPhoto = false
         // this.uploadHasError = true;
       }
+      }
+      else{
+        this.isErrorPhoto = false
+      }
     },
     checkProof () {
       // console.log("Proof", this.$refs.photo);
       // console.log(this.$refs.photo.files.length);
-
+      //Below condition is only check for updating Profile
+      //console.log("Check Proof", this.updateProfile, this.updateProof)
+      if(this.updateProfile !== true || 
+      this.updateProof === true){
       if (this.$refs.proof.files.length === 0) {
         this.isErrorProof = true
         // this.uploadHasError = true;
       } else {
         this.isErrorProof = false
         // this.uploadHasError = true;
+      }
+      }
+      else{
+        this.isErrorProof = false
       }
     },
     async submitForm () {
@@ -995,7 +1014,7 @@ export default {
 
         await this.registerUser(this.formData)
 
-        if (this.user_details_id !== '') {
+        if (this.userDetailsId !== '') {
           this.$refs.photo.upload()
           this.$refs.proof.upload()
           this.successRegistration = true
@@ -1034,54 +1053,61 @@ export default {
     },
     defaultAgeFromAgeTo () {
       // console.log("Gender", this.formData.gender);
-      if (this.formData.age !== '') {
-        if (this.formData.gender.name == 'Male') {
-          // Defaulting Age for Partner
-          this.formData.partnerAgeFrom = this.formData.age - this.ageDifference
-          this.formData.ageTo = this.formData.age
-        } else if (this.formData.gender.name == 'Female') {
-          // Defaulting Age for Partner
-          this.formData.partnerAgeFrom = this.formData.age
-          this.formData.ageTo = this.formData.age + this.ageDifference
-        } else {
-          this.formData.partnerAgeFrom = ''
-          this.formData.ageTo = ''
-        }
-      } else {
-        this.formData.partnerAgeFrom = ''
-        this.formData.ageTo = ''
-      }
+    if(this.updateProfile!== true){
+          if (this.formData.age !== '') {
+            if (this.formData.gender.name === 'Male') {
+              // Defaulting Age for Partner
+              this.formData.partnerAgeFrom = this.formData.age - this.ageDifference
+              this.formData.ageTo = this.formData.age
+            } else if (this.formData.gender.name === 'Female') {
+              // Defaulting Age for Partner
+              this.formData.partnerAgeFrom = this.formData.age
+              this.formData.ageTo = this.formData.age + this.ageDifference
+            } else {
+              this.formData.partnerAgeFrom = ''
+              this.formData.ageTo = ''
+            }
+          } else {
+            this.formData.partnerAgeFrom = ''
+            this.formData.ageTo = ''
+          }
+    }
     },
     defaultHeightFromHeightTo () {
-      this.formData.heightCms = this.convertHeightToCms(this.formData.height)
-      var heightCms = this.formData.heightCms
-      var heightFromCms, heightToCms
-      this.convertHeightToFtInch(heightCms)
-      if (this.formData.gender.name == 'Male') {
-        // Defaulting Age for Partner
-        heightFromCms = heightCms - this.heightDifference
-        heightToCms = heightCms
-      } else if (this.formData.gender.name == 'Female') {
-        // Defaulting Age for Partner
-        heightFromCms = heightCms
-        heightToCms = heightCms + this.heightDifference
-      } else {
-        heightFromCms = heightCms
-        heightToCms = heightCms
+      if(this.updateProfile!== true){
+        this.formData.heightCms = this.convertHeightToCms(this.formData.height)
+        var heightCms = this.formData.heightCms
+        var heightFromCms, heightToCms
+        this.convertHeightToFtInch(heightCms)
+        if (this.formData.gender.name === 'Male') {
+          // Defaulting Age for Partner
+          heightFromCms = heightCms - this.heightDifference
+          heightToCms = heightCms
+        } else if (this.formData.gender.name === 'Female') {
+          // Defaulting Age for Partner
+          heightFromCms = heightCms
+          heightToCms = heightCms + this.heightDifference
+        } else {
+          heightFromCms = heightCms
+          heightToCms = heightCms
+        }
+        this.formData.partnerHeightFromCms = heightFromCms
+        this.formData.partnerHeightToCms = heightToCms
+        this.formData.partnerHeightFrom = this.convertHeightToFtInch(
+          heightFromCms
+        )
+        this.formData.partnerHeightTo = this.convertHeightToFtInch(heightToCms)
       }
-      this.formData.partnerHeightFromCms = heightFromCms
-      this.formData.partnerHeightToCms = heightToCms
-      this.formData.partnerHeightFrom = this.convertHeightToFtInch(
-        heightFromCms
-      )
-      this.formData.partnerHeightTo = this.convertHeightToFtInch(heightToCms)
     },
 
     defaultPartnerMartialStatus () {
       // console.log("Martial Status", this.formData.maritalStatus);
       // console.log("MSP", this.formData.partnerMartialStatus);
-      this.formData.partnerMartialStatus.length = 0
-      this.formData.partnerMartialStatus.push(this.formData.maritalStatus)
+      if(this.updateProfile!== true )
+      {
+        this.formData.partnerMartialStatus.length = 0
+        this.formData.partnerMartialStatus.push(this.formData.maritalStatus)
+      }
     },
     convertHeightToCms (heightFtInch) {
       var heightFt = heightFtInch.substr(0, 1)
@@ -1095,12 +1121,12 @@ export default {
     convertHeightToFtInch (heightCms) {
       var heightTotalInches = heightCms * 0.393701
       var heightFt = Math.floor(heightTotalInches / 12)
-      var heightInches = Math.floor(heightTotalInches - heightFt * 12)
+      var heightInches = Math.ceil(heightTotalInches - heightFt * 12)
       console.log('Height Ft Inch', heightFt, heightInches)
       return heightFt + ' ft ' + heightInches + ' inches'
     },
     checkOtherCountry (otherCountry) {
-      if (this.formData.country === 'Other' && otherCountry === null) {
+      if (this.tmpData.countryRadio === 'Other' && otherCountry === null) {
         return false
       } else {
         return true
@@ -1161,7 +1187,7 @@ export default {
           let errMsg = ''
           if ('message' in error.response.data) {
             // errMsg = error.response.data.error + " - " + error.response.data.message;
-            errMsg = rror.response.data.message
+            errMsg = error.response.data.message
           } else {
             errMsg = error.response.data.error
           }
@@ -1173,7 +1199,7 @@ export default {
       const fd = new FormData()
       fd.append('file', file[0])
       fd.append('filetype', 'photo')
-      fd.append('user_details_id', this.user_details_id)
+      fd.append('userDetailsId', this.userDetailsId)
       // console.log("Upload Photo", fd, file);
       await this.uploadImage(fd, 'Photo')
     },
@@ -1181,7 +1207,7 @@ export default {
       const fd = new FormData()
       fd.append('file', file[0])
       fd.append('filetype', 'proof')
-      fd.append('user_details_id', this.user_details_id)
+      fd.append('userDetailsId', this.userDetailsId)
       // console.log("Upload Proof", fd, file[0]);
       await this.uploadImage(fd, 'Proof')
     },
@@ -1212,19 +1238,20 @@ export default {
 
     // For Update Profile
     getUserDetail () {
+      this.showProgressBar = true;
       var user = JSON.parse(localStorage.getItem('user'))
       var userDetail
       // console.log(JSON.parse(localStorage.getItem("user")));
       // var keysArray = Object.keys(user);
-      // console.log(typeof user, user, user.email, user.user_details_id);
+      // console.log(typeof user, user, user.email, user.userDetailsId);
       if (user !== null) {
-        var user_details_id = user.user_details_id
+        var userDetailsId = user.user_details_id
         // user_details_id is same profile_Id share on UI
 
-        this.user_details_id = user_details_id
+        this.userDetailsId = userDetailsId
 
         axios
-          .get(process.env.API + '/users/' + user_details_id)
+          .get(process.env.API + '/users/' + userDetailsId)
           .then(({ data }) => {
             console.log('data', data, data.upload_proof)
 
@@ -1252,28 +1279,29 @@ export default {
 
             /* for Primary Phone and Alternate Phone. It is stored in the following format "+91 1234567890"
       so extracting the information */
-            this.tmpData.primaryContactCountryCode = this.formData.phonePrimary.substr(
+            this.tmpData.primaryContactCountryCode = this.formData.primaryContact.substr(
               1,
               2
             )
-            this.tmpData.primaryContact = this.formData.phonePrimary.substr(4)
-            this.tmpData.alternateContactCountryCode = this.formData.phoneAlternate.substr(
+            this.tmpData.primaryContact = this.formData.primaryContact.substr(4)
+            this.tmpData.alternateContactCountryCode = this.formData.alternateContact.substr(
               1,
               2
             )
-            this.tmpData.alternateContact = this.formData.phoneAlternate.substr(
+            this.tmpData.alternateContact = this.formData.alternateContact.substr(
               4
             )
 
             // Mapping Height in Cms to Ft and Inch
+            this.formData.heightCms = this.formData.height
             this.formData.height = this.convertHeightToFtInch(
-              this.formData.height
+              this.formData.heightCms
             )
             // console.log('Height',this.formData.height);
 
             // Mapping Date of birth correctly. Date of birth will be mapped
             // from "Tue, 20 Sep 1983 00:00:00 GMT"(returned from DB) to YYYY-MM-DD(required for mapping in UI)
-            this.formData.dateOfBirth = new Date(this.formData.dob)
+            this.formData.dateOfBirth = new Date(this.formData.dateOfBirth)
               .toISOString()
               .split('T')[0]
             console.log(
@@ -1286,31 +1314,54 @@ export default {
             this.formData.age = this.computeAge(this.formData.dateOfBirth)
 
             // Map country and other country
-            var country = this.formData.country
-            if (country.Name === 'India') {
-              this.formData.country = 'India'
+
+           var country = this.formData.country
+            if (country.name === 'India') {
+              this.tmpData.countryRadio = 'India'
             } else {
-              this.formData.country = 'Other'
-              this.formData.otherCountry = country // mapping entire country object
+              this.tmpData.countryRadio = 'Other'
+              this.tmpData.otherCountry = Object.assign({}, this.formData.country); // mapping entire country object
             }
+            
 
             // Map Address and father
-            this.formData.residentialAddress = this.formData.address
-            this.formData.fatherName = this.formData.fatherFullname
+            //this.formData.residentialAddress = this.formData.address
+            //this.formData.fatherName = this.formData.fatherName
 
-            // Map Source of Website
-            this.formData.sourceOfWebsite = this.formData.whereKnow
+            // Map where you came to know
+            //this.formData.whereKnow = this.formData.whereKnow
 
+            
             // Map Partner Height From and To. First, Convert to Ft and Inches
+            this.formData.partnerHeightFromCms = this.formData.partnerHeightFrom;
             this.formData.partnerHeightFrom = this.convertHeightToFtInch(
-              this.formData.partnerHeightFrom
+              this.formData.partnerHeightFromCms
             )
+            this.formData.partnerHeightToCms = this.formData.partnerHeightTo;
             this.formData.partnerHeightTo = this.convertHeightToFtInch(
-              this.formData.partnerHeightTo
+              this.formData.partnerHeightToCms
             )
+            
+
+            //Storing FormData into Other Object
+            this.previousFormData = Object.assign({}, this.formData);
+            //this.previousFormData = this.formData;
+            console.log("Previous Form Data", this.previousFormData);
+
+            this.showProgressBar = false;
+
           })
           .catch((error) => {
-            // console.log(error);
+            let errMsg = ''
+            if ('message' in error.response.data) {
+            // errMsg = error.response.data.error + " - " + error.response.data.message;
+
+              errMsg = error.response.data.message
+            } else {
+              errMsg = error.response.data.error
+            }
+            // console.log(errMsg);
+            showErrorMessage(errMsg)
           })
       } // end of if user!==null
     }, // end of getUser Detail method
@@ -1321,26 +1372,24 @@ export default {
       // console.log("Get Photo", this.formData.uploadPhotos);
       if (
         this.updatePhoto && (
-          this.formData.uploadPhotos.length != 0 &&
-              this.formData.uploadPhotos != null &&
+          this.formData.uploadPhotos.length !== 0 &&
+              this.formData.uploadPhotos !== null &&
               typeof this.formData.uploadPhotos !== 'undefined') &&
-              (this.$refs.photo.files.length != this.formData.uploadPhotos.length)
+              (this.$refs.photo.files.length !== this.formData.uploadPhotos.length)
               // if photos are already loaded then no need to fetch it from Axios
       ) {
-        // var user_d_id = this.user_details_id;
         // console.log("Before Photo Loop", this.formData.uploadPhotos);
         var fileList = []
-        var i = 0
         var photos = this.formData.uploadPhotos
-        var len = photos.length
+        // var len = photos.length
         var photo = {}
         var fileObj = {}
         var blobObject = {}
-        var user_d_id = this.formData.id
+        // var userDetailsId = this.formData.id
 
         for (photo of photos) {
           // var filename = photo.filename;
-          // axios.get(process.env.API + "/upload/"+ user_details_id +"/" + filename,
+          // axios.get(process.env.API + "/upload/"+ userDetailsId +"/" + filename,
           // photo = photos[i];
           // console.log("Photo Loop", photo, photo.filename, fileList[0], fileList.length);
 
@@ -1348,7 +1397,7 @@ export default {
             url:
                     process.env.API +
                     '/upload/' +
-                    this.user_details_id +
+                    this.userDetailsId +
                     '/' +
                     photo.filename,
             method: 'GET',
@@ -1383,7 +1432,16 @@ export default {
               // console.log("Photos in Uploader", this.$refs.photo);
             })
             .catch((error) => {
-              // console.log(error);
+              let errMsg = ''
+              if ('message' in error.response.data) {
+                // errMsg = error.response.data.error + " - " + error.response.data.message;
+
+                errMsg = error.response.data.message
+              } else {
+                errMsg = error.response.data.error
+              }
+              // console.log(errMsg);
+              showErrorMessage(errMsg)
             })
 
           // console.log("File List", fileList);
@@ -1398,13 +1456,13 @@ export default {
       if (this.updateProof &&
       (this.formData.uploadProof !== '' && this.formData.uploadProof !== null &&
       (typeof this.formData.uploadProof !== 'undefined')) &&
-      (this.$refs.proof.files.length == 0)
+      (this.$refs.proof.files.length === 0)
       ) {
-        var user_d_id = this.user_details_id
+        var userDetailsId = this.userDetailsId
         var filename = this.formData.uploadProof
 
         axios({
-          url: process.env.API + '/upload/' + user_d_id + '/' + filename,
+          url: process.env.API + '/upload/' + userDetailsId + '/' + filename,
           method: 'GET',
           responseType: 'blob' // important
         }).then((response) => {
@@ -1421,7 +1479,16 @@ export default {
             this.$refs.proof.disable = true
           }
         }).catch((error) => {
-        // console.log(error);
+          let errMsg = ''
+          if ('message' in error.response.data) {
+            // errMsg = error.response.data.error + " - " + error.response.data.message;
+
+            errMsg = error.response.data.message
+          } else {
+            errMsg = error.response.data.error
+          }
+          // console.log(errMsg);
+          showErrorMessage(errMsg)
         })
       }
     }, // end of getphotos
@@ -1445,6 +1512,68 @@ export default {
       this.checkPhoto()
       this.checkProof()
 
+      if (
+        !this.basicHasError &&
+        !this.personalHasError &&
+        !this.isErrorPhoto &&
+        !this.isErrorProof
+      ) 
+        {
+        //create PrimaryContact
+        this.formData.primaryContact =
+          '+' +
+          this.tmpData.primaryContactCountryCode +
+          ' ' +
+          this.tmpData.primaryContact
+        this.formData.alternateContact =
+          '+' +
+          this.tmpData.alternateContactCountryCode +
+          ' ' +
+          this.tmpData.alternateContact
+
+
+        
+      //create Country Object using Country radio and otherCountry Dropdown
+      if(this.tmpData.countryRadio === 'India'){
+        this.formData.country = {};
+        this.formData.country['id'] = 81;
+        this.formData.country['name'] = 'India';
+      }else {
+        this.tmpData.countryRadio = 'Other'
+        this.formData.country = Object.assign({},this.tmpData.otherCountry);
+      }
+      
+      console.log("FormData", this.formData);
+
+      //creating new Object with only updated values
+      var updatedFormData = {};
+      var previousForm = this.previousFormData;
+      
+      var form = this.formData;
+      for(var key in previousForm){
+        if(previousForm[key] !== '' && previousForm[key] !== null && previousForm[key] !== 'undefined'){
+          //console.log("loop", key, form[key], previousForm[key], previousForm, this.previousFormData);
+          //if(previousForm[key] !== form[key]){
+            if(JSON.stringify(previousForm[key]) !== JSON.stringify(form[key])){
+            console.log("Did not match", previousForm[key], form[key])  
+            updatedFormData[key] = form[key]
+          }
+        }
+      }
+      console.log("updatedFormData", updatedFormData);
+
+
+        //if updatedFormData has height then convert the same field to Cms
+        var keys = ['partnerHeightFrom','partnerHeightTo','height'];
+        for(var key of keys){
+        if(updatedFormData.hasOwnProperty(key)){
+            updatedFormData[key] = this.convertHeightToCms(updatedFormData[key])
+        }
+        }
+        console.log("updatedFormData", updatedFormData);
+
+
+/*
       if (
         !this.basicHasError &&
         !this.personalHasError &&
@@ -1475,20 +1604,22 @@ export default {
             this.formData.height
           )
         }
+*/
 
         // converting from CamelCase to SnakeCase
-        var formDataSnakeCase = {}
-        for (var camel in this.formData) {
-          // console.log("Key", camel);
-          formDataSnakeCase[this.camelToSnake(camel)] = this.formData[camel]
+        var updatedFormDataSnakeCase = {}
+        for (var key in updatedFormData) {
+          //console.log("Key", camel);
+          updatedFormDataSnakeCase[this.camelToSnake(key)] = updatedFormData[key]
         }
-
-  	  console.log('Converted to Snake Case', formDataSnakeCase)
-
-        await this.updateUser(formDataSnakeCase)
+        console.log('Converted to Snake Case', updatedFormDataSnakeCase)
+        await this.updateUser(updatedFormDataSnakeCase)
+       
+       } // end of if of !basicError and other Errors
 
         this.showProgressBar = false
-      }
+
+      
     }, // end of  UpdateForm
     camelToSnake (key) {
       return key.replace(/([A-Z])/g, '_$1').toLowerCase()
@@ -1496,10 +1627,10 @@ export default {
 
     updateUser (data) {
       return axios
-        .put(process.env.API + '/users/' + this.user_details_id, data)
+        .put(process.env.API + '/users/' + this.userDetailsId, data)
         .then(({ data }) => {
           console.log('Search Success', data)
-          // this.user_details_id = data.user_details_id;
+          // this.userDetailsId = data.userDetailsId;
           this.$q.notify({
             type: 'positive',
             message: 'Successfully registered'
@@ -1518,7 +1649,8 @@ export default {
           // console.log(errMsg);
           showErrorMessage(errMsg)
         })
-    },
+    }
+    ,
     checkPhoto1 () {
       console.log('Check Photo', this.$refs.photo1)
     }
@@ -1538,12 +1670,21 @@ export default {
         this.countryList = response.data.country
         this.countryOptions = this.countryList
         this.gotraOptions = response.data.gotra
-        this.sourceOfWebsiteOptions = response.data.where_know
+        this.whereKnowOptions = response.data.where_know
         this.maritalOptions = response.data.marital_status
         this.genderOptions = response.data.gender
       })
       .catch((error) => {
-        // console.log(error);
+        let errMsg = ''
+        if ('message' in error.response.data) {
+          // errMsg = error.response.data.error + " - " + error.response.data.message;
+
+          errMsg = error.response.data.message
+        } else {
+          errMsg = error.response.data.error
+        }
+        // console.log(errMsg);
+        showErrorMessage(errMsg)
       })
   },
   components: {
