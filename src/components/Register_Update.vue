@@ -1565,8 +1565,8 @@ export default {
 
         //if updatedFormData has height then convert the same field to Cms
         var keys = ['partnerHeightFrom','partnerHeightTo','height'];
-        for(var key of keys){
-        if(updatedFormData.hasOwnProperty(key)){
+        for(let key of keys){
+        if(Object.prototype.hasOwnProperty.call(updatedFormData, key)){
             updatedFormData[key] = this.convertHeightToCms(updatedFormData[key])
         }
         }
