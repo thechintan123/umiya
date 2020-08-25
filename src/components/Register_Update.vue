@@ -2,7 +2,12 @@
   <div class="fit column">
     <!-- <q-card flat bordered class="my-card">--->
 
-    <q-linear-progress v-show="showProgressBar" indeterminate size="10px" color="secondary" />
+    <q-linear-progress
+      v-show="showProgressBar"
+      indeterminate
+      size="10px"
+      color="secondary"
+    />
     <q-spinner
       v-show="showProgressBar"
       class="z-top fixed-center"
@@ -20,15 +25,15 @@
       </q-banner>
       <q-card-section>
         Thank you
-        <span
-          class="text-weight-bolder text-capitalize"
-        >{{formData.firstName}} {{formData.lastName}}</span> for successful registration.
-        <br />Your Profile ID is
-        <b>{{userDetailsId}}</b>.
-        <br />Going forward, UmiyaMatrimony.com will notify you on your email
-        <b>{{formData.email}}</b>.
-        <br />The other profile will contact you on your primary contact
-        <b>{{formData.primaryContact}}</b>
+        <span class="text-weight-bolder text-capitalize"
+          >{{ formData.firstName }} {{ formData.lastName }}</span
+        >
+        for successful registration. <br />Your Profile ID is
+        <b>{{ userDetailsId }}</b
+        >. <br />Going forward, UmiyaMatrimony.com will notify you on your email
+        <b>{{ formData.email }}</b
+        >. <br />The other profile will contact you on your primary contact
+        <b>{{ formData.primaryContact }}</b>
         <br />
         <br />
         <b>Next Steps:</b>
@@ -41,8 +46,8 @@
           <q-item-section>
             <q-item-label>Admin Approval</q-item-label>
             <q-item-label caption>
-              Admin will verify your ID Proof and approve the profile.
-              You will be notified on {{formData.email}}.
+              Admin will verify your ID Proof and approve the profile. You will
+              be notified on {{ formData.email }}.
             </q-item-label>
           </q-item-section>
         </q-item>
@@ -52,7 +57,9 @@
           </q-item-section>
           <q-item-section>
             <q-item-label>Self Search & Contact</q-item-label>
-            <q-item-label caption>Search your match and contact the profile directly.</q-item-label>
+            <q-item-label caption
+              >Search your match and contact the profile directly.</q-item-label
+            >
           </q-item-section>
         </q-item>
       </q-card-section>
@@ -61,7 +68,10 @@
     <q-card v-if="!showProgressBar || !successRegistration">
       <q-banner class="bg-grey-3 q-mb-xs">
         <template v-slot:avatar>
-          <q-icon :name="updateProfile ? 'edit' : 'account_circle'" color="primary" />
+          <q-icon
+            :name="updateProfile ? 'edit' : 'account_circle'"
+            color="primary"
+          />
         </template>
         <template v-if="updateProfile">Update Profile</template>
         <template v-else>Register on website!!</template>
@@ -90,7 +100,12 @@
           </q-badge>
         </q-tab>
         <q-tab name="upload" icon="add_a_photo" label="Upload">
-          <q-badge v-if="isErrorPhoto || isErrorProof" align="top" color="blue" floating>
+          <q-badge
+            v-if="isErrorPhoto || isErrorProof"
+            align="top"
+            color="blue"
+            floating
+          >
             Error
             <q-icon name="warning" color="yellow" class="q-ml-sm" />
           </q-badge>
@@ -119,7 +134,10 @@
               tabindex="1"
               v-model="formData.email"
               label="Email (Login ID)*"
-              :rules="[ val => !!val || 'Field is required', val => checkEmail(val) || 'Please enter valid email address.']"
+              :rules="[
+                val => !!val || 'Field is required',
+                val => checkEmail(val) || 'Please enter valid email address.'
+              ]"
               dense
               clearable
               hint="Hint: This Email will be used as login ID"
@@ -133,7 +151,7 @@
                   tabindex="2"
                   outlined
                   v-model="formData.password"
-                  :rules="[ val => !!val || 'Field is required']"
+                  :rules="[val => !!val || 'Field is required']"
                   lazy-rules
                   ref="password"
                   label="Password*"
@@ -158,7 +176,12 @@
                   tabindex="3"
                   outlined
                   v-model="formData.confirmPassword"
-                  :rules="[ val => !!val || 'Field is required', val => checkConfirmPassword(val) || 'Password & Confirm Password are not same' ]"
+                  :rules="[
+                    val => !!val || 'Field is required',
+                    val =>
+                      checkConfirmPassword(val) ||
+                      'Password & Confirm Password are not same'
+                  ]"
                   lazy-rules
                   label="Confirm Password*"
                   type="password"
@@ -176,7 +199,7 @@
                   outlined
                   v-model="formData.firstName"
                   label="First Name*"
-                  :rules="[ val => !!val || 'Field is required']"
+                  :rules="[val => !!val || 'Field is required']"
                   dense
                   clearable
                   maxlength="50"
@@ -188,7 +211,7 @@
                   outlined
                   v-model="formData.lastName"
                   label="Last Name*"
-                  :rules="[ val => !!val || 'Field is required']"
+                  :rules="[val => !!val || 'Field is required']"
                   dense
                   clearable
                   maxlength="50"
@@ -207,7 +230,7 @@
               options-dense
               clearable
               label="Gender*"
-              :rules="[ val => !!val || 'Field is required']"
+              :rules="[val => !!val || 'Field is required']"
               @blur="defaultHeightAgeFromTo"
             />
 
@@ -221,13 +244,20 @@
                   stack-label
                   type="date"
                   label="Date of Birth*"
-                  :rules="[ val => !!val || 'Field is required']"
+                  :rules="[val => !!val || 'Field is required']"
                   @blur="calculateAge"
                   clearable
                 />
               </div>
               <div class="col">
-                <q-input outlined v-model="formData.age" label="Age" readonly disable dense />
+                <q-input
+                  outlined
+                  v-model="formData.age"
+                  label="Age"
+                  readonly
+                  disable
+                  dense
+                />
               </div>
             </div>
 
@@ -263,7 +293,9 @@
                   use-input
                   hide-selected
                   fill-input
-                  :rules="[ val => checkOtherCountry(val) || 'Field is required']"
+                  :rules="[
+                    val => checkOtherCountry(val) || 'Field is required'
+                  ]"
                   input-debounce="0"
                   clearable
                   @filter="filterOtherCountry"
@@ -279,7 +311,7 @@
                   outlined
                   dense
                   label="State*"
-                  :rules="[ val => !!val || 'Field is required']"
+                  :rules="[val => !!val || 'Field is required']"
                   clearable
                   maxlength="20"
                 />
@@ -291,7 +323,7 @@
                   outlined
                   dense
                   label="City*"
-                  :rules="[ val => !!val || 'Field is required']"
+                  :rules="[val => !!val || 'Field is required']"
                   clearable
                   maxlength="30"
                 />
@@ -306,7 +338,7 @@
                   dense
                   label="Country Code"
                   type="tel"
-                  :rules="[ val => !!val || 'Field is required']"
+                  :rules="[val => !!val || 'Field is required']"
                   hint="Don't add + or ( )"
                 />
               </div>
@@ -318,7 +350,7 @@
                   dense
                   label="Primary Contact*"
                   type="number"
-                  :rules="[ val => !!val || 'Field is required']"
+                  :rules="[val => !!val || 'Field is required']"
                   clearable
                   maxlength="12"
                   hint="Contact Numbers will be only shared to Approved profiles."
@@ -335,7 +367,7 @@
                   dense
                   label="Country Code"
                   type="tel"
-                  :rules="[ val => !!val || 'Field is required']"
+                  :rules="[val => !!val || 'Field is required']"
                   hint="Don't add + or ( )"
                 />
               </div>
@@ -360,7 +392,7 @@
                 <q-field
                   borderless
                   :value="formData.agreeTc"
-                  :rules="[ val => val === true || 'Field is required']"
+                  :rules="[val => val === true || 'Field is required']"
                 >
                   <template v-slot:control>
                     <q-toggle
@@ -382,10 +414,11 @@
             </div>
             <p class="text-caption text-weight-light">
               <i>
-                UmiyaMatrimony.com and its team are only providing online platform for brige-groom search.
-                The team only validates the name and date of birth based on ID Proof.
-                The team does not perform any background check on any details.
-                Requesting to perform the background check before proceeding with any profile.
+                UmiyaMatrimony.com and its team are only providing online
+                platform for brige-groom search. The team only validates the
+                name and date of birth based on ID Proof. The team does not
+                perform any background check on any details. Requesting to
+                perform the background check before proceeding with any profile.
               </i>
             </p>
 
@@ -417,7 +450,7 @@
                   options-dense
                   label="Marital Status*"
                   clearable
-                  :rules="[ val => !!val || 'Field is required']"
+                  :rules="[val => !!val || 'Field is required']"
                   @blur="defaultPartnerMartialStatus"
                 />
               </div>
@@ -431,7 +464,7 @@
                   options-dense
                   label="Height*"
                   :options="heightOptions"
-                  :rules="[ val => !!val || 'Field is required']"
+                  :rules="[val => !!val || 'Field is required']"
                   @blur="defaultHeightFromHeightTo"
                 ></q-select>
               </div>
@@ -442,7 +475,7 @@
                 <q-select
                   tabindex="17"
                   v-model="formData.gotra"
-                  :rules="[ val => !!val || 'Field is required']"
+                  :rules="[val => !!val || 'Field is required']"
                   outlined
                   dense
                   clearable
@@ -462,7 +495,7 @@
                   outlined
                   dense
                   label="Original Surname*"
-                  :rules="[ val => !!val || 'Field is required']"
+                  :rules="[val => !!val || 'Field is required']"
                   maxlength="20"
                 />
               </div>
@@ -474,7 +507,7 @@
               outlined
               v-model="formData.fatherName"
               label="Father Name*"
-              :rules="[ val => !!val || 'Field is required']"
+              :rules="[val => !!val || 'Field is required']"
               dense
               maxlength="50"
             />
@@ -484,7 +517,7 @@
               outlined
               v-model="formData.residentialAddress"
               label="Residential Address*"
-              :rules="[ val => !!val || 'Field is required']"
+              :rules="[val => !!val || 'Field is required']"
               dense
               placeholder="Flat/House no, Building Name, Street Name, City, State"
               hint="Hint: Flat/House no, Building Name, Street Name, City, State"
@@ -513,12 +546,12 @@
               options-dense
               outlined
               clearable
-              :rules="[ val => !!val || 'Field is required']"
+              :rules="[val => !!val || 'Field is required']"
             />
             <div class="text-subtitle1">Partner Preferences</div>
             <div class="text-caption text-italic">
-              We have defaulted some of the options.
-              Please feel free to change as per your preference.
+              We have defaulted some of the options. Please feel free to change
+              as per your preference.
             </div>
 
             <div class="row">
@@ -532,7 +565,12 @@
                   options-dense
                   label="Age(From)*"
                   :options="ageFromToOptions"
-                  :rules="[ val => !!val || 'Field is required',  val => checkAgeFrom(val) || 'Age(To) should be greater than Age(From)']"
+                  :rules="[
+                    val => !!val || 'Field is required',
+                    val =>
+                      checkAgeFrom(val) ||
+                      'Age(To) should be greater than Age(From)'
+                  ]"
                 ></q-select>
               </div>
               <div class="col">
@@ -545,7 +583,12 @@
                   options-dense
                   label="Age(To)*"
                   :options="ageFromToOptions"
-                  :rules="[ val => !!val || 'Field is required', val => checkAgeTo(val) || 'Age(To) should be greater than Age(From)' ]"
+                  :rules="[
+                    val => !!val || 'Field is required',
+                    val =>
+                      checkAgeTo(val) ||
+                      'Age(To) should be greater than Age(From)'
+                  ]"
                 ></q-select>
               </div>
             </div>
@@ -561,7 +604,12 @@
                   options-dense
                   label="Height(From)*"
                   :options="heightOptions"
-                  :rules="[ val => !!val || 'Field is required', val => checkHeightFrom(val) || 'Height(To) should be greater than Height(From)']"
+                  :rules="[
+                    val => !!val || 'Field is required',
+                    val =>
+                      checkHeightFrom(val) ||
+                      'Height(To) should be greater than Height(From)'
+                  ]"
                 ></q-select>
               </div>
               <div class="col">
@@ -574,7 +622,12 @@
                   options-dense
                   label="Height(To)*"
                   :options="heightOptions"
-                  :rules="[ val => !!val || 'Field is required' , val => checkHeightTo(val) || 'Height(To) should be greater than Height(From)']"
+                  :rules="[
+                    val => !!val || 'Field is required',
+                    val =>
+                      checkHeightTo(val) ||
+                      'Height(To) should be greater than Height(From)'
+                  ]"
                 ></q-select>
               </div>
             </div>
@@ -589,7 +642,7 @@
               dense
               options-dense
               label="Marital Statuses*"
-              :rules="[ val => val.length > 0 || 'Field is required']"
+              :rules="[val => val.length > 0 || 'Field is required']"
               multiple
               use-chips
               input-debounce="0"
@@ -598,97 +651,121 @@
             />
 
             <div class="row">
-              <q-btn color="secondary" flat label="Back" @click="tab = 'basic'" />
+              <q-btn
+                color="secondary"
+                flat
+                label="Back"
+                @click="tab = 'basic'"
+              />
               <q-space />
-              <q-btn tabindex="28" color="primary" label="Next >" @click="submitPersonalForm" />
+              <q-btn
+                tabindex="28"
+                color="primary"
+                label="Next >"
+                @click="submitPersonalForm"
+              />
             </div>
           </q-form>
         </q-tab-panel>
 
         <q-tab-panel name="upload">
           <q-form ref="uploadForm" greedy>
+            <div class="q-mb-xs">
+              <q-toggle
+                v-model="updatePhoto"
+                checked-icon="check"
+                color="green"
+                unchecked-icon="clear"
+                label="Do you want to update Photos?"
+                @input="getPhotos"
+              />
+              <q-slide-transition>
+                <q-field
+                  error-message="Please upload atleast One Photo."
+                  :error="isErrorPhoto"
+                  borderless
+                  dense
+                  v-show="(updateProfile && updatePhoto) || !updateProfile"
+                >
+                  <template v-slot:control>
+                    <q-uploader
+                      :factory="uploadPhoto"
+                      label="Upload Photos (max 4 images)"
+                      class="my-uploader"
+                      accept="image/*, .pdf, .jpg, .jpeg, .gif, .png"
+                      multiple
+                      :max-files="4"
+                      ref="photo"
+                      hide-upload-btn
+                      @added="checkPhoto"
+                      @removed="checkPhoto"
+                      @rejected="onRejected"
+                    />
+                  </template>
+                </q-field>
+              </q-slide-transition>
+            </div>
 
-          <div class="q-mb-xs" >
-            <q-toggle
-            v-model="updatePhoto"
-            checked-icon="check"
-            color="green" unchecked-icon="clear"
-            label="Do you want to update Photos?"
-            @input="getPhotos"
-            />
-        <q-slide-transition>
-              <q-field
-                error-message="Please upload atleast One Photo."
-                :error="isErrorPhoto"
-                borderless
-                dense
-                v-show="(updateProfile && updatePhoto) || !updateProfile"
-              >
-                <template v-slot:control>
-                  <q-uploader
-                    :factory="uploadPhoto"
-                    label="Upload Photos (max 4 images)"
-                    class="my-uploader"
-                    accept="image/*, .pdf, .jpg, .jpeg, .gif, .png"
-                    multiple
-                    :max-files="4"
-                    ref="photo"
-                    hide-upload-btn
-                    @added="checkPhoto"
-                    @removed="checkPhoto"
-                    @rejected="onRejected"
-                  />
-                </template>
-              </q-field>
-    </q-slide-transition>
-                </div>
+            <div class="q-mb-xs">
+              <q-toggle
+                v-model="updateProof"
+                checked-icon="check"
+                color="green"
+                unchecked-icon="clear"
+                label="Do you want to update Proofs?"
+                @input="getProof"
+              />
 
-            <div class="q-mb-xs" >
-
-            <q-toggle
-            v-model="updateProof"
-            checked-icon="check"
-            color="green" unchecked-icon="clear"
-            label="Do you want to update Proofs?"
-            @input="getProof"
-            />
-
-        <q-slide-transition>
-
-              <q-field
-                error-message="Please upload ID Proof."
-                :error="isErrorProof"
-                borderless
-                dense
-                v-show="(updateProfile && updateProof) || !updateProfile"
-              >
-                <template v-slot:control>
-                  <q-uploader
-                    :factory="uploadProof"
-                    label="Upload ID Proof (only 1 image or PDF)"
-                    class="my-uploader"
-                    accept="image/*, .pdf, .jpg, .jpeg, .gif, .png"
-                    color="accent"
-                    ref="proof"
-                    hide-upload-btn
-                    @added="checkProof"
-                    @removed="checkProof"
-                  />
-                </template>
-              </q-field>
-
-        </q-slide-transition>
-                    <p v-if = "formData.status.name === 'Approved'">
-              Your profile is already Approved so you cannot update your ID Proof</p>
-                    </div>
+              <q-slide-transition>
+                <q-field
+                  error-message="Please upload ID Proof."
+                  :error="isErrorProof"
+                  borderless
+                  dense
+                  v-show="(updateProfile && updateProof) || !updateProfile"
+                >
+                  <template v-slot:control>
+                    <q-uploader
+                      :factory="uploadProof"
+                      label="Upload ID Proof (only 1 image or PDF)"
+                      class="my-uploader"
+                      accept="image/*, .pdf, .jpg, .jpeg, .gif, .png"
+                      color="accent"
+                      ref="proof"
+                      hide-upload-btn
+                      @added="checkProof"
+                      @removed="checkProof"
+                    />
+                  </template>
+                </q-field>
+              </q-slide-transition>
+              <p v-if="formData.status.name === 'Approved'">
+                Your profile is already Approved so you cannot update your ID
+                Proof
+              </p>
+            </div>
 
             <div class="row">
-              <q-btn color="secondary" flat label="Back" @click="tab = 'personal'" />
+              <q-btn
+                color="secondary"
+                flat
+                label="Back"
+                @click="tab = 'personal'"
+              />
               <q-space />
-              <q-btn v-if="updateProfile" color="primary" label="Update"  @click="updateForm"/>
+              <q-btn
+                v-if="updateProfile"
+                color="primary"
+                label="Update"
+                @click="updateForm"
+              />
 
-              <q-btn v-else color="primary" label="Submit" @click="submitForm" />
-
+              <q-btn
+                v-else
+                color="primary"
+                label="Submit"
+                @click="submitForm"
+              />
             </div>
           </q-form>
         </q-tab-panel>
@@ -765,7 +842,7 @@ export default {
         dateOfBirth: '1983-09-01',
         age: 36,
         countryRadio: 'India',
-        country : {},
+        country: {},
         otherCountry: '',
         state: 'state',
         city: 'city',
@@ -806,7 +883,7 @@ export default {
         gender: '',
         dateOfBirth: '',
         age: 0,
-        country : {},
+        country: {},
         state: '',
         city: '',
         primaryContact: '',
@@ -828,7 +905,7 @@ export default {
         partnerMartialStatus: [],
         agreeTc: false,
         whereKnow: '',
-        status: {name: ''}
+        status: { name: '' }
       },
 
       // This fields are used to later club them into form fields of primaryContact and alternateContcts
@@ -837,17 +914,16 @@ export default {
         primaryContactCountryCode: '',
         alternateContactCountryCode: '',
         alternateContact: '',
-        countryRadio : '',
-        otherCountry : ''
-
+        countryRadio: '',
+        otherCountry: ''
       },
 
       // These fields are used for updateProfile
       updatePhoto: false,
       updateProof: false,
 
-      //This field is used to compare Previous Form Data with updated Form Data
-      previousFormData : {}
+      // This field is used to compare Previous Form Data with updated Form Data
+      previousFormData: {}
     }
   },
   computed: {
@@ -860,7 +936,11 @@ export default {
       this.tmpData = this.testTmpData
       // defaults email with random string
       this.formData.email =
-        'test' + Math.random().toString(20).substr(2, 6) + '@test.com'
+        'test' +
+        Math.random()
+          .toString(20)
+          .substr(2, 6) +
+        '@test.com'
     },
     tabChange () {
       if (this.tab === 'basic' && this.basicHasError) {
@@ -870,7 +950,7 @@ export default {
       }
     },
     submitBasicForm () {
-      this.$refs.basicForm.validate().then((success) => {
+      this.$refs.basicForm.validate().then(success => {
         if (success) {
           this.basicHasError = false
           this.tab = 'personal'
@@ -880,7 +960,7 @@ export default {
       })
     },
     submitPersonalForm () {
-      this.$refs.personalForm.validate().then((success) => {
+      this.$refs.personalForm.validate().then(success => {
         if (success) {
           this.personalHasError = false
           this.tab = 'upload'
@@ -904,7 +984,7 @@ export default {
           })
           /* this.$router.push('/login') */
         })
-        .catch((error) => {
+        .catch(error => {
           let errMsg = ''
           if ('message' in error.response.data) {
             // errMsg = error.response.data.error + " - " + error.response.data.message;
@@ -921,42 +1001,39 @@ export default {
     checkPhoto () {
       // console.log("Photo", this.$refs.photo);
       // console.log(this.$refs.photo.files.length);
-      //Below condition is only check for updating Profile
-      if(this.updateProfile !== true || this.updatePhoto === true){
-      if (this.$refs.photo.files.length > 4) {
-        this.$refs.photo.files.length = 4 // This will reduce the allowed files to 4 photos;
-        this.$q.notify({
-          type: 'negative',
-          message: 'Only 4 Photos are allowed. Addtional ones are removed'
-        })
-      } else if (this.$refs.photo.files.length === 0) {
-        this.isErrorPhoto = true
-        // this.uploadHasError = true;
+      // Below condition is only check for updating Profile
+      if (this.updateProfile !== true || this.updatePhoto === true) {
+        if (this.$refs.photo.files.length > 4) {
+          this.$refs.photo.files.length = 4 // This will reduce the allowed files to 4 photos;
+          this.$q.notify({
+            type: 'negative',
+            message: 'Only 4 Photos are allowed. Addtional ones are removed'
+          })
+        } else if (this.$refs.photo.files.length === 0) {
+          this.isErrorPhoto = true
+          // this.uploadHasError = true;
+        } else {
+          this.isErrorPhoto = false
+          // this.uploadHasError = true;
+        }
       } else {
-        this.isErrorPhoto = false
-        // this.uploadHasError = true;
-      }
-      }
-      else{
         this.isErrorPhoto = false
       }
     },
     checkProof () {
       // console.log("Proof", this.$refs.photo);
       // console.log(this.$refs.photo.files.length);
-      //Below condition is only check for updating Profile
-      //console.log("Check Proof", this.updateProfile, this.updateProof)
-      if(this.updateProfile !== true || 
-      this.updateProof === true){
-      if (this.$refs.proof.files.length === 0) {
-        this.isErrorProof = true
-        // this.uploadHasError = true;
+      // Below condition is only check for updating Profile
+      // console.log("Check Proof", this.updateProfile, this.updateProof)
+      if (this.updateProfile !== true || this.updateProof === true) {
+        if (this.$refs.proof.files.length === 0) {
+          this.isErrorProof = true
+          // this.uploadHasError = true;
+        } else {
+          this.isErrorProof = false
+          // this.uploadHasError = true;
+        }
       } else {
-        this.isErrorProof = false
-        // this.uploadHasError = true;
-      }
-      }
-      else{
         this.isErrorProof = false
       }
     },
@@ -1053,28 +1130,29 @@ export default {
     },
     defaultAgeFromAgeTo () {
       // console.log("Gender", this.formData.gender);
-    if(this.updateProfile!== true){
-          if (this.formData.age !== '') {
-            if (this.formData.gender.name === 'Male') {
-              // Defaulting Age for Partner
-              this.formData.partnerAgeFrom = this.formData.age - this.ageDifference
-              this.formData.ageTo = this.formData.age
-            } else if (this.formData.gender.name === 'Female') {
-              // Defaulting Age for Partner
-              this.formData.partnerAgeFrom = this.formData.age
-              this.formData.ageTo = this.formData.age + this.ageDifference
-            } else {
-              this.formData.partnerAgeFrom = ''
-              this.formData.ageTo = ''
-            }
+      if (this.updateProfile !== true) {
+        if (this.formData.age !== '') {
+          if (this.formData.gender.name === 'Male') {
+            // Defaulting Age for Partner
+            this.formData.partnerAgeFrom =
+              this.formData.age - this.ageDifference
+            this.formData.ageTo = this.formData.age
+          } else if (this.formData.gender.name === 'Female') {
+            // Defaulting Age for Partner
+            this.formData.partnerAgeFrom = this.formData.age
+            this.formData.ageTo = this.formData.age + this.ageDifference
           } else {
             this.formData.partnerAgeFrom = ''
             this.formData.ageTo = ''
           }
-    }
+        } else {
+          this.formData.partnerAgeFrom = ''
+          this.formData.ageTo = ''
+        }
+      }
     },
     defaultHeightFromHeightTo () {
-      if(this.updateProfile!== true){
+      if (this.updateProfile !== true) {
         this.formData.heightCms = this.convertHeightToCms(this.formData.height)
         var heightCms = this.formData.heightCms
         var heightFromCms, heightToCms
@@ -1103,8 +1181,7 @@ export default {
     defaultPartnerMartialStatus () {
       // console.log("Martial Status", this.formData.maritalStatus);
       // console.log("MSP", this.formData.partnerMartialStatus);
-      if(this.updateProfile!== true )
-      {
+      if (this.updateProfile !== true) {
         this.formData.partnerMartialStatus.length = 0
         this.formData.partnerMartialStatus.push(this.formData.maritalStatus)
       }
@@ -1176,14 +1253,14 @@ export default {
             'Content-Type': 'multipart/form-data'
           }
         })
-        .then((resolve) => {
+        .then(resolve => {
           // console.log("uploadImage - Then");
           this.$q.notify({
             type: 'positive',
             message: file + ' successfully uploaded'
           })
         })
-        .catch((error) => {
+        .catch(error => {
           let errMsg = ''
           if ('message' in error.response.data) {
             // errMsg = error.response.data.error + " - " + error.response.data.message;
@@ -1238,7 +1315,7 @@ export default {
 
     // For Update Profile
     getUserDetail () {
-      this.showProgressBar = true;
+      this.showProgressBar = true
       var user = JSON.parse(localStorage.getItem('user'))
       var userDetail
       // console.log(JSON.parse(localStorage.getItem("user")));
@@ -1259,7 +1336,7 @@ export default {
             userDetail = JSON.parse(
               JSON.stringify(data).replace(
                 /(_\w)\w+":/g,
-                (match) => match[1].toUpperCase() + match.substring(2)
+                match => match[1].toUpperCase() + match.substring(2)
               )
             )
 
@@ -1267,7 +1344,7 @@ export default {
             userDetail = JSON.parse(
               JSON.stringify(userDetail).replace(
                 /(_\w)\w+":/g,
-                (match) => match[1].toUpperCase() + match.substring(2)
+                match => match[1].toUpperCase() + match.substring(2)
               )
             )
 
@@ -1283,7 +1360,9 @@ export default {
               1,
               2
             )
-            this.tmpData.primaryContact = this.formData.primaryContact.substr(4)
+            this.tmpData.primaryContact = this.formData.primaryContact.substr(
+              4
+            )
             this.tmpData.alternateContactCountryCode = this.formData.alternateContact.substr(
               1,
               2
@@ -1315,46 +1394,45 @@ export default {
 
             // Map country and other country
 
-           var country = this.formData.country
+            var country = this.formData.country
             if (country.name === 'India') {
               this.tmpData.countryRadio = 'India'
             } else {
               this.tmpData.countryRadio = 'Other'
-              this.tmpData.otherCountry = Object.assign({}, this.formData.country); // mapping entire country object
+              this.tmpData.otherCountry = Object.assign(
+                {},
+                this.formData.country
+              ) // mapping entire country object
             }
-            
 
             // Map Address and father
-            //this.formData.residentialAddress = this.formData.address
-            //this.formData.fatherName = this.formData.fatherName
+            // this.formData.residentialAddress = this.formData.address
+            // this.formData.fatherName = this.formData.fatherName
 
             // Map where you came to know
-            //this.formData.whereKnow = this.formData.whereKnow
+            // this.formData.whereKnow = this.formData.whereKnow
 
-            
             // Map Partner Height From and To. First, Convert to Ft and Inches
-            this.formData.partnerHeightFromCms = this.formData.partnerHeightFrom;
+            this.formData.partnerHeightFromCms = this.formData.partnerHeightFrom
             this.formData.partnerHeightFrom = this.convertHeightToFtInch(
               this.formData.partnerHeightFromCms
             )
-            this.formData.partnerHeightToCms = this.formData.partnerHeightTo;
+            this.formData.partnerHeightToCms = this.formData.partnerHeightTo
             this.formData.partnerHeightTo = this.convertHeightToFtInch(
               this.formData.partnerHeightToCms
             )
-            
 
-            //Storing FormData into Other Object
-            this.previousFormData = Object.assign({}, this.formData);
-            //this.previousFormData = this.formData;
-            console.log("Previous Form Data", this.previousFormData);
+            // Storing FormData into Other Object
+            this.previousFormData = Object.assign({}, this.formData)
+            // this.previousFormData = this.formData;
+            console.log('Previous Form Data', this.previousFormData)
 
-            this.showProgressBar = false;
-
+            this.showProgressBar = false
           })
-          .catch((error) => {
+          .catch(error => {
             let errMsg = ''
             if ('message' in error.response.data) {
-            // errMsg = error.response.data.error + " - " + error.response.data.message;
+              // errMsg = error.response.data.error + " - " + error.response.data.message;
 
               errMsg = error.response.data.message
             } else {
@@ -1371,12 +1449,12 @@ export default {
       // Get Photos
       // console.log("Get Photo", this.formData.uploadPhotos);
       if (
-        this.updatePhoto && (
-          this.formData.uploadPhotos.length !== 0 &&
-              this.formData.uploadPhotos !== null &&
-              typeof this.formData.uploadPhotos !== 'undefined') &&
-              (this.$refs.photo.files.length !== this.formData.uploadPhotos.length)
-              // if photos are already loaded then no need to fetch it from Axios
+        this.updatePhoto &&
+        this.formData.uploadPhotos.length !== 0 &&
+        this.formData.uploadPhotos !== null &&
+        typeof this.formData.uploadPhotos !== 'undefined' &&
+        this.$refs.photo.files.length !== this.formData.uploadPhotos.length
+        // if photos are already loaded then no need to fetch it from Axios
       ) {
         // console.log("Before Photo Loop", this.formData.uploadPhotos);
         var fileList = []
@@ -1395,15 +1473,15 @@ export default {
 
           axios({
             url:
-                    process.env.API +
-                    '/upload/' +
-                    this.userDetailsId +
-                    '/' +
-                    photo.filename,
+              process.env.API +
+              '/upload/' +
+              this.userDetailsId +
+              '/' +
+              photo.filename,
             method: 'GET',
             responseType: 'blob' // important
           })
-            .then((response) => {
+            .then(response => {
               var pos = response.config.url.indexOf('photo')
               var file = response.config.url.substr(pos) // get file name from URL
 
@@ -1431,7 +1509,7 @@ export default {
               this.$refs.photo.addFiles(fileList)
               // console.log("Photos in Uploader", this.$refs.photo);
             })
-            .catch((error) => {
+            .catch(error => {
               let errMsg = ''
               if ('message' in error.response.data) {
                 // errMsg = error.response.data.error + " - " + error.response.data.message;
@@ -1453,10 +1531,12 @@ export default {
       // get Proofs
 
       // console.log("getProof", this.updateProof,  this.formData.uploadProof);
-      if (this.updateProof &&
-      (this.formData.uploadProof !== '' && this.formData.uploadProof !== null &&
-      (typeof this.formData.uploadProof !== 'undefined')) &&
-      (this.$refs.proof.files.length === 0)
+      if (
+        this.updateProof &&
+        this.formData.uploadProof !== '' &&
+        this.formData.uploadProof !== null &&
+        typeof this.formData.uploadProof !== 'undefined' &&
+        this.$refs.proof.files.length === 0
       ) {
         var userDetailsId = this.userDetailsId
         var filename = this.formData.uploadProof
@@ -1465,31 +1545,35 @@ export default {
           url: process.env.API + '/upload/' + userDetailsId + '/' + filename,
           method: 'GET',
           responseType: 'blob' // important
-        }).then((response) => {
-          // console.log("Called Upload", response);
-
-          var blobObject = new Blob([response.data])
-          var fileObj = new File([blobObject], filename, { type: 'image/jpeg' })
-
-          // console.log('File Obj', blobObject, fileObj);
-          var fileList = [fileObj]
-          this.$refs.proof.addFiles(fileList)
-          // console.log('Proof', this.$refs.proof)
-          if (this.formData.status.name === 'Approved') {
-            this.$refs.proof.disable = true
-          }
-        }).catch((error) => {
-          let errMsg = ''
-          if ('message' in error.response.data) {
-            // errMsg = error.response.data.error + " - " + error.response.data.message;
-
-            errMsg = error.response.data.message
-          } else {
-            errMsg = error.response.data.error
-          }
-          // console.log(errMsg);
-          showErrorMessage(errMsg)
         })
+          .then(response => {
+            // console.log("Called Upload", response);
+
+            var blobObject = new Blob([response.data])
+            var fileObj = new File([blobObject], filename, {
+              type: 'image/jpeg'
+            })
+
+            // console.log('File Obj', blobObject, fileObj);
+            var fileList = [fileObj]
+            this.$refs.proof.addFiles(fileList)
+            // console.log('Proof', this.$refs.proof)
+            if (this.formData.status.name === 'Approved') {
+              this.$refs.proof.disable = true
+            }
+          })
+          .catch(error => {
+            let errMsg = ''
+            if ('message' in error.response.data) {
+              // errMsg = error.response.data.error + " - " + error.response.data.message;
+
+              errMsg = error.response.data.message
+            } else {
+              errMsg = error.response.data.error
+            }
+            // console.log(errMsg);
+            showErrorMessage(errMsg)
+          })
       }
     }, // end of getphotos
     // function called on updateForm
@@ -1517,9 +1601,8 @@ export default {
         !this.personalHasError &&
         !this.isErrorPhoto &&
         !this.isErrorProof
-      ) 
-        {
-        //create PrimaryContact
+      ) {
+        // create PrimaryContact
         this.formData.primaryContact =
           '+' +
           this.tmpData.primaryContactCountryCode +
@@ -1531,49 +1614,54 @@ export default {
           ' ' +
           this.tmpData.alternateContact
 
+        // create Country Object using Country radio and otherCountry Dropdown
+        if (this.tmpData.countryRadio === 'India') {
+          this.formData.country = {}
+          this.formData.country.id = 81
+          this.formData.country.name = 'India'
+        } else {
+          this.tmpData.countryRadio = 'Other'
+          this.formData.country = Object.assign({}, this.tmpData.otherCountry)
+        }
 
-        
-      //create Country Object using Country radio and otherCountry Dropdown
-      if(this.tmpData.countryRadio === 'India'){
-        this.formData.country = {};
-        this.formData.country['id'] = 81;
-        this.formData.country['name'] = 'India';
-      }else {
-        this.tmpData.countryRadio = 'Other'
-        this.formData.country = Object.assign({},this.tmpData.otherCountry);
-      }
-      
-      console.log("FormData", this.formData);
 
-      //creating new Object with only updated values
-      var updatedFormData = {};
-      var previousForm = this.previousFormData;
-      
-      var form = this.formData;
-      for(var key in previousForm){
-        if(previousForm[key] !== '' && previousForm[key] !== null && previousForm[key] !== 'undefined'){
-          //console.log("loop", key, form[key], previousForm[key], previousForm, this.previousFormData);
-          //if(previousForm[key] !== form[key]){
-            if(JSON.stringify(previousForm[key]) !== JSON.stringify(form[key])){
-            console.log("Did not match", previousForm[key], form[key])  
-            updatedFormData[key] = form[key]
+        console.log('FormData', this.formData)
+
+        // creating new Object with only updated values
+        var updatedFormData = {}
+        var previousForm = this.previousFormData
+
+        var form = this.formData
+        for (const key in previousForm) {
+          if (
+            previousForm[key] !== '' &&
+            previousForm[key] !== null &&
+            previousForm[key] !== 'undefined'
+          ) {
+            // console.log("loop", key, form[key], previousForm[key], previousForm, this.previousFormData);
+            // if(previousForm[key] !== form[key]){
+            if (
+              JSON.stringify(previousForm[key]) !== JSON.stringify(form[key])
+            ) {
+              console.log('Did not match', previousForm[key], form[key])
+              updatedFormData[key] = form[key]
+            }
           }
         }
-      }
-      console.log("updatedFormData", updatedFormData);
+        console.log('updatedFormData', updatedFormData)
 
-
-        //if updatedFormData has height then convert the same field to Cms
-        var keys = ['partnerHeightFrom','partnerHeightTo','height'];
-        for(let key of keys){
-        if(Object.prototype.hasOwnProperty.call(updatedFormData, key)){
-            updatedFormData[key] = this.convertHeightToCms(updatedFormData[key])
+        // if updatedFormData has height then convert the same field to Cms
+        var keys = ['partnerHeightFrom', 'partnerHeightTo', 'height']
+        for (const key of keys) {
+          if (updatedFormData.hasOwnProperty(key)) {
+            updatedFormData[key] = this.convertHeightToCms(
+              updatedFormData[key]
+            )
+          }
         }
-        }
-        console.log("updatedFormData", updatedFormData);
+        console.log('updatedFormData', updatedFormData)
 
-
-/*
+        /*
       if (
         !this.basicHasError &&
         !this.personalHasError &&
@@ -1608,18 +1696,16 @@ export default {
 
         // converting from CamelCase to SnakeCase
         var updatedFormDataSnakeCase = {}
-        for (var key in updatedFormData) {
-          //console.log("Key", camel);
-          updatedFormDataSnakeCase[this.camelToSnake(key)] = updatedFormData[key]
+        for (const key in updatedFormData) {
+          // console.log("Key", camel);
+          updatedFormDataSnakeCase[this.camelToSnake(key)] =
+            updatedFormData[key]
         }
         console.log('Converted to Snake Case', updatedFormDataSnakeCase)
         await this.updateUser(updatedFormDataSnakeCase)
-       
-       } // end of if of !basicError and other Errors
+      } // end of if of !basicError and other Errors
 
-        this.showProgressBar = false
-
-      
+      this.showProgressBar = false
     }, // end of  UpdateForm
     camelToSnake (key) {
       return key.replace(/([A-Z])/g, '_$1').toLowerCase()
@@ -1637,7 +1723,7 @@ export default {
           })
           /* this.$router.push('/login') */
         })
-        .catch((error) => {
+        .catch(error => {
           let errMsg = ''
           if ('message' in error.response.data) {
             // errMsg = error.response.data.error + " - " + error.response.data.message;
@@ -1649,8 +1735,7 @@ export default {
           // console.log(errMsg);
           showErrorMessage(errMsg)
         })
-    }
-    ,
+    },
     checkPhoto1 () {
       console.log('Check Photo', this.$refs.photo1)
     }
@@ -1666,7 +1751,7 @@ export default {
     }
     axios
       .get(process.env.API + '/lists')
-      .then((response) => {
+      .then(response => {
         this.countryList = response.data.country
         this.countryOptions = this.countryList
         this.gotraOptions = response.data.gotra
@@ -1674,7 +1759,7 @@ export default {
         this.maritalOptions = response.data.marital_status
         this.genderOptions = response.data.gender
       })
-      .catch((error) => {
+      .catch(error => {
         let errMsg = ''
         if ('message' in error.response.data) {
           // errMsg = error.response.data.error + " - " + error.response.data.message;

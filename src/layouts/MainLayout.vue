@@ -175,7 +175,7 @@ export default {
   data () {
     return {
       drawer: false,
-      left :  true,
+      left: true,
       menuList
     }
   },
