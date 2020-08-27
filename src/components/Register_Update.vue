@@ -15,57 +15,13 @@
       size="3em"
       :thickness="10"
     />
+    <successUpdate v-if="successProcess" 
+    :updateProfile = "updateProfile"
+    :formData = "formData" :userDetailsId  = "userDetailsId" />
 
-    <q-card v-if="successRegistration">
-      <q-banner class="bg-grey-3 q-mb-xs">
-        <template v-slot:avatar>
-          <q-icon name="assignment_turned_in" color="secondary" />
-        </template>
-        Successful Registration!!
-      </q-banner>
-      <q-card-section>
-        Thank you
-        <span class="text-weight-bolder text-capitalize"
-          >{{ formData.firstName }} {{ formData.lastName }}</span
-        >
-        for successful registration. <br />Your Profile ID is
-        <b>{{ userDetailsId }}</b
-        >. <br />Going forward, UmiyaMatrimony.com will notify you on your email
-        <b>{{ formData.email }}</b
-        >. <br />The other profile will contact you on your primary contact
-        <b>{{ formData.primaryContact }}</b>
-        <br />
-        <br />
-        <b>Next Steps:</b>
-        <br />
-        <q-item>
-          <q-item-section avatar>
-            <q-icon color="primary" name="done_outline" />
-          </q-item-section>
+    
 
-          <q-item-section>
-            <q-item-label>Admin Approval</q-item-label>
-            <q-item-label caption>
-              Admin will verify your ID Proof and approve the profile. You will
-              be notified on {{ formData.email }}.
-            </q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-section avatar>
-            <q-icon color="secondary" name="fas fa-heart" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Self Search & Contact</q-item-label>
-            <q-item-label caption
-              >Search your match and contact the profile directly.</q-item-label
-            >
-          </q-item-section>
-        </q-item>
-      </q-card-section>
-    </q-card>
-
-    <q-card v-if="!showProgressBar || !successRegistration">
+    <q-card v-if="!successProcess">
       <q-banner class="bg-grey-3 q-mb-xs">
         <template v-slot:avatar>
           <q-icon
@@ -700,6 +656,9 @@
                       @added="checkPhoto"
                       @removed="checkPhoto"
                       @rejected="onRejected"
+                      @factory-failed ="handleFailed"
+                      @uploaded="uploadSuccess"
+                      @finish="uploadSuccess"
                     />
                   </template>
                 </q-field>
@@ -757,7 +716,7 @@
                 v-if="updateProfile"
                 color="primary"
                 label="Update"
-                @click="updateForm"
+                @click.prevent="updateForm"
               />
 
               <q-btn
@@ -794,7 +753,7 @@ export default {
       showProgressBar: false,
 
       // to show Registration form or Success message
-      successRegistration: false,
+      successProcess: false,
 
       // Form Settings
       isPwd: true,
@@ -923,7 +882,14 @@ export default {
       updateProof: false,
 
       // This field is used to compare Previous Form Data with updated Form Data
-      previousFormData: {}
+      previousFormData: {},
+
+      //This field is used to check when user detils are updated in DB successfully
+      updateUserStatus : false,
+
+      //This field is used for update of photos and proofs 
+      previousPhotosFiles : [],
+      previousProofFile : []
     }
   },
   computed: {
@@ -1094,7 +1060,7 @@ export default {
         if (this.userDetailsId !== '') {
           this.$refs.photo.upload()
           this.$refs.proof.upload()
-          this.successRegistration = true
+          this.successProcess = true
         }
       }
       this.showProgressBar = false
@@ -1198,7 +1164,7 @@ export default {
     convertHeightToFtInch (heightCms) {
       var heightTotalInches = heightCms * 0.393701
       var heightFt = Math.floor(heightTotalInches / 12)
-      var heightInches = Math.ceil(heightTotalInches - heightFt * 12)
+      var heightInches = Math.round(heightTotalInches - heightFt * 12)
       console.log('Height Ft Inch', heightFt, heightInches)
       return heightFt + ' ft ' + heightInches + ' inches'
     },
@@ -1273,12 +1239,66 @@ export default {
         })
     },
     async uploadPhoto (file) {
+
+      var uploadFile = true;
+      if(this.updateProfile === true){
+        // var newFileList = this.$refs.photo.files;
+        var prevFileList = this.previousPhotosFiles;
+        //console.log("Check File List 2", file, prevFileList, typeof(prevFileList), typeof(file) );
+        var pFile, nFile;
+        for(pFile of prevFileList){
+          //for(nFile of newFileList){
+            console.log("File Details", file[0].name, pFile.name)
+            if(pFile.name === file[0].name){
+                this.$refs.photo.removeFile(file[0]);
+                uploadFile = false;
+            } //end-if
+          //} //end -for
+        } //end-for
+       console.log("Photo List", this.$refs.photo);
+       }// end -if updateprofile = true
+       if(uploadFile === true){
       const fd = new FormData()
       fd.append('file', file[0])
       fd.append('filetype', 'photo')
-      fd.append('userDetailsId', this.userDetailsId)
-      // console.log("Upload Photo", fd, file);
+      fd.append('user_details_id', this.userDetailsId)
+      console.log("Upload Photo", this.userDetailsId, fd, file);
       await this.uploadImage(fd, 'Photo')
+    }
+    },
+    //Below function is copied from Internet as an example
+        uploadFile (files) {
+      return new Promise((resolve, reject) => {
+        var myUploader = this.$refs.uploader[0]
+        var file = files[0]
+        var fileSrc
+        var fileData
+        var reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onerror = err => console.error(`Failed to read file: ${err}`)
+        reader.onload = function () {
+          fileSrc = reader.result
+          fileData = fileSrc.substr(fileSrc.indexOf(',') + 1)
+          stitchClient.callFunction('uploadImageToS3', [fileData, 'elever-erp-document-store', file.name, file.type])
+            .then(result => {
+              alert('fatto')
+              console.log(file)
+              myUploader.removeFile(file)
+              resolve(files)
+            })
+            .catch(err => {
+              console.error(`Failed to upload file: ${err}`)
+              reject()
+            })
+        }
+      })
+    }
+    ,
+    handleFailed(err, files) {
+      console.debug('uploaded failed', err, files)
+    },
+    uploadSuccess() {
+      console.debug('UPload Success')
     },
     async uploadProof (file) {
       const fd = new FormData()
@@ -1457,7 +1477,8 @@ export default {
         // if photos are already loaded then no need to fetch it from Axios
       ) {
         // console.log("Before Photo Loop", this.formData.uploadPhotos);
-        var fileList = []
+        this.showProgressBar = true;
+        //var fileList = []
         var photos = this.formData.uploadPhotos
         // var len = photos.length
         var photo = {}
@@ -1504,10 +1525,12 @@ export default {
               // fileObj.type = "image/jpeg";
               // console.log('File Obj', blobObject, fileObj);
               // var fileList = [fileObj]
-              fileList.push(fileObj)
+              this.previousPhotosFiles.push(fileObj)
               // this.$refs.photo1.files.push(fileObj);
-              this.$refs.photo.addFiles(fileList)
+              this.$refs.photo.addFiles(this.previousPhotosFiles)
               // console.log("Photos in Uploader", this.$refs.photo);
+              this.showProgressBar = false;
+
             })
             .catch(error => {
               let errMsg = ''
@@ -1538,6 +1561,8 @@ export default {
         typeof this.formData.uploadProof !== 'undefined' &&
         this.$refs.proof.files.length === 0
       ) {
+
+        this.showProgressBar = true;
         var userDetailsId = this.userDetailsId
         var filename = this.formData.uploadProof
 
@@ -1561,6 +1586,8 @@ export default {
             if (this.formData.status.name === 'Approved') {
               this.$refs.proof.disable = true
             }
+           this.showProgressBar = false;
+
           })
           .catch(error => {
             let errMsg = ''
@@ -1580,7 +1607,7 @@ export default {
     async updateForm () {
       this.showProgressBar = true
 
-      console.log('Update Form', this.formData)
+      console.log('Update Form', this.formData, this.$refs)
 
       if (typeof this.$refs.basicForm === 'undefined') {
         this.basicHasError = true
@@ -1648,6 +1675,9 @@ export default {
             }
           }
         }
+
+
+
         console.log('updatedFormData', updatedFormData)
 
         // if updatedFormData has height then convert the same field to Cms
@@ -1661,39 +1691,6 @@ export default {
         }
         console.log('updatedFormData', updatedFormData)
 
-        /*
-      if (
-        !this.basicHasError &&
-        !this.personalHasError &&
-        !this.isErrorPhoto &&
-        !this.isErrorProof
-      ) {
-        this.formData.primaryContact =
-          '+' +
-          this.tmpData.primaryContactCountryCode +
-          ' ' +
-          this.tmpData.primaryContact
-        this.formData.alternateContact =
-          '+' +
-          this.tmpData.alternateContactCountryCode +
-          ' ' +
-          this.tmpData.alternateContact
-
-        // console.log("Submit form 1", this.formData);
-        // convert Height To Cms
-        this.formData.partnerHeightFromCms = this.convertHeightToCms(
-          this.formData.partnerHeightFrom
-        )
-        this.formData.partnerHeightToCms = this.convertHeightToCms(
-          this.formData.partnerHeightTo
-        )
-        if (this.formData.heightCms === '') {
-          this.formData.heightCms = this.convertHeightToCms(
-            this.formData.height
-          )
-        }
-*/
-
         // converting from CamelCase to SnakeCase
         var updatedFormDataSnakeCase = {}
         for (const key in updatedFormData) {
@@ -1703,6 +1700,14 @@ export default {
         }
         console.log('Converted to Snake Case', updatedFormDataSnakeCase)
         await this.updateUser(updatedFormDataSnakeCase)
+
+        //Update Photos and Proof if applicable
+        console.log("updateUserStatus", this.updateUserStatus, this.$refs.photo, this.$refs);
+        if(this.updateUserStatus === true){
+          this.$refs.photo.upload();
+
+        }
+        
       } // end of if of !basicError and other Errors
 
       this.showProgressBar = false
@@ -1716,12 +1721,13 @@ export default {
         .put(process.env.API + '/users/' + this.userDetailsId, data)
         .then(({ data }) => {
           console.log('Search Success', data)
-          // this.userDetailsId = data.userDetailsId;
+           this.updateUserStatus = true;
           this.$q.notify({
             type: 'positive',
-            message: 'Successfully registered'
+            message: 'Successfully Updated'
           })
           /* this.$router.push('/login') */
+          //this.successProcess = true;
         })
         .catch(error => {
           let errMsg = ''
@@ -1734,6 +1740,34 @@ export default {
           }
           // console.log(errMsg);
           showErrorMessage(errMsg)
+        })
+    },
+
+    /// This function is called to update Image - Photo and Proof
+       updateImage (fd, file) {
+      return axios
+        .post(process.env.API + '/upload', fd, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+        .then(resolve => {
+          // console.log("uploadImage - Then");
+          this.$q.notify({
+            type: 'positive',
+            message: file + ' successfully uploaded'
+          })
+        })
+        .catch(error => {
+          let errMsg = ''
+          if ('message' in error.response.data) {
+            // errMsg = error.response.data.error + " - " + error.response.data.message;
+            errMsg = error.response.data.message
+          } else {
+            errMsg = error.response.data.error
+          }
+          showErrorMessage(errMsg)
+          // console.log("uploadImage - Error - Error Message", errMsg);
         })
     },
     checkPhoto1 () {
@@ -1773,9 +1807,10 @@ export default {
       })
   },
   components: {
-    termsConditionsDialog: require('./terms_privacy/TermsConditionsDialog.vue')
-      .default
-  }
+    termsConditionsDialog: require('./terms_privacy/TermsConditionsDialog.vue').default,
+    successUpdate : require('./register_update/SuccessUpdate.vue').default
+
+    }
 }
 </script>
 

@@ -34,6 +34,7 @@ def create_user():
                    'height', 'gotra', 'original_surname', 'father_fullname', 'residential_address',
                    'partner_age_from', 'partner_age_to', 'partner_height_from', 'partner_height_to',
                    'where_know')
+    
     if not all(field in data for field in mand_fields):
         return bad_request('Please provide all mandatory fields')
     if 'id' not in data['gotra'] or \

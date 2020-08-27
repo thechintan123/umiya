@@ -615,7 +615,6 @@
                     multiple
                     max-files="4"
                     ref="photo"
-                    hide-upload-btn
                     @added="checkPhoto"
                     @removed="checkPhoto"
                     @rejected="onRejected"
@@ -939,6 +938,7 @@ export default {
         // console.log("Submit Form", this.formData);
 
         await this.registerUser(this.formData)
+        this.user_details_id = 3;
 
         if (this.user_details_id !== '') {
           this.$refs.photo.upload()
@@ -1119,6 +1119,7 @@ export default {
       fd.append('user_details_id', this.user_details_id)
       // console.log("Upload Photo", fd, file);
       await this.uploadImage(fd, 'Photo')
+      console.log("Upload Photo", this.$refs.photo);
     },
     async uploadProof (file) {
       const fd = new FormData()
