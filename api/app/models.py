@@ -188,7 +188,7 @@ class UserDetails(db.Model):
                 setattr(self, key, data[key])
     
         # had to separate queries and assign to self otherwise SQLachemy seems to commit too early???
-        '''
+        
         country = gotra = where_know = marital_status = gender = None
         partner_marital_status = []
         if 'country' in data and data['country'] is not None:
@@ -221,9 +221,10 @@ class UserDetails(db.Model):
         if 'date_of_birth' in data and data['date_of_birth'] != '':
             self.date_of_birth = datetime.strptime(data['date_of_birth'], '%Y-%m-%d')
         if len(partner_marital_status) > 0:
+            self.partner_marital_status = []
             for pms in partner_marital_status:
                 self.partner_marital_status.append(pms)
-        '''
+        
         self.update_date = datetime.utcnow()
         
     def __repr__(self):
