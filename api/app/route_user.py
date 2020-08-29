@@ -34,7 +34,7 @@ def create_user():
                    'height', 'gotra', 'original_surname', 'father_fullname', 'residential_address',
                    'partner_age_from', 'partner_age_to', 'partner_height_from', 'partner_height_to',
                    'where_know')
-    
+
     if not all(field in data for field in mand_fields):
         return bad_request('Please provide all mandatory fields')
     if 'id' not in data['gotra'] or \
@@ -42,7 +42,7 @@ def create_user():
        'id' not in data['marital_status'] or \
        'id' not in data['gender']:
         return bad_request('Please provide all mandatory fields')
-   
+
     email = data['email'].lower()
     if re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', email) is None:
         return bad_request('Email provided is not valid')
@@ -73,16 +73,6 @@ def update_user(id):
     if curr_user.user_details.id != id:
         return error_response(401, 'You are not authorised')
     data = request.get_json() or {}
-    print('Update User', user_det,data)
-    '''
-    if 'email' in data and data['email'] is not None:
-        email = data['email'].lower()
-        if re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', email) is None:
-            return bad_request('Email provided is not valid')
-        if User.query.filter_by(email=data['email']).first():
-            return bad_request('Email already registered. Please use another email ID.')
-        data['email'] = 
-    '''
     user_det.from_dict(data=data)
     db.session.commit()
     return jsonify(user_det.to_dict())
@@ -111,9 +101,9 @@ def lists():
     return jsonify(payload)
 
 
-# handle file uploads
-@app.route('/api/upload', methods=['POST'])
-def upload_file():
+# handle photo uploads
+@app.route('/api/photos', methods=['POST'])
+def upload_photo():
     if 'filetype' not in request.form:
         return bad_request('Missing filetype')
     filetype = request.form.get('filetype')
@@ -166,11 +156,11 @@ def upload_file():
 
 
 # return uploaded photos for a user
-@app.route('/api/upload/<int:id>/<string:filename>', methods=['GET'])
-def get_upload(id, filename):
+@app.route('/api/photos/<int:id>/<string:filename>', methods=['GET'])
+def get_photo(id, filename):
     folder = app.config['UPLOAD_FOLDER'] / str(id)
     if not folder.is_dir():
-       return bad_request('Upload folder not found')
+        return bad_request('Upload folder not found')
     file_path = folder / filename
 
     try:
@@ -183,3 +173,44 @@ def get_upload(id, filename):
         return Response(file_object, mimetype='image/jpeg', direct_passthrough=True)
     except IOError as e:
         return bad_request('Unable to open file')
+
+
+# delete photo from database and folder
+@app.route('/api/photos/<int:id>/<string:filename>', methods=['DELETE'])
+# @token_auth.login_required
+def delete_photo(id, filename):
+    UserDetails.query.get_or_404(id)
+    #curr_user = token_auth.current_user()
+    # if curr_user.user_details.id != id:
+    #    return error_response(401, 'You are not authorised')
+
+    user_det_upl_proof = db.session.query(UserDetails) \
+        .filter(UserDetails.upload_proof == filename) \
+        .filter(UserDetails.id == id) \
+        .first()
+    upload_photos = UploadPhotos.query \
+        .filter(UploadPhotos.filename == filename) \
+        .filter(UploadPhotos.user_details_id == id) \
+        .all()
+    if user_det_upl_proof is None and not upload_photos:
+        return error_response(404, 'Photo not found in database')
+    if user_det_upl_proof is not None:
+        user_det_upl_proof.upload_proof = None
+        db.session.add(user_det_upl_proof)
+    if upload_photos:
+        for p in upload_photos:
+            db.session.delete(p)
+
+    folder = app.config['UPLOAD_FOLDER'] / str(id)
+    if not folder.is_dir():
+        return bad_request('Upload folder not found')
+    file_path = folder / filename
+
+    try:
+        file_path.unlink()
+    except OSError as e:
+        return bad_request('Unable to delete photo')
+    db.session.commit()
+
+    # 204 - successful and no body
+    return '', 204
