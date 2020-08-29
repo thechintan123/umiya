@@ -177,12 +177,12 @@ def get_photo(id, filename):
 
 # delete photo from database and folder
 @app.route('/api/photos/<int:id>/<string:filename>', methods=['DELETE'])
-# @token_auth.login_required
+@token_auth.login_required
 def delete_photo(id, filename):
     UserDetails.query.get_or_404(id)
-    #curr_user = token_auth.current_user()
-    # if curr_user.user_details.id != id:
-    #    return error_response(401, 'You are not authorised')
+    curr_user = token_auth.current_user()
+    if curr_user.user_details.id != id:
+        return error_response(401, 'You are not authorised')
 
     user_det_upl_proof = db.session.query(UserDetails) \
         .filter(UserDetails.upload_proof == filename) \
