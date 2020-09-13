@@ -15,11 +15,9 @@
       size="3em"
       :thickness="10"
     />
-    <successUpdate v-if="successProcess" 
+    <successUpdate v-if="successProcess"
     :updateProfile = "updateProfile"
     :formData = "formData" :userDetailsId  = "userDetailsId" />
-
-    
 
     <q-card v-if="!successProcess">
       <q-banner class="bg-grey-3 q-mb-xs">
@@ -884,12 +882,12 @@ export default {
       // This field is used to compare Previous Form Data with updated Form Data
       previousFormData: {},
 
-      //This field is used to check when user detils are updated in DB successfully
-      updateUserStatus : false,
+      // This field is used to check when user detils are updated in DB successfully
+      updateUserStatus: false,
 
-      //This field is used for update of photos and proofs 
-      previousPhotosFiles : [],
-      previousProofFile : []
+      // This field is used for update of photos and proofs
+      previousPhotosFiles: [],
+      previousProofFile: []
     }
   },
   computed: {
@@ -1239,35 +1237,34 @@ export default {
         })
     },
     async uploadPhoto (file) {
-
-      var uploadFile = true;
-      if(this.updateProfile === true){
+      var uploadFile = true
+      if (this.updateProfile === true) {
         // var newFileList = this.$refs.photo.files;
-        var prevFileList = this.previousPhotosFiles;
-        //console.log("Check File List 2", file, prevFileList, typeof(prevFileList), typeof(file) );
-        var pFile, nFile;
-        for(pFile of prevFileList){
-          //for(nFile of newFileList){
-            console.log("File Details", file[0].name, pFile.name)
-            if(pFile.name === file[0].name){
-                this.$refs.photo.removeFile(file[0]);
-                uploadFile = false;
-            } //end-if
-          //} //end -for
-        } //end-for
-       console.log("Photo List", this.$refs.photo);
-       }// end -if updateprofile = true
-       if(uploadFile === true){
-      const fd = new FormData()
-      fd.append('file', file[0])
-      fd.append('filetype', 'photo')
-      fd.append('user_details_id', this.userDetailsId)
-      console.log("Upload Photo", this.userDetailsId, fd, file);
-      await this.uploadImage(fd, 'Photo')
-    }
+        var prevFileList = this.previousPhotosFiles
+        // console.log("Check File List 2", file, prevFileList, typeof(prevFileList), typeof(file) );
+        var pFile
+        for (pFile of prevFileList) {
+          // for(nFile of newFileList){
+          console.log('File Details', file[0].name, pFile.name)
+          if (pFile.name === file[0].name) {
+            this.$refs.photo.removeFile(file[0])
+            uploadFile = false
+          } // end-if
+          // } //end -for
+        } // end-for
+        console.log('Photo List', this.$refs.photo)
+      }// end -if updateprofile = true
+      if (uploadFile === true) {
+        const fd = new FormData()
+        fd.append('file', file[0])
+        fd.append('filetype', 'photo')
+        fd.append('user_details_id', this.userDetailsId)
+        console.log('Upload Photo', this.userDetailsId, fd, file)
+        await this.uploadImage(fd, 'Photo')
+      }
     },
-    //Below function is copied from Internet as an example
-        uploadFile (files) {
+    // Below function is copied from Internet as an example
+    uploadFile (files) {
       return new Promise((resolve, reject) => {
         var myUploader = this.$refs.uploader[0]
         var file = files[0]
@@ -1279,6 +1276,7 @@ export default {
         reader.onload = function () {
           fileSrc = reader.result
           fileData = fileSrc.substr(fileSrc.indexOf(',') + 1)
+          /*
           stitchClient.callFunction('uploadImageToS3', [fileData, 'elever-erp-document-store', file.name, file.type])
             .then(result => {
               alert('fatto')
@@ -1289,15 +1287,14 @@ export default {
             .catch(err => {
               console.error(`Failed to upload file: ${err}`)
               reject()
-            })
+            }) */
         }
       })
-    }
-    ,
-    handleFailed(err, files) {
+    },
+    handleFailed (err, files) {
       console.debug('uploaded failed', err, files)
     },
-    uploadSuccess() {
+    uploadSuccess () {
       console.debug('UPload Success')
     },
     async uploadProof (file) {
@@ -1477,8 +1474,8 @@ export default {
         // if photos are already loaded then no need to fetch it from Axios
       ) {
         // console.log("Before Photo Loop", this.formData.uploadPhotos);
-        this.showProgressBar = true;
-        //var fileList = []
+        this.showProgressBar = true
+        // var fileList = []
         var photos = this.formData.uploadPhotos
         // var len = photos.length
         var photo = {}
@@ -1529,8 +1526,7 @@ export default {
               // this.$refs.photo1.files.push(fileObj);
               this.$refs.photo.addFiles(this.previousPhotosFiles)
               // console.log("Photos in Uploader", this.$refs.photo);
-              this.showProgressBar = false;
-
+              this.showProgressBar = false
             })
             .catch(error => {
               let errMsg = ''
@@ -1561,8 +1557,7 @@ export default {
         typeof this.formData.uploadProof !== 'undefined' &&
         this.$refs.proof.files.length === 0
       ) {
-
-        this.showProgressBar = true;
+        this.showProgressBar = true
         var userDetailsId = this.userDetailsId
         var filename = this.formData.uploadProof
 
@@ -1586,8 +1581,7 @@ export default {
             if (this.formData.status.name === 'Approved') {
               this.$refs.proof.disable = true
             }
-           this.showProgressBar = false;
-
+            this.showProgressBar = false
           })
           .catch(error => {
             let errMsg = ''
@@ -1651,7 +1645,6 @@ export default {
           this.formData.country = Object.assign({}, this.tmpData.otherCountry)
         }
 
-
         console.log('FormData', this.formData)
 
         // creating new Object with only updated values
@@ -1676,8 +1669,6 @@ export default {
           }
         }
 
-
-
         console.log('updatedFormData', updatedFormData)
 
         // if updatedFormData has height then convert the same field to Cms
@@ -1701,13 +1692,11 @@ export default {
         console.log('Converted to Snake Case', updatedFormDataSnakeCase)
         await this.updateUser(updatedFormDataSnakeCase)
 
-        //Update Photos and Proof if applicable
-        console.log("updateUserStatus", this.updateUserStatus, this.$refs.photo, this.$refs);
-        if(this.updateUserStatus === true){
-          this.$refs.photo.upload();
-
+        // Update Photos and Proof if applicable
+        console.log('updateUserStatus', this.updateUserStatus, this.$refs.photo, this.$refs)
+        if (this.updateUserStatus === true) {
+          this.$refs.photo.upload()
         }
-        
       } // end of if of !basicError and other Errors
 
       this.showProgressBar = false
@@ -1721,13 +1710,13 @@ export default {
         .put(process.env.API + '/users/' + this.userDetailsId, data)
         .then(({ data }) => {
           console.log('Search Success', data)
-           this.updateUserStatus = true;
+          this.updateUserStatus = true
           this.$q.notify({
             type: 'positive',
             message: 'Successfully Updated'
           })
           /* this.$router.push('/login') */
-          //this.successProcess = true;
+          // this.successProcess = true;
         })
         .catch(error => {
           let errMsg = ''
@@ -1744,7 +1733,7 @@ export default {
     },
 
     /// This function is called to update Image - Photo and Proof
-       updateImage (fd, file) {
+    updateImage (fd, file) {
       return axios
         .post(process.env.API + '/upload', fd, {
           headers: {
@@ -1808,9 +1797,9 @@ export default {
   },
   components: {
     termsConditionsDialog: require('./terms_privacy/TermsConditionsDialog.vue').default,
-    successUpdate : require('./register_update/SuccessUpdate.vue').default
+    successUpdate: require('./register_update/SuccessUpdate.vue').default
 
-    }
+  }
 }
 </script>
 

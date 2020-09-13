@@ -1,0 +1,8 @@
+Dear {{ user.user_details.first_name[0]|upper }}{{ user.user_details.first_name[1:] }}
+
+You have requested a new password to UmiyaMatrimony.com. Please login using your new password below. Once you login please change your password via the Change Password page.
+
+New password: {{ new_pwd }}
+
+Best Regards,
+Your Friends at UmiyaMatrimony.com

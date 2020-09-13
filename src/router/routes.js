@@ -3,12 +3,26 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Index.vue') },
-      { path: '/register', component: () => import('pages/RegisterPage.vue') },
-      { path: '/search', component: () => import('pages/SearchPage.vue') },
-      { path: '/login', component: () => import('pages/LoginPage.vue') },
-      { path: '/logout', component: () => import('pages/LogoutPage.vue') },
-
+      { 
+        path: '', 
+        component: () => import('pages/Index.vue') 
+      },
+      { 
+        path: '/register', 
+        component: () => import('pages/RegisterPage.vue') 
+      },
+      { 
+        path: '/search', 
+        component: () => import('pages/SearchPage.vue') 
+      },
+      { 
+        path: '/login', 
+        component: () => import('pages/LoginPage.vue') 
+      },
+      { 
+        path: '/logout', 
+        component: () => import('pages/LogoutPage.vue') 
+      },
       {
         path: '/updateProfile',
         component: () => import('pages/UpdateProfilePage.vue')
@@ -16,6 +30,10 @@ const routes = [
       {
         path: '/profile',
         component: () => import('pages/ProfilePage.vue')
+      },
+      {
+        path: '/forgot-password',
+        component: () => import('pages/ForgotPasswordPage.vue')
       }
     ]
   }

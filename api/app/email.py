@@ -5,7 +5,7 @@ from sendgrid.helpers.mail import Mail, Content, Personalization, Email, From, B
 
 
 # Generic method to send email via Sendgrid
-def send_email(recipients, subject, text_body, html_body):
+def send_email(recipients, subject, text_body, html_body, send_admin=False):
     message = Mail()
 
     # personalization is used so you can't see other people sent email
@@ -14,8 +14,9 @@ def send_email(recipients, subject, text_body, html_body):
         person.add_to(Email(r))
         message.add_personalization(person)
 
-    admin_list = app.config['MAIL_ADMINS'].split(';')
-    message.bcc = [Bcc(a) for a in admin_list]
+    if send_admin:
+        admin_list = app.config['MAIL_ADMINS'].split(';')
+        message.bcc = [Bcc(a) for a in admin_list]
     message.subject = Subject(subject)
     message.from_email = From(
         app.config['MAIL_FROM'], 'Umiya Matrimony')
@@ -48,4 +49,17 @@ def send_reg_email(user):
         text_body=render_template('email_reg.txt',
                                   user=user),
         html_body=render_template('email_reg.html',
-                                  user=user))
+                                  user=user),
+        send_admin=True)
+
+
+# Send register successful email which calls generic method above
+def send_forgotpwd_email(user, new_pwd):
+    recipients = [user.email]
+    return send_email(
+        recipients=recipients,
+        subject='Reset your password from UmiyaMatrimony.com',
+        text_body=render_template('email_pwdreset.txt',
+                                  user=user, new_pwd=new_pwd),
+        html_body=render_template('email_pwdreset.html',
+                                  user=user, new_pwd=new_pwd))

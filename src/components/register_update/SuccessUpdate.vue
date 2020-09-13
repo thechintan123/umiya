@@ -5,18 +5,18 @@
           <q-icon name="assignment_turned_in" color="secondary" />
         </template>
         <template v-if="updateProfile">Successfull Update</template>
-        <template v-else>Sucessfull Registration !!</template>      
+        <template v-else>Sucessfull Registration !!</template>
         </q-banner>
       <q-card-section>
         Thank you
         <span class="text-weight-bolder text-capitalize"
         >{{ formData.firstName }} {{ formData.lastName }} </span>
         <template v-if="updateProfile">for successful update.</template>
-        <template v-else>for successful registration.!</template>          
+        <template v-else>for successful registration.!</template>
         <br />
         <br/>
         Your Profile ID is
-        <b>{{ userDetailsId }}</b>. 
+        <b>{{ userDetailsId }}</b>.
         <br />
         <br/>
         UmiyaMatrimony.com will notify you on your email
@@ -61,7 +61,7 @@
 
 <script>
 export default {
-    props :['userDetailsId', 'formData','updateProfile']
+  props: ['userDetailsId', 'formData', 'updateProfile']
 
 }
 </script>
