@@ -18,11 +18,13 @@ class Config(object):
     # Image upload config
     UPLOAD_FOLDER = basedir / 'app/static/uploads'
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-    # Max 3 MB
-    MAX_CONTENT_LENGTH = 3 * 1024 * 1024
+    MAX_CONTENT_LENGTH = 3 * 1024 * 1024  # Max 3 MB
 
     # Sendgrid settings
     SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
     MAIL_FROM = os.environ.get('MAIL_FROM')
     MAIL_ADMINS = os.environ.get('MAIL_ADMINS')
     MAIL_REPLY_TO = os.environ.get('MAIL_REPLY_TO')
+
+
+    

@@ -1,7 +1,11 @@
-from flask import jsonify
+from flask import jsonify, request
 from . import app, db
 from .auth import basic_auth, token_auth
 from datetime import datetime
+from .errors import error_response
+from .models import User
+from .email import send_forgotpwd_email
+from strgen import StringGenerator
 
 
 # Serve the Vue file
@@ -37,6 +41,23 @@ def revoke_token():
     db.session.commit()
     # 204 - successful and no body
     return '', 204
+
+
+# User forgot password
+@app.route('/api/forgot_password/<email>', methods=['POST'])
+def forgot_password(email):
+    user = User.query.filter_by(email=email).first()
+    if user:
+        new_pwd = StringGenerator("[\d\w]{8}").render()
+        if send_forgotpwd_email(user, new_pwd):
+            user.set_password(new_pwd)
+            db.session.add(user)
+            db.session.commit()
+            return '', 204
+        else:
+            return error_response(502, 'unable to send email')
+    else:
+        return error_response(400, "email doesn't exist")
 
 
 # testing

@@ -1,8 +1,6 @@
 <template>
- <div class="fit column">
+  <div class="fit column">
     <q-card bordered>
-      <!-- <img src="https://cdn.quasar.dev/img/mountains.jpg"> -->
-
       <q-banner class="q-mb-md bg-grey-3">
         <template v-slot:avatar>
           <q-icon name="fas fa-sign-in-alt" color="primary" />
@@ -10,13 +8,11 @@
         Login
       </q-banner>
       <q-card-section>
-
         <q-form
           greedy
           ref="loginForm"
           @submit.prevent="login"
         >
-
           <q-input outlined v-model="formData.email" label="Email"
             lazy-rules
             tabIndex = 1
@@ -33,26 +29,33 @@
             :type="isPwd ? 'password' : 'text'"
             clearable
             dense >
-          <template v-slot:append>
-          <q-icon
-            :name="isPwd ? 'visibility_off' : 'visibility'"
-            class="cursor-pointer"
-            @click="isPwd = !isPwd"
-          />
-        </template>
-        </q-input>
+            <template v-slot:append>
+              <q-icon
+                :name="isPwd ? 'visibility_off' : 'visibility'"
+                class="cursor-pointer"
+                @click="isPwd = !isPwd"
+              />
+            </template>
+          </q-input>
 
           <div class="row">
-          <!-- <q-btn label="Submit" type="submit" color="primary"/> -->
-          <q-space/>
-          <q-btn
-            tabIndex=3
-            label="Login"
-            type="submit"
-            icon-right="keyboard_arrow_right"
-            color="primary" />
+            <q-space/>
+            <q-btn
+              tabIndex=3
+              label="Login"
+              type="submit"
+              icon-right="keyboard_arrow_right"
+              color="primary" />
           </div>
         </q-form>
+      </q-card-section>
+
+      <q-separator />
+
+      <q-card-section>
+        <div class="text-caption">
+          <router-link to="/forgot-password">Forgot Password</router-link>
+        </div>
       </q-card-section>
 
     </q-card>
