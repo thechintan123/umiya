@@ -24,7 +24,7 @@ const routes = [
         component: () => import('pages/LogoutPage.vue') 
       },
       {
-        path: '/updateProfile',
+        path: '/update-profile',
         component: () => import('pages/UpdateProfilePage.vue')
       },
       {

@@ -3,6 +3,8 @@ import Vuex from 'vuex'
 
 import auth from './store-auth.js'
 import search from './store-search.js'
+import register_update from './store-register_update.js'
+
 
 // import example from './module-example'
 
@@ -21,7 +23,8 @@ export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
       auth,
-      search
+      search,
+      register_update
     },
 
     // enable strict mode (adds overhead!)
