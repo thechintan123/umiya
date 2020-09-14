@@ -4,19 +4,19 @@
         <template v-slot:avatar>
           <q-icon name="assignment_turned_in" color="secondary" />
         </template>
-        <template v-if="updateProfile">Successfull Update</template>
-        <template v-else>Sucessfull Registration !!</template>      
+        <template v-if="updateProfile">Successful Update !!</template>
+        <template v-else>Sucessful Registration !!</template>      
         </q-banner>
       <q-card-section>
         Thank you
         <span class="text-weight-bolder text-capitalize"
         >{{ formData.firstName }} {{ formData.lastName }} </span>
         <template v-if="updateProfile">for successful update.</template>
-        <template v-else>for successful registration.!</template>          
+        <template v-else>for successful registration.</template>          
         <br />
         <br/>
         Your Profile ID is
-        <b>{{ userDetailsId }}</b>. 
+        <b>{{ formData.userDetailsId }}</b>. 
         <br />
         <br/>
         UmiyaMatrimony.com will notify you on your email
@@ -60,8 +60,18 @@
 </template>
 
 <script>
+import { mapState, mapMutations} from "vuex";
+
 export default {
-    props :['userDetailsId', 'formData','updateProfile']
+    props :['updateProfile'],
+
+    computed :{
+    ...mapState("register_update", ["formData"]),
+    }
+    ,
+    methods:{
+    ...mapMutations("register_update",["setSuccessProcess","setTab"])
+    }
 
 }
 </script>

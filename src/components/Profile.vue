@@ -46,7 +46,7 @@
           </q-item>
           <q-item>
             <q-item-section>
-              <q-item-label>Your Primary Contact is  <b>{{ userDetail.phonePrimary }} </b> </q-item-label>
+              <q-item-label>Your Primary Contact is  <b>{{ userDetail.primaryContact }} </b> </q-item-label>
               <q-item-label caption :lines="2">
                 You will be contacted by other party on this contact number.
                 Please ensure to keep your contact number active.

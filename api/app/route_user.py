@@ -31,7 +31,7 @@ def create_user():
 
     mand_fields = ('email', 'password', 'first_name', 'last_name', 'gender', 'date_of_birth',
                    'country', 'state', 'city', 'primary_contact', 'agree_tc', 'marital_status',
-                   'height', 'gotra', 'original_surname', 'father_fullname', 'residential_address',
+                   'height', 'gotra', 'original_surname', 'father_name', 'residential_address',
                    'partner_age_from', 'partner_age_to', 'partner_height_from', 'partner_height_to',
                    'where_know')
 

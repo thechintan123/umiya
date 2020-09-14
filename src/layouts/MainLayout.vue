@@ -165,10 +165,12 @@ const menuList = [
   {
     icon: 'edit',
     label: 'Update Profile',
-    link: '/updateProfile',
+    link: '/update-profile',
     loggedIn: true,
     separator: true
   }
+
+
 ]
 
 export default {

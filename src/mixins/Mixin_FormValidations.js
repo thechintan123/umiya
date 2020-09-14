@@ -7,6 +7,9 @@ export default {
       return re.test(String(email).toLowerCase())
     },
     compareHeightFromHeightTo (heightFrom, heightTo) {
+      // console.log("compareHeightFromHeightTo" , heightFrom, heightTo)
+      //isNaN check is to check whether heightFom and heightTo are in Ft Inch or cms
+      if(isNaN(heightFrom) && isNaN(heightTo)){
       const heightFromFoot = parseInt(heightFrom.charAt(0)) // 0  is position for foot
       const heightToFoot = parseInt(heightTo.charAt(0))
       // console.log(heightFromFoot, heightToFoot)
@@ -24,6 +27,14 @@ export default {
       } else {
         return true
       }
+    }else{
+      //if number then since it is already converted to cms
+      if (heightFrom < heightTo){
+        return true
+      } else {
+        return false
+      }
+    }
     }
   }
 }
