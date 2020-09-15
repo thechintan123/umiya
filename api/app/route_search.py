@@ -69,11 +69,13 @@ def search():
     else:
         looking_for = int(looking_for)
 
-    users = UserDetails.query.filter(and_(UserDetails.country_id.in_(country_id_local),\
-                                          UserDetails.gender_id == looking_for), \
-                                          UserDetails.dob <= curr_date_plus_min, UserDetails.dob >= curr_date_plus_max, \
+    allowed_status_id = '2' #2 is for Approved
+    users = UserDetails.query.filter(and_(UserDetails.status_id == allowed_status_id,\
+                                          UserDetails.country_id.in_(country_id_local),\
+                                          UserDetails.gender_id == looking_for, \
+                                          UserDetails.date_of_birth <= curr_date_plus_min, UserDetails.date_of_birth >= curr_date_plus_max, \
                                           UserDetails.height.between(height_min_in_cms, height_max_in_cms), \
-                                          UserDetails.marital_status_id.in_(marital_status_id_local)).all()
+                                          UserDetails.marital_status_id.in_(marital_status_id_local))).all()
 
     user_list = []
     for user in users:
@@ -82,18 +84,18 @@ def search():
         user_list.append({'id': user.id, 'firstName': user.first_name, \
                         'lastName': user.last_name, \
                         'gender' : user.gender.name, \
-                        'dob' : user.dob,\
+                        'dateOfBirth' : user.date_of_birth,\
                         'country' : user.country.name, \
                         'state' : user.state, \
                         'city' : user.city,\
-                        'phonePrimary' : user.phone_primary, \
-                        'phoneAlternate': user.phone_alternate, \
+                        'primaryContact' : user.primary_contact, \
+                        'alternateContact': user.alternate_contact, \
                         'maritalStatus' : user.marital_status.name, \
                         'height' : user.height, \
                         'gotra' : user.gotra.name,\
                         'originalSurname' : user.original_surname, \
-                        'fatherFullName' : user.father_fullname, \
-                        'address' : user.address, \
+                        'fatherName' : user.father_name, \
+                        'residentialAddress' : user.residential_address, \
                         'aboutYourself': user.about_yourself, \
                         'uploadProof': user.upload_proof, \
                         'uploadPhotos': filenames \

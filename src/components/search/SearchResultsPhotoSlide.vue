@@ -25,7 +25,7 @@
     class="bg-grey-1 text-primary rounded-borders"
     transition-prev="slide-right"
     transition-next="slide-left"
-    v-if="photos.length > 1"
+    v-if="photos.length >= 1"
   >
     <q-carousel-slide class="no-padding" v-for="(photo,index) in photos" :key="index" :name="index">
       <q-img class="fit" :src="computeURL(photo)">
@@ -47,11 +47,12 @@ export default {
     return {
       slide: 0,
       fullscreen: false,
-      imageURL: process.env.API + '/upload/'
+      imageURL: process.env.API + '/photos/'
     }
   },
   computed: {
     computeURL () {
+      console.log("photo")
       return (photo) => this.imageURL + this.profileID + '/' + photo
     },
     avatarURL () {

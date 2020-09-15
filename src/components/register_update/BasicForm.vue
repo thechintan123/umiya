@@ -312,7 +312,6 @@ import mixinFormValidations from "src/mixins/Mixin_FormValidations.js";
 import mixinComputations from "src/mixins/Mixin_Computations.js";
 import mixinUtils from "src/mixins/Mixin_Utils.js";
 
-import { mapFields } from "vuex-map-fields";
 
 export default {
   mixins: [mixinFormValidations, mixinComputations,mixinUtils],

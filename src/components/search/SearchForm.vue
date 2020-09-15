@@ -1,21 +1,19 @@
 <template>
   <div class="fit column">
     <q-card>
-      <q-linear-progress v-show="showProgressBar" indeterminate size="10px" color="secondary" />
-      <q-spinner
-        v-show="showProgressBar"
-        class="z-top fixed-center"
-        color="secondary"
-        size="3em"
-        :thickness="10"
-      />
+
+
       <q-form greedy ref="searchForm">
-        <q-banner rounded dense class="bg-grey-3">
+        <!-- <q-banner rounded dense class="bg-grey-3">
           <template v-slot:avatar>
             <q-icon name="search" color="primary" />
           </template>
           Search
-        </q-banner>
+        </q-banner> -->
+              <banner
+        iconName="search"
+        bannerTitle="Search"
+      />
 
         <q-card-section>
           <q-item>
@@ -125,7 +123,7 @@
 <script>
 import axios from 'axios'
 // import { countryList } from './countryList.js'
-import { mapActions } from 'vuex'
+import { mapActions, mapState, mapMutations } from 'vuex'
 import mixinFormValidations from 'src/mixins/Mixin_FormValidations.js'
 import { showErrorMessage } from 'src/utils/show-error-message'
 
@@ -149,8 +147,6 @@ export default {
   },
   data () {
     return {
-      // To show Progress bar when loading
-      showProgressBar: false,
 
       ageFromToOptions: [],
       heightOptions: [],
@@ -177,15 +173,23 @@ export default {
       }
     }
   },
+  components :{
+    progressBar: require("../general/ProgressBar.vue").default,
+    spinner: require("../general/Spinner.vue").default,
+    banner: require("../general/Banner.vue").default
+  }
+  ,
   methods: {
+    ...mapMutations('search', ['setShowProgessBar']),
     ...mapActions('search', ['saveSearchResults']),
+  
 
     submitSearchForm () {
       this.showProgressBar = true
       // console.log("showProgressBar", this.showProgressBar);
       this.$refs.searchForm.validate().then(success => {
         if (success) {
-          // console.log("Success");
+          console.log("Success", this.searchParams);
           this.fetchSearchResults()
         } else {
           console.log('Error')
@@ -204,7 +208,7 @@ export default {
       return axios
         .post(process.env.API + '/search', data)
         .then(({ data }) => {
-          // console.log("Search Success", data);
+          console.log("Search Success", data);
           this.saveSearchResults(data)
           // Store in Stores
           this.$q.notify({
@@ -266,6 +270,10 @@ export default {
         return true
       }
     }
+  }
+  ,
+  components : {
+    ...mapState("search",["showProgressBar"])
   }
 }
 </script>
