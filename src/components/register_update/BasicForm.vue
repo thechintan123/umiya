@@ -303,73 +303,69 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import { mapActions } from "vuex";
-import { mapGetters } from "vuex";
-import { mapMutations } from "vuex";
+import { mapState, mapActions, mapMutations } from 'vuex'
 
-import mixinFormValidations from "src/mixins/Mixin_FormValidations.js";
-import mixinComputations from "src/mixins/Mixin_Computations.js";
-import mixinUtils from "src/mixins/Mixin_Utils.js";
-
+import mixinFormValidations from 'src/mixins/Mixin_FormValidations.js'
+import mixinComputations from 'src/mixins/Mixin_Computations.js'
+import mixinUtils from 'src/mixins/Mixin_Utils.js'
 
 export default {
-  mixins: [mixinFormValidations, mixinComputations,mixinUtils],
-  props: ["updateProfile"],
-  created() {
-    this.localCountryOptions = this.list.countryOptions;
+  mixins: [mixinFormValidations, mixinComputations, mixinUtils],
+  props: ['updateProfile'],
+  created () {
+    this.localCountryOptions = this.list.countryOptions
     // console.log("LocalCountryOptions", this.localCountryOptions);
   },
-  data() {
+  data () {
     return {
-      devEnv: process.env.DEV, //This is true for development environment and false for production
+      devEnv: process.env.DEV, // This is true for development environment and false for production
       localCountryOptions: [],
       locaFormData: {},
-      isPwd : true
-       };
+      isPwd: true
+    }
   },
 
   methods: {
-    ...mapMutations("register_update", ["setFormDataIndividual", "setError"]),
-    ...mapActions("register_update",["defaultFields"]),
-    setLocalState(value) {
+    ...mapMutations('registerUpdate', ['setFormDataIndividual', 'setError']),
+    ...mapActions('registerUpdate', ['defaultFields']),
+    setLocalState (value) {
       // console.log("setLocalState", value);
-      this.locaFormData = Object.assign({}, value);
+      this.locaFormData = Object.assign({}, value)
     },
-    calculateAge() {
-      var age = this.computeAge(this.formData.dateOfBirth);
+    calculateAge () {
+      var age = this.computeAge(this.formData.dateOfBirth)
       // console.log("Age", age);
-      this.$store.commit("register_update/setTmpData", {
-        key: "age",
+      this.$store.commit('registerUpdate/setTmpData', {
+        key: 'age',
         value: age
-      });
+      })
 
-      //this.defaultAgeFromAgeTo()
+      // this.defaultAgeFromAgeTo()
     },
-    filterOtherCountry(val, update, abort) {
+    filterOtherCountry (val, update, abort) {
       update(() => {
-        const needle = val.toLowerCase();
-        const countryListFiltered = [];
+        const needle = val.toLowerCase()
+        const countryListFiltered = []
         for (const country of this.tmpData.countryList) {
           // console.log('country',country);
-          const countryNameLowerCase = country.name.toLowerCase();
+          const countryNameLowerCase = country.name.toLowerCase()
           if (countryNameLowerCase.includes(needle)) {
-            countryListFiltered.push(country);
+            countryListFiltered.push(country)
           }
         }
         // console.log('countryListFiltered', countryListFiltered);
-        //this.countryOptions = countryListFiltered
-        this.$store.commit("register_update/setList", {
-          key: "countryOptions",
+        // this.countryOptions = countryListFiltered
+        this.$store.commit('registerUpdate/setList', {
+          key: 'countryOptions',
           value: countryListFiltered
-        });
-      });
+        })
+      })
     },
-    checkOtherCountry(otherCountry) {
-      if (this.countryRadio === "Other" && otherCountry === null) {
-        return false;
+    checkOtherCountry (otherCountry) {
+      if (this.countryRadio === 'Other' && otherCountry === null) {
+        return false
       } else {
-        return true;
+        return true
       }
     },
     checkConfirmPassword (confirmPassword) {
@@ -378,254 +374,249 @@ export default {
       } else {
         return false
       }
-    }
-    ,
-    submitBasicForm() {
+    },
+    submitBasicForm () {
       // console.log("submitBasicForm ");
 
-    try{
-      this.$refs.basicForm.validate().then(success => {
-        if (success) {
-          this.$store.commit("register_update/setError", {
-            key: "basicHasError",
-            value: false
-          });
-          this.$store.commit("register_update/setTab", "personal");
-          // console.log("validate BasicForm 2 - SUCCESS");
-
-        } else {
-          this.$store.commit("register_update/setError", {
-            key: "basicHasError",
-            value: true
-          });
-          if(this.error.finalSubmitClicked === true){
-              this.setError({ key: "finalSubmitClicked", value: false });
-          }
+      try {
+        this.$refs.basicForm.validate().then(success => {
+          if (success) {
+            this.$store.commit('registerUpdate/setError', {
+              key: 'basicHasError',
+              value: false
+            })
+            this.$store.commit('registerUpdate/setTab', 'personal')
+            // console.log("validate BasicForm 2 - SUCCESS");
+          } else {
+            this.$store.commit('registerUpdate/setError', {
+              key: 'basicHasError',
+              value: true
+            })
+            if (this.error.finalSubmitClicked === true) {
+              this.setError({ key: 'finalSubmitClicked', value: false })
+            }
           // console.log("validate BasicForm 2 - FAILED");
-        }
-      });
+          }
+        })
 
-      this.$store.commit("register_update/setError", {
-        key: "basicValidated",
-        value: true
-      });
-    // console.log("validate BasicForm 3");
-    }
-    catch(error){
+        this.$store.commit('registerUpdate/setError', {
+          key: 'basicValidated',
+          value: true
+        })
+        // console.log("validate BasicForm 3");
+      } catch (error) {
       // console.log("Validate Basic Form", err)
-      this.showErrorDialog(error)
-    }
-
-},
-    checkHeightTo(heightTo) {
-      const heightFrom = this.formData.partnerHeightFrom;
-      if (heightFrom && heightTo) {
-        return this.compareHeightFromHeightTo(heightFrom, heightTo);
-      } else {
-        return true;
+        this.showErrorDialog(error)
       }
     },
-    checkHeightFrom(heightFrom) {
-      const heightTo = this.formData.heightTo;
+    checkHeightTo (heightTo) {
+      const heightFrom = this.formData.partnerHeightFrom
       if (heightFrom && heightTo) {
-        return this.compareHeightFromHeightTo(heightFrom, heightTo);
+        return this.compareHeightFromHeightTo(heightFrom, heightTo)
       } else {
-        return true;
+        return true
+      }
+    },
+    checkHeightFrom (heightFrom) {
+      const heightTo = this.formData.heightTo
+      if (heightFrom && heightTo) {
+        return this.compareHeightFromHeightTo(heightFrom, heightTo)
+      } else {
+        return true
       }
     }
-  }
-,
+  },
   computed: {
-    ...mapState("register_update", ["formData", "list", "tmpData","error"]),
+    ...mapState('registerUpdate', ['formData', 'list', 'tmpData', 'error']),
     gender: {
-      get() {
-        return this.$store.state.register_update.formData.gender;
+      get () {
+        return this.$store.state.registerUpdate.formData.gender
       },
-      set(value) {
-        this.$store.commit("register_update/setFormDataIndividual", {
-          key: "gender",
+      set (value) {
+        this.$store.commit('registerUpdate/setFormDataIndividual', {
+          key: 'gender',
           value: value
-        });
+        })
       }
     },
     email: {
-      get() {
-        return this.$store.state.register_update.formData.email;
+      get () {
+        return this.$store.state.registerUpdate.formData.email
       },
-      set(value) {
-        //this.$store.commit('register_update/setFormDataIndividual', {key: 'email' , value : value})
-        this.setFormDataIndividual({ key: "email", value: value });
+      set (value) {
+        // this.$store.commit('registerUpdate/setFormDataIndividual', {key: 'email' , value : value})
+        this.setFormDataIndividual({ key: 'email', value: value })
       }
     },
     password: {
-      get() {
-        return this.$store.state.register_update.formData.password;
+      get () {
+        return this.$store.state.registerUpdate.formData.password
       },
-      set(value) {
-        this.setFormDataIndividual({ key: "password", value: value });
+      set (value) {
+        this.setFormDataIndividual({ key: 'password', value: value })
       }
     },
     confirmPassword: {
-      get() {
-        return this.$store.state.register_update.formData.confirmPassword;
+      get () {
+        return this.$store.state.registerUpdate.formData.confirmPassword
       },
-      set(value) {
-        this.setFormDataIndividual({ key: "confirmPassword", value: value });
+      set (value) {
+        this.setFormDataIndividual({ key: 'confirmPassword', value: value })
       }
-    },        
+    },
     firstName: {
-      get() {
-        return this.$store.state.register_update.formData.firstName;
+      get () {
+        return this.$store.state.registerUpdate.formData.firstName
       },
-      set(value) {
-        this.$store.commit("register_update/setFormDataIndividual", {
-          key: "firstName",
+      set (value) {
+        this.$store.commit('registerUpdate/setFormDataIndividual', {
+          key: 'firstName',
           value: value
-        });
+        })
       }
     },
     lastName: {
-      get() {
-        return this.$store.state.register_update.formData.lastName;
+      get () {
+        return this.$store.state.registerUpdate.formData.lastName
       },
-      set(value) {
-        this.$store.commit("register_update/setFormDataIndividual", {
-          key: "lastName",
+      set (value) {
+        this.$store.commit('registerUpdate/setFormDataIndividual', {
+          key: 'lastName',
           value: value
-        });
+        })
       }
     },
     dateOfBirth: {
-      get() {
-        return this.$store.state.register_update.formData.dateOfBirth;
+      get () {
+        return this.$store.state.registerUpdate.formData.dateOfBirth
       },
-      set(value) {
-        this.$store.commit("register_update/setFormDataIndividual", {
-          key: "dateOfBirth",
+      set (value) {
+        this.$store.commit('registerUpdate/setFormDataIndividual', {
+          key: 'dateOfBirth',
           value: value
-        });
+        })
       }
     },
     age: {
-      get() {
-        return this.$store.state.register_update.tmpData.age;
+      get () {
+        return this.$store.state.registerUpdate.tmpData.age
       },
-      set(value) {
-        this.$store.commit("register_update/setTmpData", {
-          key: "age",
+      set (value) {
+        this.$store.commit('registerUpdate/setTmpData', {
+          key: 'age',
           value: value
-        });
+        })
       }
     },
     countryRadio: {
-      get() {
-        return this.$store.state.register_update.tmpData.countryRadio;
+      get () {
+        return this.$store.state.registerUpdate.tmpData.countryRadio
       },
-      set(value) {
-        this.$store.commit("register_update/setTmpData", {
-          key: "countryRadio",
+      set (value) {
+        this.$store.commit('registerUpdate/setTmpData', {
+          key: 'countryRadio',
           value: value
-        });
+        })
       }
     },
     otherCountry: {
-      get() {
-        return this.$store.state.register_update.tmpData.otherCountry;
+      get () {
+        return this.$store.state.registerUpdate.tmpData.otherCountry
       },
-      set(value) {
-        this.$store.commit("register_update/setTmpData", {
-          key: "otherCountry",
+      set (value) {
+        this.$store.commit('registerUpdate/setTmpData', {
+          key: 'otherCountry',
           value: value
-        });
+        })
       }
     },
     state: {
-      get() {
-        return this.$store.state.register_update.formData.state;
+      get () {
+        return this.$store.state.registerUpdate.formData.state
       },
-      set(value) {
-        this.$store.commit("register_update/setFormDataIndividual", {
-          key: "state",
+      set (value) {
+        this.$store.commit('registerUpdate/setFormDataIndividual', {
+          key: 'state',
           value: value
-        });
+        })
       }
     },
     city: {
-      get() {
-        return this.$store.state.register_update.formData.city;
+      get () {
+        return this.$store.state.registerUpdate.formData.city
       },
-      set(value) {
-        this.$store.commit("register_update/setFormDataIndividual", {
-          key: "city",
+      set (value) {
+        this.$store.commit('registerUpdate/setFormDataIndividual', {
+          key: 'city',
           value: value
-        });
+        })
       }
     },
     primaryContactCountryCode: {
-      get() {
-        return this.$store.state.register_update.tmpData
-          .primaryContactCountryCode;
+      get () {
+        return this.$store.state.registerUpdate.tmpData
+          .primaryContactCountryCode
       },
-      set(value) {
-        this.$store.commit("register_update/setTmpData", {
-          key: "primaryContactCountryCode",
+      set (value) {
+        this.$store.commit('registerUpdate/setTmpData', {
+          key: 'primaryContactCountryCode',
           value: value
-        });
+        })
       }
     },
     primaryContact: {
-      get() {
-        return this.$store.state.register_update.tmpData.primaryContact;
+      get () {
+        return this.$store.state.registerUpdate.tmpData.primaryContact
       },
-      set(value) {
-        this.$store.commit("register_update/setTmpData", {
-          key: "primaryContact",
+      set (value) {
+        this.$store.commit('registerUpdate/setTmpData', {
+          key: 'primaryContact',
           value: value
-        });
+        })
       }
     },
     alternateContactCountryCode: {
-      get() {
-        return this.$store.state.register_update.tmpData
-          .alternateContactCountryCode;
+      get () {
+        return this.$store.state.registerUpdate.tmpData
+          .alternateContactCountryCode
       },
-      set(value) {
-        this.$store.commit("register_update/setTmpData", {
-          key: "alternateContactCountryCode",
+      set (value) {
+        this.$store.commit('registerUpdate/setTmpData', {
+          key: 'alternateContactCountryCode',
           value: value
-        });
+        })
       }
     },
     alternateContact: {
-      get() {
-        return this.$store.state.register_update.tmpData.alternateContact;
+      get () {
+        return this.$store.state.registerUpdate.tmpData.alternateContact
       },
-      set(value) {
-        this.$store.commit("register_update/setTmpData", {
-          key: "alternateContact",
+      set (value) {
+        this.$store.commit('registerUpdate/setTmpData', {
+          key: 'alternateContact',
           value: value
-        });
+        })
       }
     },
     agreeTc: {
-      get() {
-        // console.log("agreeTc", this.$store.state.register_update.formData.agreeTc, this.$store.state.register_update.formData)
-        return this.$store.state.register_update.formData.agreeTc;
+      get () {
+        // console.log("agreeTc", this.$store.state.registerUpdate.formData.agreeTc, this.$store.state.registerUpdate.formData)
+        return this.$store.state.registerUpdate.formData.agreeTc
       },
-      set(value) {
-        this.$store.commit("register_update/setFormDataIndividual", {
-          key: "agreeTc",
+      set (value) {
+        this.$store.commit('registerUpdate/setFormDataIndividual', {
+          key: 'agreeTc',
           value: value
-        });
+        })
       }
     }
   },
 
   components: {
-    termsConditionsDialog: require("../terms_privacy/TermsConditionsDialog.vue")
+    termsConditionsDialog: require('../terms_privacy/TermsConditionsDialog.vue')
       .default
   }
-};
+}
 </script>
 
 <style></style>

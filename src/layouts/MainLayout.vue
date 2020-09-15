@@ -170,7 +170,6 @@ const menuList = [
     separator: true
   }
 
-
 ]
 
 export default {

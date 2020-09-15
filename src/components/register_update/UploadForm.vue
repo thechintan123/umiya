@@ -94,135 +94,132 @@
 </template>
 
 <script>
-import axios from "axios";
-import { mapState, mapActions, mapMutations } from "vuex";
+import axios from 'axios'
+import { mapState, mapActions, mapMutations } from 'vuex'
 
-import mixinFormValidations from "src/mixins/Mixin_FormValidations.js";
-import mixinComputations from "src/mixins/Mixin_Computations.js";
-import mixinUtils from "src/mixins/Mixin_Utils.js";
+import mixinFormValidations from 'src/mixins/Mixin_FormValidations.js'
+import mixinComputations from 'src/mixins/Mixin_Computations.js'
+import mixinUtils from 'src/mixins/Mixin_Utils.js'
 
 export default {
   mixins: [mixinComputations, mixinFormValidations, mixinUtils],
-  props: ["updateProfile"],
-  data() {
+  props: ['updateProfile'],
+  data () {
     return {
       updatePhoto: false,
       updateProof: false,
 
       previousPhotosFiles: [],
-      previousProofFile: "",
+      previousProofFile: '',
 
       isErrorProof: false,
       isErrorPhoto: false,
 
-      //For disabling Upload Proof for Approved Profiles
+      // For disabling Upload Proof for Approved Profiles
       disableUploadProof: false
-    };
+    }
   },
   computed: {
-    ...mapState("register_update", [
-      "formData",
-      "list",
-      "tmpData",
-      "error",
-      "previousFormData",
-      "userSubmitted"
+    ...mapState('registerUpdate', [
+      'formData',
+      'list',
+      'tmpData',
+      'error',
+      'previousFormData',
+      'userSubmitted'
     ])
   },
   methods: {
-    ...mapActions("register_update", ["fetchPhotos"]),
-    ...mapMutations("register_update", [
-      "setShowProgressBar",
-      "setError",
-      "setTab",
-      "setFormDataIndividual",
-      "setUserSubmitted",
-      "setSuccessProcess"
+    ...mapActions('registerUpdate', ['fetchPhotos']),
+    ...mapMutations('registerUpdate', [
+      'setShowProgressBar',
+      'setError',
+      'setTab',
+      'setFormDataIndividual',
+      'setUserSubmitted',
+      'setSuccessProcess'
     ]),
-    async uploadPhoto(file) {
-      var uploadFile = true;
+    async uploadPhoto (file) {
+      var uploadFile = true
       if (this.updateProfile === true) {
         // var newFileList = this.$refs.photo.files;
-        var prevFileList = this.previousPhotosFiles;
         // console.log("Check File List ", this.previousPhotosFiles);
-        var pFile, nFile;
-        var index;
+        var index
         for (index = 0; index < this.previousPhotosFiles.length; index++) {
           if (this.previousPhotosFiles[index].name === file[0].name) {
             // console.log(
             //   "this.previousPhotosFiles - Before",
             //   JSON.stringify(this.previousPhotosFiles)
             // );
-            this.$refs.photo.removeFile(file[0]);
-            this.previousPhotosFiles.splice(index, 1);
-            index--;
-            uploadFile = false;
+            this.$refs.photo.removeFile(file[0])
+            this.previousPhotosFiles.splice(index, 1)
+            index--
+            uploadFile = false
             // console.log(
             //   "this.previousPhotosFiles - After",
             //   JSON.stringify(this.previousPhotosFiles)
             // );
-          } //end-if
-          //} //end -for
-        } //end-for
-        //console.log("Photo List", this.$refs.photo);
+          } // end-if
+          // } //end -for
+        } // end-for
+        // console.log("Photo List", this.$refs.photo);
       } // end -if updateprofile = true
       if (uploadFile === true) {
-        const fd = new FormData();
-        fd.append("file", file[0]);
-        fd.append("filetype", "photo");
-        fd.append("user_details_id", this.formData.userDetailsId);
+        const fd = new FormData()
+        fd.append('file', file[0])
+        fd.append('filetype', 'photo')
+        fd.append('user_details_id', this.formData.userDetailsId)
         // console.log("Upload Photo", this.formData.userDetailsId, fd, file);
-        await this.uploadImage(fd, "Photo");
+        await this.uploadImage(fd, 'Photo')
       }
     },
-    async uploadProof(file) {
-      var uploadFile = true;
+    async uploadProof (file) {
+      var uploadFile = true
       if (this.updateProfile === true) {
-        //var prevFileList = this.previousProofFile;
-        var pFile, index;
+        // var prevFileList = this.previousProofFile;
+        var index
         for (index = 0; index < this.previousProofFile.length; index++) {
-          //console.log("Upload Proof File Details", file[0].name, pFile.name)
           if (this.previousProofFile[index].name === file[0].name) {
-            this.$refs.proof.removeFile(file[0]);
-            uploadFile = false;
+            this.$refs.proof.removeFile(file[0])
+            uploadFile = false
 
             // if matches then remove Proof file otherwise remaning files will be deleted
-            this.previousProofFile.splice(index, 1);
-            index--;
-          } //end-if
-        } //end-for
-        console.log("Photo List", this.$refs.proof);
+            this.previousProofFile.splice(index, 1)
+            index--
+          } // end-if
+        } // end-for
+        console.log('Photo List', this.$refs.proof)
       } // end -if updateprofile = true
       if (uploadFile === true) {
-        const fd = new FormData();
-        fd.append("file", file[0]);
-        fd.append("filetype", "proof");
-        fd.append("user_details_id", this.formData.userDetailsId);
+        const fd = new FormData()
+        fd.append('file', file[0])
+        fd.append('filetype', 'proof')
+        fd.append('user_details_id', this.formData.userDetailsId)
         // console.log("Upload Proof", fd, file[0]);
-        await this.uploadImage(fd, "Proof");
+        await this.uploadImage(fd, 'Proof')
       }
     },
     // get Photos for update profile
-    getPhotos() {
+    getPhotos () {
       // Get Photos
       // console.log("Get Photo", this.updatePhoto, this.formData.uploadPhotos, this.$refs.photo);
       if (
         this.updatePhoto &&
         this.formData.uploadPhotos.length !== 0 &&
         this.formData.uploadPhotos !== null &&
-        typeof this.formData.uploadPhotos !== "undefined" &&
+        typeof this.formData.uploadPhotos !== 'undefined' &&
         this.$refs.photo.files.length !== this.formData.uploadPhotos.length
         // if photos are already loaded then no need to fetch it from Axios
       ) {
         // console.log("Before Photo Loop", this.formData.uploadPhotos);
-        this.setShowProgressBar(true);
-        //var fileList = []
-        var photos = this.formData.uploadPhotos;
+        this.setShowProgressBar(true)
+        // var fileList = []
+        var photos = this.formData.uploadPhotos
         // var len = photos.length
-        var photo = {};
-        var fileObj = {};
-        var blobObject = {};
-        var userDetailsId = this.formData.userDetailsId;
+        var photo = {}
+        var fileObj = {}
+        var blobObject = {}
+        var userDetailsId = this.formData.userDetailsId
 
         for (photo of photos) {
           // var filename = photo.filename;
@@ -233,16 +230,16 @@ export default {
           axios({
             url:
               process.env.API +
-              "/photos/" +
+              '/photos/' +
               userDetailsId +
-              "/" +
+              '/' +
               photo.filename,
-            method: "GET",
-            responseType: "blob" // important
+            method: 'GET',
+            responseType: 'blob' // important
           })
             .then(response => {
-              var position = response.config.url.indexOf("photo_");
-              var fileName = response.config.url.substr(position); // get file name from URL
+              var position = response.config.url.indexOf('photo_')
+              var fileName = response.config.url.substr(position) // get file name from URL
 
               // console.log(
               //   "Photo Details",
@@ -253,146 +250,145 @@ export default {
               //   response
               // );
 
-              blobObject = new Blob([response.data]);
+              blobObject = new Blob([response.data])
               fileObj = new File([blobObject], fileName, {
-                type: "image/jpeg"
-              });
+                type: 'image/jpeg'
+              })
               // var fileObj =  new File([response.data]);
               // fileObj.lastModifiedDate = new Date();
               // fileObj.name = filename;
               // fileObj.type = "image/jpeg";
               // console.log('File Obj', blobObject, fileObj);
               // var fileList = [fileObj]
-              this.previousPhotosFiles.push(fileObj);
+              this.previousPhotosFiles.push(fileObj)
               // this.$refs.photo1.files.push(fileObj);
-              this.$refs.photo.addFiles(this.previousPhotosFiles);
+              this.$refs.photo.addFiles(this.previousPhotosFiles)
               // console.log(
               //   "Photos Loaded",
               //   fileName,
               //   fileObj,
               //   this.previousPhotosFiles
               // );
-              this.setShowProgressBar(false);
+              this.setShowProgressBar(false)
             })
             .catch(error => {
               // console.log("error", error);
               this.showErrorDialog(error)
-
-            });
+            })
 
           // console.log("File List", fileList);
         } // for of Photo loop
       } // end of if for photos
     }, // end of getPhotos
     // get Proofs for UpdateProfile
-    getProof() {
+    getProof () {
       // get Proofs
 
       // console.log("getProof", this.updateProof,  this.formData.uploadProof);
       if (
         this.updateProof &&
-        this.formData.uploadProof !== "" &&
+        this.formData.uploadProof !== '' &&
         this.formData.uploadProof !== null &&
-        typeof this.formData.uploadProof !== "undefined" &&
+        typeof this.formData.uploadProof !== 'undefined' &&
         this.$refs.proof.files.length === 0
       ) {
-        this.setShowProgressBar(true);
-        var userDetailsId = this.formData.userDetailsId;
-        var filename = this.formData.uploadProof;
+        this.setShowProgressBar(true)
+        var userDetailsId = this.formData.userDetailsId
+        var filename = this.formData.uploadProof
 
         axios({
-          url: process.env.API + "/photos/" + userDetailsId + "/" + filename,
-          method: "GET",
-          responseType: "blob" // important
+          url: process.env.API + '/photos/' + userDetailsId + '/' + filename,
+          method: 'GET',
+          responseType: 'blob' // important
         })
           .then(response => {
             // console.log("Called Upload", response);
 
-            var blobObject = new Blob([response.data]);
+            var blobObject = new Blob([response.data])
             var fileObj = new File([blobObject], filename, {
-              type: "image/jpeg"
-            });
+              type: 'image/jpeg'
+            })
 
             // console.log('File Obj', blobObject, fileObj);
-            this.previousProofFile = [fileObj];
-            this.$refs.proof.addFiles(this.previousProofFile);
+            this.previousProofFile = [fileObj]
+            this.$refs.proof.addFiles(this.previousProofFile)
             // console.log('Proof', this.$refs.proof)
-            if (this.formData.status.name === "Approved") {
-              this.disableUploadProof = true;
+            if (this.formData.status.name === 'Approved') {
+              this.disableUploadProof = true
             }
 
-            this.setShowProgressBar(false);
+            this.setShowProgressBar(false)
           })
           .catch(error => {
             // console.log(errMsg);
-            this.showErrorDialog(error);
-          });
+            this.showErrorDialog(error)
+          })
       }
     }, // end of getphotos
 
-    checkPhoto() {
+    checkPhoto () {
       // console.log("Photo", this.$refs.photo);
       // console.log(this.$refs.photo.files.length);
       // Below condition is only check for updating Profile
       if (this.updateProfile !== true || this.updatePhoto === true) {
         if (this.$refs.photo.files.length > 4) {
-          this.$refs.photo.files.length = 4; // This will reduce the allowed files to 4 photos;
+          this.$refs.photo.files.length = 4 // This will reduce the allowed files to 4 photos;
           this.$q.notify({
-            type: "negative",
-            message: "Only 4 Photos are allowed. Addtional ones are removed"
-          });
+            type: 'negative',
+            message: 'Only 4 Photos are allowed. Addtional ones are removed'
+          })
         } else if (this.$refs.photo.files.length === 0) {
-          this.isErrorPhoto = true;
+          this.isErrorPhoto = true
           // this.uploadHasError = true;
         } else {
-          this.isErrorPhoto = false;
+          this.isErrorPhoto = false
           // this.uploadHasError = true;
         }
       } else {
-        this.isErrorPhoto = false;
+        this.isErrorPhoto = false
       }
     },
-    checkProof() {
+    checkProof () {
       // console.log("Proof", this.$refs.photo);
       // console.log(this.$refs.photo.files.length);
       // Below condition is only check for updating Profile
       // console.log("Check Proof", this.updateProfile, this.updateProof)
       if (this.updateProfile !== true || this.updateProof === true) {
         if (this.$refs.proof.files.length === 0) {
-          this.isErrorProof = true;
+          this.isErrorProof = true
           // this.uploadHasError = true;
         } else {
-          this.isErrorProof = false;
+          this.isErrorProof = false
           // this.uploadHasError = true;
         }
       } else {
-        this.isErrorProof = false;
+        this.isErrorProof = false
       }
     },
-    validateUploadForm() {
-      this.setShowProgressBar(true);
+    validateUploadForm () {
+      this.setShowProgressBar(true)
 
-      this.checkPhoto();
-      this.checkProof();
+      this.checkPhoto()
+      this.checkProof()
 
       if (this.isErrorPhoto || this.isErrorProof) {
-        this.setError({ key: "uploadHasError", value: true });
+        this.setError({ key: 'uploadHasError', value: true })
       } else {
-        this.setError({ key: "uploadHasError", value: false });
+        this.setError({ key: 'uploadHasError', value: false })
 
-        //check other forms
-        //this key is used to check transition function in Register_Update component
-        this.setError({ key: "finalSubmitClicked", value: true });
-        this.setTab("basic");
+        // check other forms
+        // this key is used to check transition function in Register_Update component
+        this.setError({ key: 'finalSubmitClicked', value: true })
+        this.setTab('basic')
       }
 
-      this.setError({ key: "uploadValidated", value: true });
+      this.setError({ key: 'uploadValidated', value: true })
 
-      this.setShowProgressBar(false);
+      this.setShowProgressBar(false)
     },
-      
-   preSubmit(){
-    this.setShowProgressBar(true);
+
+    preSubmit () {
+      this.setShowProgressBar(true)
       // console.log(
       //   "UpdateFinalForm 3",
       //   this.error,
@@ -403,9 +399,9 @@ export default {
       // );
 
       if (this.error.basicHasError) {
-        this.setTab("basic");
+        this.setTab('basic')
       } else if (this.error.personalHasError) {
-        this.setTab("personal");
+        this.setTab('personal')
       }
 
       if (
@@ -415,149 +411,140 @@ export default {
         this.error.uploadValidated
       ) {
         var primaryContact =
-          "+" +
+          '+' +
           this.tmpData.primaryContactCountryCode +
-          " " +
-          this.tmpData.primaryContact;
+          ' ' +
+          this.tmpData.primaryContact
 
         this.setFormDataIndividual({
-          key: "primaryContact",
+          key: 'primaryContact',
           value: primaryContact
-        });
+        })
 
         var alternateContact =
-          "+" +
+          '+' +
           this.tmpData.alternateContactCountryCode +
-          " " +
-          this.tmpData.alternateContact;
+          ' ' +
+          this.tmpData.alternateContact
 
         this.setFormDataIndividual({
-          key: "alternateContact",
+          key: 'alternateContact',
           value: alternateContact
-        });
+        })
 
         // create Country Object using Country radio and otherCountry Dropdown
-        var country = {};
-        if (this.tmpData.countryRadio === "India") {
-
+        var country = {}
+        if (this.tmpData.countryRadio === 'India') {
           const findIndia = this.tmpData.countryList.find(
-            element => element.name === "India"
-          );
+            element => element.name === 'India'
+          )
           // console.log("findIndia", findIndia);
-          country = findIndia;
+          country = findIndia
         } else {
           //   this.tmpData.countryRadio = 'Other'
-          country = Object.assign({}, this.tmpData.otherCountry);
+          country = Object.assign({}, this.tmpData.otherCountry)
         }
-        this.setFormDataIndividual({ key: "country", value: country });
+        this.setFormDataIndividual({ key: 'country', value: country })
 
         // console.log("Submit Form", this.formData);
 
-        if(this.updateProfile === true){
-          this.updateFinalForm();
+        if (this.updateProfile === true) {
+          this.updateFinalForm()
+        } else {
+          this.registerFinalForm()
         }
-        else{
-          this.registerFinalForm();
-        }
+      }
+    },
+    async registerFinalForm () {
+      var partnerHeightFromCms = this.convertHeightToCms(
+        this.formData.partnerHeightFrom
+      )
+      // Height in cms are stored in DB so mapped back to same field - partnerHeightFrom
+      this.setFormDataIndividual({ key: 'partnerHeightFrom', value: partnerHeightFromCms })
 
-    }
-    }
-    ,
-    async registerFinalForm(){
-        var partnerHeightFromCms = this.convertHeightToCms(
-          this.formData.partnerHeightFrom
+      var partnerHeightToCms = this.convertHeightToCms(
+        this.formData.partnerHeightTo
+      )
+      this.setFormDataIndividual({ key: 'partnerHeightTo', value: partnerHeightToCms })
+
+      if (this.formData.heightCms === '') {
+        var heightCms = this.convertHeightToCms(
+          this.formData.height
         )
-        //Height in cms are stored in DB so mapped back to same field - partnerHeightFrom
-        this.setFormDataIndividual({ key: "partnerHeightFrom", value: partnerHeightFromCms });
+        this.setFormDataIndividual({ key: 'height', value: heightCms })
+      }
 
-        var partnerHeightToCms = this.convertHeightToCms(
-          this.formData.partnerHeightTo
-        )
-        this.setFormDataIndividual({ key: "partnerHeightTo", value: partnerHeightToCms });
+      // Convert From Camel to Snake Case
+      // converting from CamelCase to SnakeCase
+      var formDataSnakeCase = {}
+      for (const key in this.formData) {
+        // console.log("Key", camel);
+        formDataSnakeCase[this.camelToSnake(key)] =
+              this.formData[key]
+      }
+      // console.log("Converted to Snake Case", formDataSnakeCase);
 
-        if (this.formData.heightCms === '') {
-          var heightCms = this.convertHeightToCms(
-            this.formData.height
-          )
-        this.setFormDataIndividual({ key: "height", value: heightCms });
-        }
+      await this.registerUser(formDataSnakeCase)
 
-        //Convert From Camel to Snake Case
-          // converting from CamelCase to SnakeCase
-          var formDataSnakeCase = {};
-          for (const key in this.formData) {
-            // console.log("Key", camel);
-            formDataSnakeCase[this.camelToSnake(key)] =
-              this.formData[key];
-          }
-          // console.log("Converted to Snake Case", formDataSnakeCase);
+      if (this.formData.userDetailsId !== '') {
+        this.$refs.photo.upload()
+        this.$refs.proof.upload()
+        // this.successProcess = true
+      }
+      this.postSubmit()
+    },
 
+    async updateFinalForm () {
+      // creating new Object with only updated values
+      var updatedFormData = {}
+      var previousForm = this.previousFormData
 
-        await this.registerUser(formDataSnakeCase)
-
-        if (this.formData.userDetailsId !== '') {
-          this.$refs.photo.upload()
-          this.$refs.proof.upload()
-          // this.successProcess = true
-        }
-      this.postSubmit()    
-
-    }
-,
-    
-    async updateFinalForm() {
-          // creating new Object with only updated values
-        var updatedFormData = {};
-        var previousForm = this.previousFormData;
-
-        var form = this.formData;
-        for (const key in previousForm) {
-          if (
-            previousForm[key] !== "" &&
+      var form = this.formData
+      for (const key in previousForm) {
+        if (
+          previousForm[key] !== '' &&
             previousForm[key] !== null &&
-            previousForm[key] !== "undefined"
+            previousForm[key] !== 'undefined'
+        ) {
+          // console.log("loop", key, form[key], previousForm[key], previousForm, this.previousFormData);
+          // if(previousForm[key] !== form[key]){
+          if (
+            JSON.stringify(previousForm[key]) !== JSON.stringify(form[key])
           ) {
-            // console.log("loop", key, form[key], previousForm[key], previousForm, this.previousFormData);
-            // if(previousForm[key] !== form[key]){
-            if (
-              JSON.stringify(previousForm[key]) !== JSON.stringify(form[key])
-            ) {
-              // console.log("Did not match", previousForm[key], form[key]);
-              updatedFormData[key] = form[key];
-            }
+            // console.log("Did not match", previousForm[key], form[key]);
+            updatedFormData[key] = form[key]
           }
         }
+      }
 
+      // console.log("updatedFormData", updatedFormData);
+
+      if (Object.keys(updatedFormData).length === 0) {
+        this.showMessageDialog('You have not updated any fields')
+      } else {
+        // if updatedFormData has height then convert the same field to Cms
+        var keys = ['partnerHeightFrom', 'partnerHeightTo', 'height']
+        for (const key of keys) {
+          if (Object.prototype.hasOwnProperty.call(updatedFormData, key)) {
+            updatedFormData[key] = this.convertHeightToCms(
+              updatedFormData[key]
+            )
+          }
+        }
         // console.log("updatedFormData", updatedFormData);
 
-        if (Object.keys(updatedFormData).length === 0) {
-          this.showMessageDialog("You have not updated any fields");
+        // converting from CamelCase to SnakeCase
+        var updatedFormDataSnakeCase = {}
+        for (const key in updatedFormData) {
+          // console.log("Key", camel);
+          updatedFormDataSnakeCase[this.camelToSnake(key)] =
+              updatedFormData[key]
         }
-        else
-        {
-          // if updatedFormData has height then convert the same field to Cms
-          var keys = ["partnerHeightFrom", "partnerHeightTo", "height"];
-          for (const key of keys) {
-            if (updatedFormData.hasOwnProperty(key)) {
-              updatedFormData[key] = this.convertHeightToCms(
-                updatedFormData[key]
-              );
-            }
-          }
-          // console.log("updatedFormData", updatedFormData);
-          
-          // converting from CamelCase to SnakeCase
-          var updatedFormDataSnakeCase = {};
-          for (const key in updatedFormData) {
-            // console.log("Key", camel);
-            updatedFormDataSnakeCase[this.camelToSnake(key)] =
-              updatedFormData[key];
-          }
-          // console.log("Converted to Snake Case", updatedFormDataSnakeCase);
+        // console.log("Converted to Snake Case", updatedFormDataSnakeCase);
 
-          await this.updateUser(updatedFormDataSnakeCase);
+        await this.updateUser(updatedFormDataSnakeCase)
 
-        //Update Photos and Proof if applicable
+        // Update Photos and Proof if applicable
         // console.log(
         //   "UserSubmitted",
         //   this.userSubmitted,
@@ -566,42 +553,41 @@ export default {
         // );
         if (this.userSubmitted === true) {
           if (this.updatePhoto === true) {
-            await this.$refs.photo.upload();
+            await this.$refs.photo.upload()
 
-            //delete the photo
+            // delete the photo
             if (this.previousPhotosFiles.length > 0) {
-              for (let pFile of this.previousPhotosFiles) {
+              for (const pFile of this.previousPhotosFiles) {
                 // console.log("Previous File", pFile.name, pFile);
-                this.deleteFile(pFile.name);
+                this.deleteFile(pFile.name)
               }
             }
           }
           if (this.updateProof === true) {
-            await this.$refs.proof.upload();
+            await this.$refs.proof.upload()
 
-            //delete Proof
+            // delete Proof
             if (this.previousProofFile.length > 0) {
               // console.log("Previous File", this.previousProofFile[0].name);
-              this.deleteFile(this.previousProofFile[0].name);
+              this.deleteFile(this.previousProofFile[0].name)
             }
           }
-        }//if updateUserStatus is TRUE
-        } // if UpdateFormData is blank
-      this.postSubmit()    
+        }// if updateUserStatus is TRUE
+      } // if UpdateFormData is blank
+      this.postSubmit()
     },
-    postSubmit(){
-      this.setShowProgressBar(false);
-      this.setError({ key: "finalSubmitClicked", value: false });
-      this.setSuccessProcess(true);
-    }
-    ,
-    updateUser(data) {
-      var userDetailsId = this.formData.userDetailsId;
+    postSubmit () {
+      this.setShowProgressBar(false)
+      this.setError({ key: 'finalSubmitClicked', value: false })
+      this.setSuccessProcess(true)
+    },
+    updateUser (data) {
+      var userDetailsId = this.formData.userDetailsId
       return axios
-        .put(process.env.API + "/users/" + userDetailsId, data)
+        .put(process.env.API + '/users/' + userDetailsId, data)
         .then(({ data }) => {
           // console.log("Updated Successfully", data);
-          this.setUserSubmitted(true);
+          this.setUserSubmitted(true)
           /* this.$router.push('/login') */
         })
         .catch(error => {
@@ -611,8 +597,8 @@ export default {
           //   JSON.stringify(error),
           //   this.hasKey(error, "response.data")
           // );
-          this.showErrorDialog(error);
-        });
+          this.showErrorDialog(error)
+        })
     },
     uploadImage (fd, file) {
       return axios
@@ -631,64 +617,61 @@ export default {
         .catch(error => {
           this.showErrorDialog(error)
         })
-    },    
-    hasKey(obj, key) {
-      return key.split(".").every(function(x) {
-        if (typeof obj != "object" || obj === null || !x in obj) return false;
-        obj = obj[x];
-        return true;
-      });
     },
-    registerUser(data) {
+    hasKey (obj, key) {
+      return key.split('.').every(function (x) {
+        if (typeof obj !== 'object' || obj === null || !(x in obj)) return false
+        obj = obj[x]
+        return true
+      })
+    },
+    registerUser (data) {
       return axios
-        .post(process.env.API + "/users", data)
+        .post(process.env.API + '/users', data)
         .then(({ data }) => {
           // console.log("Register User", data);
-          this.formData.userDetailsId = data.user_details_id;
+          this.formData.userDetailsId = data.user_details_id
 
           // console.log("this.userDetailsId", this.formData.userDetailsId, typeof data);
 
           this.$q.notify({
-            type: "positive",
-            message: "Successfully registered"
-          });
+            type: 'positive',
+            message: 'Successfully registered'
+          })
           /* this.$router.push('/login') */
         })
         .catch(error => {
-          this.showErrorDialog(error);
-        });
+          this.showErrorDialog(error)
+        })
     },
- 
-    deleteFile(fileName) {
+
+    deleteFile (fileName) {
       axios({
-        url: process.env.API + "/photos/" + this.formData.userDetailsId + "/" + fileName,
-        method: "DELETE"
+        url: process.env.API + '/photos/' + this.formData.userDetailsId + '/' + fileName,
+        method: 'DELETE'
       })
         .then(response => {
           // console.log("File Deleted Response", response);
         })
         .catch(error => {
-          this.showErrorDialog(error);
-        });
+          this.showErrorDialog(error)
+        })
     },
 
     // Photo Upload - Error Message
-    onRejected(rejectedEntries) {
+    onRejected (rejectedEntries) {
       // Notify plugin needs to be installed
       // https://quasar.dev/quasar-plugins/notify#Installation
       this.$q.notify({
-        type: "negative",
+        type: 'negative',
         message: `${rejectedEntries.length} file(s) did not pass validation constraints`
-      });
+      })
     },
-    goBack() {
-      this.$store.commit("register_update/setTab", "personal");
+    goBack () {
+      this.$store.commit('registerUpdate/setTab', 'personal')
     }
-  },
-  components: {
-    basicForm: require("./BasicForm.vue").default
   }
-};
+}
 </script>
 
 <style></style>

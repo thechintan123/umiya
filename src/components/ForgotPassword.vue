@@ -50,13 +50,13 @@ export default {
   data () {
     return {
       formData: {
-        email: '',
+        email: ''
       }
     }
   },
   methods: {
     forgotPassword () {
-      let email = this.formData.email
+      const email = this.formData.email
       axios
         .post(process.env.API + '/forgot_password/' + email)
         .then(response => {

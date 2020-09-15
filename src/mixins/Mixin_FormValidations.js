@@ -8,33 +8,33 @@ export default {
     },
     compareHeightFromHeightTo (heightFrom, heightTo) {
       // console.log("compareHeightFromHeightTo" , heightFrom, heightTo)
-      //isNaN check is to check whether heightFom and heightTo are in Ft Inch or cms
-      if(isNaN(heightFrom) && isNaN(heightTo)){
-      const heightFromFoot = parseInt(heightFrom.charAt(0)) // 0  is position for foot
-      const heightToFoot = parseInt(heightTo.charAt(0))
-      // console.log(heightFromFoot, heightToFoot)
-      if (heightToFoot < heightFromFoot) {
-        return false
-      } else if (heightToFoot === heightFromFoot) {
-        // in case foot is same then check inches
-        const heightFromInches = parseInt(heightFrom.substr(5, 2)) // 5 is position for inches
-        const heightToInches = parseInt(heightTo.substr(5, 2))
-        if (heightToInches < heightFromInches) {
+      // isNaN check is to check whether heightFom and heightTo are in Ft Inch or cms
+      if (isNaN(heightFrom) && isNaN(heightTo)) {
+        const heightFromFoot = parseInt(heightFrom.charAt(0)) // 0  is position for foot
+        const heightToFoot = parseInt(heightTo.charAt(0))
+        // console.log(heightFromFoot, heightToFoot)
+        if (heightToFoot < heightFromFoot) {
           return false
+        } else if (heightToFoot === heightFromFoot) {
+        // in case foot is same then check inches
+          const heightFromInches = parseInt(heightFrom.substr(5, 2)) // 5 is position for inches
+          const heightToInches = parseInt(heightTo.substr(5, 2))
+          if (heightToInches < heightFromInches) {
+            return false
+          } else {
+            return true
+          }
         } else {
           return true
         }
       } else {
-        return true
+      // if number then since it is already converted to cms
+        if (heightFrom < heightTo) {
+          return true
+        } else {
+          return false
+        }
       }
-    }else{
-      //if number then since it is already converted to cms
-      if (heightFrom < heightTo){
-        return true
-      } else {
-        return false
-      }
-    }
     }
   }
 }

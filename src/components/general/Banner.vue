@@ -12,7 +12,7 @@
 
 <script>
 export default {
-    props:['bannerTitle','iconName']
+  props: ['bannerTitle', 'iconName']
 
 }
 </script>

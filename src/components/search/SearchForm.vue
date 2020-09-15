@@ -2,7 +2,6 @@
   <div class="fit column">
     <q-card>
 
-
       <q-form greedy ref="searchForm">
         <!-- <q-banner rounded dense class="bg-grey-3">
           <template v-slot:avatar>
@@ -173,23 +172,19 @@ export default {
       }
     }
   },
-  components :{
-    progressBar: require("../general/ProgressBar.vue").default,
-    spinner: require("../general/Spinner.vue").default,
-    banner: require("../general/Banner.vue").default
-  }
-  ,
+  components: {
+    banner: require('../general/Banner.vue').default
+  },
   methods: {
     ...mapMutations('search', ['setShowProgessBar']),
     ...mapActions('search', ['saveSearchResults']),
-  
 
     submitSearchForm () {
       this.showProgressBar = true
       // console.log("showProgressBar", this.showProgressBar);
       this.$refs.searchForm.validate().then(success => {
         if (success) {
-          console.log("Success", this.searchParams);
+          console.log('Success', this.searchParams)
           this.fetchSearchResults()
         } else {
           console.log('Error')
@@ -208,7 +203,7 @@ export default {
       return axios
         .post(process.env.API + '/search', data)
         .then(({ data }) => {
-          console.log("Search Success", data);
+          console.log('Search Success', data)
           this.saveSearchResults(data)
           // Store in Stores
           this.$q.notify({
@@ -270,10 +265,9 @@ export default {
         return true
       }
     }
-  }
-  ,
-  components : {
-    ...mapState("search",["showProgressBar"])
+  },
+  computed: {
+    ...mapState('search', ['showProgressBar'])
   }
 }
 </script>

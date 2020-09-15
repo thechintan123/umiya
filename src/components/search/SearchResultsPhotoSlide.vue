@@ -52,7 +52,7 @@ export default {
   },
   computed: {
     computeURL () {
-      console.log("photo")
+      console.log('photo')
       return (photo) => this.imageURL + this.profileID + '/' + photo
     },
     avatarURL () {
