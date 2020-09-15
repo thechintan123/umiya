@@ -32,12 +32,12 @@
               <q-item-label>
                 <u>Date of Birth</u>
                 :
-                {{ searchItem.dob | convertToDate}}
+                {{ searchItem.dateOfBirth | convertToDate}}
               </q-item-label>
               <q-item-label>
                 <u>Age</u>
                 :
-                {{ computeAge(searchItem.dob)}}
+                {{ computeAge(searchItem.dateOfBirth)}}
               </q-item-label>
               <q-item-label>
                 <u>Height</u>
@@ -56,7 +56,7 @@
               </q-item-label>
               <q-item-label
                 caption
-                v-if="!loggedIn"
+                v-if="loggedIn"
               >You need to be registered member to see contact details.</q-item-label>
               <q-expansion-item
                 switch-toggle-side
@@ -72,7 +72,7 @@
                       <q-item-label>
                         <u>Father Name</u>
                         :
-                        {{searchItem.fatherFullName}}
+                        {{searchItem.fatherName}}
                       </q-item-label>
                       <q-item-label>
                         <u>Gotra</u>
@@ -87,7 +87,7 @@
                       <q-item-label>
                         <u>Address</u>
                         :
-                        {{searchItem.address}}
+                        {{searchItem.residentialAddress}}
                       </q-item-label>
                       <q-item-label>
                         <u>
@@ -100,12 +100,12 @@
                       <q-item-label>
                         <u>Primary Contact</u>
                         :
-                        {{searchItem.phonePrimary}}
+                        {{searchItem.primaryContact}}
                       </q-item-label>
                       <q-item-label>
                         <u>Alternate Contact</u>
                         :
-                        {{searchItem.phoneAlternate}}
+                        {{searchItem.alternateContact}}
                       </q-item-label>
                     </q-item-section>
                   </q-card-section>
@@ -127,7 +127,7 @@ import mixinComputations from 'src/mixins/Mixin_Computations.js'
 export default {
   mixins: [mixinComputations],
   components: {
-    'search-results-photo-slide': require('components/SearchResultsPhotoSlide.vue')
+    'search-results-photo-slide': require('./SearchResultsPhotoSlide.vue')
       .default
   },
 

@@ -292,6 +292,8 @@ const state = {
       }
 */
   },
+
+  showProgressBar : false,
   page: 1,
   resultsPerPage: 3 // Can Change this
 }
@@ -330,6 +332,10 @@ const mutations = {
   updatePageNumber (state, page) {
     state.page = page
   },
+  setShowProgessBar(state,value){
+    state.showProgressBar = value
+  }
+  ,
   saveSearchResults (state, searchResults) {
     // console.log('Store Search Results', searchResults)
     // Vue.set(state.tasks, payload.id, payload.task);
