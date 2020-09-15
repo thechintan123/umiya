@@ -79,27 +79,24 @@
 </template>
 
 <script>
-import axios from "axios";
-import mixinFormValidations from "src/mixins/Mixin_FormValidations.js";
-import mixinComputations from "src/mixins/Mixin_Computations.js";
-import { mapState, mapMutations, mapActions} from "vuex";
-
-
+import mixinFormValidations from 'src/mixins/Mixin_FormValidations.js'
+import mixinComputations from 'src/mixins/Mixin_Computations.js'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
   mixins: [mixinFormValidations, mixinComputations],
 
   // This prop is for UpDateProfile. It will be true for UpdateProfile
-  props: ["updateProfile"],
+  props: ['updateProfile'],
 
   computed: {
-    ...mapState("register_update", ["showProgressBar", "tab", "error","successProcess","emptyFormData"]),
+    ...mapState('registerUpdate', ['showProgressBar', 'tab', 'error', 'successProcess', 'emptyFormData']),
     tab: {
-      get() {
-        return this.$store.state.register_update.tab;
+      get () {
+        return this.$store.state.register_update.tab
       },
-      set(value) {
-        this.setTab(value);
+      set (value) {
+        this.setTab(value)
         // console.log("Env",process.env);
       }
     }
@@ -109,48 +106,44 @@ export default {
     if (this.updateProfile === true) {
       this.fetchUserDetails()
     }
-      this.fetchList()
-  }
-  ,
+    this.fetchList()
+  },
   methods: {
-    ...mapActions("register_update",["fetchUserDetails","fetchList"]),
-     ...mapMutations("register_update",["setTab","setFormData","setTmpDataFull","resetState"]),
-     transitionFn(newVal, oldVal) {
+    ...mapActions('register_update', ['fetchUserDetails', 'fetchList']),
+    ...mapMutations('register_update', ['setTab', 'setFormData', 'setTmpDataFull', 'resetState']),
+    transitionFn (newVal, oldVal) {
       // console.log("transitionFn", newVal, oldVal, this.$refs, this.error);
       if (
-        oldVal === "upload" && newVal === "basic" && this.error.finalSubmitClicked) {
-        this.$refs.basicFormRef.submitBasicForm();
+        oldVal === 'upload' && newVal === 'basic' && this.error.finalSubmitClicked) {
+        this.$refs.basicFormRef.submitBasicForm()
       } else if (
-        oldVal === "basic" && newVal === "personal" && this.error.finalSubmitClicked)
-       {
-        this.$refs.personalFormRef.submitPersonalForm();
-      } else if ( oldVal === "personal" && newVal === "upload" && this.error.finalSubmitClicked) {
-        this.$refs.uploadFormRef.preSubmit();
+        oldVal === 'basic' && newVal === 'personal' && this.error.finalSubmitClicked) {
+        this.$refs.personalFormRef.submitPersonalForm()
+      } else if (oldVal === 'personal' && newVal === 'upload' && this.error.finalSubmitClicked) {
+        this.$refs.uploadFormRef.preSubmit()
       }
     },
-    tabChange() {
-      if (this.tab === "basic" && this.basicHasError) {
-        this.$refs.basicForm.validate();
-      } else if (this.tab === "personal" && this.personalHasError) {
-        this.$refs.personalForm.validate();
+    tabChange () {
+      if (this.tab === 'basic' && this.basicHasError) {
+        this.$refs.basicForm.validate()
+      } else if (this.tab === 'personal' && this.personalHasError) {
+        this.$refs.personalForm.validate()
       }
     }
-  }
-  ,
+  },
 
-beforeDestroy(){ 
-// console.log('REgister-Update - Before Destroyed');
-this.resetState();
-}
-,  
- components: {
-    successUpdate: require("./register_update/SuccessUpdate.vue").default,
-    progressBar: require("./general/ProgressBar.vue").default,
-    spinner: require("./general/Spinner.vue").default,
-    banner: require("./general/Banner.vue").default,
-    basicForm: require("./register_update/BasicForm.vue").default,
-    personalForm: require("./register_update/PersonalForm.vue").default,
-    uploadForm: require("./register_update/UploadForm.vue").default
+  beforeDestroy () {
+    // console.log('REgister-Update - Before Destroyed');
+    this.resetState()
+  },
+  components: {
+    successUpdate: require('./register_update/SuccessUpdate.vue').default,
+    progressBar: require('./general/ProgressBar.vue').default,
+    spinner: require('./general/Spinner.vue').default,
+    banner: require('./general/Banner.vue').default,
+    basicForm: require('./register_update/BasicForm.vue').default,
+    personalForm: require('./register_update/PersonalForm.vue').default,
+    uploadForm: require('./register_update/UploadForm.vue').default
   }
 }
 </script>

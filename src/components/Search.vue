@@ -88,12 +88,12 @@ export default {
   },
   computed: {
     ...mapGetters('search', ['getSearchResults', 'getSearchResultsPerPage']),
-    ...mapState('search', ['searchResults','showProgressBar'])
+    ...mapState('search', ['searchResults', 'showProgressBar'])
   },
   components: {
     searchForm: require('./search/SearchForm.vue').default,
     searchResults: require('./search/SearchResults.vue').default,
-    noSearchResult : require('./search/NoSearchResult.vue').default
+    noSearchResult: require('./search/NoSearchResult.vue').default
   }
 }
 </script>

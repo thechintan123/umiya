@@ -232,152 +232,134 @@
 </template>
 
 <script>
-import { mapState , mapActions, mapGetters , mapMutations} from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 import mixinFormValidations from 'src/mixins/Mixin_FormValidations.js'
 import mixinComputations from 'src/mixins/Mixin_Computations.js'
-import mixinUtils from "src/mixins/Mixin_Utils.js";
+import mixinUtils from 'src/mixins/Mixin_Utils.js'
 
-import {ageDifference,heightDifference} from '../../constants/registerFormConstants.js'
+import { ageDifference, heightDifference } from '../../constants/registerFormConstants.js'
 
 export default {
-    props: ['updateProfile']
-,
-      mixins: [ mixinComputations, mixinFormValidations,mixinUtils]
-,
-    data(){
-        return{
-            heightOptions : [],
-            ageFromToOptions : []
-        }
-    },
+  props: ['updateProfile'],
+  mixins: [mixinComputations, mixinFormValidations, mixinUtils],
+  data () {
+    return {
+      heightOptions: [],
+      ageFromToOptions: []
+    }
+  },
 
-    computed : {
-      ...mapState('register_update',['formData','list','tmpData','error'])
-,
+  computed: {
+    ...mapState('registerUpdate', ['formData', 'list', 'tmpData', 'error']),
     maritalStatus: {
-    get () {
-      return this.$store.state.register_update.formData.maritalStatus
+      get () {
+        return this.$store.state.registerUpdate.formData.maritalStatus
+      },
+      set (value) {
+        this.$store.commit('registerUpdate/setFormDataIndividual', { key: 'maritalStatus', value: value })
+      }
     },
-    set (value) {
-      this.$store.commit('register_update/setFormDataIndividual', {key: 'maritalStatus' , value : value})
-    }
-  }
-  ,
     height: {
-    get () {
-      return this.$store.state.register_update.formData.height
+      get () {
+        return this.$store.state.registerUpdate.formData.height
+      },
+      set (value) {
+        this.$store.commit('registerUpdate/setFormDataIndividual', { key: 'height', value: value })
+      }
     },
-    set (value) {
-      this.$store.commit('register_update/setFormDataIndividual', {key: 'height' , value : value})
-    }
-  }
-  ,
     gotra: {
-    get () {
-      return this.$store.state.register_update.formData.gotra
+      get () {
+        return this.$store.state.registerUpdate.formData.gotra
+      },
+      set (value) {
+        this.$store.commit('registerUpdate/setFormDataIndividual', { key: 'gotra', value: value })
+      }
     },
-    set (value) {
-      this.$store.commit('register_update/setFormDataIndividual', {key: 'gotra' , value : value})
+    originalSurname: {
+      get () {
+        return this.$store.state.registerUpdate.formData.originalSurname
+      },
+      set (value) {
+        this.$store.commit('registerUpdate/setFormDataIndividual', { key: 'originalSurname', value: value })
+      }
+    },
+    fatherName: {
+      get () {
+        return this.$store.state.registerUpdate.formData.fatherName
+      },
+      set (value) {
+        this.$store.commit('registerUpdate/setFormDataIndividual', { key: 'fatherName', value: value })
+      }
+    },
+    residentialAddress: {
+      get () {
+        return this.$store.state.registerUpdate.formData.residentialAddress
+      },
+      set (value) {
+        this.$store.commit('registerUpdate/setFormDataIndividual', { key: 'residentialAddress', value: value })
+      }
+    },
+    aboutYourself: {
+      get () {
+        return this.$store.state.registerUpdate.formData.aboutYourself
+      },
+      set (value) {
+        this.$store.commit('registerUpdate/setFormDataIndividual', { key: 'aboutYourself', value: value })
+      }
+    },
+    whereKnow: {
+      get () {
+        return this.$store.state.registerUpdate.formData.whereKnow
+      },
+      set (value) {
+        this.$store.commit('registerUpdate/setFormDataIndividual', { key: 'whereKnow', value: value })
+      }
+    },
+    partnerAgeFrom: {
+      get () {
+        return this.$store.state.registerUpdate.formData.partnerAgeFrom
+      },
+      set (value) {
+        this.$store.commit('registerUpdate/setFormDataIndividual', { key: 'partnerAgeFrom', value: value })
+      }
+    },
+    partnerAgeTo: {
+      get () {
+        return this.$store.state.registerUpdate.formData.partnerAgeTo
+      },
+      set (value) {
+        this.$store.commit('registerUpdate/setFormDataIndividual', { key: 'partnerAgeTo', value: value })
+      }
+    },
+    partnerHeightFrom: {
+      get () {
+        return this.$store.state.registerUpdate.formData.partnerHeightFrom
+      },
+      set (value) {
+        this.$store.commit('registerUpdate/setFormDataIndividual', { key: 'partnerHeightFrom', value: value })
+      }
+    },
+    partnerHeightTo: {
+      get () {
+        return this.$store.state.registerUpdate.formData.partnerHeightTo
+      },
+      set (value) {
+        this.$store.commit('registerUpdate/setFormDataIndividual', { key: 'partnerHeightTo', value: value })
+      }
+    },
+    partnerMaritalStatus: {
+      get () {
+        return this.$store.state.registerUpdate.formData.partnerMaritalStatus
+      },
+      set (value) {
+        this.$store.commit('registerUpdate/setFormDataIndividual', { key: 'partnerMaritalStatus', value: value })
+      }
     }
-  }
-,
-originalSurname: {
-    get () {
-      return this.$store.state.register_update.formData.originalSurname
-    },
-    set (value) {
-      this.$store.commit('register_update/setFormDataIndividual', {key: 'originalSurname' , value : value})
-    }
-  }
-  ,
-fatherName: {
-    get () {
-      return this.$store.state.register_update.formData.fatherName
-    },
-    set (value) {
-      this.$store.commit('register_update/setFormDataIndividual', {key: 'fatherName' , value : value})
-    }
-  }
-  ,
-  residentialAddress :{
-    get () {
-      return this.$store.state.register_update.formData.residentialAddress
-    },
-    set (value) {
-      this.$store.commit('register_update/setFormDataIndividual', {key: 'residentialAddress' , value : value})
-    }      
-  }
-  ,
-  aboutYourself : {
-    get () {
-      return this.$store.state.register_update.formData.aboutYourself
-    },
-    set (value) {
-      this.$store.commit('register_update/setFormDataIndividual', {key: 'aboutYourself' , value : value})
-    }      
-  }
-  ,
-  whereKnow : {
-    get () {
-      return this.$store.state.register_update.formData.whereKnow
-    },
-    set (value) {
-      this.$store.commit('register_update/setFormDataIndividual', {key: 'whereKnow' , value : value})
-    }      
-  }
-  ,
-  partnerAgeFrom : {
-    get () {
-      return this.$store.state.register_update.formData.partnerAgeFrom
-    },
-    set (value) {
-      this.$store.commit('register_update/setFormDataIndividual', {key: 'partnerAgeFrom' , value : value})
-    }      
-  }
-  ,
-  partnerAgeTo : {
-    get () {
-      return this.$store.state.register_update.formData.partnerAgeTo
-    },
-    set (value) {
-      this.$store.commit('register_update/setFormDataIndividual', {key: 'partnerAgeTo' , value : value})
-    }      
-  } 
-  ,
-    partnerHeightFrom : {
-    get () {
-      return this.$store.state.register_update.formData.partnerHeightFrom
-    },
-    set (value) {
-      this.$store.commit('register_update/setFormDataIndividual', {key: 'partnerHeightFrom' , value : value})
-    }      
-  }
-  ,
-  partnerHeightTo : {
-    get () {
-      return this.$store.state.register_update.formData.partnerHeightTo
-    },
-    set (value) {
-      this.$store.commit('register_update/setFormDataIndividual', {key: 'partnerHeightTo' , value : value})
-    }      
-  }
-  ,
-  partnerMaritalStatus : {
-    get () {
-      return this.$store.state.register_update.formData.partnerMaritalStatus
-    },
-    set (value) {
-      this.$store.commit('register_update/setFormDataIndividual', {key: 'partnerMaritalStatus' , value : value})
-    }      
-  }
-  ,  
 
-    }
-    ,
-    methods:{
-          ...mapMutations('register_update',['setFormDataIndividual','setError'])
-,
+  },
+  methods: {
+    ...mapMutations('registerUpdate', ['setFormDataIndividual', 'setError']),
     createHeightList () {
       // create height list when component is created
       let h
@@ -389,16 +371,14 @@ fatherName: {
           this.heightOptions.push(h + ' ft ' + i + ' inches')
         }
       }
-    }
-    ,
+    },
     defaultHeightFromHeightTo () {
-      //if (this.updateProfile !== true) {
-          if(true){
-        //this.formData.heightCms = this.convertHeightToCms(this.formData.height)
+      if (this.updateProfile !== true) {
+        // this.formData.heightCms = this.convertHeightToCms(this.formData.height)
         var heightCms = this.convertHeightToCms(this.formData.height)
         var heightFromCms, heightToCms
         // this.convertHeightToFtInch(heightCms)
-        //console.log("Gender", this.gender);
+        // console.log("Gender", this.gender);
         if (this.formData.gender.name === 'Male') {
           // Defaulting Age for Partner
           heightFromCms = heightCms - heightDifference
@@ -418,15 +398,13 @@ fatherName: {
         )
         var partnerHeightToFtInch = this.convertHeightToFtInch(heightToCms)
 
-        this.setFormDataIndividual({key: 'partnerHeightFromCms' , value : heightFromCms});
-        this.setFormDataIndividual({key: 'partnerHeightToCms' , value : heightToCms});
-       
-        this.setFormDataIndividual({key: 'partnerHeightFrom' , value : partnerHeightFromFtInch});
-        this.setFormDataIndividual({key: 'partnerHeightTo' , value : partnerHeightToFtInch});        
-       
+        this.setFormDataIndividual({ key: 'partnerHeightFromCms', value: heightFromCms })
+        this.setFormDataIndividual({ key: 'partnerHeightToCms', value: heightToCms })
+
+        this.setFormDataIndividual({ key: 'partnerHeightFrom', value: partnerHeightFromFtInch })
+        this.setFormDataIndividual({ key: 'partnerHeightTo', value: partnerHeightToFtInch })
       }
-    } 
-    ,
+    },
     defaultAgeFromAgeTo () {
       // console.log("Gender", this.formData.gender);
       if (this.updateProfile !== true) {
@@ -434,12 +412,12 @@ fatherName: {
           if (this.formData.gender.name === 'Male') {
             // Defaulting Age for Partner
             this.formData.partnerAgeFrom =
-              this.formData.age - this.ageDifference
+              this.formData.age - ageDifference
             this.formData.ageTo = this.formData.age
           } else if (this.formData.gender.name === 'Female') {
             // Defaulting Age for Partner
             this.formData.partnerAgeFrom = this.formData.age
-            this.formData.ageTo = this.formData.age + this.ageDifference
+            this.formData.ageTo = this.formData.age + ageDifference
           } else {
             this.formData.partnerAgeFrom = ''
             this.formData.ageTo = ''
@@ -451,15 +429,13 @@ fatherName: {
       }
     },
     defaultPartnerMaritalStatus () {
-
-        if(this.updateProfile!== true){  
-        var partnerMaritalStatus = [...this.formData.partnerMaritalStatus];
-        partnerMaritalStatus.push(this.formData.maritalStatus);
-          this.$store.commit('register_update/setFormDataIndividual', {key: 'partnerMaritalStatus' , value : partnerMaritalStatus})
+      if (this.updateProfile !== true) {
+        var partnerMaritalStatus = [...this.formData.partnerMaritalStatus]
+        partnerMaritalStatus.push(this.formData.maritalStatus)
+        this.$store.commit('registerUpdate/setFormDataIndividual', { key: 'partnerMaritalStatus', value: partnerMaritalStatus })
       }
-    }
-   
-    ,
+    },
+
     createAgeFromToList () {
       const startAge = 18
       const endAge = 60
@@ -467,8 +443,7 @@ fatherName: {
       for (a = startAge; a <= endAge; a++) {
         this.ageFromToOptions.push(a)
       }
-    }
-    ,
+    },
     checkHeightTo (heightTo) {
       const heightFrom = this.formData.partnerHeightFrom
       if (heightFrom && heightTo) {
@@ -484,8 +459,7 @@ fatherName: {
       } else {
         return true
       }
-    }
-    ,
+    },
     checkAgeTo (ageTo) {
       if (ageTo < this.formData.partnerAgeFrom) {
         return false
@@ -494,44 +468,40 @@ fatherName: {
       }
     },
     checkAgeFrom (partnerAgeFrom) {
-      //console.log("checkAgeFrom", partnerAgeFrom, this.formData.partnerAgeTo);  
+      // console.log("checkAgeFrom", partnerAgeFrom, this.formData.partnerAgeTo);
       if (partnerAgeFrom > this.formData.partnerAgeTo) {
         return false
       } else {
         return true
       }
-    }
-    ,
-     submitPersonalForm () {
-      // console.log("validatePersonalForm Called")
-      try{
-       this.$refs.personalForm.validate().then(success => {
-        if (success) {
-          this.$store.commit('register_update/setError', {key: 'personalHasError' , value : false})
-          this.$store.commit("register_update/setTab", "upload");
-        } else {
-          this.$store.commit('register_update/setError', {key: 'personalHasError' , value : true})
-          if(this.error.finalSubmitClicked === true){
-              this.setError({ key: "finalSubmitClicked", value: false });
-          }
-        }
-      })
-
-      this.$store.commit('register_update/setError', {key: 'personalValidated' , value : true})
-      //  console.log("validate Personal Form 3");
-    }
-    catch(error){
-      // console.log("Validate Personal Form", err)
-      this.showErrorDialog(error)
-
-    }
     },
-    goBack(){
-        this.$store.commit('register_update/setTab', 'basic')
-    }     
+    submitPersonalForm () {
+      // console.log("validatePersonalForm Called")
+      try {
+        this.$refs.personalForm.validate().then(success => {
+          if (success) {
+            this.$store.commit('registerUpdate/setError', { key: 'personalHasError', value: false })
+            this.$store.commit('registerUpdate/setTab', 'upload')
+          } else {
+            this.$store.commit('registerUpdate/setError', { key: 'personalHasError', value: true })
+            if (this.error.finalSubmitClicked === true) {
+              this.setError({ key: 'finalSubmitClicked', value: false })
+            }
+          }
+        })
+
+        this.$store.commit('registerUpdate/setError', { key: 'personalValidated', value: true })
+      //  console.log("validate Personal Form 3");
+      } catch (error) {
+      // console.log("Validate Personal Form", err)
+        this.showErrorDialog(error)
+      }
+    },
+    goBack () {
+      this.$store.commit('registerUpdate/setTab', 'basic')
     }
-    ,
-    created () {
+  },
+  created () {
     this.createHeightList()
     this.createAgeFromToList()
   }

@@ -1,37 +1,35 @@
 import axios from 'axios'
 import mixinComputations from 'src/mixins/Mixin_Computations.js'
 import mixinUtils from 'src/mixins/Mixin_Utils.js'
-import {testData , testTmpData} from  'src/constants/testingDefaults'
-
+import { testData, testTmpData } from 'src/constants/testingDefaults'
 
 const getDefaultState = () => {
   return {
-    tab : 'basic',
-    error :{
+    tab: 'basic',
+    error: {
       basicHasError: false,
       personalHasError: false,
       uploadHasError: false,
 
       basicValidated: false,
       personalValidated: false,
-      uploadValidated: false,            
+      uploadValidated: false,
       // Error for Photo and Proofs
 
-      finalSubmitClicked :  false,
+      finalSubmitClicked: false
 
     },
 
     list: {
-      countryOptions : [],
-      gotraOptions : [],
-      whereKnowOptions : [],
-      maritalOptions : [],
-      genderOptions : []
-    }
-    ,
+      countryOptions: [],
+      gotraOptions: [],
+      whereKnowOptions: [],
+      maritalOptions: [],
+      genderOptions: []
+    },
     // form fields
     formData: {
-      userDetailsId : '',
+      userDetailsId: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -73,391 +71,364 @@ const getDefaultState = () => {
       alternateContact: '',
       countryRadio: '',
       otherCountry: '',
-      age : 0,
+      age: 0,
       countryList: []
     },
-   
 
-    //previous Form Data for Update
-    previousFormData: { }   
-    ,
-    genderOptions: [{id :1, name : 'Male'},{id:2, name:'Female'}],
+    // previous Form Data for Update
+    previousFormData: { },
+    genderOptions: [{ id: 1, name: 'Male' }, { id: 2, name: 'Female' }],
 
-    //userDetailsId : '',
+    // userDetailsId : '',
 
-    showProgressBar : false,
+    showProgressBar: false,
 
-    //For update of Photos
-    previousPhotosFiles : [],
+    // For update of Photos
+    previousPhotosFiles: [],
 
-    userSubmitted : false,
+    userSubmitted: false,
 
-    successProcess : false
+    successProcess: false
 
-}
+  }
 }
 
- 
 const state = getDefaultState()
 
-
-
-const mutations ={
+const mutations = {
 
   resetState (state) {
     Object.assign(state, getDefaultState())
+  },
+  setFormData (state, userDetail) {
+    state.formData = userDetail
+  },
+  setFormDataIndividual (state, object) {
+    state.formData[object.key] = object.value
+    // console.log("setFormDataIndividual", object.key, object.value, state.formData[object.key]);
+  },
+  setTmpData (state, object) {
+    state.tmpData[object.key] = object.value
+    // console.log("tmpdata", state.tmpData, object.key, object.key);
+  },
+  setTmpDataFull (state, object) {
+    // state.tmpData = object;
+    const mergedObject = Object.assign(state.tmpData, object)
+    state.tmpData = mergedObject
+  },
+
+  setShowProgressBar (state, value) {
+    state.showProgressBar = value
+  },
+  setList (state, object) {
+    state.list[object.key] = object.value
+    // console.log("tmpdata", state.tmpData, object.key, object.key);
+  },
+  setGender (state, value) {
+    state.formData.gender = value
+  },
+  setTab (state, value) {
+    state.tab = value
+  },
+  setError (state, object) {
+    state.error[object.key] = object.value
+  },
+  setPreviousFormData (state, object) {
+    state.previousFormData = object
+  },
+  setUserSubmitted (state, value) {
+    state.userSubmitted = value
+  },
+  setSuccessProcess (state, value) {
+    state.successProcess = value
   }
-  ,
-    setFormData(state, userDetail){
-        state.formData = userDetail;
-
-    },
-    setFormDataIndividual(state, object){
-      state.formData[object.key] = object.value;
-      //console.log("setFormDataIndividual", object.key, object.value, state.formData[object.key]);
-
-  },    
-    setTmpData(state, object){
-        state.tmpData[object.key] = object.value;
-        //console.log("tmpdata", state.tmpData, object.key, object.key);
-    }, 
-    setTmpDataFull(state, object){
-      // state.tmpData = object;
-      const mergedObject = Object.assign(state.tmpData, object);
-      state.tmpData = mergedObject;
-
-  },     
-
-    setShowProgressBar(state, value){
-        state.showProgressBar = value;
-    }
-    ,
-    setList(state, object){
-      state.list[object.key] = object.value;
-      //console.log("tmpdata", state.tmpData, object.key, object.key);
-  },  
-  setGender(state,value){
-    state.formData.gender = value;
-  }
-  ,
-  setTab(state,value){
-    state.tab = value;
-  }
-  ,
-  setError(state, object){
-    state.error[object.key] = object.value;
-},
-setPreviousFormData(state,object){
-  state.previousFormData = object;
-
-},
-setUserSubmitted(state, value){
-  state.userSubmitted = value
-}
-,
-setSuccessProcess(state, value){
-  state.successProcess = value;
-}
 }
 
 const actions = {
-setFormData2({commit}){
-    commit('setFormData');
-}
-,
-fetchList({commit}){
-  return axios
-  .get(process.env.API + '/lists')
-  .then(response => {
-    //this.countryList = response.data.country
-    var countryOptions = response.data.country
-    commit('setList', {key  : 'countryOptions',value : countryOptions});
-    commit('setTmpData', {key  : 'countryList',value : countryOptions});
+  setFormData2 ({ commit }) {
+    commit('setFormData')
+  },
+  fetchList ({ commit }) {
+    return axios
+      .get(process.env.API + '/lists')
+      .then(response => {
+        // this.countryList = response.data.country
+        var countryOptions = response.data.country
+        commit('setList', { key: 'countryOptions', value: countryOptions })
+        commit('setTmpData', { key: 'countryList', value: countryOptions })
 
         var gotraOptions = response.data.gotra
-    commit('setList', {key  : 'gotraOptions',value : gotraOptions});
-    
-    var whereKnowOptions = response.data.where_know
-    commit('setList', {key  : 'whereKnowOptions',value : whereKnowOptions});
+        commit('setList', { key: 'gotraOptions', value: gotraOptions })
 
-    var maritalOptions = response.data.marital_status
-    commit('setList', {key  : 'maritalOptions',value : maritalOptions});
+        var whereKnowOptions = response.data.where_know
+        commit('setList', { key: 'whereKnowOptions', value: whereKnowOptions })
 
-    var genderOptions = response.data.gender
-    commit('setList', {key  : 'genderOptions',value : genderOptions});
+        var maritalOptions = response.data.marital_status
+        commit('setList', { key: 'maritalOptions', value: maritalOptions })
 
-  })
-  .catch(error => {
-    mixinUtils.methods.showErrorDialog(error)
-  })
-}
-,
- // For Update Profile
- fetchUserDetails ({commit}) {
-    commit('setShowProgressBar',true);
+        var genderOptions = response.data.gender
+        commit('setList', { key: 'genderOptions', value: genderOptions })
+      })
+      .catch(error => {
+        mixinUtils.methods.showErrorDialog(error)
+      })
+  },
+  // For Update Profile
+  fetchUserDetails ({ commit }) {
+    commit('setShowProgressBar', true)
     var user = JSON.parse(localStorage.getItem('user'))
-    var userDetail;
+    var userDetail
 
     if (user !== null) {
       var userDetailsId = user.user_details_id
-     
+
       return axios
         .get(process.env.API + '/users/' + userDetailsId)
         .then(({ data }) => {
-                              //console.log("data", data, data.upload_proof);
+          // console.log("data", data, data.upload_proof);
 
-                              // converting from CamelCase to SnakeCase
-                              userDetail = {};
-                              for (const key in data) {
-                                // console.log("Key", camel);
-                                userDetail[
-                                  mixinComputations.methods.snakeToCamel(key)
-                                ] = data[key];
-                              }
+          // converting from CamelCase to SnakeCase
+          userDetail = {}
+          for (const key in data) {
+            // console.log("Key", camel);
+            userDetail[
+              mixinComputations.methods.snakeToCamel(key)
+            ] = data[key]
+          }
 
-                              //console.log("userDetail", userDetail);
-                              //state.formData = userDetail
-                              commit("setFormData", userDetail);
+          // console.log("userDetail", userDetail);
+          // state.formData = userDetail
+          commit('setFormData', userDetail)
 
-                              commit("setFormDataIndividual", {
-                                key: "userDetailsId",
-                                value: userDetailsId
-                              });
+          commit('setFormDataIndividual', {
+            key: 'userDetailsId',
+            value: userDetailsId
+          })
 
-                              //console.log("formData", state.formData);
+          // console.log("formData", state.formData);
 
-                              // Converting the data to match the form fields requirements
+          // Converting the data to match the form fields requirements
 
-                              /* for Primary Phone and Alternate Phone. It is stored in the following format "+91 1234567890"
+          /* for Primary Phone and Alternate Phone. It is stored in the following format "+91 1234567890"
     so extracting the information */
 
-                              var primaryContactCountryCode = state.formData.primaryContact.substr(
-                                1,
-                                2
-                              );
-                              //console.log("FormData Details", state.formData.primaryContact, primaryContactCountryCode);
+          var primaryContactCountryCode = state.formData.primaryContact.substr(
+            1,
+            2
+          )
+          // console.log("FormData Details", state.formData.primaryContact, primaryContactCountryCode);
 
-                              commit("setTmpData", {
-                                key: "primaryContactCountryCode",
-                                value: primaryContactCountryCode
-                              });
+          commit('setTmpData', {
+            key: 'primaryContactCountryCode',
+            value: primaryContactCountryCode
+          })
 
-                              var primaryContact = state.formData.primaryContact.substr(
-                                4
-                              );
-                              commit("setTmpData", {
-                                key: "primaryContact",
-                                value: primaryContact
-                              });
+          var primaryContact = state.formData.primaryContact.substr(
+            4
+          )
+          commit('setTmpData', {
+            key: 'primaryContact',
+            value: primaryContact
+          })
 
-                              var alternateContactCountryCode = state.formData.alternateContact.substr(
-                                1,
-                                2
-                              );
+          var alternateContactCountryCode = state.formData.alternateContact.substr(
+            1,
+            2
+          )
 
-                              commit("setTmpData", {
-                                key: "alternateContactCountryCode",
-                                value: alternateContactCountryCode
-                              });
+          commit('setTmpData', {
+            key: 'alternateContactCountryCode',
+            value: alternateContactCountryCode
+          })
 
-                              var alternateContact = state.formData.alternateContact.substr(
-                                4
-                              );
+          var alternateContact = state.formData.alternateContact.substr(
+            4
+          )
 
-                              commit("setTmpData", {
-                                key: "alternateContact",
-                                value: alternateContact
-                              });
+          commit('setTmpData', {
+            key: 'alternateContact',
+            value: alternateContact
+          })
 
-                              // Map country and other country
+          // Map country and other country
 
-                              var country = state.formData.country;
-                              if (country.name === "India") {
-                                //state.tmpData.countryRadio = 'India'
-                                commit("setTmpData", {
-                                  key: "countryRadio",
-                                  value: "India"
-                                });
-                              } else {
-                                //state.tmpData.countryRadio = 'Other'
-                                commit("setTmpData", {
-                                  key: "countryRadio",
-                                  value: "Other"
-                                });
+          var country = state.formData.country
+          if (country.name === 'India') {
+            // state.tmpData.countryRadio = 'India'
+            commit('setTmpData', {
+              key: 'countryRadio',
+              value: 'India'
+            })
+          } else {
+            // state.tmpData.countryRadio = 'Other'
+            commit('setTmpData', {
+              key: 'countryRadio',
+              value: 'Other'
+            })
 
+            commit('setTmpData', {
+              key: 'otherCountry',
+              value: state.formData.country
+            })
+          }
 
-                                commit("setTmpData", {
-                                  key: "otherCountry",
-                                  value: state.formData.country
-                                });
-                              }
+          // Calculate Age
+          // console.log("mixinComputations", mixinComputations);
+          var dateFormatted = new Date(
+            state.formData.dateOfBirth
+          )
+            .toISOString()
+            .split('T')[0]
+          commit('setFormDataIndividual', {
+            key: 'dateOfBirth',
+            value: dateFormatted
+          })
 
-                              // Calculate Age
-                              //console.log("mixinComputations", mixinComputations);
-                              var dateFormatted = new Date(
-                                state.formData.dateOfBirth
-                              )
-                                .toISOString()
-                                .split("T")[0];
-                              commit("setFormDataIndividual", {
-                                key: "dateOfBirth",
-                                value: dateFormatted
-                              });
+          var age = mixinComputations.methods.computeAge(
+            state.formData.dateOfBirth
+          )
+          commit('setTmpData', { key: 'age', value: age })
 
-                              var age = mixinComputations.methods.computeAge(
-                                state.formData.dateOfBirth
-                              );
-                              commit("setTmpData", { key: "age", value: age });
+          // Mapping Height in Cms to Ft and Inch
+          // state.formData.heightCms = state.formData.height
+          var heightCms = state.formData.height
+          var heightFtInch = mixinComputations.methods.convertHeightToFtInch(
+            heightCms
+          )
+          commit('setFormDataIndividual', {
+            key: 'height',
+            value: heightFtInch
+          })
+          commit('setFormDataIndividual', {
+            key: 'heightCms',
+            value: heightCms
+          })
 
-                              // Mapping Height in Cms to Ft and Inch
-                              //state.formData.heightCms = state.formData.height
-                              var heightCms = state.formData.height;
-                              var heightFtInch = mixinComputations.methods.convertHeightToFtInch(
-                                heightCms
-                              );
-                              commit("setFormDataIndividual", {
-                                key: "height",
-                                value: heightFtInch
-                              });
-                              commit("setFormDataIndividual", {
-                                key: "heightCms",
-                                value: heightCms
-                              });
+          // Map Partner Height From and To. First, Convert to Ft and Inches
+          var partnerHeightFromCms =
+                                state.formData.partnerHeightFrom
+          var partnerHeightFromFtInch = mixinComputations.methods.convertHeightToFtInch(
+            partnerHeightFromCms
+          )
 
-                              // Map Partner Height From and To. First, Convert to Ft and Inches
-                              var partnerHeightFromCms =
-                                state.formData.partnerHeightFrom;
-                              var partnerHeightFromFtInch = mixinComputations.methods.convertHeightToFtInch(
-                                partnerHeightFromCms
-                              );
+          commit('setFormDataIndividual', {
+            key: 'partnerHeightFrom',
+            value: partnerHeightFromFtInch
+          })
+          commit('setFormDataIndividual', {
+            key: 'partnerHeightFromCms',
+            value: partnerHeightFromCms
+          })
 
-                              commit("setFormDataIndividual", {
-                                key: "partnerHeightFrom",
-                                value: partnerHeightFromFtInch
-                              });
-                              commit("setFormDataIndividual", {
-                                key: "partnerHeightFromCms",
-                                value: partnerHeightFromCms
-                              });
+          var partnerHeightToCms =
+                                state.formData.partnerHeightTo
+          var partnerHeightToFtInch = mixinComputations.methods.convertHeightToFtInch(
+            partnerHeightToCms
+          )
 
-                              var partnerHeightToCms =
-                                state.formData.partnerHeightTo;
-                              var partnerHeightToFtInch = mixinComputations.methods.convertHeightToFtInch(
-                                partnerHeightToCms
-                              );
+          commit('setFormDataIndividual', {
+            key: 'partnerHeightTo',
+            value: partnerHeightToFtInch
+          })
+          commit('setFormDataIndividual', {
+            key: 'partnerHeightToCms',
+            value: partnerHeightToCms
+          })
 
-                              commit("setFormDataIndividual", {
-                                key: "partnerHeightTo",
-                                value: partnerHeightToFtInch
-                              });
-                              commit("setFormDataIndividual", {
-                                key: "partnerHeightToCms",
-                                value: partnerHeightToCms
-                              });
+          // Storing FormData into Other Object
+          var previousFormData = Object.assign(
+            {},
+            state.formData
+          )
+          commit('setPreviousFormData', previousFormData)
 
-                              // Storing FormData into Other Object
-                              var previousFormData = Object.assign(
-                                {},
-                                state.formData
-                              );
-                              commit("setPreviousFormData", previousFormData);
+          // console.log('Previous Form Data', state.previousFormData)
 
-                              //console.log('Previous Form Data', state.previousFormData)
-
-                              commit("setShowProgressBar", false);
-                            })
+          commit('setShowProgressBar', false)
+        })
         .catch(error => {
-          //console.log("Errror",error)
+          // console.log("Errror",error)
           mixinUtils.methods.showErrorDialog(error)
         })
-        
     } // end of if user!==null
-  }// end of fetchUSerDetails
-,
-  fetchPhotos ({commit}) {
+  }, // end of fetchUSerDetails
+  fetchPhotos ({ commit }) {
     // Get Photos
 
-      //console.log("Before Photo Loop", this.formData);
-      commit('setShowProgressBar',true);
-      var photos = state.formData.uploadPhotos
-      var photo = {}
-      var fileObj = {}
-      var blobObject = {}
-      var userDetailsId = state.formData.userDetailsId
+    // console.log("Before Photo Loop", this.formData);
+    commit('setShowProgressBar', true)
+    var photos = state.formData.uploadPhotos
+    var photo = {}
+    var fileObj = {}
+    var blobObject = {}
+    var userDetailsId = state.formData.userDetailsId
 
-      for (photo of photos) {
-        axios({
-          url:
+    for (photo of photos) {
+      axios({
+        url:
             process.env.API +
             '/photos/' +
             userDetailsId +
             '/' +
             photo.filename,
-          method: 'GET',
-          responseType: 'blob' // important
+        method: 'GET',
+        responseType: 'blob' // important
+      })
+        .then(response => {
+          var position = response.config.url.indexOf('photo_')
+          var fileName = response.config.url.substr(position) // get file name from URL
+
+          // console.log(
+          //   "Photo Details",
+          //   position,
+          //   response.config.url,
+          //   fileName,
+          //   photo.filename,
+          //   response
+          // );
+
+          blobObject = new Blob([response.data])
+          fileObj = new File([blobObject], fileName, {
+            type: 'image/jpeg'
+          })
+
+          state.previousPhotosFiles.push(fileObj)
+
+          commit('setShowProgressBar', false)
+
+          return state.previousPhotosFiles
+          // console.log("Photos Loaded", fileName, fileObj, state.previousPhotosFiles);
         })
-          .then(response => {
-            var position = response.config.url.indexOf('photo_')
-            var fileName = response.config.url.substr(position) // get file name from URL
+        .catch(error => {
+          mixinUtils.methods.showErrorDialog(error)
+        })
 
-            // console.log(
-            //   "Photo Details",
-            //   position,
-            //   response.config.url,
-            //   fileName,
-            //   photo.filename,
-            //   response
-            // );
-
-            blobObject = new Blob([response.data])
-            fileObj = new File([blobObject], fileName, {
-              type: 'image/jpeg'
-            })
-
-            state.previousPhotosFiles.push(fileObj)
-
-           commit('setShowProgressBar',false);
-
-            return state.previousPhotosFiles
-            // console.log("Photos Loaded", fileName, fileObj, state.previousPhotosFiles);
-            
-
-          })
-          .catch(error => {
-            mixinUtils.methods.showErrorDialog(error)
-
-          })
-
-        // console.log("File List", fileList);
-      } // for of Photo loop
-
+      // console.log("File List", fileList);
+    } // for of Photo loop
   }, // end of fetchPhotos
-  
-  calculateAge({commit}){
-    var dob = state.formData.dateOfBirth
-    //console.log("calculateAge", this.formData, dob, typeof(dob))
-  if(dob!== null && typeof(dob) != 'undefined' && dob!== ''){  
-    var age = mixinComputations.methods.computeAge(state.formData.dateOfBirth);
-    commit('setTmpData', {key  : 'age',value : age});
-  }
-  }
-  ,
-  filterCountryOptions({commit},filteredCountryList){
-    commit('setTmpData', {key  : 'countryOptions',value : filteredCountryList});
 
-  }
-  ,
+  calculateAge ({ commit }) {
+    var dob = state.formData.dateOfBirth
+    // console.log("calculateAge", this.formData, dob, typeof(dob))
+    if (dob !== null && typeof (dob) !== 'undefined' && dob !== '') {
+      var age = mixinComputations.methods.computeAge(state.formData.dateOfBirth)
+      commit('setTmpData', { key: 'age', value: age })
+    }
+  },
+  filterCountryOptions ({ commit }, filteredCountryList) {
+    commit('setTmpData', { key: 'countryOptions', value: filteredCountryList })
+  },
   // setFormDataIndividual({commit},genderObject){
   //   commit('setFormDataIndividual', {key  : 'gender',value : genderObject.value});
 
   // },
-  defaultFields ({commit}) {
-    //this.formData = this.testData
-    commit("setFormData", testData);
+  defaultFields ({ commit }) {
+    // this.formData = this.testData
+    commit('setFormData', testData)
 
-    commit("setTmpDataFull", testTmpData);
+    commit('setTmpDataFull', testTmpData)
 
-    //this.tmpData = this.testTmpData
+    // this.tmpData = this.testTmpData
     // defaults email with random string
     var email =
       'test' +
@@ -466,11 +437,9 @@ fetchList({commit}){
         .substr(2, 6) +
       '@test.com'
 
-      commit('setFormDataIndividual', {key  : 'email',value : email});
+    commit('setFormDataIndividual', { key: 'email', value: email })
+  }
 
-  },
-
-    
 }
 
 const getters = {
@@ -478,9 +447,9 @@ const getters = {
 }
 
 export default {
-    namespaced: true,
-    state,
-    getters,
-    mutations,
-    actions
-  }
+  namespaced: true,
+  state,
+  getters,
+  mutations,
+  actions
+}
