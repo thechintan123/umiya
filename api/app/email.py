@@ -2,6 +2,8 @@ from flask import render_template
 from . import app
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail, Content, Personalization, Email, From, Bcc, Subject, ReplyTo
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 
 # Generic method to send email via Sendgrid
@@ -40,7 +42,7 @@ def send_email(recipients, subject, text_body, html_body, send_admin=False):
         return False
 
 
-# Send register successful email which calls generic method above
+# Send register successful email
 def send_reg_email(user):
     recipients = [user.email]
     return send_email(
@@ -53,13 +55,36 @@ def send_reg_email(user):
         send_admin=True)
 
 
-# Send register successful email which calls generic method above
+# Send forgot password email
 def send_forgotpwd_email(user, new_pwd):
     recipients = [user.email]
     return send_email(
         recipients=recipients,
-        subject='Reset your password from UmiyaMatrimony.com',
+        subject='Reset your password from UmiyaMatrimony',
         text_body=render_template('email_pwdreset.txt',
                                   user=user, new_pwd=new_pwd),
         html_body=render_template('email_pwdreset.html',
                                   user=user, new_pwd=new_pwd))
+
+
+# Calculate age of person for display purpose
+def calc_age(match_users):
+    now = datetime.now()
+    years = []
+    for m in match_users:
+        dob = m.user_details.date_of_birth
+        year = relativedelta(now, dob).years
+        years.append(year)
+    return years
+
+# Send match partner email
+def send_match_email(user, match_users):
+    recipients = [user.email]
+    years = calc_age(match_users)
+    return send_email(
+        recipients=recipients,
+        subject='New users match your preferred partner profile at UmiyaMatrimony',
+        text_body=render_template('email_match.txt',
+                                  user=user, match_users=match_users, years=years),
+        html_body=render_template('email_match.html',
+                                  user=user, match_users=match_users, years=years))

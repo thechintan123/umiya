@@ -1,0 +1,15 @@
+<p>Dear {{ user.user_details.first_name[0]|upper }}{{ user.user_details.first_name[1:] }}</p>
+
+<p>The below are new users that matched your preferred partner profile:</p>
+
+<ul>
+{% for m in match_users %}
+<li>{{ m.user_details.first_name }} {{ m.user_details.last_name}}, {{ years[loop.index0] }}Y, {{ m.user_details.gender.name }}</li>
+{% endfor %}
+</ul>
+
+<p>
+Best Regards, <br />
+Your Friends at UmiyaMatrimony.com
+</p>
+
