@@ -1,0 +1,10 @@
+Dear {{ user.user_details.first_name[0]|upper }}{{ user.user_details.first_name[1:] }}
+
+The below are new users that matched your preferred partner profile:
+
+{% for m in match_users %}
+{{ m.user_details.first_name }} {{ m.user_details.last_name}}, {{ years[loop.index0] }}Y, {{ m.user_details.gender.name }}
+{% endfor %}
+
+Best Regards,
+Your Friends at UmiyaMatrimony.com

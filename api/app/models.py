@@ -122,6 +122,7 @@ class UserDetails(db.Model):
         'where_know.id'), nullable=False)
     status_id = db.Column(db.Integer, db.ForeignKey(
         'profile_status.id'), default=1, nullable=False)
+    email_matched_notification = db.Column(db.Boolean, default=True, nullable=False)
     update_date = db.Column(
         db.DateTime, default=datetime.utcnow, nullable=False)
     create_date = db.Column(
@@ -164,6 +165,7 @@ class UserDetails(db.Model):
             'partner_marital_status': pms,
             'where_know': self.where_know.to_dict(),
             'status': self.status.to_dict(),
+            'email_matched_notification': self.email_matched_notification,
             'last_login': self.user.last_login.isoformat() + 'Z' if self.user.last_login else None,
             'upload_proof': self.upload_proof,
             'upload_photos': upload_photos
