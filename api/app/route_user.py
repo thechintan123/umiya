@@ -162,7 +162,7 @@ def get_photo(id, filename):
     if not folder.is_dir():
         return bad_request('Upload folder not found')
     file_path = folder / filename
-    print("get_photo Response", file_path)
+    # print("get_photo Response", file_path)
     try:
         # get PIL image
         img = Image.open(file_path)

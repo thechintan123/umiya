@@ -1,7 +1,25 @@
 <template>
   <div class="q-mt-md">
-    <q-card>
-      <q-banner rounded dense class="bg-dark text-secondary">Results</q-banner>
+    <!-- <div> -->
+    <q-card >
+      <q-banner inline-actions rounded dense class="bg-dark text-secondary">
+        Results : 
+        <i> You have <b>{{searchResults.length}}</b> matches
+          </i>
+      <template v-slot:action>
+       <q-select dense options-dense 
+       borderless v-model="sortBy" 
+       :options=sortByOptions
+      option-value="id"
+      option-label="value" 
+       @input = "changeSort"
+       label="Sort By" >
+        <template v-slot:prepend>
+          <q-icon name="fas fa-sort-amount-up-alt"/>
+        </template>
+       </q-select> 
+      </template>
+      </q-banner>
       <!--
     <q-toolbar class="bg-dark text-secondary shadow-2 rounded-borders">
       <q-toolbar-title>
@@ -10,9 +28,9 @@
     </q-toolbar>
       -->
       <!--<q-card>-->
-      <q-list padding v-for="(searchItem,key,index) in searchResults" :key="index">
-        <div class="q-ma-sm row justify-center">
-          <div class="col-md-4 col-9">
+      <q-list padding v-for="(searchItem,index) in searchResultsPerPage" :key="index">
+        <div class="q-ma-sm row justify-evenly">
+          <div class="col-4">
             <!-- <q-avatar rounded> -->
             <!--<img style="max-width:200px;max-height:200px" :src="'statics/photos/' + key + '.jpg'"> -->
             <!-- </q-avatar> -->
@@ -22,17 +40,22 @@
               :gender="searchItem.gender"
             ></search-results-photo-slide>
           </div>
-          <q-item class="col-md-8 col-9 text-capitalize">
+          <q-item class="col-8 text-capitalize">
             <q-item-section>
               <q-item-label>
                 <div
                   class="text-h6"
-                >{{ searchItem.firstName}} {{searchItem.lastName}} (Profile ID :{{ searchItem.id }})</div>
+                >{{ searchItem.firstName}} {{searchItem.lastName}} </div>
               </q-item-label>
+              <q-item-label>
+                <u>Profile ID</u>
+                :
+                {{ searchItem.id }}
+              </q-item-label>              
               <q-item-label>
                 <u>Date of Birth</u>
                 :
-                {{ searchItem.dateOfBirth | convertToDate}}
+                {{ removeTimeStamp(searchItem.dateOfBirth)}}
               </q-item-label>
               <q-item-label>
                 <u>Age</u>
@@ -42,22 +65,18 @@
               <q-item-label>
                 <u>Height</u>
                 :
-                {{searchItem.height | convertHeightToFoot}}
+                {{convertHeightToFtInch(searchItem.height)}}
               </q-item-label>
               <q-item-label>
                 <u>Marital Status</u>
                 :
-                {{searchItem.maritalStatus}}
+                {{searchItem.maritalStatus.name}}
               </q-item-label>
-              <q-item-label>
-                <u>Location</u>
-                :
-                {{ searchItem.city}}, {{ searchItem.state}}, {{ searchItem.country}}
-              </q-item-label>
+
               <q-item-label
                 caption
-                v-if="loggedIn"
-              >You need to be registered member to see contact details.</q-item-label>
+                v-if="!loggedIn"
+              >You need to be approved member to see contact details.</q-item-label>
               <q-expansion-item
                 switch-toggle-side
                 expand-separator
@@ -70,6 +89,11 @@
                   <q-card-section>
                     <q-item-section>
                       <q-item-label>
+                        <u>Location</u>
+                        :
+                        {{ searchItem.city}}, {{ searchItem.state}}, {{ searchItem.country.name}}
+                      </q-item-label>                      
+                      <q-item-label>
                         <u>Father Name</u>
                         :
                         {{searchItem.fatherName}}
@@ -77,7 +101,7 @@
                       <q-item-label>
                         <u>Gotra</u>
                         :
-                        {{searchItem.gotra}}
+                        {{searchItem.gotra.name}}
                       </q-item-label>
                       <q-item-label>
                         <u>Original Surname</u>
@@ -107,6 +131,11 @@
                         :
                         {{searchItem.alternateContact}}
                       </q-item-label>
+                      <q-item-label>
+                        <u>Last Login</u>
+                        :
+                        {{ hasBlank(searchItem.lastLogin)}}
+                      </q-item-label>                      
                     </q-item-section>
                   </q-card-section>
                 </q-card>
@@ -122,48 +151,77 @@
 </template>
 
 <script>
+import {mapState, mapMutations, mapActions} from 'vuex'
 import mixinComputations from 'src/mixins/Mixin_Computations.js'
+import mixinUtils from 'src/mixins/Mixin_Utils.js'
+
 
 export default {
-  mixins: [mixinComputations],
+  mixins: [mixinComputations,mixinUtils],
   components: {
     'search-results-photo-slide': require('./SearchResultsPhotoSlide.vue')
       .default
   },
 
-  props: ['searchResults'],
+  // props: ['searchResults'],
   data () {
     return {
       slide: 'first',
-      loggedIn: false
+      loggedIn: false,
+      sortBy : {id: 1, key:'lastLogin' , value : 'Login Date (Asc)' , order : 'asc'},
+      sortByOptions : [{id: 1, key:'lastLogin' , value : 'Login Date (Asc)' , order : 'asc'},
+                        {id: 2, key:'lastLogin' , value : 'Login Date (Desc)', order : 'desc'},
+                        {id: 3, key:'firstName' , value : 'First Name (Asc)', order : 'asc'},
+                         {id: 4, key:'firstName' , value : 'First Name (Desc)', order : 'desc'},
+                      {id: 5, key:'userDetailsId' , value : 'Profile ID (Asc)', order : 'asc'},
+                      {id: 6, key:'userDetailsId' , value : 'Profile ID (Desc)', order : 'desc'}]
     }
   },
-  methods: {
-    checkLoggedIn () {
-      const user = localStorage.getItem('user')
-      // console.log(user);
-      if (user) {
-        this.loggedIn = true
-      } else {
-        this.loggedIn = false
-      }
-    }
-  },
-  filters: {
-    convertHeightToFoot (heightInCms) {
-      var heigthInInches = heightInCms * 0.39
-      var heightInFeet = Math.trunc(heigthInInches / 12)
-      var onlyInches = Math.trunc(heigthInInches - heightInFeet * 12)
-      // console.log(heightInFeet, onlyInches, heigthInInches);
-      return heightInFeet + ' feet ' + onlyInches + ' inches'
-    },
-    convertToDate (val) {
+  computed:{
+    ...mapState("search",["searchResultsPerPage","searchResults","page"])
+  }
+  ,
+  methods:{
+...mapMutations("search",["setPage","setSearchResults"]),
+...mapActions("search",["updatePage"])
+  ,
+    removeTimeStamp (val) {
       // console.log('ConvertToDate', val);
-      return val.substring(0, 17)
+      if(this.hasValue(val))
+        return val.substring(0, 17)
     }
-  },
+    ,
+    hasBlank(val){
+      // console.log('ifBlank', val, this);
+      if(!this.hasValue(val))
+        return "Not logged In"
+      else
+        return val  
+    }
+    ,
+    changeSort(sortOption){
+      // console.log("changeSort",sortOption);
+      var newList = [];
+      newList = [...this.searchResults]
+      if(sortOption.key === 'lastLogin'){
+      newList.sort(this.sortDate(sortOption.key, sortOption.order)) 
+      }
+      else{
+      newList.sort(this.sortList(sortOption.key, sortOption.order ))
+      }
+      console.log("newList", newList)
+      this.setSearchResults(newList);
+      this.updatePage(this.page);
+
+    }
+  }
+,
   created () {
     this.checkLoggedIn()
+  }
+  ,
+  beforeDestroy(){
+    // this.setPage(1);
   }
 }
 </script>
