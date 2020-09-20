@@ -1,366 +1,199 @@
 import { uid } from 'quasar'
+import axios from 'axios'
+import mixinComputations from 'src/mixins/Mixin_Computations.js'
+import mixinUtils from 'src/mixins/Mixin_Utils.js'
+import {maxSearchResultsPerPage} from '../constants/registerFormConstants.js'
 
 const state = {
-  searchResults: {
-    /*
-        'ID1' : {
-        email: "email@email.com",
-        password: "",
-        confirmPassword: "",
-        firstName: "First",
-        lastName: "Last",
-        gender: "Male",
-        dateOfBirth: "01-Jan-2020",
-        age: 10,
-        country: "India",
-        otherCountry: "",
-        state: "Maharashtra",
-        city: "Mumbai",
-        primaryContact: "1234567890",
-        primaryContactCountryCode: 91,
-        alternateContact: "1111111111",
-        alternateContactCountryCode: 91,
-        maritalStatus: "Never Married",
-        height: "6 ft",
-        gotra: "Gotra",
-        originalSurname: "Mavani",
-        fatherName: "Father",
-        residentialAddress: "12, Building, Street, City",
-        aboutYourself: " About Yourself",
-        ageFrom: "",
-        ageTo: "",
-        heightFrom: "",
-        heightTo: "",
-        martialStatusPreferences: [],
-        agreeTnC: false
-      }
-      ,
-        'ID2' : {
-        email: "email2@email.com",
-        password: "",
-        confirmPassword: "",
-        firstName: "First-ID2",
-        lastName: "Last",
-        gender: "Male",
-        dateOfBirth: "01-Jan-2020",
-        age: 10,
-        country: "India",
-        otherCountry: "",
-        state: "Maharashtra",
-        city: "Mumbai",
-        primaryContact: "1234567890",
-        primaryContactCountryCode: 91,
-        alternateContact: "1111111111",
-        alternateContactCountryCode: 91,
-        maritalStatus: "Never Married",
-        height: "6 ft",
-        gotra: "Gotra",
-        originalSurname: "Mavani",
-        fatherName: "Father",
-        residentialAddress: "12, Building, Street, City",
-        aboutYourself: " About Yourself",
-        ageFrom: "",
-        ageTo: "",
-        heightFrom: "",
-        heightTo: "",
-        martialStatusPreferences: [],
-        agreeTnC: false
-      },
 
-      'ID3' : {
-        email: "",
-        password: "",
-        confirmPassword: "",
-        firstName: "",
-        lastName: "",
-        gender: "",
-        dateOfBirth: "",
-        age: 0,
-        country: "India",
-        otherCountry: "",
-        state: "",
-        city: "",
-        primaryContact: "",
-        primaryContactCountryCode: 91,
-        alternateContact: "",
-        alternateContactCountryCode: 91,
-        maritalStatus: "",
-        height: "",
-        gotra: "",
-        originalSurname: "",
-        fatherName: "",
-        residentialAddress: "",
-        aboutYourself: "",
-        ageFrom: "",
-        ageTo: "",
-        heightFrom: "",
-        heightTo: "",
-        martialStatusPreferences: [],
-        agreeTnC: false
-      }
-      ,
-      'ID1_1' : {
-        email: "email@email.com",
-        password: "",
-        confirmPassword: "",
-        firstName: "First_ID1_1",
-        lastName: "Last",
-        gender: "Male",
-        dateOfBirth: "01-Jan-2020",
-        age: 10,
-        country: "India",
-        otherCountry: "",
-        state: "Maharashtra",
-        city: "Mumbai",
-        primaryContact: "1234567890",
-        primaryContactCountryCode: 91,
-        alternateContact: "1111111111",
-        alternateContactCountryCode: 91,
-        maritalStatus: "Never Married",
-        height: "6 ft",
-        gotra: "Gotra",
-        originalSurname: "Mavani",
-        fatherName: "Father",
-        residentialAddress: "12, Building, Street, City",
-        aboutYourself: " About Yourself",
-        ageFrom: "",
-        ageTo: "",
-        heightFrom: "",
-        heightTo: "",
-        martialStatusPreferences: [],
-        agreeTnC: false
-      }
-      ,
-        'ID2_1' : {
-        email: "email2@email.com",
-        password: "",
-        confirmPassword: "",
-        firstName: "First-ID2_1",
-        lastName: "Last",
-        gender: "Male",
-        dateOfBirth: "01-Jan-2020",
-        age: 10,
-        country: "India",
-        otherCountry: "",
-        state: "Maharashtra",
-        city: "Mumbai",
-        primaryContact: "1234567890",
-        primaryContactCountryCode: 91,
-        alternateContact: "1111111111",
-        alternateContactCountryCode: 91,
-        maritalStatus: "Never Married",
-        height: "6 ft",
-        gotra: "Gotra",
-        originalSurname: "Mavani",
-        fatherName: "Father",
-        residentialAddress: "12, Building, Street, City",
-        aboutYourself: " About Yourself",
-        ageFrom: "",
-        ageTo: "",
-        heightFrom: "",
-        heightTo: "",
-        martialStatusPreferences: [],
-        agreeTnC: false
-      },
 
-      'ID3_1' : {
-        email: "",
-        password: "",
-        confirmPassword: "",
-        firstName: "first_ID3_1",
-        lastName: "",
-        gender: "",
-        dateOfBirth: "",
-        age: 0,
-        country: "India",
-        otherCountry: "",
-        state: "",
-        city: "",
-        primaryContact: "",
-        primaryContactCountryCode: 91,
-        alternateContact: "",
-        alternateContactCountryCode: 91,
-        maritalStatus: "",
-        height: "",
-        gotra: "",
-        originalSurname: "",
-        fatherName: "",
-        residentialAddress: "",
-        aboutYourself: "",
-        ageFrom: "",
-        ageTo: "",
-        heightFrom: "",
-        heightTo: "",
-        martialStatusPreferences: [],
-        agreeTnC: false
-      }
-,
-        'ID1_2' : {
-        email: "email@email.com",
-        password: "",
-        confirmPassword: "",
-        firstName: "First_ID1_2",
-        lastName: "Last",
-        gender: "Male",
-        dateOfBirth: "01-Jan-2020",
-        age: 10,
-        country: "India",
-        otherCountry: "",
-        state: "Maharashtra",
-        city: "Mumbai",
-        primaryContact: "1234567890",
-        primaryContactCountryCode: 91,
-        alternateContact: "1111111111",
-        alternateContactCountryCode: 91,
-        maritalStatus: "Never Married",
-        height: "6 ft",
-        gotra: "Gotra",
-        originalSurname: "Mavani",
-        fatherName: "Father",
-        residentialAddress: "12, Building, Street, City",
-        aboutYourself: " About Yourself",
-        ageFrom: "",
-        ageTo: "",
-        heightFrom: "",
-        heightTo: "",
-        martialStatusPreferences: [],
-        agreeTnC: false
-      }
-      ,
-        'ID2_2' : {
-        email: "email2@email.com",
-        password: "",
-        confirmPassword: "",
-        firstName: "First-ID2_2",
-        lastName: "Last",
-        gender: "Male",
-        dateOfBirth: "01-Jan-2020",
-        age: 10,
-        country: "India",
-        otherCountry: "",
-        state: "Maharashtra",
-        city: "Mumbai",
-        primaryContact: "1234567890",
-        primaryContactCountryCode: 91,
-        alternateContact: "1111111111",
-        alternateContactCountryCode: 91,
-        maritalStatus: "Never Married",
-        height: "6 ft",
-        gotra: "Gotra",
-        originalSurname: "Mavani",
-        fatherName: "Father",
-        residentialAddress: "12, Building, Street, City",
-        aboutYourself: " About Yourself",
-        ageFrom: "",
-        ageTo: "",
-        heightFrom: "",
-        heightTo: "",
-        martialStatusPreferences: [],
-        agreeTnC: false
-      },
+  searchParams: {
+    ageFromTo: {
+      min: 20,
+      max: 40
+    },
 
-      'ID3_2' : {
-        email: "",
-        password: "",
-        confirmPassword: "",
-        firstName: "first_ID3_2",
-        lastName: "",
-        gender: "",
-        dateOfBirth: "",
-        age: 0,
-        country: "India",
-        otherCountry: "",
-        state: "",
-        city: "",
-        primaryContact: "",
-        primaryContactCountryCode: 91,
-        alternateContact: "",
-        alternateContactCountryCode: 91,
-        maritalStatus: "",
-        height: "",
-        gotra: "",
-        originalSurname: "",
-        fatherName: "",
-        residentialAddress: "",
-        aboutYourself: "",
-        ageFrom: "",
-        ageTo: "",
-        heightFrom: "",
-        heightTo: "",
-        martialStatusPreferences: [],
-        agreeTnC: false
-      }
-*/
-  },
+    lookingFor: '2', //2 is for Bride ; Defaulted to Bride
+    heightFrom: '',
+    heightTo: '',
+    maritalStatusPreference: [],
+     country: [{ id: 81, name: 'India' }] // defaulted to India
+    //country : ['India']
+  }
+  ,
+  searchResults: []
+      ,
+  searchResultsPerPage : [],
 
   showProgressBar: false,
-  page: 1,
-  resultsPerPage: 3 // Can Change this
+  // page: 1,
+  resultsPerPage: maxSearchResultsPerPage, 
+
+  list: {
+    countryOptions: [],
+    maritalOptions: []
+  },
+
+  tmpData : {
+    countryList: []
+  },
+
+  searchPerformed : false,
+  totalPages : 0,
+  page : 1,
+  expand : true
+
 }
 
 const getters = {
   getSearchResults: state => {
     return state.searchResults
-  },
-  // Not using this function and SearchResults Pagination component since
-  // On changing the page number and calling update Action. It updates page number and it is not
-  // able to update the state of the SearchResults
-  getSearchResultsPerPage: state => {
-    console.log(
-      'getSearchResultsPerPage - page',
-      state.page,
-      state.resultsPerPage
-    )
-    const keys = Object.keys(state.searchResults)
-    console.log('keys', keys)
-    const selectedKeys = keys.slice(
-      state.page - 1,
-      state.page - 1 + state.resultsPerPage
-    )
-    console.log('selectedKeys', selectedKeys)
-    const searchResultsPerPage = Object.assign(
-      ...Object.keys(state.searchResults)
-        .slice(state.page - 1, state.page - 1 + state.resultsPerPage)
-        .map(k => ({ [k]: state.searchResults[k] }))
-    )
-    return searchResultsPerPage
   }
 }
 
+
 // Not using Action and mutations since on updating page number and state of Search Results is not changed
 const mutations = {
-  updatePageNumber (state, page) {
-    state.page = page
+
+  setSearchParamsIndividual (state, object) {
+    state.searchParams[object.key] = object.value
   },
   setShowProgessBar (state, value) {
     state.showProgressBar = value
   },
-  saveSearchResults (state, searchResults) {
-    // console.log('Store Search Results', searchResults)
-    // Vue.set(state.tasks, payload.id, payload.task);
-    // delete the existing SearchResults Object
-    for (var member in state.searchResults) {
-      delete state.searchResults[member]
-    }
-    // console.log("After Delete State SearchResults", Object.keys(state.searchResults).length);
-    var i
-    for (i = 0; i < searchResults.length; i++) {
-      const newID = uid()
-      // console.log('singleSearch', newID, searchResults[i])
-      state.searchResults[newID] = searchResults[i]
-      // console.log('State SearchResults', state.searchResults);
-    }
+  setTmpData (state, object) {
+    state.tmpData[object.key] = object.value
+    // console.log("tmpdata", state.tmpData, object.key, object.key);
+  },
+  setList (state, object) {
+    state.list[object.key] = object.value
+    // console.log("tmpdata", state.tmpData, object.key, object.key);
+  },
+  setSearchResults(state,list){
+    state.searchResults = list;
+  },
+  setSearchResultsPerPage(state,list){
+    state.searchResultsPerPage = list;
+  },  
+  setSearchResultsSingle(state,object){
+    state.searchResults[object.key] = object.value;
+  },
+  setSearchPerformed(state,value){
+    state.searchPerformed = value
+  },
+  setTotalPages(state, value){
+    state.totalPages =value
+  },
+  setPage(state, value){
+    state.page =value
+  },
+  setExpand(state, value){
+    state.expand = value
   }
 }
 
 // Not using Action and mutations since on updating page number and state of Search Results is not changed
 const actions = {
-  updatePageNumber ({ commit }, page) {
-    commit('updatePageNumber', page)
+
+  fetchList ({ commit }) {
+    return axios
+      .get(process.env.API + '/lists')
+      .then(response => {
+        // this.countryList = response.data.country
+        var countryOptions = response.data.country
+        commit('setList', { key: 'countryOptions', value: countryOptions })
+        commit('setTmpData', { key: 'countryList', value: countryOptions })
+
+        var maritalOptions = response.data.marital_status
+        commit('setList', { key: 'maritalOptions', value: maritalOptions })
+
+      })
+      .catch(error => {
+        mixinUtils.methods.showErrorDialog(error)
+      })
   },
-  saveSearchResults ({ commit }, searchResults) {
-    commit('saveSearchResults', searchResults)
+  saveSearchResults ({commit , dispatch}, searchResults) {
+
+    //Reset the details before search
+    //set Empty Result
+    var emptyResult = []
+    commit('setSearchResults', emptyResult)
+    commit('setSearchResultsPerPage',emptyResult)
+
+    //set Page back to 1 and totalpages to 0
+    commit('setPage',1)
+    commit('setTotalPages',0)
+
+    commit('setShowProgessBar', true)
+
+
+    //Converting keys in Object from Snake to Camel Case
+     var searchResultsCamelList= []
+      for (var i = 0; i < searchResults.length; i++) {
+      var indObj = searchResults[i]
+      var searchResultCamelObj = {}
+      for (var key in indObj) {
+      searchResultCamelObj[mixinComputations.methods.snakeToCamel(key)] = indObj[key]
+      }
+      searchResultsCamelList.push(searchResultCamelObj);
+
+      }
+      
+      //Computing total Pages for Pagination
+      var totalPages = Math.ceil(
+        searchResultsCamelList.length/state.resultsPerPage
+      )
+
+      if (totalPages <= 0) {
+        totalPages = 0
+      }
+      else if(totalPages <= 1){
+        totalPages = 1
+      }
+
+
+
+      commit('setSearchResults', searchResultsCamelList)
+
+      commit('setTotalPages', totalPages)
+
+      //Create Results per page
+      dispatch('updatePage', 1)
+
+
+      var searchPerformed = true;
+      commit('setSearchPerformed', searchPerformed)
+
+      //whether SearchForm should be expanded or closed
+      if(searchResults.length >0){
+      commit('setExpand', false)
+      }
+      else{
+      commit('setExpand', true)
+      }
+
+
+      commit('setShowProgessBar', false)
+
+
+  },
+  updatePage({commit}, page){
+  
+      var searchResultsPerPage = []
+      var searchResultsList = state.searchResults
+      if(searchResultsList.length > 0) {
+      var startingIndex = (state.page - 1) * state.resultsPerPage
+      var endingIndex = startingIndex + state.resultsPerPage
+      if(endingIndex > state.resultsPerPage){
+        endingIndex = searchResultsList.length
+      }
+      searchResultsPerPage = searchResultsList.slice(startingIndex, endingIndex)
+      commit('setSearchResultsPerPage', searchResultsPerPage)
+      commit('setPage', page)
+
   }
+}
+
 }
 
 export default {

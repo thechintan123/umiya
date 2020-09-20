@@ -1,8 +1,9 @@
 from flask import jsonify, request
 from . import app
 from datetime import datetime, timedelta
-from sqlalchemy import and_
-from .models import UserDetails, Country, MaritalStatus, Gender
+from sqlalchemy import and_, desc
+from .models import UserDetails, Country, MaritalStatus, Gender, User
+from app import db
 
 
 # helper function for search
@@ -51,15 +52,11 @@ def search():
 
     curr_date_plus_min = curr_date - timedelta(days=(age_min*365))
     curr_date_plus_max = curr_date - timedelta(days=(age_max*365))
-    #5ft × 30.48 + 5 in × 2.54= 165.1 cm
-    height_min = data.get("heightFrom")
-    if height_min is None or height_min == '':
-        height_min = "4 ft 0 inches"
-    height_max = data.get("heightTo")
-    if height_max is None or height_max == '':
-        height_max = "7 ft 0 inches"
-    height_min_in_cms = convert_to_cms(height_min)
-    height_max_in_cms = convert_to_cms(height_max)
+
+
+    height_min_in_cms = data.get("heightFromCms")
+    height_max_in_cms = data.get("heightToCms")
+
 
     looking_for = data.get("lookingFor")
     if looking_for is None or looking_for == '':
@@ -70,34 +67,22 @@ def search():
         looking_for = int(looking_for)
 
     allowed_status_id = '2' #2 is for Approved
-    users = UserDetails.query.filter(and_(UserDetails.status_id == allowed_status_id,\
+
+
+    user_details = db.session.query(UserDetails).join(User).filter(and_(UserDetails.status_id == allowed_status_id,\
                                           UserDetails.country_id.in_(country_id_local),\
                                           UserDetails.gender_id == looking_for, \
                                           UserDetails.date_of_birth <= curr_date_plus_min, UserDetails.date_of_birth >= curr_date_plus_max, \
                                           UserDetails.height.between(height_min_in_cms, height_max_in_cms), \
-                                          UserDetails.marital_status_id.in_(marital_status_id_local))).all()
-
+                                          UserDetails.marital_status_id.in_(marital_status_id_local))) \
+                                          .order_by(desc(User.last_login)).all()
     user_list = []
-    for user in users:
-        upload_photos = user.upload_photos.all()
+    for user_d in user_details:
+        upload_photos = user_d.upload_photos.all()
         filenames = [u.filename for u in upload_photos]
-        user_list.append({'id': user.id, 'firstName': user.first_name, \
-                        'lastName': user.last_name, \
-                        'gender' : user.gender.name, \
-                        'dateOfBirth' : user.date_of_birth,\
-                        'country' : user.country.name, \
-                        'state' : user.state, \
-                        'city' : user.city,\
-                        'primaryContact' : user.primary_contact, \
-                        'alternateContact': user.alternate_contact, \
-                        'maritalStatus' : user.marital_status.name, \
-                        'height' : user.height, \
-                        'gotra' : user.gotra.name,\
-                        'originalSurname' : user.original_surname, \
-                        'fatherName' : user.father_name, \
-                        'residentialAddress' : user.residential_address, \
-                        'aboutYourself': user.about_yourself, \
-                        'uploadProof': user.upload_proof, \
-                        'uploadPhotos': filenames \
-                        })
+        new_user = user_d.to_dict()
+        new_user['upload_photos'] = filenames 
+        new_user['last_login'] = user_d.user.last_login
+        new_user['user_details_id'] = user_d.id
+        user_list.append(new_user)
     return jsonify(user_list)

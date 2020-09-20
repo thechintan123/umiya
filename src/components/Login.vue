@@ -75,7 +75,7 @@ export default {
       isPwd: true,
       formData: {
         email: 'chin1@gmail.com',
-        password: 'password'
+        password: 'Aa3UKd7C'
       }
     }
   },

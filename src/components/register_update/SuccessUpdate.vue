@@ -66,10 +66,10 @@ export default {
   props: ['updateProfile'],
 
   computed: {
-    ...mapState('register_update', ['formData'])
+    ...mapState('registerUpdate', ['formData'])
   },
   methods: {
-    ...mapMutations('register_update', ['setSuccessProcess', 'setTab'])
+    ...mapMutations('registerUpdate', ['setSuccessProcess', 'setTab'])
   }
 
 }

@@ -93,7 +93,7 @@ export default {
     ...mapState('registerUpdate', ['showProgressBar', 'tab', 'error', 'successProcess', 'emptyFormData']),
     tab: {
       get () {
-        return this.$store.state.register_update.tab
+        return this.$store.state.registerUpdate.tab
       },
       set (value) {
         this.setTab(value)
@@ -109,8 +109,8 @@ export default {
     this.fetchList()
   },
   methods: {
-    ...mapActions('register_update', ['fetchUserDetails', 'fetchList']),
-    ...mapMutations('register_update', ['setTab', 'setFormData', 'setTmpDataFull', 'resetState']),
+    ...mapActions('registerUpdate', ['fetchUserDetails', 'fetchList']),
+    ...mapMutations('registerUpdate', ['setTab', 'setFormData', 'setTmpDataFull', 'resetState']),
     transitionFn (newVal, oldVal) {
       // console.log("transitionFn", newVal, oldVal, this.$refs, this.error);
       if (

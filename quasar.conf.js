@@ -104,7 +104,9 @@ module.exports = function (ctx) {
         'QDialog',
         'QSplitter',
         'QTree',
-        'QSlideTransition'
+        'QSlideTransition',
+        'QExpansionItem'
+
       ],
 
       directives: ['Ripple', 'ClosePopup'],
