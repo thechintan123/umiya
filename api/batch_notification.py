@@ -41,7 +41,8 @@ for u in users_notif:
             continue
         match_users_id.append(n.user.id)
     if match_users_id:
-        url = 'http://localhost:5000/api/batch-notification'
+        url = 'https://thechintan123.pythonanywhere.com/api/batch-notification'
+        #url = 'http://localhost:5000/api/batch-notification'
         payload = {'user_id': u.user.id, 'match_users_id': match_users_id}
         x = requests.post(url, data=payload)
         if (x.status_code == 204):
