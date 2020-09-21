@@ -64,5 +64,27 @@ def send_forgotpwd_email(user, new_pwd):
         text_body=render_template('email_pwdreset.txt',
                                   user=user, new_pwd=new_pwd),
         html_body=render_template('email_pwdreset.html',
-                                  user=user, new_pwd=new_pwd),
-                                  send_admin=True)
+                                  user=user, new_pwd=new_pwd))
+
+
+# Calculate age of person for display purpose
+def calc_age(match_users):
+    now = datetime.now()
+    years = []
+    for m in match_users:
+        dob = m.user_details.date_of_birth
+        year = relativedelta(now, dob).years
+        years.append(year)
+    return years
+
+# Send match partner email
+def send_match_email(user, match_users):
+    recipients = [user.email]
+    years = calc_age(match_users)
+    return send_email(
+        recipients=recipients,
+        subject='New users match your preferred partner profile at UmiyaMatrimony',
+        text_body=render_template('email_match.txt',
+                                  user=user, match_users=match_users, years=years),
+        html_body=render_template('email_match.html',
+                                  user=user, match_users=match_users, years=years))
