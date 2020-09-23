@@ -228,7 +228,7 @@ export default {
           })
         })
         .catch(error => {
-          console.log("fetchSearch_fromDB",error)
+          console.log("fetchSearch",error)
           this.showErrorDialog(error)
         })
     }

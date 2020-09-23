@@ -69,7 +69,7 @@ const getDefaultState = () => {
       primaryContactCountryCode: '',
       alternateContactCountryCode: '',
       alternateContact: '',
-      countryRadio: '',
+      countryRadio: 'India',
       otherCountry: '',
       age: 0,
       countryList: []
