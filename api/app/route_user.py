@@ -4,7 +4,8 @@ from .auth import token_auth
 from .errors import bad_request, error_response
 from datetime import datetime
 from .models import User, UserDetails, Country, Gotra, WhereKnow, MaritalStatus, Gender, UploadPhotos
-from .email import send_reg_email, send_match_email
+# from .email import send_reg_email, send_match_email
+from .email import send_reg_email
 from PIL import Image
 from strgen import StringGenerator
 import re
@@ -221,14 +222,11 @@ def delete_photo(id, filename):
 def batch_notification():
     user_id = request.form.get('user_id')
     match_users_id = request.form.get('match_users_id')
-
     if user_id is None or match_users_id is None:
         return bad_request('Mandatory data was missing')
-
     user = User.query.filter_by(id=user_id).first()
     if user is None:
         return bad_request('User id is not valid')
-    
     match_users = []
     for mid in match_users_id:
         m = User.query.filter_by(id=mid).first()
@@ -236,7 +234,5 @@ def batch_notification():
             match_users.append(m)
     if not match_users:
         return bad_request("Match user id's are invalid")
-
     send_match_email(user, match_users)
-
     return '', 204

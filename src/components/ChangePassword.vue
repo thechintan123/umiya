@@ -1,53 +1,57 @@
 <template>
   <div class="fit column">
+    <banner
+        :isSuccess = "true"
+        iconName="done_outline"
+        bannerTitle="Your password has been changed successfully"
+        v-show="successProcess"
+              />
     <q-card>
-      <q-linear-progress v-show="showProgressBar" indeterminate size="10px" color="secondary" />
-      <q-spinner
+      <progressBar v-show="showProgressBar" />
+      <spinner
         v-show="showProgressBar"
-        class="z-top fixed-center"
-        color="secondary"
-        size="3em"
-        :thickness="10"
       />
-      <q-form greedy ref="changePasswordForm">
-        <q-banner rounded dense class="bg-grey-3">
-          <template v-slot:avatar>
-            <q-icon name="fas fa-key" color="primary" />
-          </template>
-          Change Password
-        </q-banner>
+      <q-form no-reset-focus
+      greedy ref="changePasswordForm"
+      @reset="onReset"
+      >
+
+
+      <banner
+        iconName="vpn_key"
+        bannerTitle="Change Password"
+              />
 
         <q-card-section>
                 <q-input
-                  tabindex="2"
+                  tabindex="1"
                   outlined
-                  v-model="oldPassword"
+                  v-model="params.currentPassword"
                   :rules="[ val => !!val || 'Field is required']"
                   lazy-rules
                   ref="password"
-                  label="Old Password*"
+                  label="Current Password*"
                   dense
                   clearable
-                  :type="isOldPwd ? 'password' : 'text'"
+                  :type="isCurrentPwd ? 'password' : 'text'"
                   hint="Password with toggle"
                   maxlength="50"
                 >
                   <template v-slot:append>
                     <q-icon
-                      :name="isOldPwd ? 'visibility_off' : 'visibility'"
+                      :name="isCurrentPwd ? 'visibility_off' : 'visibility'"
                       class="cursor-pointer"
-                      @click="isOldPwd = !isOldPwd"
+                      @click="isCurrentPwd = !isCurrentPwd"
                       clearable
                     />
                   </template>
                 </q-input>
 
-            <div class="row" >
-              <div class="col">                
+              
                 <q-input
                   tabindex="2"
                   outlined
-                  v-model="newPassword"
+                  v-model="params.newPassword"
                   :rules="[ val => !!val || 'Field is required']"
                   lazy-rules
                   ref="password"
@@ -67,12 +71,14 @@
                     />
                   </template>
                 </q-input>
-          </div>      
-          <div class="col">
                 <q-input
                   outlined
-                  v-model="confirmNewPassword"
-                  :rules="[ val => !!val || 'Field is required']"
+                  tabindex="3"
+                  v-model="params.confirmNewPassword"
+                  :rules="[ val => !!val || 'Field is required',
+                      val => checkConfirmPassword(val, params.newPassword) ||
+                      'Password & Confirm Password are not same'
+                  ]"
                   lazy-rules
                   ref="password"
                   label="Confirm New Password*"
@@ -83,15 +89,14 @@
                 >
 
                 </q-input>
-          </div>                    
-          </div>
+
 
           <div class="row">
             <q-btn flat color="primary" type="reset" label="Reset" />
 
             <q-space />
 
-            <q-btn color="primary" label="Change Password" @click="submitSearchForm" />
+            <q-btn color="primary" label="Change Password" @click="submitForm" />
           </div>
         </q-card-section>
       </q-form>
@@ -102,27 +107,83 @@
 <script>
 import axios from "axios";
 // import { countryList } from './countryList.js'
-import { mapActions } from "vuex";
 import mixinFormValidations from "src/mixins/Mixin_FormValidations.js";
+import mixinUtils from "src/mixins/Mixin_Utils.js";
+
 
 export default {
-  mixins: [mixinFormValidations],
+  mixins: [mixinFormValidations, mixinUtils],
   data() {
     return {
       // To show Progress bar when loading
-      oldPassword: "",
+      params :{
+      currentPassword: "",
       newPassword:"",
-      confirmNewPassword : "",
-
-      //this field is used for Password Toggle
-      isOldPwd: true,
-      isNewPwd: true
-
+      confirmNewPassword : ""
+      }
+      ,
+      showProgressBar : false,
       
+      //this field is used for Password Toggle
+      isCurrentPwd: true,
+      isNewPwd: true,
+      successProcess : false
+     
     }
   },
-  methods: {
+  methods:{
+    onReset(){
+          this.params.currentPassword = "";
+          this.params.newPassword = "";
+          this.params.confirmNewPassword = "";
+    }
+    ,
+    submitForm () {
+      this.showProgressBar = true;
+      this.$refs.changePasswordForm.validate().then(success => {
+        if (success) {
+          var user = localStorage.getItem('user')
+          var user_json = JSON.parse(user)
+          this.params["email"] = user_json.email;
+          // console.log('Success', user, this.params)
+          this.changePassword(this.params)
+        } else {
+          // var error = "Error in Change Password Form. Please correct it before proceeding."
+          // this.showErrorDialog(error);
+          this.showProgressBar = false;
 
+        }
+      })
+    },
+
+    changePassword (data) {
+      return axios
+        .post(process.env.API + '/change_password', data)
+        .then(({ data }) => {
+          console.log('Search Success', data)
+          this.successProcess =  true;
+          //this.saveSearchResults(data)
+          // Store in Stores
+          this.$q.notify({
+            type: 'positive',
+            message: 'Password has been changed successfully'
+          })
+          this.$refs.changePasswordForm.reset()
+          this.showProgressBar = false;
+          // console.log("showProgressBar", this.showProgressBar);
+
+        })
+        .catch(error => {
+          // console.log("changePassword",error)
+          this.showErrorDialog(error)
+        })
+    }
+  }
+  ,
+  components: {
+    progressBar: require('./general/ProgressBar.vue').default,
+    spinner: require('./general/Spinner.vue').default,
+    banner: require('./general/Banner.vue').default
 
   }
 };

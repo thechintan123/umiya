@@ -2,7 +2,7 @@ from flask import jsonify, request
 from . import app, db
 from .auth import basic_auth, token_auth
 from datetime import datetime
-from .errors import error_response
+from .errors import error_response,  bad_request
 from .models import User
 from .email import send_forgotpwd_email
 from strgen import StringGenerator
@@ -58,6 +58,29 @@ def forgot_password(email):
             return error_response(502, 'unable to send email')
     else:
         return error_response(400, "email doesn't exist")
+
+# User change password
+@app.route('/api/change_password', methods=['POST'])
+def change_password():
+    data = request.get_json() or {}
+    old_password = data["oldPassword"]
+    new_password = data["newPassword"]
+    email = data["email"]
+    # print("1 - change_password - Old Password matches", data)
+    user = User.query.filter_by(email=email).first()
+    # print("2- change_password - Old Password matches", user)
+    # return '', 204
+    if user:
+        #check old Password matches
+        if user.check_password(old_password) :
+            print("Old Password matches")
+            user.set_password(new_password)
+            db.session.add(user)
+            db.session.commit()
+            return '', 204
+        else :
+            return bad_request('Your entered Old Password does not match. Please check your old password.')
+
 
 
 # testing
