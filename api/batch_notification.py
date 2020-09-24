@@ -44,8 +44,8 @@ for u in users_notif:
         print('Attempt to send email to', u.user.email,
               ', matched with user', n.user.email)
     if match_users_id:
-        #url = 'https://thechintan123.pythonanywhere.com/api/batch-notification'
-        url = 'http://localhost:5000/api/batch-notification'
+        url = 'https://thechintan123.pythonanywhere.com/api/batch-notification'
+        #url = 'http://localhost:5000/api/batch-notification'
         payload = {'user_id': u.user.id, 'match_users_id': match_users_id}
         x = requests.post(url, json=payload)
         if (x.status_code == 204):
