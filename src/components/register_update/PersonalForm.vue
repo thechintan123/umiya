@@ -131,8 +131,8 @@
                   :rules="[
                     val => !!val || 'Field is required',
                     val =>
-                      checkAgeFrom(val) ||
-                      'Age(To) should be greater than Age(From)'
+                      checkAgeFromTo(val, partnerAgeTo) ||
+                      'Age(From) should be less than or equal to Age(To)'
                   ]"
                 ></q-select>
               </div>
@@ -149,7 +149,7 @@
                   :rules="[
                     val => !!val || 'Field is required',
                     val =>
-                      checkAgeTo(val) ||
+                      checkAgeFromTo(partnerAgeFrom, val) ||
                       'Age(To) should be greater than Age(From)'
                   ]"
                 ></q-select>
@@ -460,18 +460,16 @@ export default {
         return true
       }
     },
-    checkAgeTo (ageTo) {
-      if (ageTo < this.formData.partnerAgeFrom) {
+    checkAgeFromTo (partnerAgeFrom, partnerAgeTo) {
+      // console.log("checkAgeFrom", partnerAgeFrom, this.formData.partnerAgeTo);
+      if(this.hasValue(partnerAgeFrom) && this.hasValue(partnerAgeTo)){
+      if (partnerAgeFrom > partnerAgeTo) {
         return false
       } else {
         return true
       }
-    },
-    checkAgeFrom (partnerAgeFrom) {
-      // console.log("checkAgeFrom", partnerAgeFrom, this.formData.partnerAgeTo);
-      if (partnerAgeFrom > this.formData.partnerAgeTo) {
-        return false
-      } else {
+      }
+      else {
         return true
       }
     },

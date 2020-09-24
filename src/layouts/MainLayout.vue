@@ -169,6 +169,14 @@ const menuList = [
     loggedIn: true,
     separator: true
   }
+  ,
+    {
+    icon: 'vpn_key',
+    label: 'Change Password',
+    link: '/change-password',
+    loggedIn: true,
+    separator: true
+  }
 
 ]
 

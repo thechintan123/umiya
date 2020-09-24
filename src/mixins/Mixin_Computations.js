@@ -1,14 +1,7 @@
 export default {
   methods: {
 
-    hasValue (value) {
-      if (value !== null && typeof (value) !== 'undefined' && value !== '') {
-        return true
-      } else {
-        return false
-      }
-    },
-    computeAge (dob) {
+   computeAge (dob) {
       // console.log("computeAge", dob)
       if (this.hasValue(dob)) {
         var dobInMS = Date.parse(dob)

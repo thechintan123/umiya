@@ -4,7 +4,8 @@ from .auth import token_auth
 from .errors import bad_request, error_response
 from datetime import datetime
 from .models import User, UserDetails, Country, Gotra, WhereKnow, MaritalStatus, Gender, UploadPhotos
-from .email import send_reg_email, send_match_email
+# from .email import send_reg_email, send_match_email
+from .email import send_reg_email
 from PIL import Image
 from strgen import StringGenerator
 import re
@@ -219,16 +220,23 @@ def delete_photo(id, filename):
 
 @app.route('/api/batch-notification', methods=['POST'])
 def batch_notification():
+<<<<<<< HEAD
     user_id = request.json['user_id']
     match_users_id = request.json['match_users_id']
 
+=======
+    user_id = request.form.get('user_id')
+    match_users_id = request.form.get('match_users_id')
+>>>>>>> 43cf0eeeb6c784b575985d57e0041b85bc5fd149
     if user_id is None or match_users_id is None:
         return bad_request('Mandatory data was missing')
-
     user = User.query.filter_by(id=user_id).first()
     if user is None:
         return bad_request('User id is not valid')
+<<<<<<< HEAD
 
+=======
+>>>>>>> 43cf0eeeb6c784b575985d57e0041b85bc5fd149
     match_users = []
     for mid in match_users_id:
         m = User.query.filter_by(id=mid).first()
@@ -236,7 +244,10 @@ def batch_notification():
             match_users.append(m)
     if not match_users:
         return bad_request("Match user id's are invalid")
-
     send_match_email(user, match_users)
+<<<<<<< HEAD
 
     return '', 204
+=======
+    return '', 204
+>>>>>>> 43cf0eeeb6c784b575985d57e0041b85bc5fd149

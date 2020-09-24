@@ -40,6 +40,14 @@ export default {
       })
     }
     ,
+    hasValue (value) {
+      if (value !== null && typeof (value) !== 'undefined' && value !== '') {
+        return true
+      } else {
+        return false
+      }
+    }
+    ,
     checkLoggedIn () {
       const user = localStorage.getItem('user')
       // console.log(user);

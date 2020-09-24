@@ -36,5 +36,14 @@ export default {
         }
       }
     }
+    ,
+    checkConfirmPassword (confirmNewPassword, newPassword) {
+      // console.log("Check Confirm Password", confirmNewPassword, newPassword)
+      if (newPassword === confirmNewPassword) {
+        return true
+      } else {
+        return false
+      }
+    }
   }
 }

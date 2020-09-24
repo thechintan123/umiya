@@ -1,5 +1,7 @@
 <template>
-      <q-banner class="bg-grey-3 q-mb-xs">
+      <q-banner 
+      rounded
+      :class="isSuccess ? 'bg-dark q-ma-sm' : 'bg-grey-3 q-mb-xs'">
         <template v-slot:avatar>
           <q-icon
             :name="iconName"
@@ -12,7 +14,13 @@
 
 <script>
 export default {
-  props: ['bannerTitle', 'iconName']
+  props: {
+    bannerTitle : String, 
+    iconName : String,
+    isSuccess : {type: Boolean,
+      default: false
+    }
+  }
 
 }
 </script>
