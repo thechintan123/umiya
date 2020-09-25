@@ -1,6 +1,6 @@
 from flask import jsonify, request, url_for, Response
 from . import app, db
-from .auth import token_auth
+from .auth import basic_auth, token_auth
 from .errors import bad_request, error_response
 from datetime import datetime
 from .models import User, UserDetails, Country, Gotra, WhereKnow, MaritalStatus, Gender, UploadPhotos
@@ -218,6 +218,7 @@ def delete_photo(id, filename):
 
 
 @app.route('/api/batch-notification', methods=['POST'])
+@basic_auth.login_required(role='email')
 def batch_notification():
     user_id = request.json['user_id']
     match_users_id = request.json['match_users_id']

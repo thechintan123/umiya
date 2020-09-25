@@ -1,5 +1,6 @@
 import requests
 import json
+import os
 from app.models import UserDetails, db
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
@@ -44,12 +45,14 @@ for u in users_notif:
         print('Attempt to send email to', u.user.email,
               ', matched with user', n.user.email)
     if match_users_id:
-        url = 'https://thechintan123.pythonanywhere.com/api/batch-notification'
-        #url = 'http://localhost:5000/api/batch-notification'
+        url = os.environ['EMAIL_NOTIF_URL']
         payload = {'user_id': u.user.id, 'match_users_id': match_users_id}
-        x = requests.post(url, json=payload)
+        x = requests.post(url, json=payload, auth=(
+            os.environ['EMAIL_NOTIF_USER'], os.environ['EMAIL_NOTIF_PASS']))
         if (x.status_code == 204):
             print('Email successfully sent to ', u.user.email)
         else:
+            print(os.environ['EMAIL_NOTIF_USER'])
+            print(os.environ['EMAIL_NOTIF_PASS'])
             print('Email error sending to', u.user.email,
                   ' with status code ', x.status_code)
