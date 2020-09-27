@@ -344,6 +344,7 @@ INSERT INTO user
 VALUES
     ('email', 'pass', 3, now(), now());
 
+from app.models import User
 u = User.query.filter_by(role_id=3).first()
 u.set_password('X232xxp9')
 from app import db
