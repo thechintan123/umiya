@@ -127,6 +127,9 @@ class UserDetails(db.Model):
         db.DateTime, default=datetime.utcnow, nullable=False)
     create_date = db.Column(
         db.DateTime, default=datetime.utcnow, nullable=False)
+    approval_date = db.Column(db.DateTime)
+    correction_comments = db.Column(db.String(500))
+
 
     def to_dict(self):
         # many to many
@@ -168,7 +171,9 @@ class UserDetails(db.Model):
             'email_matched_notification': self.email_matched_notification,
             'last_login': self.user.last_login.isoformat() + 'Z' if self.user.last_login else None,
             'upload_proof': self.upload_proof,
-            'upload_photos': upload_photos
+            'upload_photos': upload_photos,
+            'approval_date' : self.approval_date,
+            'correction_comments': self.correction_comments
         }
         return data
 
@@ -187,7 +192,7 @@ class UserDetails(db.Model):
                     ['password', 'country', 'other_country',
                      'gotra', 'where_know', 'marital_status', 'gender',
                      'date_of_birth', 'partner_marital_status',
-                     'status', 'id', 'email', 'upload_photos', 'upload_proof']:
+                     'status', 'id', 'email', 'upload_photos', 'upload_proof','correction_comments']:
                 setattr(self, key, data[key])
 
         # had to separate queries and assign to self otherwise SQLachemy seems to commit too early???
@@ -207,6 +212,8 @@ class UserDetails(db.Model):
         if 'gender' in data and data['gender'] is not None:
             gender = Gender.query.filter_by(
                 id=int(data['gender']['id'])).first()
+        if 'status' in data and data['status'] is not None:
+            status = ProfileStatus.query.filter_by(id=int(data['status']['id'])).first()                
         if 'partner_marital_status' in data and data['partner_marital_status'] is not None:
             for pms in data['partner_marital_status']:
                 partner_marital_status.append(
@@ -221,6 +228,13 @@ class UserDetails(db.Model):
             self.marital_status = marital_status
         if gender is not None:
             self.gender = gender
+        if status is not None:
+            self.status = status
+            if status.name == 'Approved':
+                self.approval_date = datetime.utcnow()
+            if status.name == 'Correction' and 'correction_comments' in data:
+                if data['correction_comments'] is not None:
+                    setattr(self, 'correction_comments', data['correction_comments'])
         if 'date_of_birth' in data and data['date_of_birth'] != '':
             self.date_of_birth = datetime.strptime(
                 data['date_of_birth'], '%Y-%m-%d')

@@ -154,28 +154,21 @@
 import {mapState, mapMutations, mapActions} from 'vuex'
 import mixinComputations from 'src/mixins/Mixin_Computations.js'
 import mixinUtils from 'src/mixins/Mixin_Utils.js'
+import mixinSortDataElements from "src/mixins/Mixin_SortDataElements.js";
 
 
 export default {
-  mixins: [mixinComputations,mixinUtils],
+  mixins: [mixinComputations,mixinUtils, mixinSortDataElements],
   components: {
     'search-results-photo-slide': require('./SearchResultsPhotoSlide.vue')
       .default
   },
 
-  // props: ['searchResults'],
   data () {
     return {
       slide: 'first',
       loggedIn: false,
-      sortBy : {id: 1, key:'lastLogin' , value : 'Login Date (Asc)' , order : 'asc'},
-      sortByOptions : [{id: 1, key:'lastLogin' , value : 'Login Date (Asc)' , order : 'asc'},
-                        {id: 2, key:'lastLogin' , value : 'Login Date (Desc)', order : 'desc'},
-                        {id: 3, key:'firstName' , value : 'First Name (Asc)', order : 'asc'},
-                         {id: 4, key:'firstName' , value : 'First Name (Desc)', order : 'desc'},
-                      {id: 5, key:'userDetailsId' , value : 'Profile ID (Asc)', order : 'asc'},
-                      {id: 6, key:'userDetailsId' , value : 'Profile ID (Desc)', order : 'desc'}]
-    }
+     }
   },
   computed:{
     ...mapState("search",["searchResultsPerPage","searchResults","page"])
@@ -200,7 +193,6 @@ export default {
     }
     ,
     changeSort(sortOption){
-      // console.log("changeSort",sortOption);
       var newList = [];
       newList = [...this.searchResults]
       if(sortOption.key === 'lastLogin'){
@@ -219,17 +211,8 @@ export default {
   created () {
     this.checkLoggedIn()
   }
-  ,
-  beforeDestroy(){
-    // this.setPage(1);
-  }
+
 }
 </script>
 
-<style>
-@media screen and (max-width: 400px) {
-  .my-photo {
-    width: 100px !important;
-  }
-}
-</style>
+

@@ -1,4 +1,3 @@
-import { uid } from 'quasar'
 import axios from 'axios'
 import mixinComputations from 'src/mixins/Mixin_Computations.js'
 import mixinUtils from 'src/mixins/Mixin_Utils.js'
@@ -6,36 +5,24 @@ import {maxSearchResultsPerPage} from '../constants/registerFormConstants.js'
 
 const state = {
 
+  searchParams :
+  {
+  email : '',
+  firstName : '',
+  lastName : '',
+  userDetailsId : '',
+  gender : '',
+  profileStatus : [1] //1 - Registered
+  },  
 
-  searchParams: {
-    ageFromTo: {
-      min: 20,
-      max: 40
-    },
-
-    lookingFor: '2', //2 is for Bride ; Defaulted to Bride
-    heightFrom: '',
-    heightTo: '',
-    maritalStatusPreference: [],
-     country: [{ id: 81, name: 'India' }] // defaulted to India
-    //country : ['India']
-  }
-  ,
-  searchResults: []
-      ,
+  searchResults: [],
   searchResultsPerPage : [],
 
   showProgressBar: false,
-  // page: 1,
   resultsPerPage: maxSearchResultsPerPage, 
 
   list: {
-    countryOptions: [],
-    maritalOptions: []
-  },
-
-  tmpData : {
-    countryList: []
+    profileStatusOptions: []
   },
 
   searchPerformed : false,
@@ -46,9 +33,7 @@ const state = {
 }
 
 const getters = {
-  getSearchResults: state => {
-    return state.searchResults
-  }
+
 }
 
 
@@ -58,16 +43,14 @@ const mutations = {
   setSearchParamsIndividual (state, object) {
     state.searchParams[object.key] = object.value
   },
-  setShowProgessBar (state, value) {
+  setShowProgressBar (state, value) {
+    // console.log("setShowProgressBar", state.showProgressBar, value);
     state.showProgressBar = value
   },
-  setTmpData (state, object) {
-    state.tmpData[object.key] = object.value
-    // console.log("tmpdata", state.tmpData, object.key, object.key);
-  },
+
   setList (state, object) {
     state.list[object.key] = object.value
-    // console.log("tmpdata", state.tmpData, object.key, object.key);
+    // console.log("state.list", state.list, object.key, object.key);
   },
   setSearchResults(state,list){
     state.searchResults = list;
@@ -75,9 +58,6 @@ const mutations = {
   setSearchResultsPerPage(state,list){
     state.searchResultsPerPage = list;
   },  
-  setSearchResultsSingle(state,object){
-    state.searchResults[object.key] = object.value;
-  },
   setSearchPerformed(state,value){
     state.searchPerformed = value
   },
@@ -89,29 +69,20 @@ const mutations = {
   },
   setExpand(state, value){
     state.expand = value
+  },
+  setSearchItemParameter(state, Object){
+    var item = Object.item;
+    var key = Object.key;
+    var value = Object.value;
+    var foundItem = state.searchResults.find(element => element.userDetailsId === item.userDetailsId);
+    foundItem[key] = value;
   }
+
 }
 
 // Not using Action and mutations since on updating page number and state of Search Results is not changed
 const actions = {
 
-  fetchList ({ commit }) {
-    return axios
-      .get(process.env.API + '/lists')
-      .then(response => {
-        // this.countryList = response.data.country
-        var countryOptions = response.data.country
-        commit('setList', { key: 'countryOptions', value: countryOptions })
-        commit('setTmpData', { key: 'countryList', value: countryOptions })
-
-        var maritalOptions = response.data.marital_status
-        commit('setList', { key: 'maritalOptions', value: maritalOptions })
-
-      })
-      .catch(error => {
-        mixinUtils.methods.showErrorDialog(error)
-      })
-  },
   saveSearchResults ({commit , dispatch}, searchResults) {
 
     //Reset the details before search
@@ -124,7 +95,7 @@ const actions = {
     commit('setPage',1)
     commit('setTotalPages',0)
 
-    commit('setShowProgessBar', true)
+    commit('setShowProgressBar', true)
 
 
     //Converting keys in Object from Snake to Camel Case
@@ -172,9 +143,7 @@ const actions = {
       commit('setExpand', true)
       }
 
-
-      commit('setShowProgessBar', false)
-
+      commit('setShowProgressBar', false)
 
   },
   updatePage({commit}, page){
@@ -187,6 +156,7 @@ const actions = {
       if(endingIndex > searchResultsList.length){
         endingIndex = searchResultsList.length
       }
+      // console.log("updatePage", page, startingIndex, endingIndex)
       searchResultsPerPage = searchResultsList.slice(startingIndex, endingIndex)
       commit('setSearchResultsPerPage', searchResultsPerPage)
       commit('setPage', page)
@@ -195,7 +165,6 @@ const actions = {
 }
 
 }
-
 export default {
   namespaced: true,
   state,

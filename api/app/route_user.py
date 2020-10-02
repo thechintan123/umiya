@@ -3,8 +3,8 @@ from . import app, db
 from .auth import basic_auth, token_auth
 from .errors import bad_request, error_response
 from datetime import datetime
-from .models import User, UserDetails, Country, Gotra, WhereKnow, MaritalStatus, Gender, UploadPhotos
-from .email import send_reg_email, send_match_email
+from .models import User, UserDetails, Country, Gotra, WhereKnow, MaritalStatus, Gender, UploadPhotos, ProfileStatus
+from .email import send_reg_email, send_match_email, send_update_status_email
 from PIL import Image
 from strgen import StringGenerator
 import re
@@ -78,6 +78,19 @@ def update_user(id):
     return jsonify(user_det.to_dict())
 
 
+# update user by admin
+@app.route('/api/admin-update/<int:id>', methods=['PUT'])
+# @token_auth.login_required
+def admin_update_user(id):
+    user_det = UserDetails.query.get_or_404(id)
+    data = request.get_json() or {}
+    user_det.from_dict(data=data)
+    db.session.commit()
+    if data['status'] is not None:
+        send_update_status_email(user_det.user)
+    return jsonify(user_det.to_dict())
+
+
 # helper function for dropdowns
 def get_list(table):
     results = table.query.all()
@@ -96,8 +109,9 @@ def lists():
     where_know = get_list(WhereKnow)
     marital_status = get_list(MaritalStatus)
     gender = get_list(Gender)
+    profile_status = get_list(ProfileStatus)
     payload = {'country': country, 'gotra': gotra, 'where_know': where_know,
-               'marital_status': marital_status, 'gender': gender}
+               'marital_status': marital_status, 'gender': gender , 'profile_status' : profile_status}
     return jsonify(payload)
 
 

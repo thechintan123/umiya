@@ -14,7 +14,6 @@
     v-if="photos.length >= 1"
     height="200px"
     :fullscreen.sync="fullscreen"
-
     >
   
     <q-carousel-slide class="no-padding" v-for="(photo,index) in photos" :key="index" :name="index">
@@ -25,6 +24,18 @@
         </template>
       </q-img>
     </q-carousel-slide>
+      <template v-slot:control>
+        <q-carousel-control
+          position="bottom-right"
+          :offset="[18, 18]"
+        >
+          <q-btn
+            push round dense color="white" text-color="primary"
+            :icon="fullscreen ? 'fullscreen_exit' : 'fullscreen'"
+            @click="fullscreen = !fullscreen"
+          />
+        </q-carousel-control>
+      </template>    
   </q-carousel>
          <q-img v-else  class="bg-dark rounded-borders my-max-width my-image-center" height="200px" :src="avatarURL" contain />
 
@@ -81,7 +92,7 @@ export default {
             }
 
             .my-max-width{
-              max-width : 300px !important;
+              max-width : 500px !important;
               width : 100 % !important;
 
             }
