@@ -1,21 +1,21 @@
 <template>
   <div class="fit column">
-   <q-linear-progress v-show="showProgressBar" indeterminate size="10px" color="secondary" />
-      <q-spinner
-        v-show="showProgressBar"
-        class="z-top fixed-center"
-        color="secondary"
-        size="3em"
-        :thickness="10"
-      />
+   <!-- <q-linear-progress v-show="showProgressBar" indeterminate size="10px" color="secondary" /> -->
+   <progressBar v-show="showProgressBar" />
+    <spinner v-show="showProgressBar" />
     <q-card v-if="showfield">
 
-        <q-banner rounded dense class="bg-grey-3">
+        <!-- <q-banner rounded dense class="bg-grey-3">
           <template v-slot:avatar>
             <q-icon name="assignment_ind" color="primary" />
           </template>
           Welcome!!!
-        </q-banner>
+        </q-banner> -->
+
+      <banner
+        iconName="assignment_ind"
+        :bannerTitle="'Welcome '+role"
+      />  
 
         <q-card-section>
           <q-item>
@@ -25,7 +25,6 @@
               <q-item-label>Your Profile ID is  <b>{{ userDetail.id }}</b> </q-item-label>
           </q-item>
           <q-item>
-
             <q-item-section>
               <q-item-label>Your Email is <b> {{ userDetail.email }}</b> </q-item-label>
                <q-item-label caption>
@@ -33,8 +32,12 @@
               </q-item-label>
             </q-item-section>
           </q-item>
-          <q-item>
+          <q-item v-if="role === 'admin'" dense>
+              <q-item-label>Your Role is   <b>{{ role}}</b> </q-item-label>
+          </q-item>
+          <template v-else>
 
+          <q-item>
             <q-item-section>
               <q-item-label>Your Profile Status is  <b>{{ userDetail.status.name }} </b>
               <q-icon class="vertical-middle no-padding no-margin" :name="getIcon" color="primary" size="lg"/>
@@ -53,7 +56,7 @@
               </q-item-label>
             </q-item-section>
           </q-item>
-
+        </template>
         </q-card-section>
 
     </q-card>
@@ -62,9 +65,19 @@
 
 <script>
 import axios from 'axios'
-import { showErrorMessage } from 'src/utils/show-error-message'
+// import { showErrorMessage } from 'src/utils/show-error-message'
+import mixinUtils from 'src/mixins/Mixin_Utils.js'
+import mixinComputations from 'src/mixins/Mixin_Computations.js'
+import { mapState } from 'vuex'
 
 export default {
+  mixins : [mixinUtils,mixinComputations],
+  components :{
+    progressBar: require('./general/ProgressBar.vue').default,
+    spinner: require('./general/Spinner.vue').default,
+    banner: require('./general/Banner.vue').default
+  }
+  ,
 
   data () {
     return {
@@ -76,6 +89,8 @@ export default {
     }
   },
   computed: {
+    ...mapState('auth',['role'])
+    ,
     getIcon () {
       const status = this.userDetail.status.name
       if (status === 'Registered') {
@@ -118,25 +133,34 @@ export default {
       // user_details_id is same profile_Id share on UI
       axios.get(process.env.API + '/users/' + userDetailsId)
         .then(({ data }) => {
-        // console.log("data", data, data.first_name);
 
-          // this code replaces key in data Object from Snake Case to Camel Case
-          this.userDetail = JSON.parse(JSON.stringify(data).replace(
-            /(_\w)\w+":/g,
-            match => match[1].toUpperCase() + match.substring(2)
-          ))
+          var userDetail = {}
+          for (const key in data) {
+            // console.log("Key", camel);
+            userDetail[
+              this.snakeToCamel(key)
+            ] = data[key]
+          } 
+          
+          this.userDetail = userDetail;
+
+          //this code replaces key in data Object from Snake Case to Camel Case
+          // this.userDetail = JSON.parse(JSON.stringify(data).replace(
+          //   /(_\w)\w+":/g,
+          //   match => match[1].toUpperCase() + match.substring(2)
+          // ))
           // console.log("userDetail", this.userDetail);
           this.showfield = true
           this.showProgressBar = false
         }).catch((error) => {
-          let errMsg = ''
-          if ('message' in error.response.data) {
-            // errMsg = error.response.data.error + " - " + error.response.data.message;
-            errMsg = error.response.data.message
-          } else {
-            errMsg = error.response.data.error
-          }
-          showErrorMessage(errMsg)
+          // let errMsg = ''
+          // if ('message' in error.response.data) {
+          //   // errMsg = error.response.data.error + " - " + error.response.data.message;
+          //   errMsg = error.response.data.message
+          // } else {
+          //   errMsg = error.response.data.error
+          // }
+          this.showErrorDialog(error)
           // console.log('uploadImage - Error - Error Message', errMsg)
         })
     } else {

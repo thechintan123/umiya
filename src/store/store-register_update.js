@@ -347,7 +347,7 @@ const actions = {
           commit('setShowProgressBar', false)
         })
         .catch(error => {
-          // console.log("Errror",error)
+          console.log("Store Fetch User List",error, this)
           mixinUtils.methods.showErrorDialog(error)
         })
     } // end of if user!==null

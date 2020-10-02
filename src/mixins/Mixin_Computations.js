@@ -1,8 +1,15 @@
 export default {
   methods: {
-
+    hasValue (value) {
+      if (value !== null && typeof (value) !== 'undefined' && value !== '') {
+        return true
+      } else {
+        return false
+      }
+    }
+,
    computeAge (dob) {
-      // console.log("computeAge", dob)
+      // console.log("computeAge", dob, this)
       if (this.hasValue(dob)) {
         var dobInMS = Date.parse(dob)
         var diffMs = Date.now() - dobInMS

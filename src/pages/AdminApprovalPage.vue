@@ -1,6 +1,6 @@
 <template>
-  <q-page padding class="flex">
-    <register_update :updateProfile="true"/>
+  <q-page padding>
+      <adminApproval/>
   </q-page>
 </template>
 
@@ -11,11 +11,14 @@ export default {
   mixins : [mixinUtils],
 
   components: {
-    register_update: require('components/Register_Update.vue').default
-  },
-  beforeMount(){
-    this.checkUserLoggedIn()
+    adminApproval: require('components/AdminApproval.vue').default
   }
-
+,
+  beforeMount(){
+    this.checkUserLoggedIn('admin')
+  }
 }
 </script>
+
+<style scoped>
+</style>

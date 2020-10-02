@@ -1,0 +1,37 @@
+UmiyaMatrimony.com - The exclusive matrimony service for Kutch Kadva
+Patidar Sanatan Samaj
+
+  Dear {{user.user_details.first_name}},
+ 
+  Your profile Status has been updated.   
+  Updated Profile Status : {{user.user_details.status.name}}
+  
+  {% if user.user_details.status.name == "Approved" %}
+   NEXT STEP > You can now self-search and self-contact the other profiles.
+  {% elif user.user_details.status.name == "Correction" %}
+  Comments from Admin team : {{user.user_details.correction_comments}} 
+  NEXT STEP > Please ensure that your name and date of birth matches to that in your ID Proof. Please correct your profile so that we can verify and approve.
+  {% elif user.user_details.status.name == "Deactivated" %}
+   NEXT STEP > We have deactivated your profile. Please contact us to Activate your profile. If your profile will be deactivated for long, we will delete your profile completely.
+  {% elif user.user_details.status.name == "Registered" %}
+  NEXT STEP > Admin team will approve your profile.Once approved, you can search and contact the other profiles.    
+  {% endif %}  
+
+  Please note your Details: 
+  Your Profile ID is {{user.user_details.id}}
+  Your Login ID and Notification Email is {{user.email}}
+  Your Primary Contact is {{user.user_details.primary_contact}}
+ 
+  In case of any query, please feel free to contact us . We are happy to hear
+  from you. To know more about our service, visit the website - UmiyaMatrimony.com.
+  
+  Hope you find your Life partner soon. 
+  
+  Best Regards, 
+  Your Friends at UmiyaMatrimony.com
+
+ P.S: If you have not registered on UmiyaMatrimony.com using this email,
+ then inform us on help@umiyamatrimony.com. UmiyaMatrimony.com will never
+ share your personal info with a 3rd party. This email follows
+ UmiyaMatrimony.com's Privacy Policy . Copyright © UmiyaMatrimony.com - All
+ Rights Reserved.

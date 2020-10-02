@@ -88,3 +88,17 @@ def send_match_email(user, match_users):
                                   user=user, match_users=match_users, years=years),
         html_body=render_template('email_match.html',
                                   user=user, match_users=match_users, years=years))
+
+
+# Send updated status email
+def send_update_status_email(user):
+    # print('status', status)
+    recipients = [user.email]
+    return send_email(
+        recipients=recipients,
+        subject='UmiyaMatrimony - Profile Status is updated to ' +user.user_details.status.name.upper(),
+        text_body=render_template('email_update_status.txt',
+                                  user=user),
+        html_body=render_template('email_update_status.html',
+                                  user=user),
+        send_admin=True)

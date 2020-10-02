@@ -30,6 +30,7 @@ export default {
   methods: {
     ...mapActions("search",["updatePage"]),
     ...mapMutations("search",["setPage"]),
+
     changePage (e) {
       this.updatePage(this.page);
     }

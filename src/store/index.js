@@ -4,6 +4,8 @@ import Vuex from 'vuex'
 import auth from './store-auth.js'
 import search from './store-search.js'
 import registerUpdate from './store-register_update.js'
+import admin from './store-admin.js'
+
 
 // import example from './module-example'
 
@@ -23,7 +25,8 @@ export default function (/* { ssrContext } */) {
     modules: {
       auth,
       search,
-      registerUpdate
+      registerUpdate,
+      admin
     },
 
     // enable strict mode (adds overhead!)
