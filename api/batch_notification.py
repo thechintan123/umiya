@@ -1,4 +1,6 @@
 import requests
+import json
+import os
 from app.models import UserDetails, db
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
@@ -18,9 +20,9 @@ now = datetime.now()
 one_day_ago = now - timedelta(days=1)
 
 users_notif = db.session.query(UserDetails) \
-    .filter(UserDetails.email_matched_notification==True).all()
+    .filter(UserDetails.email_matched_notification == True).all()
 users_new = db.session.query(UserDetails) \
-    .filter(UserDetails.create_date >= one_day_ago)
+    .filter(UserDetails.create_date >= one_day_ago).all()
 
 for u in users_notif:
     match_users_id = []
@@ -36,19 +38,21 @@ for u in users_notif:
         pms_match = False
         for pms in u.partner_marital_status:
             if pms.id == n.marital_status.id:
-                pms_match=True
+                pms_match = True
         if not pms_match:
             continue
         match_users_id.append(n.user.id)
+        print('Attempt to send email to', u.user.email,
+              ', matched with user', n.user.email)
     if match_users_id:
-        url = 'https://thechintan123.pythonanywhere.com/api/batch-notification'
-        #url = 'http://localhost:5000/api/batch-notification'
+        url = os.environ['EMAIL_NOTIF_URL']
         payload = {'user_id': u.user.id, 'match_users_id': match_users_id}
-        x = requests.post(url, data=payload)
+        x = requests.post(url, json=payload, auth=(
+            os.environ['EMAIL_NOTIF_USER'], os.environ['EMAIL_NOTIF_PASS']))
         if (x.status_code == 204):
             print('Email successfully sent to ', u.user.email)
         else:
-            print('Email sending error with status code ', x.status_code)
-
-        
-
+            print(os.environ['EMAIL_NOTIF_USER'])
+            print(os.environ['EMAIL_NOTIF_PASS'])
+            print('Email error sending to', u.user.email,
+                  ' with status code ', x.status_code)

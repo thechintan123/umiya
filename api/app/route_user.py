@@ -1,11 +1,10 @@
 from flask import jsonify, request, url_for, Response
 from . import app, db
-from .auth import token_auth
+from .auth import basic_auth, token_auth
 from .errors import bad_request, error_response
 from datetime import datetime
 from .models import User, UserDetails, Country, Gotra, WhereKnow, MaritalStatus, Gender, UploadPhotos, ProfileStatus
 from .email import send_reg_email, send_match_email, send_update_status_email
-from .email import send_reg_email
 from PIL import Image
 from strgen import StringGenerator
 import re
@@ -233,9 +232,11 @@ def delete_photo(id, filename):
 
 
 @app.route('/api/batch-notification', methods=['POST'])
+@basic_auth.login_required(role='email')
 def batch_notification():
-    user_id = request.form.get('user_id')
-    match_users_id = request.form.get('match_users_id')
+    user_id = request.json['user_id']
+    match_users_id = request.json['match_users_id']
+
     if user_id is None or match_users_id is None:
         return bad_request('Mandatory data was missing')
     user = User.query.filter_by(id=user_id).first()
@@ -249,4 +250,5 @@ def batch_notification():
     if not match_users:
         return bad_request("Match user id's are invalid")
     send_match_email(user, match_users)
+
     return '', 204

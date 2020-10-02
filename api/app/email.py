@@ -78,6 +78,8 @@ def calc_age(match_users):
     return years
 
 # Send match partner email
+
+
 def send_match_email(user, match_users):
     recipients = [user.email]
     years = calc_age(match_users)

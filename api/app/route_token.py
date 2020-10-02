@@ -60,8 +60,10 @@ def forgot_password(email):
     else:
         return error_response(400, "email doesn't exist")
 
+
 # User change password
 @app.route('/api/change_password', methods=['POST'])
+@basic_auth.login_required
 def change_password():
     data = request.get_json() or {}
     old_password = data["oldPassword"]
@@ -72,16 +74,15 @@ def change_password():
     # print("2- change_password - Old Password matches", user)
     # return '', 204
     if user:
-        #check old Password matches
-        if user.check_password(old_password) :
+        # check old Password matches
+        if user.check_password(old_password):
             print("Old Password matches")
             user.set_password(new_password)
             db.session.add(user)
             db.session.commit()
             return '', 204
-        else :
+        else:
             return bad_request('Your entered Old Password does not match. Please check your old password.')
-
 
 
 # testing
@@ -89,4 +90,3 @@ def change_password():
 @token_auth.login_required
 def hello():
     return jsonify({'message': 'hello world!!!'})
-

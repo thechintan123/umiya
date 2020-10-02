@@ -6,6 +6,7 @@ from .models import User
 basic_auth = HTTPBasicAuth()
 token_auth = HTTPTokenAuth()
 
+
 # this funcion receives the username, password sent by Vue
 # If valid it will return a user object.
 # You can then access the user object via current_user()
@@ -15,11 +16,19 @@ def verify_password(email, password):
     if user and user.check_password(password):
         return user
 
+
 # this function is called if there is an error with basic authentication
 @basic_auth.error_handler
 def basic_auth_error(status):
     # It is actually 401 error, but we use 400 so that browser doesnt do their autopopup
-    return error_response(401,'Invalid credentials')
+    return error_response(401, 'Invalid credentials')
+
+
+# used by http-auth to provide authentication based on roles
+@basic_auth.get_user_roles
+def get_user_roles(user):
+    return [user.role.name]
+
 
 # this funcion receives the token sent by Vue
 # If valid it will return a user object
@@ -28,8 +37,9 @@ def basic_auth_error(status):
 def verify_token(token):
     return User.check_token(token) if token else None
 
+
 # this function is called if there is an error with token authentication
 @token_auth.error_handler
 def auth_error():
     # It is actually 401 error, but we use 400 so that browser doesnt do their autopopup
-    return error_response(401,'Invalid token')
+    return error_response(401, 'Invalid token')
