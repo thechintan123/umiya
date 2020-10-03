@@ -25,7 +25,8 @@ def get_token():
     payload = {
         'token': token,
         'email': user.email,
-        'user_details_id': user.user_details.id
+        'user_details_id': user.user_details.id,
+        'role' : user.role.name,
     }
     user.last_login = datetime.utcnow()
     db.session.add(user)

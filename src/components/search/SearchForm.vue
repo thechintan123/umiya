@@ -173,11 +173,11 @@ export default {
     banner: require('../general/Banner.vue').default
   },
   methods: {
-    ...mapMutations('search', ['setShowProgessBar','setExpand','setSearchParamsIndividual']),
+    ...mapMutations('search', ['setShowProgressBar','setExpand','setSearchParamsIndividual']),
     ...mapActions('search', ['saveSearchResults','fetchList']),
 
     async submitSearchForm () {
-      this.setShowProgessBar(true);
+      this.setShowProgressBar(true);
       // console.log("showProgressBar", this.showProgressBar);
       await this.$refs.searchForm.validate().then(success => {
         if (success) {
@@ -206,7 +206,7 @@ export default {
         } else {
           var error = "Error in Search Form. Please correct it before proceeding."
           this.showErrorDialog(error);
-          this.setShowProgessBar(false);
+          this.setShowProgressBar(false);
 
         }
       })

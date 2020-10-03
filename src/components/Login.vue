@@ -66,16 +66,18 @@
 <script>
 import { mapActions } from 'vuex'
 import mixinFormValidations from 'src/mixins/Mixin_FormValidations.js'
+import mixinUtils from 'src/mixins/Mixin_Utils.js'
+
 import { showErrorMessage } from 'src/utils/show-error-message'
 
 export default {
-  mixins: [mixinFormValidations],
+  mixins: [mixinFormValidations, mixinUtils],
   data () {
     return {
       isPwd: true,
       formData: {
         email: 'chin1@gmail.com',
-        password: 'Aa3UKd7C'
+        password: 'password'
       }
     }
   },
@@ -91,14 +93,14 @@ export default {
           this.$router.push('/profile')
         })
         .catch(error => {
-          // console.log('error',error);
-          let errMsg = ''
-          if ('message' in error.response.data) {
-            errMsg = error.response.data.error + ' - ' + error.response.data.message
-          } else {
-            errMsg = error.response.data.error
-          }
-          showErrorMessage(errMsg)
+          console.log('Login error',error);
+          // let errMsg = ''
+          // if ('message' in error.response.data) {
+          //   errMsg = error.response.data.error + ' - ' + error.response.data.message
+          // } else {
+          //   errMsg = error.response.data.error
+          // }
+          this.showErrorDialog(errMsg)
         })
     }
   }

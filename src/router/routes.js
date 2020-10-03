@@ -39,7 +39,12 @@ const routes = [
       {
         path: '/change-password',
         component: () => import('pages/ChangePasswordPage.vue')
-      }      
+      }
+      ,
+       {
+        path: '/admin-approval',
+        component: () => import('pages/AdminApprovalPage.vue')
+      }     
     ]
   }
 ]

@@ -1,4 +1,3 @@
-// this is to default ageFrom and ageTo. Defaulting to 5 years
 const ageDifference = 5
 const heightDifference = 15.24// 15.24 cms is 6 inches
 
@@ -10,4 +9,7 @@ const ageEnd = 60
 
 const maxSearchResultsPerPage =  5
 
-export { ageDifference, heightDifference, heightFtStart, heightFtEnd, ageStart, ageEnd , maxSearchResultsPerPage }
+const correctionCommentsMaxLength = 950 // DB length is 1000; 50 is reduced to compensate for any additional buffer;
+
+export { ageDifference, heightDifference, heightFtStart, heightFtEnd, ageStart, ageEnd , 
+    maxSearchResultsPerPage, correctionCommentsMaxLength}

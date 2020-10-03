@@ -1,0 +1,48 @@
+<div>
+  <h3>
+    <i
+      >UmiyaMatrimony.com - The exclusive matrimony service for Kutch Kadva
+      Patidar Sanatan Samaj</i
+    >
+  </h3>
+  Dear <b>{{user.user_details.first_name.title()}}</b>,<br />
+  <br />
+  Your profile status has been updated. <br>
+  <br>
+  Updated Profile Status : <b>{{user.user_details.status.name.upper()}}</b> <br />
+  {% if user.user_details.status.name == "Approved" %}
+  <p>NEXT STEP > You can now self-search and self-contact the other profiles.</p>
+  {% elif user.user_details.status.name == "Correction" %}
+  <p>Comments from Admin team : <b>{{user.user_details.correction_comments}}</b> </p> 
+  <p>NEXT STEP > Please ensure that your name and date of birth matches to that in your ID Proof. Please correct your profile so that we can verify and approve.</p>
+  {% elif user.user_details.status.name == "Deactivated" %}
+  <p>NEXT STEP > We have deactivated your profile. Please contact us to Activate your profile. If your profile will be deactivated for long, we will delete your profile completely.</p>
+  {% elif user.user_details.status.name == "Registered" %}
+  <p>NEXT STEP > Admin team will approve your profile.Once approved, you can search and contact the other profiles.</p>    
+  {% endif %}
+  <b><u>Please note your details: </b></u> <br>
+  Your Profile Id is <b>{{user.user_details.id}}</b> <br>
+  Your Login Id and notification email is <b>{{user.email}}</b> <br>
+  Your Primary contact is <b>{{user.user_details.primary_contact}}</b> <br>
+  <br/>
+  <br />
+  In case of any query, please feel free to contact us . We are happy to hear
+  from you. To know more about our service, visit the website -
+  <a href="https://www.umiyamatrimony.com">UmiyaMatrimony.com</a>. <br />
+  <br />
+  Hope you find your Life partner soon. <br />
+  <br />
+  Best Regards, <br />
+  Your Friends at UmiyaMatrimony.com
+  <br />
+  <br />
+  <i
+    ><small>
+      P.S: If you have not registered on UmiyaMatrimony.com using this email,
+      then inform us on help@umiyamatrimony.com. UmiyaMatrimony.com will never
+      share your personal info with a 3rd party. This email follows
+      UmiyaMatrimony.com's Privacy Policy . Copyright © UmiyaMatrimony.com - All
+      Rights Reserved.
+    </small>
+  </i>
+</div>

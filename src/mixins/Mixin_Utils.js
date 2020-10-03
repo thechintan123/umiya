@@ -2,6 +2,35 @@ import { Dialog } from 'quasar'
 
 export default {
   methods: {
+    checkUserLoggedIn(role){
+      var user = JSON.parse(localStorage.getItem('user'))
+      if (user === null) {
+        this.$q.notify({
+          type: 'negative',
+          multiLine: true,
+          message: 'You need to login to access this page.You are redirected to Login Page',
+          icon: 'warning'
+        })
+        this.$router.push('/login')
+    }
+    else{
+      if (this.hasValue(role)) {
+        // if role is BLANK then it is allowed to be accessed by all roles
+        var rolefromLocalStorage = user.role;
+        if (rolefromLocalStorage !== role) {
+          this.$q.notify({
+            type: "negative",
+            multiLine: true,
+            message:
+              "You do not have right permission to access this page.You are redirected to Home Page",
+            icon: "warning"
+          });
+          this.$router.push("/");
+        }
+      }
+    }
+  }
+    ,
     showErrorDialog (error) {
       let errorMessage = ''
       errorMessage = '<b>' + error.toString() + '</b>'
@@ -105,6 +134,18 @@ export default {
         }
     }  
   }
-
+  ,
+  removeTimeStamp(val) {
+    if (this.hasValue(val))  {
+      var d = new Date(val)
+      return d.toDateString();
+    }
+  },
+  hasBlank(val) {
+    if (!this.hasValue(val)) return "No Information";
+    else return val;
   }
+  
+
+}
 }

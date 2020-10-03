@@ -2,7 +2,7 @@ from flask import jsonify, request
 from . import app
 from datetime import datetime, timedelta
 from sqlalchemy import and_, desc
-from .models import UserDetails, Country, MaritalStatus, Gender, User
+from .models import UserDetails, Country, MaritalStatus, Gender, User, ProfileStatus
 from app import db
 
 
@@ -76,6 +76,91 @@ def search():
                                           UserDetails.height.between(height_min_in_cms, height_max_in_cms), \
                                           UserDetails.marital_status_id.in_(marital_status_id_local))) \
                                           .order_by(desc(User.last_login)).all()
+    user_list = []
+    for user_d in user_details:
+        upload_photos = user_d.upload_photos.all()
+        filenames = [u.filename for u in upload_photos]
+        new_user = user_d.to_dict()
+        new_user['upload_photos'] = filenames 
+        new_user['last_login'] = user_d.user.last_login
+        new_user['user_details_id'] = user_d.id
+        user_list.append(new_user)
+    return jsonify(user_list)
+
+
+    # search Function
+@app.route('/api/search-by-admin', methods=['POST'])
+def search_by_admin():
+    data = request.get_json() or {}
+
+    print("data", data)
+
+    allowed_status_id = '2' #1 is for Registered
+
+    first_name = ""
+    first_name = data.get("first_name")
+    if first_name is None:
+        first_name = ""
+
+    formatted_first_name = "%{}%".format(first_name)
+    # print("formatted_first_name", formatted_first_name)
+
+
+    last_name = ""
+    last_name = data.get("last_name")
+    if last_name is None:
+        last_name = ""
+        
+    formatted_last_name = "%{}%".format(last_name)
+
+    email = ""
+    email = data.get("email")
+    if email is None:
+        email = ""    
+    formatted_email = "%{}%".format(email)
+
+    user_details_id = ""
+    user_details_id = data.get("user_details_id")
+    if user_details_id is None:
+        user_details_id = ""        
+    formatted_user_details_id = "%{}%".format(user_details_id)
+
+    all_genders =[]
+    gender_id_local = []
+    gender = data.get("gender")
+    # print("Gender 1", gender)
+
+    if gender != "" and gender is not None:
+        gender_id_local.append(gender.get("id"))
+    else:
+        all_genders = Gender.query.all()
+        for gen in all_genders:
+            gender_id_local.append(gen.id)
+    
+    # print("Gender 2", all_genders, gender_id_local)
+    
+    profile_status_id_local = []
+    all_profile_statuses = {}
+    profile_status_list = data.get("profile_status")
+    if profile_status_list!= ""  and profile_status_list is not None and profile_status_list != []:
+        profile_status_id_local = profile_status_list
+    else:
+        all_profile_statuses = ProfileStatus.query.all()
+        for p_s in all_profile_statuses:
+            profile_status_id_local.append(p_s.id)
+
+    # print("Profile Statuses", all_profile_statuses, profile_status_id_local, profile_status_list)
+
+
+    user_details = db.session.query(UserDetails).join(User).filter(and_(User.email.like(formatted_email),
+                                        UserDetails.first_name.like(formatted_first_name), \
+                                        UserDetails.last_name.like(formatted_last_name) , \
+                                        UserDetails.id.like(formatted_user_details_id), \
+                                        UserDetails.gender_id.in_(gender_id_local), \
+                                        UserDetails.status_id.in_(profile_status_id_local))) \
+                                        .order_by(desc(User.last_login)).all()       
+    
+    # print('User Details',user_details)                                          
     user_list = []
     for user_d in user_details:
         upload_photos = user_d.upload_photos.all()

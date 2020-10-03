@@ -81,10 +81,11 @@
 <script>
 import mixinFormValidations from 'src/mixins/Mixin_FormValidations.js'
 import mixinComputations from 'src/mixins/Mixin_Computations.js'
+import mixinUtils from 'src/mixins/Mixin_Utils.js'
 import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
-  mixins: [mixinFormValidations, mixinComputations],
+  mixins: [mixinFormValidations, mixinComputations, mixinUtils ],
 
   // This prop is for UpDateProfile. It will be true for UpdateProfile
   props: ['updateProfile'],

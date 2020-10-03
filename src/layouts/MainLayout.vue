@@ -147,27 +147,31 @@ const menuList = [
     icon: 'person_add',
     label: 'Register',
     link: '/register',
-    separator: true
+    separator: true,
+
   },
   {
     icon: 'search',
     label: 'Search',
     link: '/search',
-    separator: true
+    separator: true,
+
   },
   {
     icon: 'assignment_ind',
     label: 'Profile',
     link: '/profile',
     loggedIn: true,
-    separator: true
+    separator: true,
   },
   {
     icon: 'edit',
     label: 'Update Profile',
     link: '/update-profile',
     loggedIn: true,
-    separator: true
+    separator: true,
+     role : 'user'
+
   }
   ,
     {
@@ -175,7 +179,17 @@ const menuList = [
     label: 'Change Password',
     link: '/change-password',
     loggedIn: true,
-    separator: true
+    separator: true,
+    // No roles means it is applicable for both
+  }
+  ,
+      {
+    icon: 'fas fa-tasks',
+    label: 'Approve Profile',
+    link: '/admin-approval',
+    loggedIn: true,
+    separator: true,
+    role : 'admin'
   }
 
 ]
@@ -219,28 +233,49 @@ export default {
         return false
       }
     } // end of showMenuItem
+  
+  ,
+  checkRole(role, menuItemRole){
+    //  console.log("Menu Item", role,menuItemRole)
+    if(menuItemRole === undefined || menuItemRole === null){
+      return true
+    }
+    else if(menuItemRole === role){
+      return true
+    }
+    else if(menuItemRole !== role){
+      return false
+    }else{
+      return false
+    }
+  }
 
   },
   computed: {
-    ...mapState('auth', ['loggedIn']),
+    ...mapState('auth', ['loggedIn','role']),
     filteredMenuList () {
       var filterMenuList = []
       var loggedInStatus = this.loggedIn
       var menuItemLoginStatus, menuItem
+      var role = this.role
       for (menuItem of this.menuList) {
+        // console.log("Menu Item", menuItem, menuItem.role)
         menuItemLoginStatus = menuItem.loggedIn
         if (menuItemLoginStatus === undefined || menuItemLoginStatus === null) {
-          filterMenuList.push(menuItem)
+          if(this.checkRole(role, menuItem.role))
+              filterMenuList.push(menuItem)
         } else if (menuItemLoginStatus === false) {
           if (loggedInStatus === false) {
-            filterMenuList.push(menuItem)
+           if(this.checkRole(role, menuItem.role)) 
+                filterMenuList.push(menuItem)
           } else {
           // Don't add
             continue
           }
         } else if (menuItemLoginStatus === true) {
           if (loggedInStatus === true) {
-            filterMenuList.push(menuItem)
+            if(this.checkRole(role, menuItem.role))
+              filterMenuList.push(menuItem)
           } else {
           // Don't add
             continue
@@ -254,6 +289,7 @@ export default {
     }
 
   }
+
 }
 </script>
 
