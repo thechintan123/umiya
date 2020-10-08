@@ -58,6 +58,7 @@ const getDefaultState = () => {
       partnerHeightTo: '',
       partnerHeightToCms: '',
       partnerMaritalStatus: [],
+      emailMatchedNotification : true,
       agreeTc: false,
       whereKnow: '',
       status: { name: '' }
@@ -88,7 +89,9 @@ const getDefaultState = () => {
 
     userSubmitted: false,
 
-    successProcess: false
+    successProcess: false,
+
+    loggedInUserDetailsId : "",
 
   }
 }
@@ -142,6 +145,10 @@ const mutations = {
   setSuccessProcess (state, value) {
     state.successProcess = value
   }
+  ,
+  setLoggedInUserDetailsId(state, value){
+    state.loggedInUserDetailsId = value;
+  }
 }
 
 const actions = {
@@ -173,17 +180,32 @@ const actions = {
         mixinUtils.methods.showErrorDialog(error)
       })
   },
-  // For Update Profile
-  fetchUserDetails ({ commit }) {
-    commit('setShowProgressBar', true)
-    var user = JSON.parse(localStorage.getItem('user'))
-    var userDetail
 
+  fetchLoggedInUserDetails({commit}){
+    var user = JSON.parse(localStorage.getItem('user'))
     if (user !== null) {
       var userDetailsId = user.user_details_id
+      commit('setLoggedInUserDetailsId', userDetailsId)
+    }
+  }
+  ,
+  // For Update Profile
+  fetchUserDetails ({ commit }, {userDetailsId, selectedByAdmin}) {
+    commit('setShowProgressBar', true)
+    // var user = JSON.parse(localStorage.getItem('user'))
+    var userDetail;
 
+    if (userDetailsId !== null && userDetailsId != "") {
+      // var userDetailsId = user.user_details_id
+
+      var endPoint = '';
+      if(selectedByAdmin){
+        endPoint = process.env.API + '/admin/users/' + userDetailsId
+      }else{
+        endPoint = process.env.API + '/users/' + userDetailsId
+      }
       return axios
-        .get(process.env.API + '/users/' + userDetailsId)
+        .get(endPoint)
         .then(({ data }) => {
           // console.log("data", data, data.upload_proof);
 
@@ -422,7 +444,7 @@ const actions = {
   //   commit('setFormDataIndividual', {key  : 'gender',value : genderObject.value});
 
   // },
-  defaultFields ({ commit }) {
+  defaultTestingData ({ commit }) {
     // this.formData = this.testData
     commit('setFormData', testData)
 

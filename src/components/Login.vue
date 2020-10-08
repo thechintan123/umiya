@@ -1,18 +1,29 @@
 <template>
   <div class="fit column">
     <q-card bordered>
-      <q-banner class="q-mb-md bg-grey-3">
-        <template v-slot:avatar>
-          <q-icon name="fas fa-sign-in-alt" color="primary" />
-        </template>
-        Login
-      </q-banner>
+
+      <progressBar v-show="showProgressBar" />
+      <spinner
+        v-show="showProgressBar"
+      />
+        <banner
+        iconName="fas fa-sign-in-alt"
+        bannerTitle="Login"
+              />
       <q-card-section>
         <q-form
           greedy
           ref="loginForm"
           @submit.prevent="login"
         >
+      <q-btn
+        class="my-button q-mb-md"
+        color="secondary"
+        label="For Testing - Default fields"
+        v-if="devEnv"
+        @click="defaultTestingData"
+      />
+
           <q-input outlined v-model="formData.email" label="Email"
             lazy-rules
             tabIndex = 1
@@ -76,34 +87,52 @@ export default {
     return {
       isPwd: true,
       formData: {
-        email: 'chin1@gmail.com',
-        password: 'password'
-      }
+        email: '',
+        password: ''
+      },
+      showProgressBar : false,
+      devEnv: process.env.DEV, // This is true for development environment and false for production
+
     }
   },
   methods: {
     ...mapActions('auth', ['loginUser']),
     login () {
+      this.showProgressBar = true;
       this.loginUser(this.formData)
         .then(() => {
           this.$q.notify({
             type: 'positive',
             message: 'Welcome ! You are now logged in.'
           })
+          this.showProgressBar = false;
+
           this.$router.push('/profile')
         })
         .catch(error => {
-          console.log('Login error',error);
+          console.log('Login error',error, error.response);
           // let errMsg = ''
           // if ('message' in error.response.data) {
           //   errMsg = error.response.data.error + ' - ' + error.response.data.message
           // } else {
           //   errMsg = error.response.data.error
           // }
-          this.showErrorDialog(errMsg)
+           this.showErrorDialog(error)
+           this.showProgressBar = false;
         })
     }
+    ,
+    defaultTestingData(){
+        this.formData.email = 'chin1@gmail.com';
+        this.formData.password = 'password';
+    }
   }
+  ,
+  components: {
+    progressBar: require('./general/ProgressBar.vue').default,
+    spinner: require('./general/Spinner.vue').default,
+    banner: require('./general/Banner.vue').default
+  }    
 }
 </script>
 

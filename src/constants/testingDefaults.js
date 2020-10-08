@@ -30,9 +30,10 @@ var testData = {
   partnerHeightTo: '6 ft 0 inch',
   partnerHeightToCms: '',
   partnerMaritalStatus: [{ id: 1, name: 'Never Married' }],
+  emailMatchedNotification: true,
   agreeTc: true,
   whereKnow: { id: 1, name: 'Friends' },
-  status: { id: 2, name: 'Approved' }
+  // status: { id: 2, name: 'Approved' }
 }
 
 var testTmpData = {

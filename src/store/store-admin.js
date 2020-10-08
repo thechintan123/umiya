@@ -28,7 +28,10 @@ const state = {
   searchPerformed : false,
   totalPages : 0,
   page : 1,
-  expand : true
+  expand : true,
+
+  selectedIdByAdmin : '',
+  selectedUser : []
 
 }
 
@@ -77,6 +80,19 @@ const mutations = {
     var foundItem = state.searchResults.find(element => element.userDetailsId === item.userDetailsId);
     foundItem[key] = value;
   }
+  ,
+ 
+  setSelectedUser(state, value){
+    state.selectedUser = value;
+    // state.selectedIdByAdmin = value[0].userDetailsId;
+    console.log("state.setSelectedUser",state.selectedUser,state.selectedIdByAdmin, value)
+  }
+  ,
+  setSelectedIdByAdmin(state, value){
+    state.selectedIdByAdmin = value;
+    // state.selectedIdByAdmin = value[0].userDetailsId;
+    console.log("state.setSelectedIdByAdmin",state.selectedIdByAdmin, value)
+  }  
 
 }
 
@@ -162,6 +178,15 @@ const actions = {
       commit('setPage', page)
 
   }
+}
+,
+resetSearchParams({commit}){
+  commit('setSearchParamsIndividual', {key : 'firstName', value : ''})
+  commit('setSearchParamsIndividual', {key : 'email', value : ''})
+  commit('setSearchParamsIndividual', {key : 'lastName', value : ''})
+  commit('setSearchParamsIndividual', {key : 'userDetailsId', value : ''})
+  commit('setSearchParamsIndividual', {key : 'gender', value : ''})
+  commit('setSearchParamsIndividual', {key : 'profileStatus', value : []})
 }
 
 }

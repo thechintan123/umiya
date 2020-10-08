@@ -63,10 +63,11 @@ def forgot_password(email):
 
 # User change password
 @app.route('/api/change_password', methods=['POST'])
-@basic_auth.login_required
+# @basic_auth.login_required
 def change_password():
     data = request.get_json() or {}
-    old_password = data["oldPassword"]
+    print("1 - change_password", data)
+    current_password = data["currentPassword"]
     new_password = data["newPassword"]
     email = data["email"]
     # print("1 - change_password - Old Password matches", data)
@@ -75,14 +76,14 @@ def change_password():
     # return '', 204
     if user:
         # check old Password matches
-        if user.check_password(old_password):
-            print("Old Password matches")
+        if user.check_password(current_password):
+            print("Current Password matches")
             user.set_password(new_password)
             db.session.add(user)
             db.session.commit()
             return '', 204
         else:
-            return bad_request('Your entered Old Password does not match. Please check your old password.')
+            return bad_request('Your entered current password does not match. Please check your current password.')
 
 
 # testing
