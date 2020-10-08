@@ -111,7 +111,7 @@ def lists():
     gender = get_list(Gender)
     profile_status = get_list(ProfileStatus)
     payload = {'country': country, 'gotra': gotra, 'where_know': where_know,
-               'marital_status': marital_status, 'gender': gender , 'profile_status' : profile_status}
+               'marital_status': marital_status, 'gender': gender, 'profile_status': profile_status}
     return jsonify(payload)
 
 

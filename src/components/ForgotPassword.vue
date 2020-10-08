@@ -12,16 +12,16 @@
           greedy
           @submit.prevent="forgotPassword"
         >
-        <q-input
-          outlined
-          v-model="formData.email"
-          label="Email"
-          lazy-rules
-          tabIndex=1
-          :rules="[ val => !!val || 'Please type something', val => checkEmail(val) || 'Please enter valid email address.']"
-          clearable
-          dense
-        />
+          <q-input
+            v-model="formData.email"
+            :rules="[ val => !!val || 'Please type something', val => checkEmail(val) || 'Please enter valid email address.']"
+            label="Email"
+            clearable
+            dense
+            lazy-rules
+            outlined
+            tabIndex=1
+          />
 
           <div class="row">
             <q-space/>
