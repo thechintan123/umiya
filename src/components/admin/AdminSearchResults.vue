@@ -193,7 +193,6 @@ export default {
     ...mapActions("admin",["updatePage"])
 ,    //...mapActions("admin",["updateStatus"])
     changeStatus(item){
-
       var userDetailsId = item.userDetailsId
       var newStatusId = this.profileStatus[userDetailsId];
       var updatedUser = { status: { id: newStatusId}}
@@ -224,7 +223,7 @@ export default {
 
       // console.log("updatedUser", updatedUser);
       axios
-        .put(process.env.API + '/admin-update/' + userDetailsId, updatedUser)
+        .put(process.env.API + '/admin/users/' + userDetailsId, updatedUser)
         .then(({ data }) => {
           // console.log("Updated Successfully", data);
           this.setSearchItemParameter({item: item , key: 'status', value: data.status})

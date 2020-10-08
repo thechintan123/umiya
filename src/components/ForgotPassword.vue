@@ -1,16 +1,29 @@
 <template>
   <div class="fit column">
+
+        <banner
+        :isSuccess = "true"
+        iconName="done_outline"
+        :bannerTitle="successMessage"
+        v-show="successProcess"
+              />
+
+      <progressBar v-show="showProgressBar" />
+      <spinner
+        v-show="showProgressBar"
+      />
     <q-card bordered>
-      <q-banner class="q-mb-md bg-grey-3">
-        <template v-slot:avatar>
-          <q-icon name="fas fa-sign-in-alt" color="primary" />
-        </template>
-        Forgot Password
-      </q-banner>
+      <banner
+        iconName="vpn_key"
+        bannerTitle="Forgot Password"
+              />
       <q-card-section>
         <q-form
+          no-reset-focus
           greedy
           @submit.prevent="forgotPassword"
+          @reset="resetForm"
+          ref="forgotPasswordForm"
         >
         <q-input
           outlined
@@ -42,30 +55,40 @@
 
 <script>
 import mixinFormValidations from 'src/mixins/Mixin_FormValidations.js'
+import mixinUtils from 'src/mixins/Mixin_Utils.js'
 import { showErrorMessage } from 'src/utils/show-error-message'
 import axios from 'axios'
 
 export default {
-  mixins: [mixinFormValidations],
+  mixins: [mixinFormValidations, mixinUtils],
   data () {
     return {
       formData: {
         email: ''
-      }
+      },
+      successProcess : false,
+      successMessage : 'Password has been reset. Please check your email.',
+      showProgressBar : false,
+
     }
   },
   methods: {
     forgotPassword () {
+      this.showProgressBar = true;
       const email = this.formData.email
       axios
         .post(process.env.API + '/forgot_password/' + email)
         .then(response => {
           this.$q.notify({
             type: 'positive',
-            message: 'Password has been reset. Please check your email.'
+            message: this.successMessage
           })
+          this.successProcess = true;
+          this.$refs.forgotPasswordForm.reset();
+          this.showProgressBar = false;
         })
         .catch(error => {
+          console.log("forgotPassword", error)
           let errMsg = ''
           if ('message' in error.response.data) {
             errMsg = error.response.data.message
@@ -73,9 +96,23 @@ export default {
             errMsg = error.response.data.error
           }
           showErrorMessage(errMsg)
+          this.showProgressBar = false;
+          this.successProcess = false;
+
         })
     }
+    ,
+    resetForm(){
+      this.formData.email = ""
+    }
   }
+  ,
+  components: {
+    progressBar: require('./general/ProgressBar.vue').default,
+    spinner: require('./general/Spinner.vue').default,
+    banner: require('./general/Banner.vue').default
+
+  }  
 }
 </script>
 

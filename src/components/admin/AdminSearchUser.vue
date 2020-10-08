@@ -2,7 +2,7 @@
   <div class="fit column">
     <q-card>
 
-      <q-form greedy ref="searchUserForm">
+      <q-form greedy ref="searchUserForm" @reset="resetForm">
 
       <q-expansion-item
         label="Search"
@@ -85,12 +85,15 @@
     />
       </div>
       </div>
-    <div class="row">
-
-
-    <template v-for="profStatus in this.list.profileStatusOptions">
-      <q-checkbox v-model="profileStatus" :label="profStatus.name"  :val ="profStatus.id" />
-    </template>
+    <div class="row q-ma-sm" v-if="this.list.profileStatusOptions.length <= 0">
+      <div class="col">
+      <q-skeleton animation="pulse" class="bg-dark" square />
+       </div> 
+    </div>
+    <div  class="row" v-else>
+      <template v-for="profStatus in this.list.profileStatusOptions">
+        <q-checkbox v-model="profileStatus" :label="profStatus.name"  :val ="profStatus.id" />
+      </template>
 
       </div>
           <div class="row">
@@ -141,10 +144,13 @@ export default {
   components: {
   },
   methods: {
-   ...mapActions('admin', ['saveSearchResults']),
-   ...mapMutations('admin', ['setList','setSearchParamsIndividual','setExpand','setShowProgressBar']),
+   ...mapActions('admin', ['saveSearchResults','resetSearchParams']),
+   ...mapMutations('admin', ['setList','setSearchParamsIndividual','setExpand','setShowProgressBar',"setSelectedIdByAdmin"]),
 
     async submitSearchUser () {
+      
+      //reset
+      this.setSelectedIdByAdmin("");
       this.setShowProgressBar(true);
       // console.log("showProgressBar", this.showProgressBar);
       await this.$refs.searchUserForm.validate().then(success => {
@@ -174,7 +180,7 @@ export default {
       return axios
         .post(process.env.API + '/search-by-admin', searchParamsSnakeCase)
         .then(({ data }) => {
-          // console.log('Search Success', data)
+          console.log('Search Success', data)
           this.saveSearchResults(data)
           // Store in Stores
           this.$q.notify({
@@ -188,6 +194,9 @@ export default {
         })
     }
 ,
+resetForm(){
+  this.resetSearchParams();
+}
 
   },
   computed: {

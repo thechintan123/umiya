@@ -3,21 +3,17 @@
     <progressBar v-show="showProgressBar"/>
     <spinner v-show="showProgressBar"/>
     <adminSearchUser />
-    <adminSearchResults
+    <adminSearchResultList
       v-if="Object.keys(searchResultsPerPage).length"
     />
 
   <noSearchResult v-if="!Object.keys(searchResultsPerPage).length && searchPerformed" />
 
-    <div class="q-mt-sm flex flex-center">
-      <q-pagination
-        v-model="page"
-        :max="totalPages"
-        @click="changePage"
-        v-if="totalPages > 0"
-        color="secondary"
-      ></q-pagination>
-    </div>
+    <register_update v-if="selectedIdByAdmin !== ''" 
+    :updateProfile="true" 
+    class="q-mt-md"
+    ref="registerRef"
+    />
 
   </div>
 </template>
@@ -30,7 +26,8 @@ export default {
   mixins: [mixinFormValidations]
   ,
   computed:{
-    ...mapState('admin', ['searchResults','searchResultsPerPage','showProgressBar','searchPerformed','totalPages']),
+    ...mapState('admin', ['searchResults','searchResultsPerPage',
+    'showProgressBar','searchPerformed','totalPages','selectedIdByAdmin']),
     
     page: {
       get () {
@@ -52,10 +49,12 @@ export default {
   ,
   components : {
     adminSearchUser : require('components/admin/AdminSearchUser.vue').default,
-    adminSearchResults : require ('components/admin/AdminSearchResults.vue').default,
+    adminSearchResultList : require ('components/admin/AdminSearchResultList.vue').default,
     noSearchResult: require('components/search/NoSearchResult.vue').default,
     progressBar : require('components/general/ProgressBar.vue').default,
-    spinner : require('components/general/Spinner.vue').default    
+    spinner : require('components/general/Spinner.vue').default,
+    register_update: require('components/Register_Update.vue').default
+    
   }
 }
 </script>

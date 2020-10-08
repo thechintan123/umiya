@@ -10,7 +10,7 @@ class User(db.Model):
     email = db.Column(db.String(50), index=True, unique=True, nullable=False)
     password_hash = db.Column(db.String(100))
     role_id = db.Column(db.Integer, db.ForeignKey(
-        'role.id'), default=1, nullable=False)
+        'role.id'), default=2, nullable=False)
     user_details = db.relationship(
         "UserDetails", uselist=False, backref="user", passive_deletes=True)
     last_login = db.Column(db.DateTime)
@@ -196,7 +196,7 @@ class UserDetails(db.Model):
                 setattr(self, key, data[key])
 
         # had to separate queries and assign to self otherwise SQLachemy seems to commit too early???
-        country = gotra = where_know = marital_status = gender = None
+        country = gotra = where_know = marital_status = gender = status = None
         partner_marital_status = []
         if 'country' in data and data['country'] is not None:
             country = Country.query.filter_by(

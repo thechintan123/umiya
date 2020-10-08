@@ -86,12 +86,26 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
   mixins: [mixinFormValidations, mixinComputations, mixinUtils ],
-
+  data(){
+    return {
+      prevUserId : ''
+    }
+  }
+  ,
   // This prop is for UpDateProfile. It will be true for UpdateProfile
-  props: ['updateProfile'],
+  props: {
+    updateProfile: {
+      type : Boolean,
+      default : false
+    }, 
+
+  },
 
   computed: {
-    ...mapState('registerUpdate', ['showProgressBar', 'tab', 'error', 'successProcess', 'emptyFormData']),
+    ...mapState('registerUpdate', ['showProgressBar', 'tab', 'error', 'successProcess', 
+    'emptyFormData','loggedInUserDetailsId']),
+     ...mapState('admin',['selectedIdByAdmin']),
+
     tab: {
       get () {
         return this.$store.state.registerUpdate.tab
@@ -104,13 +118,29 @@ export default {
   },
   mounted () {
     // for updateProfile
+    // console.log("Mounted", this, this.$props)
+     var selectedUserDetailsId = ""
+     var selectedByAdmin = false;
+
     if (this.updateProfile === true) {
-      this.fetchUserDetails()
+      if(this.selectedIdByAdmin!== "" ){
+      selectedUserDetailsId = this.selectedIdByAdmin;
+      this.prevUserId = this.selectedIdByAdmin;
+      selectedByAdmin = true;
+    }
+    else{
+      this.fetchLoggedInUserDetails();
+      selectedUserDetailsId =  this.loggedInUserDetailsId; 
+    }
+    console.log("selectedUserDetailsId",selectedUserDetailsId);
+    this.fetchUserDetails({userDetailsId : selectedUserDetailsId,
+                        selectedByAdmin: selectedByAdmin});
     }
     this.fetchList()
-  },
+  }
+  ,
   methods: {
-    ...mapActions('registerUpdate', ['fetchUserDetails', 'fetchList']),
+    ...mapActions('registerUpdate', ['fetchUserDetails', 'fetchList','fetchLoggedInUserDetails']),
     ...mapMutations('registerUpdate', ['setTab', 'setFormData', 'setTmpDataFull', 'resetState']),
     transitionFn (newVal, oldVal) {
       // console.log("transitionFn", newVal, oldVal, this.$refs, this.error);

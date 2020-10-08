@@ -44,7 +44,12 @@ const routes = [
        {
         path: '/admin-approval',
         component: () => import('pages/AdminApprovalPage.vue')
-      }     
+      }
+      ,
+      {
+        path: '/admin-update-profile',
+        component: () => import('pages/AdminUpdateProfilePage.vue')
+      }              
     ]
   }
 ]

@@ -21,7 +21,7 @@ def verify_password(email, password):
 @basic_auth.error_handler
 def basic_auth_error(status):
     # It is actually 401 error, but we use 400 so that browser doesnt do their autopopup
-    return error_response(401, 'Invalid credentials')
+    return error_response(401, 'You have entered incorrect login credentials.')
 
 
 # used by http-auth to provide authentication based on roles
@@ -43,3 +43,10 @@ def verify_token(token):
 def auth_error():
     # It is actually 401 error, but we use 400 so that browser doesnt do their autopopup
     return error_response(401, 'Invalid token')
+
+
+# used by http-auth to provide authentication based on roles
+@basic_auth.get_user_roles
+@token_auth.get_user_roles
+def get_user_roles(user):
+    return [user.role.name]

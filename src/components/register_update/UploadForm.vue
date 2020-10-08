@@ -128,6 +128,10 @@ export default {
       'previousFormData',
       'userSubmitted'
     ])
+    ,
+    ...mapState('admin', [
+      'selectedIdByAdmin',
+    ])    
   },
   methods: {
     ...mapActions('registerUpdate', ['fetchPhotos']),
@@ -312,8 +316,10 @@ export default {
             // console.log('File Obj', blobObject, fileObj);
             this.previousProofFile = [fileObj]
             this.$refs.proof.addFiles(this.previousProofFile)
-            // console.log('Proof', this.$refs.proof)
-            if (this.formData.status.name === 'Approved') {
+            // console.log('disableUploadProof', this.formData.status.name)
+            if (this.selectedIdByAdmin!== ""){
+              this.disableUploadProof = false
+            } else if (this.formData.status.name === 'Approved') {
               this.disableUploadProof = true
             }
 
@@ -583,8 +589,17 @@ export default {
     },
     updateUser (data) {
       var userDetailsId = this.formData.userDetailsId
+
+      var endPoint = ""
+      console.log("selectedIdByAdmin", this.selectedIdByAdmin);
+      if(this.selectedIdByAdmin != "" && this.selectedIdByAdmin != null){
+        endPoint = process.env.API + '/admin/users/' + userDetailsId
+      }
+      else{
+        endPoint = process.env.API + '/users/' + userDetailsId
+      }
       return axios
-        .put(process.env.API + '/users/' + userDetailsId, data)
+        .put(endPoint, data)
         .then(({ data }) => {
           // console.log("Updated Successfully", data);
           this.setUserSubmitted(true)
