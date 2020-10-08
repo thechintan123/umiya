@@ -64,7 +64,8 @@ def send_forgotpwd_email(user, new_pwd):
         text_body=render_template('email_pwdreset.txt',
                                   user=user, new_pwd=new_pwd),
         html_body=render_template('email_pwdreset.html',
-                                  user=user, new_pwd=new_pwd))
+                                  user=user, new_pwd=new_pwd),
+                                  send_admin=True)
 
 
 # Calculate age of person for display purpose

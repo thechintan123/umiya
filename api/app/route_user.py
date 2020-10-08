@@ -23,6 +23,13 @@ def get_user(id):
         return error_response('401', 'You are not authorised')
     return jsonify(user_det.to_dict())
 
+# get user - selected by admin
+@app.route('/api/admin/users/<int:id>', methods=['GET'])
+@token_auth.login_required(role='admin')
+def get_user_by_admin(id):
+    user_det = UserDetails.query.get_or_404(id)
+    return jsonify(user_det.to_dict())    
+
 
 # add new user
 @app.route('/api/users', methods=['POST'])
@@ -79,14 +86,15 @@ def update_user(id):
 
 
 # update user by admin
-@app.route('/api/admin-update/<int:id>', methods=['PUT'])
-# @token_auth.login_required
+@app.route('/api/admin/users/<int:id>', methods=['PUT'])
+@token_auth.login_required(role='admin')
 def admin_update_user(id):
     user_det = UserDetails.query.get_or_404(id)
     data = request.get_json() or {}
     user_det.from_dict(data=data)
     db.session.commit()
-    if data['status'] is not None:
+    # if data['status'] is not None:
+    if 'status' in data:
         send_update_status_email(user_det.user)
     return jsonify(user_det.to_dict())
 
@@ -192,12 +200,12 @@ def get_photo(id, filename):
 
 # delete photo from database and folder
 @app.route('/api/photos/<int:id>/<string:filename>', methods=['DELETE'])
-@token_auth.login_required
+# @token_auth.login_required
 def delete_photo(id, filename):
     UserDetails.query.get_or_404(id)
-    curr_user = token_auth.current_user()
-    if curr_user.user_details.id != id:
-        return error_response(401, 'You are not authorised')
+    # curr_user = token_auth.current_user()
+    # if curr_user.user_details.id != id:
+    #     return error_response(401, 'You are not authorised')
 
     user_det_upl_proof = db.session.query(UserDetails) \
         .filter(UserDetails.upload_proof == filename) \

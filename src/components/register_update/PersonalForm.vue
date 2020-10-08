@@ -213,6 +213,26 @@
               hint="Hint: Multiple Options can be selected"
             />
 
+    <div class="row">
+      <div class="col">
+        <q-field
+          borderless
+          :value="emailMatchedNotification"
+        >
+          <template v-slot:control>
+            <q-toggle
+              tabindex="28"
+              v-model="emailMatchedNotification"
+              checked-icon="check"
+              color="green"
+              unchecked-icon="clear"
+              label="Recieve email notifications for matches based on above preferences*"
+              dense
+            />
+          </template>
+        </q-field>
+      </div>
+      </div>
             <div class="row">
               <q-btn
                 color="secondary"
@@ -354,6 +374,15 @@ export default {
       },
       set (value) {
         this.$store.commit('registerUpdate/setFormDataIndividual', { key: 'partnerMaritalStatus', value: value })
+      }
+    }
+    ,
+    emailMatchedNotification : { 
+      get () {
+        return this.$store.state.registerUpdate.formData.emailMatchedNotification
+      },
+      set (value) {
+        this.$store.commit('registerUpdate/setFormDataIndividual', { key: 'emailMatchedNotification', value: value })
       }
     }
 

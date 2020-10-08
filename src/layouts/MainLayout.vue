@@ -185,8 +185,17 @@ const menuList = [
   ,
       {
     icon: 'fas fa-tasks',
-    label: 'Approve Profile',
+    label: 'Admin Approve Profile',
     link: '/admin-approval',
+    loggedIn: true,
+    separator: true,
+    role : 'admin'
+  }
+  ,
+       {
+    icon: 'fas fa-tools',
+    label: 'Admin Update Profile',
+    link: '/admin-update-profile',
     loggedIn: true,
     separator: true,
     role : 'admin'

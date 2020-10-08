@@ -1,15 +1,13 @@
 <template>
   <q-form greedy ref="basicForm">
     <!-- Start - This button is only visible in Testing Mode -->
-    <div class="row">
       <q-btn
         class="my-button q-mb-md"
         color="secondary"
         label="For Testing - Default fields"
         v-if="devEnv"
-        @click="defaultFields"
+        @click="defaultTestingData"
       />
-    </div>
     <!-- End - This button is only visible in Testing Mode -->
 
     <q-input
@@ -327,7 +325,7 @@ export default {
 
   methods: {
     ...mapMutations('registerUpdate', ['setFormDataIndividual', 'setError']),
-    ...mapActions('registerUpdate', ['defaultFields']),
+    ...mapActions('registerUpdate', ['defaultTestingData']),
     setLocalState (value) {
       // console.log("setLocalState", value);
       this.locaFormData = Object.assign({}, value)
