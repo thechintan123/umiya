@@ -15,7 +15,7 @@
       <banner
         iconName="assignment_ind"
         :bannerTitle="'Welcome '+role"
-      />  
+      />
 
         <q-card-section>
           <q-item>
@@ -71,13 +71,12 @@ import mixinComputations from 'src/mixins/Mixin_Computations.js'
 import { mapState } from 'vuex'
 
 export default {
-  mixins : [mixinUtils,mixinComputations],
-  components :{
+  mixins: [mixinUtils, mixinComputations],
+  components: {
     progressBar: require('./general/ProgressBar.vue').default,
     spinner: require('./general/Spinner.vue').default,
     banner: require('./general/Banner.vue').default
-  }
-  ,
+  },
 
   data () {
     return {
@@ -89,8 +88,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('auth',['role'])
-    ,
+    ...mapState('auth', ['role']),
     getIcon () {
       const status = this.userDetail.status.name
       if (status === 'Registered') {
@@ -133,18 +131,17 @@ export default {
       // user_details_id is same profile_Id share on UI
       axios.get(process.env.API + '/users/' + userDetailsId)
         .then(({ data }) => {
-
           var userDetail = {}
           for (const key in data) {
             // console.log("Key", camel);
             userDetail[
               this.snakeToCamel(key)
             ] = data[key]
-          } 
-          
-          this.userDetail = userDetail;
+          }
 
-          //this code replaces key in data Object from Snake Case to Camel Case
+          this.userDetail = userDetail
+
+          // this code replaces key in data Object from Snake Case to Camel Case
           // this.userDetail = JSON.parse(JSON.stringify(data).replace(
           //   /(_\w)\w+":/g,
           //   match => match[1].toUpperCase() + match.substring(2)

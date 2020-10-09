@@ -3,21 +3,21 @@
     <!-- <div> -->
     <q-card >
       <q-banner inline-actions rounded dense class="bg-dark text-secondary">
-        Results : 
+        Results :
         <i> You have <b>{{searchResults.length}}</b> matches
           </i>
       <template v-slot:action>
-       <q-select dense options-dense 
-       borderless v-model="sortBy" 
+       <q-select dense options-dense
+       borderless v-model="sortBy"
        :options=sortByOptions
       option-value="id"
-      option-label="value" 
+      option-label="value"
        @input = "changeSort"
        label="Sort By" >
         <template v-slot:prepend>
           <q-icon name="fas fa-sort-amount-up-alt"/>
         </template>
-       </q-select> 
+       </q-select>
       </template>
       </q-banner>
       <!--
@@ -51,7 +51,7 @@
                 <u>Profile ID</u>
                 :
                 {{ searchItem.id }}
-              </q-item-label>              
+              </q-item-label>
               <q-item-label>
                 <u>Date of Birth</u>
                 :
@@ -92,7 +92,7 @@
                         <u>Location</u>
                         :
                         {{ searchItem.city}}, {{ searchItem.state}}, {{ searchItem.country.name}}
-                      </q-item-label>                      
+                      </q-item-label>
                       <q-item-label>
                         <u>Father Name</u>
                         :
@@ -135,7 +135,7 @@
                         <u>Last Login</u>
                         :
                         {{ hasBlank(searchItem.lastLogin)}}
-                      </q-item-label>                      
+                      </q-item-label>
                     </q-item-section>
                   </q-card-section>
                 </q-card>
@@ -151,14 +151,13 @@
 </template>
 
 <script>
-import {mapState, mapMutations, mapActions} from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import mixinComputations from 'src/mixins/Mixin_Computations.js'
 import mixinUtils from 'src/mixins/Mixin_Utils.js'
-import mixinSortDataElements from "src/mixins/Mixin_SortDataElements.js";
-
+import mixinSortDataElements from 'src/mixins/Mixin_SortDataElements.js'
 
 export default {
-  mixins: [mixinComputations,mixinUtils, mixinSortDataElements],
+  mixins: [mixinComputations, mixinUtils, mixinSortDataElements],
   components: {
     'search-results-photo-slide': require('./SearchResultsPhotoSlide.vue')
       .default
@@ -167,52 +166,39 @@ export default {
   data () {
     return {
       slide: 'first',
-      loggedIn: false,
-     }
+      loggedIn: false
+    }
   },
-  computed:{
-    ...mapState("search",["searchResultsPerPage","searchResults","page"])
-  }
-  ,
-  methods:{
-...mapMutations("search",["setPage","setSearchResults"]),
-...mapActions("search",["updatePage"])
-  ,
+  computed: {
+    ...mapState('search', ['searchResultsPerPage', 'searchResults', 'page'])
+  },
+  methods: {
+    ...mapMutations('search', ['setPage', 'setSearchResults']),
+    ...mapActions('search', ['updatePage']),
     removeTimeStamp (val) {
       // console.log('ConvertToDate', val);
-      if(this.hasValue(val))
-        return val.substring(0, 17)
-    }
-    ,
-    hasBlank(val){
+      if (this.hasValue(val)) { return val.substring(0, 17) }
+    },
+    hasBlank (val) {
       // console.log('ifBlank', val, this);
-      if(!this.hasValue(val))
-        return "Not logged In"
-      else
-        return val  
-    }
-    ,
-    changeSort(sortOption){
-      var newList = [];
+      if (!this.hasValue(val)) { return 'Not logged In' } else { return val }
+    },
+    changeSort (sortOption) {
+      var newList = []
       newList = [...this.searchResults]
-      if(sortOption.key === 'lastLogin'){
-      newList.sort(this.sortDate(sortOption.key, sortOption.order)) 
+      if (sortOption.key === 'lastLogin') {
+        newList.sort(this.sortDate(sortOption.key, sortOption.order))
+      } else {
+        newList.sort(this.sortList(sortOption.key, sortOption.order))
       }
-      else{
-      newList.sort(this.sortList(sortOption.key, sortOption.order ))
-      }
-      console.log("newList", newList)
-      this.setSearchResults(newList);
-      this.updatePage(this.page);
-
+      console.log('newList', newList)
+      this.setSearchResults(newList)
+      this.updatePage(this.page)
     }
-  }
-,
+  },
   created () {
     this.checkLoggedIn()
   }
 
 }
 </script>
-
-

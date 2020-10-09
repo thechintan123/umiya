@@ -32,7 +32,7 @@ var testData = {
   partnerMaritalStatus: [{ id: 1, name: 'Never Married' }],
   emailMatchedNotification: true,
   agreeTc: true,
-  whereKnow: { id: 1, name: 'Friends' },
+  whereKnow: { id: 1, name: 'Friends' }
   // status: { id: 2, name: 'Approved' }
 }
 

@@ -1,14 +1,13 @@
 export default {
   methods: {
     checkEmail (email) {
-       var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       // console.log('checkEmail', email, this.hasValue(email), re.test(String(email).toLowerCase()));
-      if(this.hasValue(email)){
+      if (this.hasValue(email)) {
       // var re = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/
       //    console.log('checkEmail', re.test(String(email).toLowerCase()));
-      return re.test(String(email).toLowerCase())
-      }
-      else{
+        return re.test(String(email).toLowerCase())
+      } else {
         return true
       }
     },
@@ -41,8 +40,7 @@ export default {
           return false
         }
       }
-    }
-    ,
+    },
     checkConfirmPassword (confirmNewPassword, newPassword) {
       // console.log("Check Confirm Password", confirmNewPassword, newPassword)
       if (newPassword === confirmNewPassword) {

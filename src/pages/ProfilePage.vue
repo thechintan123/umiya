@@ -8,13 +8,12 @@
 import mixinUtils from 'src/mixins/Mixin_Utils.js'
 
 export default {
-    mixins : [mixinUtils],
+  mixins: [mixinUtils],
 
   components: {
     profile: require('components/Profile.vue').default
-  }
-  ,
-  beforeMount(){
+  },
+  beforeMount () {
     this.checkUserLoggedIn()
   }
 }

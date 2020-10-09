@@ -6,7 +6,6 @@ import search from './store-search.js'
 import registerUpdate from './store-register_update.js'
 import admin from './store-admin.js'
 
-
 // import example from './module-example'
 
 Vue.use(Vuex)
