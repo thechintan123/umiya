@@ -16,7 +16,6 @@
       @reset="onReset"
       >
 
-
       <banner
         iconName="vpn_key"
         bannerTitle="Change Password"
@@ -47,7 +46,6 @@
                   </template>
                 </q-input>
 
-              
                 <q-input
                   tabindex="2"
                   outlined
@@ -90,7 +88,6 @@
 
                 </q-input>
 
-
           <div class="row">
             <q-btn flat color="primary" type="reset" label="Reset" />
 
@@ -105,53 +102,45 @@
 </template>
 
 <script>
-import axios from "axios";
-// import { countryList } from './countryList.js'
-import mixinFormValidations from "src/mixins/Mixin_FormValidations.js";
-import mixinUtils from "src/mixins/Mixin_Utils.js";
-
+import axios from 'axios'
+import mixinFormValidations from 'src/mixins/Mixin_FormValidations.js'
+import mixinUtils from 'src/mixins/Mixin_Utils.js'
 
 export default {
   mixins: [mixinFormValidations, mixinUtils],
-  data() {
+  data () {
     return {
       // To show Progress bar when loading
-      params :{
-      currentPassword: "",
-      newPassword:"",
-      confirmNewPassword : ""
-      }
-      ,
-      showProgressBar : false,
-      
-      //this field is used for Password Toggle
+      params: {
+        currentPassword: '',
+        newPassword: '',
+        confirmNewPassword: ''
+      },
+      showProgressBar: false,
+
+      // this field is used for Password Toggle
       isCurrentPwd: true,
       isNewPwd: true,
-      successProcess : false
-     
+      successProcess: false
+
     }
   },
-  methods:{
-    onReset(){
-          this.params.currentPassword = "";
-          this.params.newPassword = "";
-          this.params.confirmNewPassword = "";
-    }
-    ,
+  methods: {
+    onReset () {
+      this.params.currentPassword = ''
+      this.params.newPassword = ''
+      this.params.confirmNewPassword = ''
+    },
     submitForm () {
-      this.showProgressBar = true;
+      this.showProgressBar = true
       this.$refs.changePasswordForm.validate().then(success => {
         if (success) {
           var user = localStorage.getItem('user')
-          var user_json = JSON.parse(user)
-          this.params["email"] = user_json.email;
-          // console.log('Success', user, this.params)
+          var userJson = JSON.parse(user)
+          this.params.email = userJson.email
           this.changePassword(this.params)
         } else {
-          // var error = "Error in Change Password Form. Please correct it before proceeding."
-          // this.showErrorDialog(error);
-          this.showProgressBar = false;
-
+          this.showProgressBar = false
         }
       })
     },
@@ -160,33 +149,26 @@ export default {
       return axios
         .post(process.env.API + '/change_password', data)
         .then(({ data }) => {
-          console.log('Search Success', data)
-          this.successProcess =  true;
-          //this.saveSearchResults(data)
-          // Store in Stores
+          this.successProcess = true
           this.$q.notify({
             type: 'positive',
             message: 'Password has been changed successfully'
           })
           this.$refs.changePasswordForm.reset()
-          this.showProgressBar = false;
-          // console.log("showProgressBar", this.showProgressBar);
-
+          this.showProgressBar = false
         })
         .catch(error => {
-          // console.log("changePassword",error)
           this.showErrorDialog(error)
         })
     }
-  }
-  ,
+  },
   components: {
     progressBar: require('./general/ProgressBar.vue').default,
     spinner: require('./general/Spinner.vue').default,
     banner: require('./general/Banner.vue').default
 
   }
-};
+}
 </script>
 
 <style>

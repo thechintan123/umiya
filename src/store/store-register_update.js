@@ -58,7 +58,7 @@ const getDefaultState = () => {
       partnerHeightTo: '',
       partnerHeightToCms: '',
       partnerMaritalStatus: [],
-      emailMatchedNotification : true,
+      emailMatchedNotification: true,
       agreeTc: false,
       whereKnow: '',
       status: { name: '' }
@@ -91,7 +91,7 @@ const getDefaultState = () => {
 
     successProcess: false,
 
-    loggedInUserDetailsId : "",
+    loggedInUserDetailsId: ''
 
   }
 }
@@ -144,10 +144,9 @@ const mutations = {
   },
   setSuccessProcess (state, value) {
     state.successProcess = value
-  }
-  ,
-  setLoggedInUserDetailsId(state, value){
-    state.loggedInUserDetailsId = value;
+  },
+  setLoggedInUserDetailsId (state, value) {
+    state.loggedInUserDetailsId = value
   }
 }
 
@@ -181,27 +180,26 @@ const actions = {
       })
   },
 
-  fetchLoggedInUserDetails({commit}){
+  fetchLoggedInUserDetails ({ commit }) {
     var user = JSON.parse(localStorage.getItem('user'))
     if (user !== null) {
       var userDetailsId = user.user_details_id
       commit('setLoggedInUserDetailsId', userDetailsId)
     }
-  }
-  ,
+  },
   // For Update Profile
-  fetchUserDetails ({ commit }, {userDetailsId, selectedByAdmin}) {
+  fetchUserDetails ({ commit }, { userDetailsId, selectedByAdmin }) {
     commit('setShowProgressBar', true)
     // var user = JSON.parse(localStorage.getItem('user'))
-    var userDetail;
+    var userDetail
 
-    if (userDetailsId !== null && userDetailsId != "") {
+    if (userDetailsId !== null && userDetailsId !== '') {
       // var userDetailsId = user.user_details_id
 
-      var endPoint = '';
-      if(selectedByAdmin){
+      var endPoint = ''
+      if (selectedByAdmin) {
         endPoint = process.env.API + '/admin/users/' + userDetailsId
-      }else{
+      } else {
         endPoint = process.env.API + '/users/' + userDetailsId
       }
       return axios
@@ -369,7 +367,7 @@ const actions = {
           commit('setShowProgressBar', false)
         })
         .catch(error => {
-          console.log("Store Fetch User List",error, this)
+          console.log('Store Fetch User List', error, this)
           mixinUtils.methods.showErrorDialog(error)
         })
     } // end of if user!==null

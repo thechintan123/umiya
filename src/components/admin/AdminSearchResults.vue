@@ -7,17 +7,17 @@
           You have <b>{{ searchResults.length }}</b> matches
         </i>
         <template v-slot:action>
-       <q-select dense options-dense 
-       borderless v-model="sortBy" 
+       <q-select dense options-dense
+       borderless v-model="sortBy"
        :options=sortByOptions
       option-value="id"
-      option-label="value" 
+      option-label="value"
        @input = "changeSort"
        label="Sort By" >
         <template v-slot:prepend>
           <q-icon name="fas fa-sort-amount-up-alt"/>
-        </template> 
-       </q-select> 
+        </template>
+       </q-select>
       </template>
       </q-banner>
 
@@ -62,7 +62,7 @@
                         <u>Current Status</u>
                         :
                         <b>{{ searchItem.status.name }} </b> <i>(Approval Date : {{ searchItem.approvalDate}})</i>
-                      </q-item-label>       
+                      </q-item-label>
                       <q-item-label>
                         <u>Previous Correction Comments</u>
                         :
@@ -70,9 +70,10 @@
                       </q-item-label>
           <q-item-label>
 
-            <template v-for="status in list.profileStatusOptions">
-            <q-radio v-model="profileStatus[searchItem.userDetailsId]" :val="status.id" :label="status.name" />
-            </template>                          
+            <template v-for="(status,index) in list.profileStatusOptions">
+            <q-radio v-model="profileStatus[searchItem.userDetailsId]"
+            :val="status.id" :label="status.name" :key="index"/>
+            </template>
           </q-item-label>
 
           <q-item-label>
@@ -86,7 +87,7 @@
 
               />
            <q-btn color="primary" label="Change Status"
-           @click="changeStatus(searchItem)"/>    
+           @click="changeStatus(searchItem)"/>
 
           </q-item-label>
               <q-expansion-item
@@ -160,131 +161,124 @@
 
 <script>
 import axios from 'axios'
-import { mapState, mapMutations, mapActions } from "vuex";
-import mixinComputations from "src/mixins/Mixin_Computations.js";
-import mixinUtils from "src/mixins/Mixin_Utils.js";
-import mixinSortDataElements from "src/mixins/Mixin_SortDataElements.js";
-import {correctionCommentsMaxLength} from 'src/constants/registerFormConstants.js'
-import { Dialog } from 'quasar'
+import { mapState, mapMutations, mapActions } from 'vuex'
+import mixinComputations from 'src/mixins/Mixin_Computations.js'
+import mixinUtils from 'src/mixins/Mixin_Utils.js'
+import mixinSortDataElements from 'src/mixins/Mixin_SortDataElements.js'
+import { correctionCommentsMaxLength } from 'src/constants/registerFormConstants.js'
 
 export default {
   mixins: [mixinComputations, mixinUtils, mixinSortDataElements],
   components: {
-    "search-results-photo-slide": require("../search/SearchResultsPhotoSlide.vue")
+    'search-results-photo-slide': require('../search/SearchResultsPhotoSlide.vue')
       .default
   },
 
   // props: ['searchResults'],
-  data() {
+  data () {
     return {
-      profileStatus : [],
-      correctionComments : [],
-      correctionCommentsMax : correctionCommentsMaxLength,
-      correctionErrorMessage : 'Max length of Correction Commments has reached',
+      profileStatus: [],
+      correctionComments: [],
+      correctionCommentsMax: correctionCommentsMaxLength,
+      correctionErrorMessage: 'Max length of Correction Commments has reached'
 
-    };
+    }
   },
   computed: {
-    ...mapState("admin", ["searchResultsPerPage", "searchResults", "page","list"])
+    ...mapState('admin', ['searchResultsPerPage', 'searchResults', 'page', 'list'])
 
   },
   methods: {
-    ...mapMutations("admin",["setSearchItemParameter","setSearchResults","setShowProgressBar"]),
-    ...mapActions("admin",["updatePage"])
-,    //...mapActions("admin",["updateStatus"])
-    changeStatus(item){
+    ...mapMutations('admin', ['setSearchItemParameter', 'setSearchResults', 'setShowProgressBar']),
+    ...mapActions('admin', ['updatePage']), // ...mapActions("admin",["updateStatus"])
+    changeStatus (item) {
       var userDetailsId = item.userDetailsId
-      var newStatusId = this.profileStatus[userDetailsId];
-      var updatedUser = { status: { id: newStatusId}}
+      var newStatusId = this.profileStatus[userDetailsId]
+      var updatedUser = { status: { id: newStatusId } }
       // console.log("changeStatus", item, this.correctionComments)
 
-      var currentComments, currDate, previousComments;
-      var hasError = false;
-      if(newStatusId === 3){ // 3- Correction
-      //validate Correction Comments Length
-       currentComments = this.correctionComments[userDetailsId];
-       currDate = new Date().toDateString();
-       previousComments = ""
-       if(this.hasValue(item.correctionComments)){
-          previousComments = item.correctionComments;
-       }
-      hasError = !this.checkCorrectionCommentsLength(currentComments, previousComments);
-      //above function returns false if there is any error
+      var currentComments, currDate, previousComments
+      var hasError = false
+      if (newStatusId === 3) { // 3- Correction
+      // validate Correction Comments Length
+        currentComments = this.correctionComments[userDetailsId]
+        currDate = new Date().toDateString()
+        previousComments = ''
+        if (this.hasValue(item.correctionComments)) {
+          previousComments = item.correctionComments
+        }
+        hasError = !this.checkCorrectionCommentsLength(currentComments, previousComments)
+      // above function returns false if there is any error
       }
 
-      if(hasError){
-       this.showMessageDialog(this.correctionErrorMessage);
-      }else{
-      this.setShowProgressBar(true)
-      //3 means - Correction
-      if(newStatusId === 3 && this.hasValue(currentComments)){
-        updatedUser['correction_comments'] = previousComments + currDate +' : ' +currentComments +"; \n ";
-      }
+      if (hasError) {
+        this.showMessageDialog(this.correctionErrorMessage)
+      } else {
+        this.setShowProgressBar(true)
+        // 3 means - Correction
+        if (newStatusId === 3 && this.hasValue(currentComments)) {
+          updatedUser.correction_comments = previousComments + currDate + ' : ' + currentComments + '; \n '
+        }
 
-      // console.log("updatedUser", updatedUser);
-      axios
-        .put(process.env.API + '/admin/users/' + userDetailsId, updatedUser)
-        .then(({ data }) => {
+        // console.log("updatedUser", updatedUser);
+        axios
+          .put(process.env.API + '/admin/users/' + userDetailsId, updatedUser)
+          .then(({ data }) => {
           // console.log("Updated Successfully", data);
-          this.setSearchItemParameter({item: item , key: 'status', value: data.status})
-          if(newStatusId === 3) {
-            this.setSearchItemParameter({item: item , key: 'correctionComments', value: data.correction_comments})
-          }
-          else if(newStatusId === 2) {
-            this.setSearchItemParameter({item: item , key: 'approvalDate', value: data.approval_date})
-          }
-          this.$q.notify({
-            type: 'positive',
-            message: 'Profile status of ' + data.first_name  + ' is updated to ' +data.status.name  
-          })          
-        this.setShowProgressBar(false)
-        })
-        .catch(error => {
-          this.showErrorDialog(error)
-          this.setShowProgressBar(false)
-        })
+            this.setSearchItemParameter({ item: item, key: 'status', value: data.status })
+            if (newStatusId === 3) {
+              this.setSearchItemParameter({ item: item, key: 'correctionComments', value: data.correction_comments })
+            } else if (newStatusId === 2) {
+              this.setSearchItemParameter({ item: item, key: 'approvalDate', value: data.approval_date })
+            }
+            this.$q.notify({
+              type: 'positive',
+              message: 'Profile status of ' + data.first_name + ' is updated to ' + data.status.name
+            })
+            this.setShowProgressBar(false)
+          })
+          .catch(error => {
+            this.showErrorDialog(error)
+            this.setShowProgressBar(false)
+          })
       }
-    }
-    ,
-    photosAndProof(searchItem){
-      var fileList = [];
-      fileList.push(searchItem.uploadPhotos);
+    },
+    photosAndProof (searchItem) {
+      var fileList = []
+      fileList.push(searchItem.uploadPhotos)
       fileList.push(searchItem.uploadProof)
       return fileList
-    }
-    ,
-    changeSort(sortOption){
-      var newList = [];
+    },
+    changeSort (sortOption) {
+      var newList = []
       newList = [...this.searchResults]
-      if(sortOption.key === 'lastLogin'){
-      newList.sort(this.sortDate(sortOption.key, sortOption.order)) 
-      }
-      else{
-      newList.sort(this.sortList(sortOption.key, sortOption.order ))
+      if (sortOption.key === 'lastLogin') {
+        newList.sort(this.sortDate(sortOption.key, sortOption.order))
+      } else {
+        newList.sort(this.sortList(sortOption.key, sortOption.order))
       }
       // console.log("newList", newList)
-      this.setSearchResults(newList);
-      this.updatePage(this.page);
-    }
-    ,
-    checkCorrectionCommentsLength(currentComments, previousComments){
-      var currLength = 0;
-      if(this.hasValue(currentComments)){
-          currLength = currentComments.length;
+      this.setSearchResults(newList)
+      this.updatePage(this.page)
+    },
+    checkCorrectionCommentsLength (currentComments, previousComments) {
+      var currLength = 0
+      if (this.hasValue(currentComments)) {
+        currLength = currentComments.length
       }
-       var prevLength = 0;
-      if(this.hasValue(previousComments)){
-        prevLength = previousComments.length;
+      var prevLength = 0
+      if (this.hasValue(previousComments)) {
+        prevLength = previousComments.length
       }
-      if(this.correctionCommentsMax > prevLength + currLength){
+      if (this.correctionCommentsMax > prevLength + currLength) {
         return true
-      }else{
+      } else {
         return false
       }
-    }    
+    }
   }
 
-};
+}
 </script>
 
 <style>

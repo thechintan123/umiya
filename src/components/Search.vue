@@ -28,17 +28,16 @@ import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
 
   methods: {
-    ...mapActions("search",["updatePage"]),
-    ...mapMutations("search",["setPage"]),
+    ...mapActions('search', ['updatePage']),
+    ...mapMutations('search', ['setPage']),
 
     changePage (e) {
-      this.updatePage(this.page);
+      this.updatePage(this.page)
     }
   },
   computed: {
     ...mapGetters('search', ['getSearchResults']),
-    ...mapState('search', ['searchResults', 'showProgressBar','searchResultsPerPage','searchPerformed','totalPages'])
-    ,
+    ...mapState('search', ['searchResults', 'showProgressBar', 'searchResultsPerPage', 'searchPerformed', 'totalPages']),
     page: {
       get () {
         return this.$store.state.search.page
@@ -52,8 +51,8 @@ export default {
     searchForm: require('./search/SearchForm.vue').default,
     searchResults: require('./search/SearchResults.vue').default,
     noSearchResult: require('./search/NoSearchResult.vue').default,
-    progressBar : require('./general/ProgressBar.vue').default,
-    spinner : require('./general/Spinner.vue').default
+    progressBar: require('./general/ProgressBar.vue').default,
+    spinner: require('./general/Spinner.vue').default
   }
 }
 </script>

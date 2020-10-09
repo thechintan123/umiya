@@ -8,12 +8,12 @@
 import mixinUtils from 'src/mixins/Mixin_Utils.js'
 
 export default {
-  mixins : [mixinUtils],
+  mixins: [mixinUtils],
 
   components: {
     register_update: require('components/Register_Update.vue').default
   },
-  beforeMount(){
+  beforeMount () {
     this.checkUserLoggedIn()
   }
 

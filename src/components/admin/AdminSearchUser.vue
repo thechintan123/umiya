@@ -20,7 +20,6 @@
               Search User
           </q-item-section>
 
-
         </template>
         <q-card-section>
       <q-input
@@ -88,11 +87,11 @@
     <div class="row q-ma-sm" v-if="this.list.profileStatusOptions.length <= 0">
       <div class="col">
       <q-skeleton animation="pulse" class="bg-dark" square />
-       </div> 
+       </div>
     </div>
     <div  class="row" v-else>
-      <template v-for="profStatus in this.list.profileStatusOptions">
-        <q-checkbox v-model="profileStatus" :label="profStatus.name"  :val ="profStatus.id" />
+      <template v-for="(profStatus,index) in this.list.profileStatusOptions">
+        <q-checkbox v-model="profileStatus" :label="profStatus.name"  :val ="profStatus.id" :key="index" />
       </template>
 
       </div>
@@ -118,19 +117,17 @@ import mixinUtils from 'src/mixins/Mixin_Utils.js'
 import mixinDataElements from 'src/mixins/Mixin_DataElements.js'
 import mixinComputations from 'src/mixins/Mixin_Computations.js'
 
-
 export default {
-  mixins: [mixinFormValidations, mixinUtils,mixinDataElements,mixinComputations],
+  mixins: [mixinFormValidations, mixinUtils, mixinDataElements, mixinComputations],
 
   mounted () {
-      //this.fetchList();
-      axios
+    // this.fetchList();
+    axios
       .get(process.env.API + '/lists')
       .then(response => {
         this.genderOptions = response.data.gender
         var profileStatusOptions = response.data.profile_status
         this.setList({ key: 'profileStatusOptions', value: profileStatusOptions })
-
       })
       .catch(error => {
         this.showErrorDialog(error)
@@ -138,42 +135,37 @@ export default {
   },
   data () {
     return {
-      genderOptions : [],
+      genderOptions: []
     }
   },
   components: {
   },
   methods: {
-   ...mapActions('admin', ['saveSearchResults','resetSearchParams']),
-   ...mapMutations('admin', ['setList','setSearchParamsIndividual','setExpand','setShowProgressBar',"setSelectedIdByAdmin"]),
+    ...mapActions('admin', ['saveSearchResults', 'resetSearchParams']),
+    ...mapMutations('admin', ['setList', 'setSearchParamsIndividual', 'setExpand', 'setShowProgressBar', 'setSelectedIdByAdmin']),
 
     async submitSearchUser () {
-      
-      //reset
-      this.setSelectedIdByAdmin("");
-      this.setShowProgressBar(true);
+      // reset
+      this.setSelectedIdByAdmin('')
+      this.setShowProgressBar(true)
       // console.log("showProgressBar", this.showProgressBar);
       await this.$refs.searchUserForm.validate().then(success => {
         if (success) {
-          //convert Camel to Snake case
-                var searchParamsSnakeCase = {}
-              for (const key in this.searchParams) {
-                searchParamsSnakeCase[this.camelToSnake(key)] =
+          // convert Camel to Snake case
+          var searchParamsSnakeCase = {}
+          for (const key in this.searchParams) {
+            searchParamsSnakeCase[this.camelToSnake(key)] =
                       this.searchParams[key]
-              }
+          }
 
           // console.log('Success', searchParamsSnakeCase)
           this.fetchSearch(searchParamsSnakeCase)
- 
         } else {
-          var error = "Error in Search Form. Please correct it before proceeding."
-          this.showErrorDialog(error);
-          this.setShowProgressBar(false);
-
+          var error = 'Error in Search Form. Please correct it before proceeding.'
+          this.showErrorDialog(error)
+          this.setShowProgressBar(false)
         }
       })
-
-
     },
 
     fetchSearch (searchParamsSnakeCase) {
@@ -189,36 +181,33 @@ export default {
           })
         })
         .catch(error => {
-          console.log("fetchSearch",error)
+          console.log('fetchSearch', error)
           this.showErrorDialog(error)
         })
+    },
+    resetForm () {
+      this.resetSearchParams()
     }
-,
-resetForm(){
-  this.resetSearchParams();
-}
 
   },
   computed: {
-     ...mapState('admin', ['searchParams', 'list','expand']),
-   expand :{
+    ...mapState('admin', ['searchParams', 'list', 'expand']),
+    expand: {
       get () {
         return this.$store.state.admin.expand
       },
       set (value) {
         this.setExpand(value)
       }
-      }
-      ,  
-    email :{
+    },
+    email: {
       get () {
         return this.searchParams.email
       },
       set (value) {
-        this.setSearchParamsIndividual({key : 'email', value: value})
+        this.setSearchParamsIndividual({ key: 'email', value: value })
       }
-    }
-    ,
+    },
     firstName: {
       get () {
         return this.searchParams.firstName
@@ -241,36 +230,32 @@ resetForm(){
         })
       }
     },
-    userDetailsId :{
-            get () {
+    userDetailsId: {
+      get () {
         return this.searchParams.userDetailsId
       },
       set (value) {
         this.setSearchParamsIndividual({ key: 'userDetailsId', value: value })
       }
-    }
-    ,
-    gender :{
-            get () {
+    },
+    gender: {
+      get () {
         return this.searchParams.gender
       },
       set (value) {
         this.setSearchParamsIndividual({ key: 'gender', value: value })
       }
-    }
-    ,
-    profileStatus :{
+    },
+    profileStatus: {
       get () {
         return this.searchParams.profileStatus
       },
       set (value) {
         this.setSearchParamsIndividual({ key: 'profileStatus', value: value })
-      }  
+      }
     }
-    
 
   }
-
 
 }
 </script>

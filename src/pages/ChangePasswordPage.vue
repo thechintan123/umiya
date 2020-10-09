@@ -5,11 +5,10 @@
 </template>
 
 <script>
-import axios from "axios";
 export default {
   components: {
-    changePassword: require("components/ChangePassword.vue").default,
+    changePassword: require('components/ChangePassword.vue').default
   }
 
-};
+}
 </script>

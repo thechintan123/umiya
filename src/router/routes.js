@@ -34,22 +34,19 @@ const routes = [
       {
         path: '/forgot-password',
         component: () => import('pages/ForgotPasswordPage.vue')
-      }
-      ,
+      },
       {
         path: '/change-password',
         component: () => import('pages/ChangePasswordPage.vue')
-      }
-      ,
-       {
+      },
+      {
         path: '/admin-approval',
         component: () => import('pages/AdminApprovalPage.vue')
-      }
-      ,
+      },
       {
         path: '/admin-update-profile',
         component: () => import('pages/AdminUpdateProfilePage.vue')
-      }              
+      }
     ]
   }
 ]

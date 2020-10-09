@@ -85,26 +85,25 @@ import mixinUtils from 'src/mixins/Mixin_Utils.js'
 import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
-  mixins: [mixinFormValidations, mixinComputations, mixinUtils ],
-  data(){
+  mixins: [mixinFormValidations, mixinComputations, mixinUtils],
+  data () {
     return {
-      prevUserId : ''
+      prevUserId: ''
     }
-  }
-  ,
+  },
   // This prop is for UpDateProfile. It will be true for UpdateProfile
   props: {
     updateProfile: {
-      type : Boolean,
-      default : false
-    }, 
+      type: Boolean,
+      default: false
+    }
 
   },
 
   computed: {
-    ...mapState('registerUpdate', ['showProgressBar', 'tab', 'error', 'successProcess', 
-    'emptyFormData','loggedInUserDetailsId']),
-     ...mapState('admin',['selectedIdByAdmin']),
+    ...mapState('registerUpdate', ['showProgressBar', 'tab', 'error', 'successProcess',
+      'emptyFormData', 'loggedInUserDetailsId']),
+    ...mapState('admin', ['selectedIdByAdmin']),
 
     tab: {
       get () {
@@ -119,28 +118,28 @@ export default {
   mounted () {
     // for updateProfile
     // console.log("Mounted", this, this.$props)
-     var selectedUserDetailsId = ""
-     var selectedByAdmin = false;
+    var selectedUserDetailsId = ''
+    var selectedByAdmin = false
 
     if (this.updateProfile === true) {
-      if(this.selectedIdByAdmin!== "" ){
-      selectedUserDetailsId = this.selectedIdByAdmin;
-      this.prevUserId = this.selectedIdByAdmin;
-      selectedByAdmin = true;
-    }
-    else{
-      this.fetchLoggedInUserDetails();
-      selectedUserDetailsId =  this.loggedInUserDetailsId; 
-    }
-    console.log("selectedUserDetailsId",selectedUserDetailsId);
-    this.fetchUserDetails({userDetailsId : selectedUserDetailsId,
-                        selectedByAdmin: selectedByAdmin});
+      if (this.selectedIdByAdmin !== '') {
+        selectedUserDetailsId = this.selectedIdByAdmin
+        this.prevUserId = this.selectedIdByAdmin
+        selectedByAdmin = true
+      } else {
+        this.fetchLoggedInUserDetails()
+        selectedUserDetailsId = this.loggedInUserDetailsId
+      }
+      console.log('selectedUserDetailsId', selectedUserDetailsId)
+      this.fetchUserDetails({
+        userDetailsId: selectedUserDetailsId,
+        selectedByAdmin: selectedByAdmin
+      })
     }
     this.fetchList()
-  }
-  ,
+  },
   methods: {
-    ...mapActions('registerUpdate', ['fetchUserDetails', 'fetchList','fetchLoggedInUserDetails']),
+    ...mapActions('registerUpdate', ['fetchUserDetails', 'fetchList', 'fetchLoggedInUserDetails']),
     ...mapMutations('registerUpdate', ['setTab', 'setFormData', 'setTmpDataFull', 'resetState']),
     transitionFn (newVal, oldVal) {
       // console.log("transitionFn", newVal, oldVal, this.$refs, this.error);

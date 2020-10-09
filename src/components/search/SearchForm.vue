@@ -3,16 +3,7 @@
     <q-card>
 
       <q-form greedy ref="searchForm">
-        <!-- <q-banner rounded dense class="bg-grey-3">
-          <template v-slot:avatar>
-            <q-icon name="search" color="primary" />
-          </template>
-          Search
-        </q-banner> -->
-              <!-- <banner
-        iconName="search"
-        bannerTitle="Search"
-      /> -->
+
       <q-expansion-item
         label="Search"
         header-class="bg-grey-3"
@@ -28,7 +19,6 @@
           <q-item-section>
               Search
           </q-item-section>
-
 
         </template>
         <q-card-section>
@@ -143,23 +133,22 @@
 
 <script>
 import axios from 'axios'
-// import { countryList } from './countryList.js'
 import { mapActions, mapState, mapMutations } from 'vuex'
 import mixinFormValidations from 'src/mixins/Mixin_FormValidations.js'
 import mixinUtils from 'src/mixins/Mixin_Utils.js'
 import mixinDataElements from 'src/mixins/Mixin_DataElements.js'
 import mixinComputations from 'src/mixins/Mixin_Computations.js'
 
-import { heightFtStart, heightFtEnd} from '../../constants/registerFormConstants.js'
+import { heightFtStart, heightFtEnd } from '../../constants/registerFormConstants.js'
 
 export default {
-  mixins: [mixinFormValidations, mixinUtils,mixinDataElements,mixinComputations],
+  mixins: [mixinFormValidations, mixinUtils, mixinDataElements, mixinComputations],
   created () {
     this.createHeightList()
     this.createAgeFromToList()
   },
   mounted () {
-      this.fetchList();
+    this.fetchList()
   },
   data () {
     return {
@@ -169,50 +158,41 @@ export default {
 
     }
   },
-  components: {
-    banner: require('../general/Banner.vue').default
-  },
   methods: {
-    ...mapMutations('search', ['setShowProgressBar','setExpand','setSearchParamsIndividual']),
-    ...mapActions('search', ['saveSearchResults','fetchList']),
+    ...mapMutations('search', ['setShowProgressBar', 'setExpand', 'setSearchParamsIndividual']),
+    ...mapActions('search', ['saveSearchResults', 'fetchList']),
 
     async submitSearchForm () {
-      this.setShowProgressBar(true);
+      this.setShowProgressBar(true)
       // console.log("showProgressBar", this.showProgressBar);
       await this.$refs.searchForm.validate().then(success => {
         if (success) {
           console.log('Success', this.searchParams, this.$refs.searchForm)
 
-          //convert height to Cms
-          var heightFrom = this.searchParams.heightFrom;
-          if(!this.hasValue(heightFrom)){
-            heightFrom =  heightFtStart+" ft 0 inches"
+          // convert height to Cms
+          var heightFrom = this.searchParams.heightFrom
+          if (!this.hasValue(heightFrom)) {
+            heightFrom = heightFtStart + ' ft 0 inches'
           }
           var heightFromCms = this.convertHeightToCms(heightFrom)
           // this.searchParams['heightFromCms'] = heightFromCms
           this.setSearchParamsIndividual({ key: 'heightFromCms', value: heightFromCms })
 
-          var heightTo = this.searchParams.heightTo;
-          if(!this.hasValue(heightTo)){
-            heightTo =  heightFtEnd+" ft 12 inches"
+          var heightTo = this.searchParams.heightTo
+          if (!this.hasValue(heightTo)) {
+            heightTo = heightFtEnd + ' ft 12 inches'
           }
           var heightToCms = this.convertHeightToCms(heightTo)
           // this.searchParams['heightToCms'] = heightToCms
           this.setSearchParamsIndividual({ key: 'heightToCms', value: heightToCms })
 
-
           this.fetchSearch(this.searchParams)
- 
         } else {
-          var error = "Error in Search Form. Please correct it before proceeding."
-          this.showErrorDialog(error);
-          this.setShowProgressBar(false);
-
+          var error = 'Error in Search Form. Please correct it before proceeding.'
+          this.showErrorDialog(error)
+          this.setShowProgressBar(false)
         }
       })
-
-
-
     },
 
     fetchSearch (data) {
@@ -228,11 +208,10 @@ export default {
           })
         })
         .catch(error => {
-          console.log("fetchSearch",error)
+          console.log('fetchSearch', error)
           this.showErrorDialog(error)
         })
-    }
-,
+    },
     checkHeightTo (heightTo) {
       const heightFrom = this.searchParams.heightFrom
       if (heightFrom && heightTo) {
@@ -251,28 +230,27 @@ export default {
     },
     checkCountry (val) {
       // console.log("checkCountry", val, this.hasValue(val))
-      if (this.hasValue(val)){
-        if(val.length === 0) {
-        return false
+      if (this.hasValue(val)) {
+        if (val.length === 0) {
+          return false
+        } else {
+          return true
+        }
       } else {
-        return true
+        return false
       }
-    }else{
-       return false
     }
-  }
   },
   computed: {
-    ...mapState('search', ['showProgressBar','list','tmpData','searchPerformed','searchParams']),
-    expand :{
+    ...mapState('search', ['showProgressBar', 'list', 'tmpData', 'searchPerformed', 'searchParams']),
+    expand: {
       get () {
         return this.$store.state.search.expand
       },
       set (value) {
         this.setExpand(value)
       }
-    }
-    ,
+    },
     lookingFor: {
       get () {
         return this.searchParams.lookingFor
@@ -292,49 +270,44 @@ export default {
         // console.log("ageFromTo value", value);
         this.setSearchParamsIndividual({
           key: 'ageFromTo',
-          value: {min: value.min , max: value.max}
+          value: { min: value.min, max: value.max }
         })
       }
     },
-    heightFrom :{
-            get () {
+    heightFrom: {
+      get () {
         return this.searchParams.heightFrom
       },
       set (value) {
         this.setSearchParamsIndividual({ key: 'heightFrom', value: value })
       }
-    }
-    ,
-    heightTo :{
-            get () {
+    },
+    heightTo: {
+      get () {
         return this.searchParams.heightTo
       },
       set (value) {
         this.setSearchParamsIndividual({ key: 'heightTo', value: value })
       }
-    }
-    ,
-    maritalStatusPreference :{
+    },
+    maritalStatusPreference: {
       get () {
         return this.searchParams.maritalStatusPreference
       },
       set (value) {
         this.setSearchParamsIndividual({ key: 'maritalStatusPreference', value: value })
-      }  
-    }
-    ,
-    country :{
+      }
+    },
+    country: {
       get () {
         return this.searchParams.country
       },
       set (value) {
         this.setSearchParamsIndividual({ key: 'country', value: value })
-      }      
+      }
     }
-    ,
 
   }
-  ,
 
 }
 </script>

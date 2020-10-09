@@ -66,15 +66,15 @@ export default {
       formData: {
         email: ''
       },
-      successProcess : false,
-      successMessage : 'Password has been reset. Please check your email.',
-      showProgressBar : false,
+      successProcess: false,
+      successMessage: 'Password has been reset. Please check your email.',
+      showProgressBar: false
 
     }
   },
   methods: {
     forgotPassword () {
-      this.showProgressBar = true;
+      this.showProgressBar = true
       const email = this.formData.email
       axios
         .post(process.env.API + '/forgot_password/' + email)
@@ -83,12 +83,12 @@ export default {
             type: 'positive',
             message: this.successMessage
           })
-          this.successProcess = true;
-          this.$refs.forgotPasswordForm.reset();
-          this.showProgressBar = false;
+          this.successProcess = true
+          this.$refs.forgotPasswordForm.reset()
+          this.showProgressBar = false
         })
         .catch(error => {
-          console.log("forgotPassword", error)
+          console.log('forgotPassword', error)
           let errMsg = ''
           if ('message' in error.response.data) {
             errMsg = error.response.data.message
@@ -96,23 +96,20 @@ export default {
             errMsg = error.response.data.error
           }
           showErrorMessage(errMsg)
-          this.showProgressBar = false;
-          this.successProcess = false;
-
+          this.showProgressBar = false
+          this.successProcess = false
         })
+    },
+    resetForm () {
+      this.formData.email = ''
     }
-    ,
-    resetForm(){
-      this.formData.email = ""
-    }
-  }
-  ,
+  },
   components: {
     progressBar: require('./general/ProgressBar.vue').default,
     spinner: require('./general/Spinner.vue').default,
     banner: require('./general/Banner.vue').default
 
-  }  
+  }
 }
 </script>
 

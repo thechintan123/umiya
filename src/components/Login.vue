@@ -79,8 +79,6 @@ import { mapActions } from 'vuex'
 import mixinFormValidations from 'src/mixins/Mixin_FormValidations.js'
 import mixinUtils from 'src/mixins/Mixin_Utils.js'
 
-import { showErrorMessage } from 'src/utils/show-error-message'
-
 export default {
   mixins: [mixinFormValidations, mixinUtils],
   data () {
@@ -90,49 +88,41 @@ export default {
         email: '',
         password: ''
       },
-      showProgressBar : false,
-      devEnv: process.env.DEV, // This is true for development environment and false for production
+      showProgressBar: false,
+      devEnv: process.env.DEV // This is true for development environment and false for production
 
     }
   },
   methods: {
     ...mapActions('auth', ['loginUser']),
     login () {
-      this.showProgressBar = true;
+      this.showProgressBar = true
       this.loginUser(this.formData)
         .then(() => {
           this.$q.notify({
             type: 'positive',
             message: 'Welcome ! You are now logged in.'
           })
-          this.showProgressBar = false;
+          this.showProgressBar = false
 
           this.$router.push('/profile')
         })
         .catch(error => {
-          console.log('Login error',error, error.response);
-          // let errMsg = ''
-          // if ('message' in error.response.data) {
-          //   errMsg = error.response.data.error + ' - ' + error.response.data.message
-          // } else {
-          //   errMsg = error.response.data.error
-          // }
-           this.showErrorDialog(error)
-           this.showProgressBar = false;
+          console.log('Login error', error, error.response)
+          this.showErrorDialog(error)
+          this.showProgressBar = false
         })
+    },
+    defaultTestingData () {
+      this.formData.email = 'chin1@gmail.com'
+      this.formData.password = 'password'
     }
-    ,
-    defaultTestingData(){
-        this.formData.email = 'chin1@gmail.com';
-        this.formData.password = 'password';
-    }
-  }
-  ,
+  },
   components: {
     progressBar: require('./general/ProgressBar.vue').default,
     spinner: require('./general/Spinner.vue').default,
     banner: require('./general/Banner.vue').default
-  }    
+  }
 }
 </script>
 

@@ -72,7 +72,9 @@
     </div>
 
     <div class="flex flex-center q-pa-md row q-gutter-x-xl q-gutter-y-xl">
-      <q-card flat bordered class="my-card cursor-pointer" @click="register()" align="center">
+
+     <q-card
+      flat bordered class="my-card cursor-pointer" @click="register()" align="center" key="card1">
         <q-card-section class="bg-dark">
           <q-icon name="far fa-edit" class="text-secondary" style="font-size: 3rem;" />
         </q-card-section>
@@ -84,7 +86,28 @@
         </q-card-section>
       </q-card>
 
-      <q-card flat bordered class="my-card" align="center">
+      <q-card
+       flat bordered class="my-card" align="center" >
+        <q-card-section class="bg-dark">
+          <q-icon name="phone_android" class="text-secondary" style="font-size: 3rem;" />
+        </q-card-section>
+        <q-separator />
+        <q-card-section>
+          <div class="text-h6">Free & Easy Mobile App</div>
+          <!-- <div class="text-subtitle1">Free and Easy to use Android App available</div> -->
+          <q-img
+          src="~assets/images/Google-Play-Badge.png"
+          :ratio="1"
+          style="max-width: 150px; height: 75px;"
+          contain
+                  />
+        </q-card-section>
+      </q-card>
+
+    </div>
+    <div
+    class="flex flex-center q-pa-md row q-gutter-x-xl q-gutter-y-xl">
+      <q-card flat bordered class="my-card" align="center" >
         <q-card-section class="bg-dark">
           <q-icon name="fas fa-user-lock" class="text-secondary" style="font-size: 3rem;" />
         </q-card-section>
@@ -96,9 +119,9 @@
           >Your details are secured. It is not shared with any other website.</div>
         </q-card-section>
       </q-card>
-    </div>
-    <div class="flex flex-center q-pa-md row q-gutter-x-xl q-gutter-y-xl">
-      <q-card flat bordered class="my-card" align="center">
+
+      <q-card
+      flat bordered class="my-card" align="center">
         <q-card-section class="bg-dark">
           <q-icon name="fas fa-user-check" class="text-secondary" style="font-size: 3rem;" />
         </q-card-section>
@@ -111,7 +134,8 @@
         </q-card-section>
       </q-card>
 
-      <q-card flat bordered class="my-card" align="center">
+      <q-card
+      flat bordered class="my-card" align="center" >
         <q-card-section class="bg-dark">
           <q-icon name="fas fa-search" class="text-secondary" style="font-size: 3rem;" />
         </q-card-section>
@@ -119,6 +143,18 @@
         <q-card-section>
           <div class="text-h6">Easy Search</div>
           <div class="text-subtitle1">Easy Search based on Age, Health and Country.</div>
+        </q-card-section>
+      </q-card>
+
+      <q-card
+      flat bordered class="my-card" align="center" >
+        <q-card-section class="bg-dark">
+          <q-icon name="fas fa-ban" class="text-secondary" style="font-size: 3rem;" />
+        </q-card-section>
+        <q-separator />
+        <q-card-section>
+          <div class="text-h6">Restricted</div>
+          <div class="text-subtitle1">Only for Kucth Kadva Patidar Sanatan Samaj Only</div>
         </q-card-section>
       </q-card>
     </div>
