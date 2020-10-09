@@ -88,7 +88,7 @@ export default {
           this.showProgressBar = false
         })
         .catch(error => {
-          this.showErrorDialoge(error)
+          this.showErrorDialog(error)
           this.showProgressBar = false
           this.successProcess = false
         })

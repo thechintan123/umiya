@@ -645,7 +645,11 @@ export default {
         .post(process.env.API + '/users', data)
         .then(({ data }) => {
           // console.log("Register User", data);
-          this.formData.userDetailsId = data.user_details_id
+          // this.formData.userDetailsId = data.user_details_id
+          this.setFormDataIndividual({
+          key: 'userDetailsId',
+          value: data.user_details_id
+        })
 
           // console.log("this.userDetailsId", this.formData.userDetailsId, typeof data);
 

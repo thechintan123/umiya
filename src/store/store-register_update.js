@@ -61,7 +61,6 @@ const getDefaultState = () => {
       emailMatchedNotification: true,
       agreeTc: false,
       whereKnow: '',
-      status: { name: '' }
     },
 
     // This fields are used to later club them into form fields of primaryContact and alternateContcts
