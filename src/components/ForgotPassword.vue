@@ -56,7 +56,7 @@
 <script>
 import mixinFormValidations from 'src/mixins/Mixin_FormValidations.js'
 import mixinUtils from 'src/mixins/Mixin_Utils.js'
-import { showErrorMessage } from 'src/utils/show-error-message'
+// import { showErrorMessage } from 'src/utils/show-error-message'
 import axios from 'axios'
 
 export default {
@@ -88,14 +88,7 @@ export default {
           this.showProgressBar = false
         })
         .catch(error => {
-          console.log('forgotPassword', error)
-          let errMsg = ''
-          if ('message' in error.response.data) {
-            errMsg = error.response.data.message
-          } else {
-            errMsg = error.response.data.error
-          }
-          showErrorMessage(errMsg)
+          this.showErrorDialoge(error)
           this.showProgressBar = false
           this.successProcess = false
         })
