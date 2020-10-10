@@ -261,7 +261,6 @@
         >
           <template v-slot:control>
             <q-toggle
-              tabindex=""
               v-model="agreeTc"
               checked-icon="check"
               color="green"
@@ -308,7 +307,7 @@ import { mapState, mapActions, mapMutations } from 'vuex'
 import mixinFormValidations from 'src/mixins/Mixin_FormValidations.js'
 import mixinComputations from 'src/mixins/Mixin_Computations.js'
 import mixinUtils from 'src/mixins/Mixin_Utils.js'
-import {ageDifference} from 'src/constants/registerFormConstants.js'
+import { ageDifference } from 'src/constants/registerFormConstants.js'
 
 export default {
   mixins: [mixinFormValidations, mixinComputations, mixinUtils],
@@ -426,11 +425,10 @@ export default {
       } else {
         return true
       }
-    }
-    ,
-  defaultAgeFromAgeTo () {
+    },
+    defaultAgeFromAgeTo () {
       // console.log("Gender", this.formData.gender);
-      var partnerAgeFrom, partnerAgeTo ;
+      var partnerAgeFrom, partnerAgeTo
       if (this.updateProfile !== true) {
         if (this.age !== '') {
           if (this.gender.name === 'Male') {
@@ -450,10 +448,9 @@ export default {
           partnerAgeTo = ''
         }
       }
-      this.setFormDataIndividual({key: 'partnerAgeFrom', value: partnerAgeFrom })
-      this.setFormDataIndividual({key: 'partnerAgeTo', value: partnerAgeTo })
-
-    }    
+      this.setFormDataIndividual({ key: 'partnerAgeFrom', value: partnerAgeFrom })
+      this.setFormDataIndividual({ key: 'partnerAgeTo', value: partnerAgeTo })
+    }
   },
   computed: {
     ...mapState('registerUpdate', ['formData', 'list', 'tmpData', 'error']),

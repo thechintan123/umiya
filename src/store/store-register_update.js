@@ -60,7 +60,7 @@ const getDefaultState = () => {
       partnerMaritalStatus: [],
       emailMatchedNotification: true,
       agreeTc: false,
-      whereKnow: '',
+      whereKnow: ''
     },
 
     // This fields are used to later club them into form fields of primaryContact and alternateContcts
