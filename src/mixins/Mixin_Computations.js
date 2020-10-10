@@ -6,9 +6,8 @@ export default {
       } else {
         return false
       }
-    }
-,
-   computeAge (dob) {
+    },
+    computeAge (dob) {
       // console.log("computeAge", dob, this)
       if (this.hasValue(dob)) {
         var dobInMS = Date.parse(dob)

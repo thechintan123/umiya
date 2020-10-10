@@ -17,56 +17,14 @@
               class="col-auto text-secondary UM_title"
               style="font-family: 'Great Vibes', cursive ;font-size: 36px"
             >
-              <span class="text-white">Umiya</span>Matrimony.
-              <span class="text-white">com</span>
+              <span class="text-white">Umiya</span>Matrimony.<span class="text-white">com</span>
             </div>
           </div>
         </q-toolbar-title>
 
-        <!--
-        <q-btn
-          v-if="!loggedIn"
-          flat
-          label="Login"
-          icon-right="account_circle"
-          class="absolute-right"
-          to="/login"
-        />
-
-        <q-btn
-          v-else
-          flat
-          label="Logout"
-          icon-right="account_circle"
-          class="absolute-right"
-          @click="logout"
-        />
-        -->
       </q-toolbar>
 
-      <!--
-      <q-tabs align="left">
-        <q-route-tab to = "/One" label="Page One" />
-        <q-route-tab to = "/Two" label="Page Two" />
-        <q-route-tab to = "/Three" label="Page Three" />
-      </q-tabs>
-      -->
     </q-header>
-
-    <!--
-
-    <q-footer elevated>
-      <q-tabs
-       align="center">
-       <q-route-tab v-for="link in menuList"
-        :key="link.title"
-        :name="link.title"
-        :icon="link.icon"
-        :label="link.title" :to="link.link"/>
-      </q-tabs>
-      </q-footer>
-
-    -->
 
     <q-drawer
       content-class="bg-secondary"
@@ -77,7 +35,6 @@
       elevated
       :width="250"
     >
-      <!-- <q-scroll-area class="fit"> -->
       <q-list
         v-for="(menuItem, index) in filteredMenuList"
         :key="index"
@@ -92,23 +49,7 @@
 
         <q-separator v-if="menuItem.separator" />
       </q-list>
-<!--
-      <q-list>
-        <q-item v-if="!loggedIn" exact class="text-grey-1" to="/login" v-ripple>
-          <q-item-section avatar>
-            <q-icon name="account_circle" />
-          </q-item-section>
-          <q-item-section>Login</q-item-section>
-        </q-item>
-        <q-item v-else exact class="text-grey-1" clickable @click="logout" v-ripple>
-          <q-item-section avatar>
-            <q-icon name="account_circle" />
-          </q-item-section>
-          <q-item-section>Logout</q-item-section>
-        </q-item>
 
-      </q-list> -->
-      <!-- </q-scroll-area> -->
     </q-drawer>
 
     <q-page-container>
@@ -147,14 +88,14 @@ const menuList = [
     icon: 'person_add',
     label: 'Register',
     link: '/register',
-    separator: true,
+    separator: true
 
   },
   {
     icon: 'search',
     label: 'Search',
     link: '/search',
-    separator: true,
+    separator: true
 
   },
   {
@@ -162,7 +103,7 @@ const menuList = [
     label: 'Profile',
     link: '/profile',
     loggedIn: true,
-    separator: true,
+    separator: true
   },
   {
     icon: 'edit',
@@ -170,35 +111,32 @@ const menuList = [
     link: '/update-profile',
     loggedIn: true,
     separator: true,
-     role : 'user'
+    role: 'user'
 
-  }
-  ,
-    {
+  },
+  {
     icon: 'vpn_key',
     label: 'Change Password',
     link: '/change-password',
     loggedIn: true,
-    separator: true,
+    separator: true
     // No roles means it is applicable for both
-  }
-  ,
-      {
+  },
+  {
     icon: 'fas fa-tasks',
     label: 'Admin Approve Profile',
     link: '/admin-approval',
     loggedIn: true,
     separator: true,
-    role : 'admin'
-  }
-  ,
-       {
+    role: 'admin'
+  },
+  {
     icon: 'fas fa-tools',
     label: 'Admin Update Profile',
     link: '/admin-update-profile',
     loggedIn: true,
     separator: true,
-    role : 'admin'
+    role: 'admin'
   }
 
 ]
@@ -241,27 +179,24 @@ export default {
       } else {
         return false
       }
-    } // end of showMenuItem
-  
-  ,
-  checkRole(role, menuItemRole){
+    }, // end of showMenuItem
+
+    checkRole (role, menuItemRole) {
     //  console.log("Menu Item", role,menuItemRole)
-    if(menuItemRole === undefined || menuItemRole === null){
-      return true
+      if (menuItemRole === undefined || menuItemRole === null) {
+        return true
+      } else if (menuItemRole === role) {
+        return true
+      } else if (menuItemRole !== role) {
+        return false
+      } else {
+        return false
+      }
     }
-    else if(menuItemRole === role){
-      return true
-    }
-    else if(menuItemRole !== role){
-      return false
-    }else{
-      return false
-    }
-  }
 
   },
   computed: {
-    ...mapState('auth', ['loggedIn','role']),
+    ...mapState('auth', ['loggedIn', 'role']),
     filteredMenuList () {
       var filterMenuList = []
       var loggedInStatus = this.loggedIn
@@ -271,20 +206,17 @@ export default {
         // console.log("Menu Item", menuItem, menuItem.role)
         menuItemLoginStatus = menuItem.loggedIn
         if (menuItemLoginStatus === undefined || menuItemLoginStatus === null) {
-          if(this.checkRole(role, menuItem.role))
-              filterMenuList.push(menuItem)
+          if (this.checkRole(role, menuItem.role)) { filterMenuList.push(menuItem) }
         } else if (menuItemLoginStatus === false) {
           if (loggedInStatus === false) {
-           if(this.checkRole(role, menuItem.role)) 
-                filterMenuList.push(menuItem)
+            if (this.checkRole(role, menuItem.role)) { filterMenuList.push(menuItem) }
           } else {
           // Don't add
             continue
           }
         } else if (menuItemLoginStatus === true) {
           if (loggedInStatus === true) {
-            if(this.checkRole(role, menuItem.role))
-              filterMenuList.push(menuItem)
+            if (this.checkRole(role, menuItem.role)) { filterMenuList.push(menuItem) }
           } else {
           // Don't add
             continue

@@ -127,11 +127,10 @@ export default {
       'error',
       'previousFormData',
       'userSubmitted'
-    ])
-    ,
+    ]),
     ...mapState('admin', [
-      'selectedIdByAdmin',
-    ])    
+      'selectedIdByAdmin'
+    ])
   },
   methods: {
     ...mapActions('registerUpdate', ['fetchPhotos']),
@@ -317,7 +316,7 @@ export default {
             this.previousProofFile = [fileObj]
             this.$refs.proof.addFiles(this.previousProofFile)
             // console.log('disableUploadProof', this.formData.status.name)
-            if (this.selectedIdByAdmin!== ""){
+            if (this.selectedIdByAdmin !== '') {
               this.disableUploadProof = false
             } else if (this.formData.status.name === 'Approved') {
               this.disableUploadProof = true
@@ -525,8 +524,9 @@ export default {
 
       // console.log("updatedFormData", updatedFormData);
 
-      if (Object.keys(updatedFormData).length === 0) {
-        this.showMessageDialog('You have not updated any fields')
+      if (Object.keys(updatedFormData).length === 0 && !this.updatePhoto && !this.updateProof) {
+        this.showMessageDialog('You have not updated any fields. Please check')
+        this.setShowProgressBar(false)
       } else {
         // if updatedFormData has height then convert the same field to Cms
         var keys = ['partnerHeightFrom', 'partnerHeightTo', 'height']
@@ -579,8 +579,9 @@ export default {
             }
           }
         }// if updateUserStatus is TRUE
-      } // if UpdateFormData is blank
-      this.postSubmit()
+
+        this.postSubmit()
+      } // if No fields are updated
     },
     postSubmit () {
       this.setShowProgressBar(false)
@@ -590,12 +591,11 @@ export default {
     updateUser (data) {
       var userDetailsId = this.formData.userDetailsId
 
-      var endPoint = ""
-      console.log("selectedIdByAdmin", this.selectedIdByAdmin);
-      if(this.selectedIdByAdmin != "" && this.selectedIdByAdmin != null){
+      var endPoint = ''
+      console.log('selectedIdByAdmin', this.selectedIdByAdmin)
+      if (this.selectedIdByAdmin !== '' && this.selectedIdByAdmin != null) {
         endPoint = process.env.API + '/admin/users/' + userDetailsId
-      }
-      else{
+      } else {
         endPoint = process.env.API + '/users/' + userDetailsId
       }
       return axios
@@ -645,7 +645,11 @@ export default {
         .post(process.env.API + '/users', data)
         .then(({ data }) => {
           // console.log("Register User", data);
-          this.formData.userDetailsId = data.user_details_id
+          // this.formData.userDetailsId = data.user_details_id
+          this.setFormDataIndividual({
+            key: 'userDetailsId',
+            value: data.user_details_id
+          })
 
           // console.log("this.userDetailsId", this.formData.userDetailsId, typeof data);
 

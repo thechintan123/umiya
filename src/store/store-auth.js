@@ -4,7 +4,7 @@ const state = {
   // format is user.email and user.token
   user: null,
   loggedIn: false,
-  role : null
+  role: null
 }
 
 const mutations = {
@@ -14,7 +14,7 @@ const mutations = {
     localStorage.setItem('user', JSON.stringify(userData))
     axios.defaults.headers.common.Authorization = `Bearer ${userData.token}`
     state.loggedIn = true
-    state.role = userData.role;
+    state.role = userData.role
   },
   CLEAR_USER_DATA () {
     localStorage.removeItem('user')
@@ -25,9 +25,9 @@ const mutations = {
 
     if (localStorage.getItem('user')) {
       state.loggedIn = true
-      var user = JSON.parse(localStorage.getItem('user'));
-      state.user = user;
-      state.role = user.role;
+      var user = JSON.parse(localStorage.getItem('user'))
+      state.user = user
+      state.role = user.role
     }
   }
 }

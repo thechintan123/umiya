@@ -1,11 +1,9 @@
-import { uid } from 'quasar'
 import axios from 'axios'
 import mixinComputations from 'src/mixins/Mixin_Computations.js'
 import mixinUtils from 'src/mixins/Mixin_Utils.js'
-import {maxSearchResultsPerPage} from '../constants/registerFormConstants.js'
+import { maxSearchResultsPerPage } from '../constants/registerFormConstants.js'
 
 const state = {
-
 
   searchParams: {
     ageFromTo: {
@@ -13,35 +11,33 @@ const state = {
       max: 40
     },
 
-    lookingFor: '2', //2 is for Bride ; Defaulted to Bride
+    lookingFor: '2', // 2 is for Bride ; Defaulted to Bride
     heightFrom: '',
     heightTo: '',
     maritalStatusPreference: [],
-     country: [{ id: 81, name: 'India' }] // defaulted to India
-    //country : ['India']
-  }
-  ,
-  searchResults: []
-      ,
-  searchResultsPerPage : [],
+    country: [{ id: 81, name: 'India' }] // defaulted to India
+    // country : ['India']
+  },
+  searchResults: [],
+  searchResultsPerPage: [],
 
   showProgressBar: false,
   // page: 1,
-  resultsPerPage: maxSearchResultsPerPage, 
+  resultsPerPage: maxSearchResultsPerPage,
 
   list: {
     countryOptions: [],
     maritalOptions: []
   },
 
-  tmpData : {
+  tmpData: {
     countryList: []
   },
 
-  searchPerformed : false,
-  totalPages : 0,
-  page : 1,
-  expand : true
+  searchPerformed: false,
+  totalPages: 0,
+  page: 1,
+  expand: true
 
 }
 
@@ -51,14 +47,13 @@ const getters = {
   }
 }
 
-
 // Not using Action and mutations since on updating page number and state of Search Results is not changed
 const mutations = {
 
   setSearchParamsIndividual (state, object) {
     state.searchParams[object.key] = object.value
   },
-  setShowProgessBar (state, value) {
+  setShowProgressBar (state, value) {
     state.showProgressBar = value
   },
   setTmpData (state, object) {
@@ -69,25 +64,25 @@ const mutations = {
     state.list[object.key] = object.value
     // console.log("tmpdata", state.tmpData, object.key, object.key);
   },
-  setSearchResults(state,list){
-    state.searchResults = list;
+  setSearchResults (state, list) {
+    state.searchResults = list
   },
-  setSearchResultsPerPage(state,list){
-    state.searchResultsPerPage = list;
-  },  
-  setSearchResultsSingle(state,object){
-    state.searchResults[object.key] = object.value;
+  setSearchResultsPerPage (state, list) {
+    state.searchResultsPerPage = list
   },
-  setSearchPerformed(state,value){
+  setSearchResultsSingle (state, object) {
+    state.searchResults[object.key] = object.value
+  },
+  setSearchPerformed (state, value) {
     state.searchPerformed = value
   },
-  setTotalPages(state, value){
-    state.totalPages =value
+  setTotalPages (state, value) {
+    state.totalPages = value
   },
-  setPage(state, value){
-    state.page =value
+  setPage (state, value) {
+    state.page = value
   },
-  setExpand(state, value){
+  setExpand (state, value) {
     state.expand = value
   }
 }
@@ -106,93 +101,79 @@ const actions = {
 
         var maritalOptions = response.data.marital_status
         commit('setList', { key: 'maritalOptions', value: maritalOptions })
-
       })
       .catch(error => {
         mixinUtils.methods.showErrorDialog(error)
       })
   },
-  saveSearchResults ({commit , dispatch}, searchResults) {
-
-    //Reset the details before search
-    //set Empty Result
+  saveSearchResults ({ commit, dispatch }, searchResults) {
+    // Reset the details before search
+    // set Empty Result
     var emptyResult = []
     commit('setSearchResults', emptyResult)
-    commit('setSearchResultsPerPage',emptyResult)
+    commit('setSearchResultsPerPage', emptyResult)
 
-    //set Page back to 1 and totalpages to 0
-    commit('setPage',1)
-    commit('setTotalPages',0)
+    // set Page back to 1 and totalpages to 0
+    commit('setPage', 1)
+    commit('setTotalPages', 0)
 
-    commit('setShowProgessBar', true)
+    commit('setShowProgressBar', true)
 
-
-    //Converting keys in Object from Snake to Camel Case
-     var searchResultsCamelList= []
-      for (var i = 0; i < searchResults.length; i++) {
+    // Converting keys in Object from Snake to Camel Case
+    var searchResultsCamelList = []
+    for (var i = 0; i < searchResults.length; i++) {
       var indObj = searchResults[i]
       var searchResultCamelObj = {}
       for (var key in indObj) {
-      searchResultCamelObj[mixinComputations.methods.snakeToCamel(key)] = indObj[key]
+        searchResultCamelObj[mixinComputations.methods.snakeToCamel(key)] = indObj[key]
       }
-      searchResultsCamelList.push(searchResultCamelObj);
+      searchResultsCamelList.push(searchResultCamelObj)
+    }
 
-      }
-      
-      //Computing total Pages for Pagination
-      var totalPages = Math.ceil(
-        searchResultsCamelList.length/state.resultsPerPage
-      )
+    // Computing total Pages for Pagination
+    var totalPages = Math.ceil(
+      searchResultsCamelList.length / state.resultsPerPage
+    )
 
-      if (totalPages <= 0) {
-        totalPages = 0
-      }
-      else if(totalPages <= 1){
-        totalPages = 1
-      }
+    if (totalPages <= 0) {
+      totalPages = 0
+    } else if (totalPages <= 1) {
+      totalPages = 1
+    }
 
+    commit('setSearchResults', searchResultsCamelList)
 
+    commit('setTotalPages', totalPages)
 
-      commit('setSearchResults', searchResultsCamelList)
+    // Create Results per page
+    dispatch('updatePage', 1)
 
-      commit('setTotalPages', totalPages)
+    var searchPerformed = true
+    commit('setSearchPerformed', searchPerformed)
 
-      //Create Results per page
-      dispatch('updatePage', 1)
-
-
-      var searchPerformed = true;
-      commit('setSearchPerformed', searchPerformed)
-
-      //whether SearchForm should be expanded or closed
-      if(searchResults.length >0){
+    // whether SearchForm should be expanded or closed
+    if (searchResults.length > 0) {
       commit('setExpand', false)
-      }
-      else{
+    } else {
       commit('setExpand', true)
-      }
+    }
 
-
-      commit('setShowProgessBar', false)
-
-
+    commit('setShowProgressBar', false)
   },
-  updatePage({commit}, page){
-  
-      var searchResultsPerPage = []
-      var searchResultsList = state.searchResults
-      if(searchResultsList.length > 0) {
+  updatePage ({ commit }, page) {
+    var searchResultsPerPage = []
+    var searchResultsList = state.searchResults
+    if (searchResultsList.length > 0) {
       var startingIndex = (page - 1) * state.resultsPerPage
       var endingIndex = startingIndex + state.resultsPerPage
-      if(endingIndex > searchResultsList.length){
+      if (endingIndex > searchResultsList.length) {
         endingIndex = searchResultsList.length
       }
       searchResultsPerPage = searchResultsList.slice(startingIndex, endingIndex)
       commit('setSearchResultsPerPage', searchResultsPerPage)
       commit('setPage', page)
-
+    }
   }
-}
 
 }
 

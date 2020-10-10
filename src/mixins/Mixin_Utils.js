@@ -2,7 +2,7 @@ import { Dialog } from 'quasar'
 
 export default {
   methods: {
-    checkUserLoggedIn(role){
+    checkUserLoggedIn (role) {
       var user = JSON.parse(localStorage.getItem('user'))
       if (user === null) {
         this.$q.notify({
@@ -12,25 +12,23 @@ export default {
           icon: 'warning'
         })
         this.$router.push('/login')
-    }
-    else{
-      if (this.hasValue(role)) {
+      } else {
+        if (this.hasValue(role)) {
         // if role is BLANK then it is allowed to be accessed by all roles
-        var rolefromLocalStorage = user.role;
-        if (rolefromLocalStorage !== role) {
-          this.$q.notify({
-            type: "negative",
-            multiLine: true,
-            message:
-              "You do not have right permission to access this page.You are redirected to Home Page",
-            icon: "warning"
-          });
-          this.$router.push("/");
+          var rolefromLocalStorage = user.role
+          if (rolefromLocalStorage !== role) {
+            this.$q.notify({
+              type: 'negative',
+              multiLine: true,
+              message:
+              'You do not have right permission to access this page.You are redirected to Home Page',
+              icon: 'warning'
+            })
+            this.$router.push('/')
+          }
         }
       }
-    }
-  }
-    ,
+    },
     showErrorDialog (error) {
       let errorMessage = ''
       errorMessage = '<b>' + error.toString() + '</b>'
@@ -62,22 +60,20 @@ export default {
       })
     },
     hasKey (obj, key) {
-      console.log("hasKey", obj, key)
+      // console.log('hasKey', obj, key)
       return key.split('.').every(function (x) {
         if (typeof obj !== 'object' || obj === null || !(x in obj)) { return false }
         obj = obj[x]
         return true
       })
-    }
-    ,
+    },
     hasValue (value) {
       if (value !== null && typeof (value) !== 'undefined' && value !== '') {
         return true
       } else {
         return false
       }
-    }
-    ,
+    },
     checkLoggedIn () {
       const user = localStorage.getItem('user')
       // console.log(user);
@@ -86,67 +82,61 @@ export default {
       } else {
         this.loggedIn = false
       }
-    }
-    ,
-    sortList(property, order = 'asc') {
-      var sort_order = 1;
-      if(order === "desc"){
-          sort_order = -1;
+    },
+    sortList (property, order = 'asc') {
+      var sortOrder = 1
+      if (order === 'desc') {
+        sortOrder = -1
       }
-      return function (a, b){
-          // a should come before b in the sorted order
-          // console.log("Property a and b", typeof(a[property]),typeof(b[property]) )
-          if(a[property] < b[property]){
-                  return -1 * sort_order;
+      return function (a, b) {
+        // a should come before b in the sorted order
+        // console.log("Property a and b", typeof(a[property]),typeof(b[property]) )
+        if (a[property] < b[property]) {
+          return -1 * sortOrder
           // a should come after b in the sorted order
-          }else if(a[property] > b[property]){
-                  return 1 * sort_order;
+        } else if (a[property] > b[property]) {
+          return 1 * sortOrder
           // a and b are the same
-          }else{
-                  return 0 * sort_order;
-          }
+        } else {
+          return 0 * sortOrder
+        }
       }
-  }
-  ,
-  sortDate(dateProperty, order = 'desc'){
-    var sort_order = 1;
-    if(order === "desc"){
-        sort_order = -1;
-    }
-    return function (a, b){
+    },
+    sortDate (dateProperty, order = 'desc') {
+      var sortOrder = 1
+      if (order === 'desc') {
+        sortOrder = -1
+      }
+      return function (a, b) {
         // a should come before b in the sorted order
         // console.log("Property a and b", a[dateProperty], b[dateProperty],typeof(a[dateProperty]),typeof(b[dateProperty]) )
-        var a_date = Date.parse(a[dateProperty]);
-        var b_date = Date.parse(b[dateProperty]);
-        if(isNaN(a_date)) 
-          a_date = Date.parse("01-Jan-2000") //Defaulted to earliest date
-        if(isNaN(b_date)) 
-          b_date =Date.parse("01-Jan-2000") //Defaulted to earliest date
-        // console.log("Property a_date and b_date", a_date,b_date, typeof(a_date),typeof(b_date), (a_date<b_date) )
+        var aDate = Date.parse(a[dateProperty])
+        var bDate = Date.parse(b[dateProperty])
+        if (isNaN(aDate)) { aDate = Date.parse('01-Jan-2000') } // Defaulted to earliest date
+        if (isNaN(bDate)) { bDate = Date.parse('01-Jan-2000') } // Defaulted to earliest date
+        // console.log("Property aDate and bDate", aDate,bDate, typeof(aDate),typeof(bDate), (aDate<bDate) )
 
-        if(a_date < b_date){
-                return -1 * sort_order;
+        if (aDate < bDate) {
+          return -1 * sortOrder
         // a should come after b in the sorted order
-        }else if(a_date > b_date){
-                return 1 * sort_order;
+        } else if (aDate > bDate) {
+          return 1 * sortOrder
         // a and b are the same
-        }else{
-                return 0 * sort_order;
+        } else {
+          return 0 * sortOrder
         }
-    }  
-  }
-  ,
-  removeTimeStamp(val) {
-    if (this.hasValue(val))  {
-      var d = new Date(val)
-      return d.toDateString();
+      }
+    },
+    removeTimeStamp (val) {
+      if (this.hasValue(val)) {
+        var d = new Date(val)
+        return d.toDateString()
+      }
+    },
+    hasBlank (val) {
+      if (!this.hasValue(val)) return 'No Information'
+      else return val
     }
-  },
-  hasBlank(val) {
-    if (!this.hasValue(val)) return "No Information";
-    else return val;
-  }
-  
 
-}
+  }
 }

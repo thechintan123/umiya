@@ -1,6 +1,5 @@
 <template>
 
-
   <q-carousel
     animated
     v-model="slide"
@@ -15,12 +14,12 @@
     height="200px"
     :fullscreen.sync="fullscreen"
     >
-  
+
     <q-carousel-slide class="no-padding" v-for="(photo,index) in photos" :key="index" :name="index">
        <q-img class="my-image-contain" :src="computeURL(photo)" contain>
         <template v-slot:error>
           <!-- <div class="absolute-full flex flex-center bg-negative text-white">Cannot load image</div> height="200px"-->
-          <q-img class="my-image-center bg-dark rounded-borders my-max-width my-image-contain" :src="avatarURL" contain/> 
+          <q-img class="my-image-center bg-dark rounded-borders my-max-width my-image-contain" :src="avatarURL" contain/>
         </template>
       </q-img>
     </q-carousel-slide>
@@ -35,7 +34,7 @@
             @click="fullscreen = !fullscreen"
           />
         </q-carousel-control>
-      </template>    
+      </template>
   </q-carousel>
          <q-img v-else  class="bg-dark rounded-borders my-max-width my-image-center" height="200px" :src="avatarURL" contain />
 
@@ -77,7 +76,7 @@ export default {
 </script>
 
 <style scoped>
-           .my-image-contain { 
+           .my-image-contain {
                 width:100% !important;
                 max-width: 100% !important;
                 height: 100% !important;
@@ -104,5 +103,5 @@ export default {
     /* object-fit: contain !important;
     width : 100px !important; */
   }
-}            
+}
 </style>

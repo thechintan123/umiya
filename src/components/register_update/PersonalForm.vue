@@ -375,9 +375,8 @@ export default {
       set (value) {
         this.$store.commit('registerUpdate/setFormDataIndividual', { key: 'partnerMaritalStatus', value: value })
       }
-    }
-    ,
-    emailMatchedNotification : { 
+    },
+    emailMatchedNotification: {
       get () {
         return this.$store.state.registerUpdate.formData.emailMatchedNotification
       },
@@ -491,14 +490,13 @@ export default {
     },
     checkAgeFromTo (partnerAgeFrom, partnerAgeTo) {
       // console.log("checkAgeFrom", partnerAgeFrom, this.formData.partnerAgeTo);
-      if(this.hasValue(partnerAgeFrom) && this.hasValue(partnerAgeTo)){
-      if (partnerAgeFrom > partnerAgeTo) {
-        return false
+      if (this.hasValue(partnerAgeFrom) && this.hasValue(partnerAgeTo)) {
+        if (partnerAgeFrom > partnerAgeTo) {
+          return false
+        } else {
+          return true
+        }
       } else {
-        return true
-      }
-      }
-      else {
         return true
       }
     },

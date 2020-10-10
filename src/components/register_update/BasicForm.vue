@@ -28,7 +28,7 @@
     <div class="row">
       <div class="col">
         <q-input
-          tabindex="4"
+          tabindex="2"
           outlined
           v-model="firstName"
           label="First Name*"
@@ -40,7 +40,7 @@
       </div>
       <div class="col">
         <q-input
-          tabindex="5"
+          tabindex="3"
           outlined
           v-model="lastName"
           label="Last Name*"
@@ -54,7 +54,7 @@
             <div class="row" v-if="!updateProfile">
               <div class="col">
                 <q-input
-                  tabindex="2"
+                  tabindex="4"
                   outlined
                   v-model="password"
                   :rules="[val => !!val || 'Field is required']"
@@ -79,7 +79,7 @@
               </div>
               <div class="col">
                 <q-input
-                  tabindex="3"
+                  tabindex="5"
                   outlined
                   v-model="confirmPassword"
                   :rules="[
@@ -205,11 +205,12 @@
           type="tel"
           :rules="[val => !!val || 'Field is required']"
           hint="Don't add + or ( )"
+          tabindex="11"
         />
       </div>
       <div class="col-9">
         <q-input
-          tabindex="11"
+          tabindex="12"
           v-model="primaryContact"
           outlined
           dense
@@ -227,18 +228,17 @@
       <div class="col-3">
         <q-input
           v-model="alternateContactCountryCode"
-          tabindex="12"
+          tabindex="13"
           outlined
           dense
           label="Country Code"
           type="tel"
-          :rules="[val => !!val || 'Field is required']"
           hint="Don't add + or ( )"
         />
       </div>
       <div class="col-9">
         <q-input
-          tabindex="13"
+          tabindex="14"
           v-model="alternateContact"
           outlined
           dense
@@ -261,7 +261,6 @@
         >
           <template v-slot:control>
             <q-toggle
-              tabindex="13"
               v-model="agreeTc"
               checked-icon="check"
               color="green"
@@ -269,6 +268,8 @@
               label="Agree Terms & Conditions *"
               dense
               :disable="updateProfile"
+              tabindex="13"
+
             />
           </template>
         </q-field>
@@ -306,6 +307,7 @@ import { mapState, mapActions, mapMutations } from 'vuex'
 import mixinFormValidations from 'src/mixins/Mixin_FormValidations.js'
 import mixinComputations from 'src/mixins/Mixin_Computations.js'
 import mixinUtils from 'src/mixins/Mixin_Utils.js'
+import { ageDifference } from 'src/constants/registerFormConstants.js'
 
 export default {
   mixins: [mixinFormValidations, mixinComputations, mixinUtils],
@@ -338,7 +340,7 @@ export default {
         value: age
       })
 
-      // this.defaultAgeFromAgeTo()
+      this.defaultAgeFromAgeTo()
     },
     filterOtherCountry (val, update, abort) {
       update(() => {
@@ -360,7 +362,8 @@ export default {
       })
     },
     checkOtherCountry (otherCountry) {
-      if (this.countryRadio === 'Other' && otherCountry === null) {
+      // console.log("checkOtherCountry",this.countryRadio, otherCountry, this.hasValue(otherCountry));
+      if (this.countryRadio === 'Other' && !this.hasValue(otherCountry)) {
         return false
       } else {
         return true
@@ -422,6 +425,31 @@ export default {
       } else {
         return true
       }
+    },
+    defaultAgeFromAgeTo () {
+      // console.log("Gender", this.formData.gender);
+      var partnerAgeFrom, partnerAgeTo
+      if (this.updateProfile !== true) {
+        if (this.age !== '') {
+          if (this.gender.name === 'Male') {
+            // Defaulting Age for Partner
+            partnerAgeFrom = this.age - ageDifference
+            partnerAgeTo = this.age
+          } else if (this.gender.name === 'Female') {
+            // Defaulting Age for Partner
+            partnerAgeFrom = this.age
+            partnerAgeTo = this.age + ageDifference
+          } else {
+            partnerAgeFrom = ''
+            partnerAgeTo = ''
+          }
+        } else {
+          partnerAgeFrom = ''
+          partnerAgeTo = ''
+        }
+      }
+      this.setFormDataIndividual({ key: 'partnerAgeFrom', value: partnerAgeFrom })
+      this.setFormDataIndividual({ key: 'partnerAgeTo', value: partnerAgeTo })
     }
   },
   computed: {

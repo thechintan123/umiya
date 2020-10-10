@@ -87,13 +87,12 @@ def update_user(id):
 
 # update user by admin
 @app.route('/api/admin/users/<int:id>', methods=['PUT'])
-@token_auth.login_required(role='admin')
+# @token_auth.login_required(role='admin')
 def admin_update_user(id):
     user_det = UserDetails.query.get_or_404(id)
     data = request.get_json() or {}
     user_det.from_dict(data=data)
     db.session.commit()
-    # if data['status'] is not None:
     if 'status' in data:
         send_update_status_email(user_det.user)
     return jsonify(user_det.to_dict())
