@@ -183,7 +183,6 @@ def get_photo(id, filename):
     if not folder.is_dir():
         return bad_request('Upload folder not found')
     file_path = folder / filename
-    # print("get_photo Response", file_path)
     try:
         # get PIL image
         img = Image.open(file_path)
@@ -191,7 +190,6 @@ def get_photo(id, filename):
         img.save(file_object, 'JPEG')
         file_object.seek(0)
         w = FileWrapper(file_object)
-        print("get_photo Response", img)
         return Response(file_object, mimetype='image/jpeg', direct_passthrough=True)
     except IOError as e:
         return bad_request('Unable to open file')

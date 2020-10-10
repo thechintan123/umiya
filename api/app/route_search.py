@@ -23,8 +23,8 @@ def search():
 
     country_id_local = []
     countries = data.get("country")
-        for country in countries:
-            country_id_local.append(country['id'])
+    for country in countries:
+        country_id_local.append(country['id'])
     else:
         # otherwise default to India
         india = Country.query.filter_by(name='India').first()
