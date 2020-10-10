@@ -23,6 +23,7 @@ def search():
 
     country_id_local = []
     countries = data.get("country")
+    if countries is not None:
         for country in countries:
             country_id_local.append(country['id'])
     else:
