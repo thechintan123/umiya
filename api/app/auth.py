@@ -26,6 +26,7 @@ def basic_auth_error(status):
 
 # used by http-auth to provide authentication based on roles
 @basic_auth.get_user_roles
+@token_auth.get_user_roles
 def get_user_roles(user):
     return [user.role.name]
 

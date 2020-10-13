@@ -225,7 +225,7 @@ module.exports = function (ctx) {
     cordova: {
       // noIosLegacyBuildFlag: true, // uncomment only if you know what you are doing
       id: 'org.cordova.umiyamatrimony.app',
-      version: '1.0.0'
+      version: '2.0.0'
     },
 
     // Full list of options: https://quasar.dev/quasar-cli/developing-capacitor-apps/configuring-capacitor

@@ -102,7 +102,7 @@ class UserDetails(db.Model):
     agree_tc = db.Column(db.Boolean, default=False, nullable=False)
     marital_status_id = db.Column(db.Integer, db.ForeignKey(
         'marital_status.id'), nullable=False)
-    height = db.Column(db.String(20), nullable=False)
+    height = db.Column(db.Float, nullable=False)
     gotra_id = db.Column(db.Integer, db.ForeignKey('gotra.id'), nullable=False)
     original_surname = db.Column(db.String(20), nullable=False)
     father_name = db.Column(db.String(50), nullable=False)
@@ -113,8 +113,8 @@ class UserDetails(db.Model):
     upload_proof = db.Column(db.String(70))
     partner_age_from = db.Column(db.Integer, nullable=False)
     partner_age_to = db.Column(db.Integer, nullable=False)
-    partner_height_from = db.Column(db.String(20), nullable=False)
-    partner_height_to = db.Column(db.String(20), nullable=False)
+    partner_height_from = db.Column(db.Float, nullable=False)
+    partner_height_to = db.Column(db.Float, nullable=False)
     # many to many relationship can be defined on either table
     partner_marital_status = db.relationship('MaritalStatus', secondary=user_partner_marital, lazy='dynamic',
                                              backref=db.backref('pms_prefs', lazy='dynamic'))
@@ -122,14 +122,14 @@ class UserDetails(db.Model):
         'where_know.id'), nullable=False)
     status_id = db.Column(db.Integer, db.ForeignKey(
         'profile_status.id'), default=1, nullable=False)
-    email_matched_notification = db.Column(db.Boolean, default=True, nullable=False)
+    email_matched_notification = db.Column(
+        db.Boolean, default=True, nullable=False)
     update_date = db.Column(
         db.DateTime, default=datetime.utcnow, nullable=False)
     create_date = db.Column(
         db.DateTime, default=datetime.utcnow, nullable=False)
     approval_date = db.Column(db.DateTime)
     correction_comments = db.Column(db.String(500))
-
 
     def to_dict(self):
         # many to many
@@ -172,7 +172,7 @@ class UserDetails(db.Model):
             'last_login': self.user.last_login.isoformat() + 'Z' if self.user.last_login else None,
             'upload_proof': self.upload_proof,
             'upload_photos': upload_photos,
-            'approval_date' : self.approval_date,
+            'approval_date': self.approval_date,
             'correction_comments': self.correction_comments
         }
         return data
@@ -192,7 +192,7 @@ class UserDetails(db.Model):
                     ['password', 'country', 'other_country',
                      'gotra', 'where_know', 'marital_status', 'gender',
                      'date_of_birth', 'partner_marital_status',
-                     'status', 'id', 'email', 'upload_photos', 'upload_proof','correction_comments']:
+                     'status', 'id', 'email', 'upload_photos', 'upload_proof', 'correction_comments']:
                 setattr(self, key, data[key])
 
         # had to separate queries and assign to self otherwise SQLachemy seems to commit too early???
@@ -213,7 +213,8 @@ class UserDetails(db.Model):
             gender = Gender.query.filter_by(
                 id=int(data['gender']['id'])).first()
         if 'status' in data and data['status'] is not None:
-            status = ProfileStatus.query.filter_by(id=int(data['status']['id'])).first()                
+            status = ProfileStatus.query.filter_by(
+                id=int(data['status']['id'])).first()
         if 'partner_marital_status' in data and data['partner_marital_status'] is not None:
             for pms in data['partner_marital_status']:
                 partner_marital_status.append(
@@ -234,7 +235,8 @@ class UserDetails(db.Model):
                 self.approval_date = datetime.utcnow()
             if status.name == 'Correction' and 'correction_comments' in data:
                 if data['correction_comments'] is not None:
-                    setattr(self, 'correction_comments', data['correction_comments'])
+                    setattr(self, 'correction_comments',
+                            data['correction_comments'])
         if 'date_of_birth' in data and data['date_of_birth'] != '':
             self.date_of_birth = datetime.strptime(
                 data['date_of_birth'], '%Y-%m-%d')
