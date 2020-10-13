@@ -67,9 +67,34 @@ def search():
         looking_for = int(looking_for)
 
     allowed_status_id = '2' #2 is for Approved
+    
+    user_details_id_from = None
+    user_details_id_from = data.get("userDetailsIdFrom")
 
+    user_details_id_to = None
+    user_details_id_to = data.get("userDetailsIdTo")
 
-    user_details = db.session.query(UserDetails).join(User).filter(and_(UserDetails.status_id == allowed_status_id,\
+    search_using_single_id = None
+    search_using_id_range = False
+
+    if user_details_id_from is not None and user_details_id_to is None:
+        search_using_single_id = user_details_id_from
+    elif user_details_id_from is None and user_details_id_to is not None:
+        search_using_single_id = user_details_id_to
+    elif user_details_id_from is not None and user_details_id_to is not None:
+        search_using_id_range = True
+
+    if search_using_single_id is not None:
+        formatted_user_details_id = "%{}%".format(search_using_single_id)
+        user_details = db.session.query(UserDetails).join(User).filter(and_(UserDetails.status_id == allowed_status_id, \
+                                            UserDetails.id.like(formatted_user_details_id))) \
+                                          .order_by(desc(User.last_login)).all()
+    elif search_using_id_range is True:
+        user_details = db.session.query(UserDetails).join(User).filter(and_(UserDetails.status_id == allowed_status_id, \
+                                          UserDetails.id.between(user_details_id_from, user_details_id_to))) \
+                                          .order_by(desc(User.last_login)).all()
+    else:    
+        user_details = db.session.query(UserDetails).join(User).filter(and_(UserDetails.status_id == allowed_status_id,\
                                           UserDetails.country_id.in_(country_id_local),\
                                           UserDetails.gender_id == looking_for, \
                                           UserDetails.date_of_birth <= curr_date_plus_min, UserDetails.date_of_birth >= curr_date_plus_max, \

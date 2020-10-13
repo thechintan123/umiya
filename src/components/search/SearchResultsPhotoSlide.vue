@@ -11,7 +11,7 @@
     transition-prev="slide-right"
     transition-next="slide-left"
     v-if="photos.length >= 1"
-    height="200px"
+    height="180px"
     :fullscreen.sync="fullscreen"
     >
 
@@ -36,7 +36,7 @@
         </q-carousel-control>
       </template>
   </q-carousel>
-         <q-img v-else  class="bg-dark rounded-borders my-max-width my-image-center" height="200px" :src="avatarURL" contain />
+         <q-img v-else  class="bg-dark rounded-borders my-max-width my-image-center" height="180px" :src="avatarURL" contain />
 
 </template>
 
