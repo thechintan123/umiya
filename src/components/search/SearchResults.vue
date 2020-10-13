@@ -28,7 +28,7 @@
     </q-toolbar>
       -->
       <!--<q-card>-->
-      <q-list padding v-for="(searchItem,index) in searchResultsPerPage" :key="index">
+      <q-list v-for="(searchItem,index) in searchResultsPerPage" :key="index">
         <div class="q-ma-sm row justify-evenly">
           <div class="col-4">
             <!-- <q-avatar rounded> -->
@@ -53,14 +53,15 @@
                 {{ searchItem.id }}
               </q-item-label>
               <q-item-label>
-                <u>Date of Birth</u>
+                <u>Gender</u>
                 :
-                {{ removeTimeStamp(searchItem.dateOfBirth)}}
+                {{searchItem.gender.name}}
               </q-item-label>
+
               <q-item-label>
                 <u>Age</u>
                 :
-                {{ computeAge(searchItem.dateOfBirth)}}
+                {{computeAge(searchItem.dateOfBirth)}}
               </q-item-label>
               <q-item-label>
                 <u>Height</u>

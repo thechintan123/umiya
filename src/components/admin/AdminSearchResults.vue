@@ -21,7 +21,7 @@
       </template>
       </q-banner>
 
-      <q-list padding v-for="(searchItem, index) in searchResultsPerPage" :key="index">
+      <q-list v-for="(searchItem, index) in searchResultsPerPage" :key="index">
         <div class="q-ma-sm row justify-evenly">
           <div class="col-4">
             <search-results-photo-slide
@@ -47,6 +47,11 @@
                 :
                 {{ removeTimeStamp(searchItem.dateOfBirth) }} <i> (Age : {{ computeAge(searchItem.dateOfBirth) }} )</i>
               </q-item-label>
+                    <q-item-label>
+                        <u>Gender</u>
+                        :
+                        {{ searchItem.gender.name }}
+                      </q-item-label>
                       <q-item-label>
                         <u>Location</u>
                         :
