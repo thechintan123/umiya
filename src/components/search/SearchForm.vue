@@ -126,7 +126,7 @@
             </div>
           </div>
           <q-separator inset color="secondary"/>
-          <p class="text-subtitle no-margin text-grey-5">Search based on above parameters or Search using profile ID.</p>
+          <p class="text-subtitle no-margin text-grey-6">Search based on above parameters or Search using profile ID.</p>
           <div class="row">
             <div class="col">
                 <q-input
@@ -204,22 +204,24 @@ export default {
       if (this.hasValue(this.userDetailsIdFrom) && this.hasValue(this.userDetailsIdTo)) {
         searchMessage = `You are searching using profile ID range from <b><u>${this.userDetailsIdFrom}</u></b> to <b><u>${this.userDetailsIdTo}</u></b>`
       } else if (this.hasValue(this.userDetailsIdFrom) && !this.hasValue(this.userDetailsIdTo)) {
-        searchMessage = `You are searching using all profile ID having <b><u>${this.userDetailsIdFrom} </u></b>`
+        searchMessage = `You are searching using all profile ID containing <b><u>${this.userDetailsIdFrom}</u></b> in it.`
       } else if (!this.hasValue(this.userDetailsIdFrom) && this.hasValue(this.userDetailsIdTo)) {
-        searchMessage = `You are searching using all profile ID having <b><u>${this.userDetailsIdTo} </u></b>`
+        searchMessage = `You are searching using all profile ID having <b><u>${this.userDetailsIdTo}</u></b> in it.`
       } else if (!this.hasValue(this.userDetailsIdFrom) && !this.hasValue(this.userDetailsIdTo)) {
-        var brigeGroom = this.lookingFor === 1 ? 'Groom (Male)' : 'Bride (Female)'
+        var brigeGroom = this.lookingFor === "1" ? 'Groom (Male)' : 'Bride (Female)'
         searchMessage = `You are searching using following parameters :  <br>
-                <b><u> ${brigeGroom} </u></b> of  age from <b><u>${this.ageFromTo.min}</u></b> to <b><u>${this.ageFromTo.max}</u></b> and other crietria... `
+                <b><u> ${brigeGroom} </u></b> of  age from <b><u>${this.ageFromTo.min}</u></b> to <b><u>${this.ageFromTo.max}</u></b> and other criteria... `
       }
       this.$q.notify({
+        icon: 'search',
         message: searchMessage,
-        color: 'secondary',
+        color: 'dark',
         multiLine: true,
         position: 'center',
         progress: true,
         type: 'ongoing',
-        html: true
+        html: true,
+        textColor: 'secondary'
 
       })
     },
@@ -267,7 +269,9 @@ export default {
           // Store in Stores
           this.$q.notify({
             type: 'positive',
-            message: 'Successfully search. Matching results are ' + data.length
+            message: 'Successfully search. Matching results are ' + data.length,
+            position: 'top-right'
+
           })
         })
         .catch(error => {

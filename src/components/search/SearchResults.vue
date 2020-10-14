@@ -57,7 +57,11 @@
                 :
                 {{searchItem.gender.name}}
               </q-item-label>
-
+              <q-item-label>
+                <u>Date of Birth</u>
+                :
+                {{removeTimeStamp(searchItem.dateOfBirth)}}
+              </q-item-label>
               <q-item-label>
                 <u>Age</u>
                 :
@@ -176,10 +180,10 @@ export default {
   methods: {
     ...mapMutations('search', ['setPage', 'setSearchResults']),
     ...mapActions('search', ['updatePage']),
-    removeTimeStamp (val) {
-      // console.log('ConvertToDate', val);
-      if (this.hasValue(val)) { return val.substring(0, 17) }
-    },
+    // removeTimeStamp (val) {
+    //   // console.log('ConvertToDate', val);
+    //   if (this.hasValue(val)) { return val.substring(0, 17) }
+    // },
     hasBlank (val) {
       // console.log('ifBlank', val, this);
       if (!this.hasValue(val)) { return 'Not logged In' } else { return val }
