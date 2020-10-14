@@ -11,7 +11,7 @@ const state = {
       max: 40
     },
 
-    lookingFor: '2', // 2 is for Bride ; Defaulted to Bride
+    lookingFor: "2", // 2 is for Bride ; Defaulted to Bride
     heightFrom: '',
     heightTo: '',
     maritalStatusPreference: [],

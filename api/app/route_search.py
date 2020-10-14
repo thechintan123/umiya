@@ -23,14 +23,9 @@ def search():
 
     country_id_local = []
     countries = data.get("country")
-<<<<<<< HEAD
     if countries is not None:
         for country in countries:
             country_id_local.append(country['id'])
-=======
-    for country in countries:
-        country_id_local.append(country['id'])
->>>>>>> f164aff6912288f32f847051e32a50c24d82e3c0
     else:
         ## otherwise default to India
         india = Country.query.filter_by(name='India').first()
