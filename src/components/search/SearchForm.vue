@@ -208,7 +208,7 @@ export default {
       } else if (!this.hasValue(this.userDetailsIdFrom) && this.hasValue(this.userDetailsIdTo)) {
         searchMessage = `You are searching using all profile ID having <b><u>${this.userDetailsIdTo}</u></b> in it.`
       } else if (!this.hasValue(this.userDetailsIdFrom) && !this.hasValue(this.userDetailsIdTo)) {
-        var brigeGroom = this.lookingFor === "1" ? 'Groom (Male)' : 'Bride (Female)'
+        var brigeGroom = this.lookingFor === '1' ? 'Groom (Male)' : 'Bride (Female)'
         searchMessage = `You are searching using following parameters :  <br>
                 <b><u> ${brigeGroom} </u></b> of  age from <b><u>${this.ageFromTo.min}</u></b> to <b><u>${this.ageFromTo.max}</u></b> and other criteria... `
       }

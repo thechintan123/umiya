@@ -77,11 +77,15 @@ def search():
     search_using_single_id = None
     search_using_id_range = False
 
-    if user_details_id_from is not None and user_details_id_to is None:
+    #To search using single id - The other Id should be valid.
+    if ((user_details_id_from is not None and user_details_id_from != '') \
+            and (user_details_id_to is None or user_details_id_to == '')):
         search_using_single_id = user_details_id_from
-    elif user_details_id_from is None and user_details_id_to is not None:
+    elif (user_details_id_from is None or user_details_id_from == '') \
+            and (user_details_id_to is not None and user_details_id_to != ''):
         search_using_single_id = user_details_id_to
-    elif user_details_id_from is not None and user_details_id_to is not None:
+    elif (user_details_id_from is not None and user_details_id_from != '') \
+            and (user_details_id_to is not None and user_details_id_to != ''):
         search_using_id_range = True
 
     if search_using_single_id is not None:
