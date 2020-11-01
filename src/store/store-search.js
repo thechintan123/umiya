@@ -15,8 +15,11 @@ const state = {
     heightFrom: '',
     heightTo: '',
     maritalStatusPreference: [],
-    country: [{ id: 81, name: 'India' }] // defaulted to India
+    country: [{ id: 81, name: 'India' }], // defaulted to India
     // country : ['India']
+    userDetailsIdFrom: '',
+    userDetailsIdTo: '',
+    searchUsingId: false
   },
   searchResults: [],
   searchResultsPerPage: [],

@@ -28,7 +28,7 @@
     </q-toolbar>
       -->
       <!--<q-card>-->
-      <q-list padding v-for="(searchItem,index) in searchResultsPerPage" :key="index">
+      <q-list v-for="(searchItem,index) in searchResultsPerPage" :key="index">
         <div class="q-ma-sm row justify-evenly">
           <div class="col-4">
             <!-- <q-avatar rounded> -->
@@ -53,14 +53,19 @@
                 {{ searchItem.id }}
               </q-item-label>
               <q-item-label>
+                <u>Gender</u>
+                :
+                {{searchItem.gender.name}}
+              </q-item-label>
+              <q-item-label>
                 <u>Date of Birth</u>
                 :
-                {{ removeTimeStamp(searchItem.dateOfBirth)}}
+                {{removeTimeStamp(searchItem.dateOfBirth)}}
               </q-item-label>
               <q-item-label>
                 <u>Age</u>
                 :
-                {{ computeAge(searchItem.dateOfBirth)}}
+                {{computeAge(searchItem.dateOfBirth)}}
               </q-item-label>
               <q-item-label>
                 <u>Height</u>
@@ -175,10 +180,10 @@ export default {
   methods: {
     ...mapMutations('search', ['setPage', 'setSearchResults']),
     ...mapActions('search', ['updatePage']),
-    removeTimeStamp (val) {
-      // console.log('ConvertToDate', val);
-      if (this.hasValue(val)) { return val.substring(0, 17) }
-    },
+    // removeTimeStamp (val) {
+    //   // console.log('ConvertToDate', val);
+    //   if (this.hasValue(val)) { return val.substring(0, 17) }
+    // },
     hasBlank (val) {
       // console.log('ifBlank', val, this);
       if (!this.hasValue(val)) { return 'Not logged In' } else { return val }
