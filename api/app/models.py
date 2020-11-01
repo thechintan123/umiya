@@ -104,10 +104,10 @@ class UserDetails(db.Model):
         'marital_status.id'), nullable=False)
     height = db.Column(db.Float, nullable=False)
     gotra_id = db.Column(db.Integer, db.ForeignKey('gotra.id'), nullable=False)
-    original_surname = db.Column(db.String(20), nullable=False)
+    original_surname = db.Column(db.String(40), nullable=False)
     father_name = db.Column(db.String(50), nullable=False)
-    residential_address = db.Column(db.String(100), nullable=False)
-    about_yourself = db.Column(db.String(200))
+    residential_address = db.Column(db.String(200), nullable=False)
+    about_yourself = db.Column(db.String(500))
     upload_photos = db.relationship(
         'UploadPhotos', backref='user_details', lazy='dynamic')
     upload_proof = db.Column(db.String(70))
@@ -130,6 +130,7 @@ class UserDetails(db.Model):
         db.DateTime, default=datetime.utcnow, nullable=False)
     approval_date = db.Column(db.DateTime)
     correction_comments = db.Column(db.String(500))
+    migration_data = db.Column(db.Boolean, default=False)
 
     def to_dict(self):
         # many to many
@@ -359,3 +360,4 @@ class Gender(db.Model):
 
     def __repr__(self):
         return '<Gender {}>'.format(self.name)
+
