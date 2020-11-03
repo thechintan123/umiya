@@ -221,8 +221,8 @@ export default {
         progress: true,
         type: 'ongoing',
         html: true,
-        textColor: 'secondary'
-
+        textColor: 'secondary',
+        timeout : 1500
       })
     },
     async submitSearchForm () {

@@ -42,6 +42,9 @@
               <q-item-label>Your Profile Status is  <b>{{ userDetail.status.name }} </b>
               <q-icon class="vertical-middle no-padding no-margin" :name="getIcon" color="primary" size="lg"/>
               </q-item-label>
+              <q-item-label :lines="3" v-if="userDetail.status.name === 'Correction'">
+                Correction Comments from Admin : <b>{{userDetail.correctionComments}}</b>
+              </q-item-label>
               <q-item-label caption :lines="3">
                 {{getProfileStatusMessage}}
               </q-item-label>
@@ -110,7 +113,7 @@ export default {
       } else if (status === 'Approved') {
         return 'NEXT STEP > You can search and contact the other profiles.'
       } else if (status === 'Correction') {
-        return 'NEXT STEP > We have sent an email for correction steps. Please ensure that your name and date of birth matches to that in your ID Proof. Please correct your profile so that we can verify and approve.'
+        return 'NEXT STEP > We have also sent an email for correction steps. Please ensure that your name and date of birth matches to that in your ID Proof. Please correct your profile so that we can verify and approve.'
       } else if (status === 'Deactivated') {
         return 'NEXT STEP > We have deactivated your profile. Please contact us to Activate your profile. If your profile will be deactivated for long, we will delete your profile completely.'
       } else {
