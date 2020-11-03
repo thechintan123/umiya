@@ -230,6 +230,6 @@ export default {
 }
 
 .my-style {
-  font-family: "Great Vibes", cursive;
+  font-family: "Niconne", cursive;
 }
 </style>

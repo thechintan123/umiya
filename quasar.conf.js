@@ -108,7 +108,8 @@ module.exports = function (ctx) {
         'QExpansionItem',
         'QCheckbox',
         'QTable',
-        'QSkeleton'
+        'QSkeleton',
+        'QSpinnerGears'
       ],
 
       directives: ['Ripple', 'ClosePopup'],
@@ -224,7 +225,8 @@ module.exports = function (ctx) {
     // Full list of options: https://quasar.dev/quasar-cli/developing-cordova-apps/configuring-cordova
     cordova: {
       // noIosLegacyBuildFlag: true, // uncomment only if you know what you are doing
-      id: 'org.cordova.umiyamatrimony.app',
+      //id: 'org.cordova.umiyamatrimony.app',
+      id : 'com.umiyamatrimony.app',
       version: '2.0.0'
     },
 

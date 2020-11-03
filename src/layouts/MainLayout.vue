@@ -1,6 +1,8 @@
 <template>
   <q-layout view="hHh lpR fFf">
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" /> -->
+
+<link href="https://fonts.googleapis.com/css2?family=Niconne&display=swap" rel="stylesheet">
 
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar>
@@ -8,17 +10,33 @@
 
         <q-toolbar-title>
           <div class="row">
-            <div class="col-auto q-mr-xs">
-              <q-avatar square size="42px">
-                <img src="~assets/logos/LogoMakr_Ring_RED.png" size="50%" />
-              </q-avatar>
+            <div class="col-auto q-mr-xs my-logo">
+              <!-- <q-avatar square size="42px">
+                <img src="statics/icons/favicon-128x128.png" contain />
+              </q-avatar> -->
+              <!-- <q-avatar square size="42px">
+                <img src="~assets/logos/LogoMakr_Ring_RED.png" contain />
+              </q-avatar>               -->
+
+            <q-avatar square size="52px">
+                <img src="~assets/logos/noun_2rings_heart.svg" />
+              </q-avatar> 
+
             </div>
-            <div
+
+            <!-- <div
               class="col-auto text-secondary UM_title"
               style="font-family: 'Great Vibes', cursive ;font-size: 36px"
-            >
-              <span class="text-white">Umiya</span>Matrimony.<span class="text-white">com</span>
-            </div>
+            > 
+            <span class="text-dark">Umiya</span>Matrimony.<span class="text-dark">com</span>
+
+            -->
+            <div
+              class="col-auto text-secondary UM_title"
+              style="font-family: 'Niconne', cursive; font-size: 35px"
+            >            
+              UmiyaMatrimony.com
+               </div>
           </div>
         </q-toolbar-title>
 
@@ -241,6 +259,7 @@ export default {
   }
 }
 
+
 .q-drawer .q-router-link--active {
   color: #ffd31d !important;
 }
@@ -255,5 +274,9 @@ export default {
   .UM_title {
     font-size: 14px;
   }
+}
+
+.icon {
+  fill: white;
 }
 </style>

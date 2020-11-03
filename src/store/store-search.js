@@ -40,7 +40,11 @@ const state = {
   searchPerformed: false,
   totalPages: 0,
   page: 1,
-  expand: true
+  expand: true,
+  count :{
+    start : 0,
+    end : 0
+  }
 
 }
 
@@ -88,6 +92,17 @@ const mutations = {
   setExpand (state, value) {
     state.expand = value
   }
+  ,
+  setCount(state, object) {
+    state.count[object.key] = object.value
+    console.log("setCount", state.count, object, object.key, object.value)
+  }
+  ,
+  setResultsPerPage(state, value){
+    state.resultsPerPage = value
+    console.log("setResultsPerPage", state.resultsPerPage, value)
+
+  }
 }
 
 // Not using Action and mutations since on updating page number and state of Search Results is not changed
@@ -123,7 +138,7 @@ const actions = {
     commit('setShowProgressBar', true)
 
     // Converting keys in Object from Snake to Camel Case
-    var searchResultsCamelList = []
+    var searchResultsCamelList = [];
     for (var i = 0; i < searchResults.length; i++) {
       var indObj = searchResults[i]
       var searchResultCamelObj = {}
@@ -133,20 +148,11 @@ const actions = {
       searchResultsCamelList.push(searchResultCamelObj)
     }
 
-    // Computing total Pages for Pagination
-    var totalPages = Math.ceil(
-      searchResultsCamelList.length / state.resultsPerPage
-    )
-
-    if (totalPages <= 0) {
-      totalPages = 0
-    } else if (totalPages <= 1) {
-      totalPages = 1
-    }
-
     commit('setSearchResults', searchResultsCamelList)
 
-    commit('setTotalPages', totalPages)
+
+     // Computing total Pages for Pagination
+    dispatch('computeTotalPages')
 
     // Create Results per page
     dispatch('updatePage', 1)
@@ -163,6 +169,21 @@ const actions = {
 
     commit('setShowProgressBar', false)
   },
+  computeTotalPages({commit}){
+  var resultsCount = state.searchResults.length;  
+  var totalPages = Math.ceil(
+    resultsCount / state.resultsPerPage
+  )
+
+  if (totalPages <= 0) {
+    totalPages = 0
+  } else if (totalPages <= 1) {
+    totalPages = 1
+  }
+  commit('setTotalPages', totalPages)
+
+}
+,
   updatePage ({ commit }, page) {
     var searchResultsPerPage = []
     var searchResultsList = state.searchResults
@@ -175,6 +196,9 @@ const actions = {
       searchResultsPerPage = searchResultsList.slice(startingIndex, endingIndex)
       commit('setSearchResultsPerPage', searchResultsPerPage)
       commit('setPage', page)
+      commit('setCount',{ key: 'start', value: startingIndex+1 })
+      commit('setCount', { key: 'end', value: endingIndex} )
+
     }
   }
 
