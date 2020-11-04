@@ -79,6 +79,7 @@ for index, row in df.iterrows():
     if row['upload_proof'] != 'nil':
         from_file = basedir / 'data' / 'image' / str(row['upload_proof'])
         to_file = new_folder / str(row['upload_proof'])
+        #to_file = basedir / 'data' / 'image_pa' / str(row['upload_proof'])
         shutil.copy(from_file, to_file)
 
     if row['upload_photos'] != 'nil':
@@ -86,5 +87,6 @@ for index, row in df.iterrows():
         for p in photos:
             from_file = basedir / 'data' / 'image' / str(p)
             to_file = new_folder / str(p)
+            #to_file = basedir / 'data' / 'image_pa' / str(p)
             shutil.copy(from_file, to_file)
     
