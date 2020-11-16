@@ -4,6 +4,7 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail, Content, Personalization, Email, From, Bcc, Subject, ReplyTo
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+import math
 
 
 # Generic method to send email via Sendgrid
@@ -78,19 +79,41 @@ def calc_age(match_users):
         years.append(year)
     return years
 
+# Calculate height in Ft and Inch for  display purpose
+def calc_height_ft_inches(match_users):
+    height_ft_inches = []
+    for m in match_users:
+        heightTotalInches = m.user_details.height * 0.393701
+        heightFt = math.floor(heightTotalInches / 12)
+        heightInches = round(heightTotalInches - heightFt * 12)
+        height_ft_inches.append(str(heightFt) + ' ft ' + str(heightInches) + ' inches')
+    return height_ft_inches    
+
 # Send match partner email
+def send_match_email(user, match_users, new_match_users):
+    # recipients = [user.email]
+    recipients = ['chintan123@gmail.com']
+    match_age_years = calc_age(match_users)
+    match_height_ft = calc_height_ft_inches(match_users)
 
-
-def send_match_email(user, match_users):
-    recipients = [user.email]
-    years = calc_age(match_users)
+    new_match_age_years = calc_age(new_match_users)
+    new_match_height_ft = calc_height_ft_inches(new_match_users)
     return send_email(
         recipients=recipients,
-        subject='New users match your preferred partner profile at UmiyaMatrimony',
+        subject='UmiyaMatrimony.com - ' +user.user_details.first_name.capitalize()  +' find your matches',
         text_body=render_template('email_match.txt',
-                                  user=user, match_users=match_users, years=years),
+                                  user=user, new_match_users = new_match_users, 
+                                  new_match_age_years = new_match_age_years, 
+                                  new_match_height_ft = new_match_height_ft,
+                                  match_users=match_users, match_age_years=match_age_years,
+                                  match_height_ft = match_height_ft                                  ),
         html_body=render_template('email_match.html',
-                                  user=user, match_users=match_users, years=years))
+                                  user=user, new_match_users = new_match_users, 
+                                  new_match_age_years = new_match_age_years, 
+                                  new_match_height_ft = new_match_height_ft,
+                                  match_users=match_users, match_age_years=match_age_years,
+                                  match_height_ft = match_height_ft
+                                  ))
 
 
 # Send updated status email
@@ -99,7 +122,7 @@ def send_update_status_email(user):
     recipients = [user.email]
     return send_email(
         recipients=recipients,
-        subject='UmiyaMatrimony - Profile Status is updated to ' +user.user_details.status.name.upper(),
+        subject='UmiyaMatrimony.com - Profile Status is updated to ' +user.user_details.status.name.upper(),
         text_body=render_template('email_update_status.txt',
                                   user=user),
         html_body=render_template('email_update_status.html',

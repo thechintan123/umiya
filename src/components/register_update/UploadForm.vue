@@ -21,9 +21,9 @@
           <template v-slot:control>
             <q-uploader
               :factory="uploadPhoto"
-              label="Upload Photos (max 4 images)"
+              label="Upload Photos (Max 4 images)"
               class="my-uploader"
-              accept="image/*, .pdf, .jpg, .jpeg, .gif, .png"
+              accept="image/*, .jpg, .jpeg, .gif, .png"
               multiple
               :max-files="4"
               ref="photo"
@@ -59,9 +59,9 @@
           <template v-slot:control>
             <q-uploader
               :factory="uploadProof"
-              label="Upload ID Proof (only 1 image or PDF)"
+              label="Upload ID Proof (only 1 image)"
               class="my-uploader"
-              accept="image/*, .pdf, .jpg, .jpeg, .gif, .png"
+              accept="image/*, .jpg, .jpeg, .gif, .png"
               color="accent"
               ref="proof"
               hide-upload-btn

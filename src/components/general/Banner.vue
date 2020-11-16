@@ -1,7 +1,7 @@
 <template>
       <q-banner
       rounded
-      :class="isSuccess ? 'bg-dark q-ma-sm' : 'bg-grey-3 q-mb-xs'">
+      :class="isSuccess ? 'bg-dark q-ma-sm' : 'bg-dark q-mb-xs'">
         <template v-slot:avatar>
           <q-icon
             :name="iconName"

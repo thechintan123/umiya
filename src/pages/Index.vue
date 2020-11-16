@@ -14,7 +14,7 @@
           padding
           navigation
           :autoplay="2500"
-          class="my-carousel bg-primary"
+          class="my-carousel bg-secondary"
         >
           <!--
       style="height:30vw"
@@ -230,6 +230,6 @@ export default {
 }
 
 .my-style {
-  font-family: "Niconne", cursive;
+  font-family: "Great Vibes", cursive;
 }
 </style>

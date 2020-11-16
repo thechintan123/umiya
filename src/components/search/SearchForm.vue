@@ -6,7 +6,7 @@
 
       <q-expansion-item
         label="Search"
-        header-class="bg-grey-3"
+        header-class="bg-dark"
         v-model="expand"
         expand-icon-class="text-primary"
 
