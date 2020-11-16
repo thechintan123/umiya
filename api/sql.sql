@@ -350,3 +350,16 @@ u.set_password('X232xxp9')
 from app import db
 db.session.add(u)
 db.session.commit()
+
+
+
+------ Added by CP for email ----
+update user
+set email='email', password_hash ='pbkdf2:sha256:150000$ldb5ndNx$9175ffae23933d919b0652ed7ae45de0252a468323019b1ac03868811774c030'
+where id=1035;
+
+update user
+set role_id =3
+where id=1035;
+
+insert into role values (3, 'email');

@@ -1,10 +1,30 @@
 Dear {{ user.user_details.first_name[0]|upper }}{{ user.user_details.first_name[1:] }}
 
 The below are new users that matched your preferred partner profile:
+    {% for m in new_match_users %}
+    {{ m.user_details.first_name }} {{ m.user_details.last_name}} ::: Profile ID : {{m.user_details.id}} , Age : {{ new_match_age_years[loop.index0] }} years, Height : {{ m.user_details.height }}, City : {{ m.user_details.city }}
+    {% endfor %}
 
+Your previous matches:
 {% for m in match_users %}
-{{ m.user_details.first_name }} {{ m.user_details.last_name}}, {{ years[loop.index0] }}Y, {{ m.user_details.gender.name }}
+{{ m.user_details.first_name }} {{ m.user_details.last_name}}  ::: Profile ID : {{m.user_details.id}} , Age : {{ match_age_years[loop.index0] }} years, Height : {{ m.user_details.height }}, City : {{ m.user_details.city }}
 {% endfor %}
 
-Best Regards,
+For security reasons, we are not sharing the profile pictures and other details over the email. To check the profile details,
+login into UmiyaMatrimony.com and follow below steps.
+  Login into <a href="https://www.umiyamatrimony.com">UmiyaMatrimony.com</a> or go to Mobile App</li>
+  Click on Search menu on left hand side</li>
+  Provide Profile ID. Either provide single profile Id or Profile ID range.</li>
+
+In case of any query, please feel free to contact us . We are happy to hear
+from you. To know more about our service, visit the website - UmiyaMatrimony.com.
+Hope you find your Life partner soon. 
+
+Best Regards, 
 Your Friends at UmiyaMatrimony.com
+
+    P.S: If you have not registered on UmiyaMatrimony.com using this email,
+    then inform us on help@umiyamatrimony.com. UmiyaMatrimony.com will never
+    share your personal info with a 3rd party. This email follows
+    UmiyaMatrimony.com's Privacy Policy . Copyright © UmiyaMatrimony.com - All
+    Rights Reserved.

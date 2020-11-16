@@ -1,15 +1,50 @@
+<h3>
+    <i
+      >UmiyaMatrimony.com - The exclusive matrimony service for Kutch Kadva
+      Patidar Sanatan Samaj</i
+    >
+  </h3>
 <p>Dear {{ user.user_details.first_name[0]|upper }}{{ user.user_details.first_name[1:] }}</p>
 
 <p>The below are new users that matched your preferred partner profile:</p>
-
-<ul>
+<ol>
+    {% for m in new_match_users %}
+    <li><b>{{ m.user_details.first_name }} {{ m.user_details.last_name}} </b> ::: Profile ID : {{m.user_details.id}} , Age : {{ new_match_age_years[loop.index0] }} years, Height : {{ new_match_height_ft[loop.index0] }} ({{m.user_details.height}} cms), City : {{ m.user_details.city }}</li>
+    {% endfor %}
+</ol>
+<hr>
+<p>Your previous matches:</p>
+<ol>
 {% for m in match_users %}
-<li>{{ m.user_details.first_name }} {{ m.user_details.last_name}}, {{ years[loop.index0] }}Y, {{ m.user_details.gender.name }}</li>
+<li><b>{{ m.user_details.first_name }} {{ m.user_details.last_name}} </b> ::: Profile ID : {{m.user_details.id}} , Age : {{ match_age_years[loop.index0] }} years, Height : {{ match_height_ft[loop.index0] }} ({{m.user_details.height}} cms), City : {{ m.user_details.city }}</li>
 {% endfor %}
-</ul>
-
-<p>
+</ol>
+For security reasons, we are not sharing the profile pictures and other details over the email. To check the profile details,
+login into UmiyaMatrimony.com and follow below steps.
+<ol>
+  <li>Login into <a href="https://www.umiyamatrimony.com">UmiyaMatrimony.com</a> or go to Mobile App</li>
+  <li>Click on Search menu on left hand side</li>
+  <li>Provide Profile ID. Either provide single profile Id or Profile ID range.</li>
+</ol>
+<br/>
+In case of any query, please feel free to contact us . We are happy to hear
+from you. To know more about our service, visit the website -
+<a href="https://www.umiyamatrimony.com">UmiyaMatrimony.com</a>. <br />
+<br />
+Hope you find your Life partner soon. <br />
+<br />
 Best Regards, <br />
 Your Friends at UmiyaMatrimony.com
-</p>
+<br />
+<br />
+<i
+  ><small>
+    P.S: If you have not registered on UmiyaMatrimony.com using this email,
+    then inform us on help@umiyamatrimony.com. UmiyaMatrimony.com will never
+    share your personal info with a 3rd party. This email follows
+    UmiyaMatrimony.com's Privacy Policy . Copyright © UmiyaMatrimony.com - All
+    Rights Reserved.
+  </small>
+</i>
+</div>
 
