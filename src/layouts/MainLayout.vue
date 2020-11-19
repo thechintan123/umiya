@@ -1,16 +1,16 @@
 <template>
   <q-layout view="hHh lpR fFf">
-    <!-- <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" /> -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
 
-<link href="https://fonts.googleapis.com/css2?family=Niconne&display=swap" rel="stylesheet">
+<!-- <link href="https://fonts.googleapis.com/css2?family=Niconne&display=swap" rel="stylesheet"> -->
 
-    <q-header elevated class="bg-primary text-white" height-hint="98">
+    <q-header reveal elevated class="bg-secondary text-white" height-hint="98">
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="left = !left" />
 
         <q-toolbar-title>
           <div class="row">
-            <div class="col-auto q-mr-xs my-logo">
+            <div class="col-auto q-mr-xs">
               <!-- <q-avatar square size="42px">
                 <img src="statics/icons/favicon-128x128.png" contain />
               </q-avatar> -->
@@ -18,25 +18,28 @@
                 <img src="~assets/logos/LogoMakr_Ring_RED.png" contain />
               </q-avatar>               -->
 
-            <q-avatar square size="52px">
-                <img src="~assets/logos/noun_2rings_heart.svg" />
-              </q-avatar> 
+            <!-- <q-avatar square > -->
+                <img         
+                style="height: 50px;"
+              class="my_logo" src="~assets/logos/rings_diamond_heart.svg" />
+              <!-- </q-avatar>  -->
+
+            </div>
+
+             <div
+              class="col-auto text-primary UM_title"
+              style="font-family: 'Great Vibes', cursive ;font-size: 36px"
+            > 
+            <span class="text-white">Umiya</span>Matrimony.<span class="text-white">com</span>
 
             </div>
 
             <!-- <div
               class="col-auto text-secondary UM_title"
-              style="font-family: 'Great Vibes', cursive ;font-size: 36px"
-            > 
-            <span class="text-dark">Umiya</span>Matrimony.<span class="text-dark">com</span>
-
-            -->
-            <div
-              class="col-auto text-secondary UM_title"
-              style="font-family: 'Niconne', cursive; font-size: 35px"
+              style="font-family: 'Great Vibes', cursive; font-size: 35px"
             >            
               UmiyaMatrimony.com
-               </div>
+               </div> -->
           </div>
         </q-toolbar-title>
 
@@ -45,10 +48,10 @@
     </q-header>
 
     <q-drawer
-      content-class="bg-secondary"
+      content-class="bg-primary"
       :breakpoint="600"
-      show-if-above
       v-model="left"
+      show-if-above
       side="left"
       elevated
       :width="250"
@@ -163,7 +166,7 @@ export default {
   data () {
     return {
       drawer: false,
-      left: true,
+      left: false,
       menuList
     }
   },
@@ -252,7 +255,7 @@ export default {
 }
 </script>
 
-<style>
+<style >
 @media screen and (min-width: 599px) {
   .q-tabs {
     display: true;
@@ -261,12 +264,17 @@ export default {
 
 
 .q-drawer .q-router-link--active {
-  color: #ffd31d !important;
+  color: #d63447 !important; 
+   /* color : $primary !important; */
 }
 
 @media screen and (max-width: 500px) {
   .UM_title {
-    font-size: 30px !important;
+    font-size: 26px !important;
+  }
+
+  .my_logo{
+    height: 40px !important;
   }
 }
 
@@ -276,7 +284,4 @@ export default {
   }
 }
 
-.icon {
-  fill: white;
-}
 </style>

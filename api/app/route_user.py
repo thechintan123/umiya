@@ -237,23 +237,29 @@ def delete_photo(id, filename):
 
 
 @app.route('/api/batch-notification', methods=['POST'])
-@basic_auth.login_required(role='email')
+#@basic_auth.login_required(role='email')
 def batch_notification():
     user_id = request.json['user_id']
     match_users_id = request.json['match_users_id']
+    new_match_users_id = request.json['new_match_users_id']
 
-    if user_id is None or match_users_id is None:
+    print('Route_user',user_id,match_users_id, new_match_users_id)
+    if user_id is None or new_match_users_id is None:
         return bad_request('Mandatory data was missing')
     user = User.query.filter_by(id=user_id).first()
     if user is None:
         return bad_request('User id is not valid')
+    new_match_users = []
+    for mid in new_match_users_id:
+        m = User.query.filter_by(id=mid).first()
+        if m is not None:
+            new_match_users.append(m)        
     match_users = []
     for mid in match_users_id:
         m = User.query.filter_by(id=mid).first()
         if m is not None:
             match_users.append(m)
-    if not match_users:
+    if not new_match_users:
         return bad_request("Match user id's are invalid")
-    send_match_email(user, match_users)
-
+    send_match_email(user, match_users, new_match_users)
     return '', 204

@@ -156,9 +156,9 @@
       <q-select outlined v-model="resultsPP" :options=resultsPerPageOptions :dense='true' 
        @input = "changeResultsPerPage"
       options-dense>
-        <!-- <template v-slot:prepend>
-          <q-icon name="fas fa-ellipsis-v"/>
-        </template> -->
+        <template v-slot:prepend>
+          <q-icon name="fas fa-list-alt"/>
+        </template>
       </q-select>
       </template>
       </q-banner>      

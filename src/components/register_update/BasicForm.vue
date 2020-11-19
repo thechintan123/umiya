@@ -57,7 +57,9 @@
                   tabindex="4"
                   outlined
                   v-model="password"
-                  :rules="[val => !!val || 'Field is required']"
+                  :rules="[val => !!val || 'Field is required',
+                   val => val.length > 6 || 'Minimum Password length should be greater than 6'                    
+                  ]"
                   lazy-rules
                   ref="password"
                   label="Password*"
