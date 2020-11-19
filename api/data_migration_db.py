@@ -65,9 +65,10 @@ for index, row in df.iterrows():
     # Upload Photos object
     photos = row['upload_photos'].split(",")
     for p in photos:
-        up = UploadPhotos(filename=p)
-        up.user_details = ud
-        db.session.add(up)
+        if p != 'nil':
+            up = UploadPhotos(filename=p)
+            up.user_details = ud
+            db.session.add(up)
 
     db.session.commit()
 
