@@ -80,9 +80,8 @@ users_approved = db.session.query(UserDetails) \
 #     .filter(and_(UserDetails.status_id == allowed_status_id, \
 #     UserDetails.approval_date >= one_day_ago )).all()
 
-print('Batch Notification 2',users_notif)
-
-print('Batch Notification 3',users_approved)
+#print('Batch Notification 2',users_notif)
+#print('Batch Notification 3',users_approved)
 
 
 for u in users_notif:
@@ -105,11 +104,10 @@ for u in users_notif:
             continue
         new_user_approval_days = relativedelta(now, n.approval_date).days
         # print('new_user_approval_days', new_user_approval_days, now, n.approval_date)
-        if new_user_approval_days > 1:
+        if new_user_approval_days > 7:
             match_users_id.append(n.user.id)
         else:
             new_match_users_id.append(n.user.id)
-        print('Attempt to send email to', u.user.email, 'matched with user', n.user.email)
     
     #print('New Match', new_match_users_id, 'Matched', match_users_id)              
     if new_match_users_id:
@@ -119,10 +117,10 @@ for u in users_notif:
         x = requests.post(url, json=payload, auth=(
             os.environ['EMAIL_NOTIF_USER'], os.environ['EMAIL_NOTIF_PASS']))
         if (x.status_code == 204):
-            print('Email successfully sent to ', u.user.email)
+            print('Email successfully sent to:', u.user.email)
+            print('New matched users:', new_match_users_id)
+            print('Matched users:', match_users_id)
+            print('==')
         else:
-            print(os.environ['EMAIL_NOTIF_URL'])
-            print(os.environ['EMAIL_NOTIF_USER'])
-            print(os.environ['EMAIL_NOTIF_PASS'])
             print('Email error sending to', u.user.email,
                   ' with status code ', x.status_code)
