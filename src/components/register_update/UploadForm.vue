@@ -665,6 +665,15 @@ export default {
           // this.showMessageDialog(message);
         })
     },
+    /*
+    uploadImage(file) {
+      return new Promise ((resolve) => {
+        resolve({
+          url: process.env.API + '/photos',
+          method: 'POST'
+        })
+      })
+    },*/
     hasKey (obj, key) {
       return key.split('.').every(function (x) {
         if (typeof obj !== 'object' || obj === null || !(x in obj)) return false
