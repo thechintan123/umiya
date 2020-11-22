@@ -4,7 +4,7 @@
 
     <q-table
       color="secondary"
-      card-class="bg-grey-3"
+      card-class="bg-dark"
       :data="searchResults"
       :columns="columns"
       row-key="email"

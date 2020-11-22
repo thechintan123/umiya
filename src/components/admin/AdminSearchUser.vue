@@ -6,7 +6,7 @@
 
       <q-expansion-item
         label="Search"
-        header-class="bg-grey-3"
+        header-class="bg-dark"
         v-model="expand"
         expand-icon-class="text-primary"
 
@@ -17,7 +17,7 @@
           </q-item-section>
 
           <q-item-section>
-              Search User
+              {{bannerTitle}}
           </q-item-section>
 
         </template>
@@ -118,6 +118,7 @@ import mixinDataElements from 'src/mixins/Mixin_DataElements.js'
 import mixinComputations from 'src/mixins/Mixin_Computations.js'
 
 export default {
+  props : ['bannerTitle'],
   mixins: [mixinFormValidations, mixinUtils, mixinDataElements, mixinComputations],
 
   mounted () {
@@ -172,7 +173,7 @@ export default {
       return axios
         .post(process.env.API + '/search-by-admin', searchParamsSnakeCase)
         .then(({ data }) => {
-          console.log('Search Success', data)
+          // console.log('Search Success', data)
           this.saveSearchResults(data)
           // Store in Stores
           this.$q.notify({

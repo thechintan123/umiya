@@ -70,7 +70,7 @@
               <q-item-label>
                 <u>Height</u>
                 :
-                {{convertHeightToFtInch(searchItem.height)}}
+                {{convertHeightToFtInch(searchItem.heightCms)}}
               </q-item-label>
               <q-item-label>
                 <u>Marital Status</u>

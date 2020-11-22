@@ -102,7 +102,7 @@ class UserDetails(db.Model):
     agree_tc = db.Column(db.Boolean, default=False, nullable=False)
     marital_status_id = db.Column(db.Integer, db.ForeignKey(
         'marital_status.id'), nullable=False)
-    height = db.Column(db.Float, nullable=False)
+    height_cms = db.Column(db.Float, nullable=False)
     gotra_id = db.Column(db.Integer, db.ForeignKey('gotra.id'), nullable=False)
     original_surname = db.Column(db.String(40), nullable=False)
     father_name = db.Column(db.String(50), nullable=False)
@@ -113,8 +113,8 @@ class UserDetails(db.Model):
     upload_proof = db.Column(db.String(70))
     partner_age_from = db.Column(db.Integer, nullable=False)
     partner_age_to = db.Column(db.Integer, nullable=False)
-    partner_height_from = db.Column(db.Float, nullable=False)
-    partner_height_to = db.Column(db.Float, nullable=False)
+    partner_height_from_cms = db.Column(db.Float, nullable=False)
+    partner_height_to_cms = db.Column(db.Float, nullable=False)
     # many to many relationship can be defined on either table
     partner_marital_status = db.relationship('MaritalStatus', secondary=user_partner_marital, lazy='dynamic',
                                              backref=db.backref('pms_prefs', lazy='dynamic'))
@@ -156,7 +156,7 @@ class UserDetails(db.Model):
             'alternate_contact': self.alternate_contact,
             'agree_tc': self.agree_tc,
             'marital_status': self.marital_status.to_dict(),
-            'height': self.height,
+            'height_cms': self.height_cms,
             'gotra': self.gotra.to_dict(),
             'original_surname': self.original_surname,
             'father_name': self.father_name,
@@ -164,8 +164,8 @@ class UserDetails(db.Model):
             'about_yourself': self.about_yourself,
             'partner_age_from': self.partner_age_from,
             'partner_age_to': self.partner_age_to,
-            'partner_height_from': self.partner_height_from,
-            'partner_height_to': self.partner_height_to,
+            'partner_height_from_cms': self.partner_height_from_cms,
+            'partner_height_to_cms': self.partner_height_to_cms,
             'partner_marital_status': pms,
             'where_know': self.where_know.to_dict(),
             'status': self.status.to_dict(),
