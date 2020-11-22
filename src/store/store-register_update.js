@@ -175,6 +175,7 @@ const actions = {
         commit('setList', { key: 'genderOptions', value: genderOptions })
       })
       .catch(error => {
+        console.log("Fetch List",error)
         mixinUtils.methods.showErrorDialog(error)
       })
   },
@@ -310,7 +311,7 @@ const actions = {
 
           // Mapping Height in Cms to Ft and Inch
           // state.formData.heightCms = state.formData.height
-          var heightCms = state.formData.height
+          var heightCms = state.formData.heightCms
           var heightFtInch = mixinComputations.methods.convertHeightToFtInch(
             heightCms
           )
@@ -325,7 +326,7 @@ const actions = {
 
           // Map Partner Height From and To. First, Convert to Ft and Inches
           var partnerHeightFromCms =
-                                state.formData.partnerHeightFrom
+                                state.formData.partnerHeightFromCms
           var partnerHeightFromFtInch = mixinComputations.methods.convertHeightToFtInch(
             partnerHeightFromCms
           )
@@ -340,7 +341,7 @@ const actions = {
           })
 
           var partnerHeightToCms =
-                                state.formData.partnerHeightTo
+                                state.formData.partnerHeightToCms
           var partnerHeightToFtInch = mixinComputations.methods.convertHeightToFtInch(
             partnerHeightToCms
           )
@@ -443,7 +444,10 @@ const actions = {
   // },
   defaultTestingData ({ commit }) {
     // this.formData = this.testData
-    commit('setFormData', testData)
+    // console.log("Test Data", JSON.stringify(testData));
+    
+    var newTestObject= Object.assign({}, testData)
+    commit('setFormData', newTestObject)
 
     commit('setTmpDataFull', testTmpData)
 

@@ -81,12 +81,12 @@ const mutations = {
   setSelectedUser (state, value) {
     state.selectedUser = value
     // state.selectedIdByAdmin = value[0].userDetailsId;
-    console.log('state.setSelectedUser', state.selectedUser, state.selectedIdByAdmin, value)
+    //console.log('state.setSelectedUser', state.selectedUser, state.selectedIdByAdmin, value)
   },
   setSelectedIdByAdmin (state, value) {
     state.selectedIdByAdmin = value
     // state.selectedIdByAdmin = value[0].userDetailsId;
-    console.log('state.setSelectedIdByAdmin', state.selectedIdByAdmin, value)
+    //console.log('state.setSelectedIdByAdmin', state.selectedIdByAdmin, value)
   }
 
 }

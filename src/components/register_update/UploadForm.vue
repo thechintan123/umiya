@@ -126,7 +126,8 @@ export default {
       'tmpData',
       'error',
       'previousFormData',
-      'userSubmitted'
+      'userSubmitted',
+      'showProgressBar'
     ]),
     ...mapState('admin', [
       'selectedIdByAdmin'
@@ -143,6 +144,8 @@ export default {
       'setSuccessProcess'
     ]),
     async uploadPhoto (file) {
+
+      // console.log("uploadPhoto START");
       var uploadFile = true
       if (this.updateProfile === true) {
         // var newFileList = this.$refs.photo.files;
@@ -173,8 +176,10 @@ export default {
         fd.append('filetype', 'photo')
         fd.append('user_details_id', this.formData.userDetailsId)
         // console.log("Upload Photo", this.formData.userDetailsId, fd, file);
-        await this.uploadImage(fd, 'Photo')
+         //uploadImageResponse = await this.uploadImage(fd, 'Photo')
+         await this.uploadImage(fd, 'Photo')
       }
+      // console.log("uploadPhoto End", uploadImageResponse);
     },
     async uploadProof (file) {
       var uploadFile = true
@@ -191,7 +196,7 @@ export default {
             index--
           } // end-if
         } // end-for
-        console.log('Photo List', this.$refs.proof)
+        // console.log('Photo List', this.$refs.proof)
       } // end -if updateprofile = true
       if (uploadFile === true) {
         const fd = new FormData()
@@ -461,22 +466,23 @@ export default {
       }
     },
     async registerFinalForm () {
+      // console.log("registerFinalForm", this.formData);
       var partnerHeightFromCms = this.convertHeightToCms(
         this.formData.partnerHeightFrom
       )
       // Height in cms are stored in DB so mapped back to same field - partnerHeightFrom
-      this.setFormDataIndividual({ key: 'partnerHeightFrom', value: partnerHeightFromCms })
+      this.setFormDataIndividual({ key: 'partnerHeightFromCms', value: partnerHeightFromCms })
 
       var partnerHeightToCms = this.convertHeightToCms(
         this.formData.partnerHeightTo
       )
-      this.setFormDataIndividual({ key: 'partnerHeightTo', value: partnerHeightToCms })
+      this.setFormDataIndividual({ key: 'partnerHeightToCms', value: partnerHeightToCms })
 
       if (this.formData.heightCms === '') {
         var heightCms = this.convertHeightToCms(
           this.formData.height
         )
-        this.setFormDataIndividual({ key: 'height', value: heightCms })
+        this.setFormDataIndividual({ key: 'heightCms', value: heightCms })
       }
 
       // Convert From Camel to Snake Case
@@ -487,16 +493,31 @@ export default {
         formDataSnakeCase[this.camelToSnake(key)] =
               this.formData[key]
       }
-      // console.log("Converted to Snake Case", formDataSnakeCase);
-
-      await this.registerUser(formDataSnakeCase)
-
-      if (this.formData.userDetailsId !== '') {
-        this.$refs.photo.upload()
-        this.$refs.proof.upload()
-        // this.successProcess = true
+      //  console.log("Converted to Snake Case", formDataSnakeCase);
+      try {
+          await this.registerUser(formDataSnakeCase)
+        // console.log("Register User", this.formData.userDetailsId, this.formData);
+        if (this.hasValue(this.formData.userDetailsId)) {
+            await this.$refs.photo.upload() //CP
+            await this.$refs.proof.upload() 
+            // this.successProcess = true
+            // console.log("Post Photo Upload")
+            
+            //this.postSubmit()
+          this.setSuccessProcess(true)        
+          }
       }
-      this.postSubmit()
+      catch(error) {
+        // console.log("Register User Error", error)
+      }
+      finally {
+        this.setShowProgressBar(false)
+      }
+
+  
+    this.setError({ key: 'finalSubmitClicked', value: false })
+    this.setShowProgressBar(false)
+    // console.log("Show Progress Bar", this.showProgressBar);
     },
 
     async updateFinalForm () {
@@ -592,7 +613,7 @@ export default {
       var userDetailsId = this.formData.userDetailsId
 
       var endPoint = ''
-      console.log('selectedIdByAdmin', this.selectedIdByAdmin)
+      // console.log('selectedIdByAdmin', this.selectedIdByAdmin)
       if (this.selectedIdByAdmin !== '' && this.selectedIdByAdmin != null) {
         endPoint = process.env.API + '/admin/users/' + userDetailsId
       } else {
@@ -624,13 +645,24 @@ export default {
         })
         .then(resolve => {
           // console.log("uploadImage - Then");
+
           this.$q.notify({
             type: 'positive',
             message: file + ' successfully uploaded'
           })
+          // if(file == 'Photo'){
+          //   this.isErrorPhoto = false;
+          // }else if(file == 'Proof'){
+          //   this.isErrorProof = false;
+          // }
+        // console.log("uploadImage - DONE");
+
         })
         .catch(error => {
-          this.showErrorDialog(error)
+          var message = "Only your "+file +" was not uploaded. Your registration is successful. Please login and upload your "+file +"."
+          //console.log("Error", error, message);
+          this.showErrorDialog(error, message);
+          // this.showMessageDialog(message);
         })
     },
     /*
@@ -669,7 +701,8 @@ export default {
           /* this.$router.push('/login') */
         })
         .catch(error => {
-          this.showErrorDialog(error)
+          var message = "Due to some technical reasons, your profile is not registered. Please try again. If issue continues, please let us know and try in some time."
+          this.showErrorDialog(error, message)
         })
     },
 

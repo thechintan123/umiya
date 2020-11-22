@@ -33,6 +33,7 @@ export default {
     convertHeightToCms (heightFtInch) {
       // console.log("convertHeightToCms", heightFtInch, this.hasValue(heightFtInch))
       if (this.hasValue(heightFtInch)) {
+        
         var heightFt = heightFtInch.substr(0, 1)
         var heightInches = heightFtInch.substr(5, 7)
         // console.log("Height Ft Inch", heightFt, heightInches);

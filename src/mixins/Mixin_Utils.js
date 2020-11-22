@@ -29,9 +29,10 @@ export default {
         }
       }
     },
-    showErrorDialog (error) {
+    showErrorDialog (error, msg="") {
+      //console.log("showErrorDialog", error, msg);
       let errorMessage = ''
-      errorMessage = '<b>' + error.toString() + '</b>'
+      errorMessage = error.toString()
 
       if (this.hasKey(error, 'response.data.message')) {
         errorMessage += '<br><br>Server Message :' + error.response.data.message
@@ -44,7 +45,7 @@ export default {
         persistent: true,
         transitionShow: 'scale',
         transitionHide: 'scale',
-        message: errorMessage,
+        message: msg + '<br><br><i>' + errorMessage + '</i>',
         backgroundColor: 'blue',
         html: true
       })
