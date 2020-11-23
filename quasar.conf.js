@@ -185,8 +185,8 @@ module.exports = function (ctx) {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {}, // only for GenerateSW
       manifest: {
-        name: 'UmiyaMatrimony.com',
-        short_name: 'UmiyaMatrimony.com',
+        name: 'UmiyaMatrimony',
+        short_name: 'UmiyaMatrimony',
         description: 'Umiya Matrimony',
         display: 'standalone',
         orientation: 'portrait',

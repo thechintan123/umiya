@@ -153,7 +153,7 @@
       </q-list>
       <q-banner inline-actions rounded dense class="bg-dark text-secondary">
       <template v-slot:action>
-      <q-select outlined v-model="resultsPP" :options=resultsPerPageOptions :dense='true' 
+      <q-select outlined v-model="resultsPP" :options=resultsPerPageOptions :dense='true'
        @input = "changeResultsPerPage"
       options-dense>
         <template v-slot:prepend>
@@ -161,7 +161,7 @@
         </template>
       </q-select>
       </template>
-      </q-banner>      
+      </q-banner>
     </q-card>
   </div>
 </template>
@@ -183,25 +183,23 @@ export default {
     return {
       slide: 'first',
       loggedIn: false,
-      resultsPerPageOptions : [5,10,15,20,25],
+      resultsPerPageOptions: [5, 10, 15, 20, 25]
     }
   },
   computed: {
-    ...mapState('search', ['searchResultsPerPage', 'count', 'searchResults', 'page','resultsPerPage'])
-    ,
-    resultsPP:{
-      get(){
-        return this.resultsPerPage;
-      }
-      ,
-      set(value){
-        this.setResultsPerPage(value);
+    ...mapState('search', ['searchResultsPerPage', 'count', 'searchResults', 'page', 'resultsPerPage']),
+    resultsPP: {
+      get () {
+        return this.resultsPerPage
+      },
+      set (value) {
+        this.setResultsPerPage(value)
       }
     }
   },
   methods: {
-    ...mapMutations('search', ['setPage', 'setSearchResults','setResultsPerPage']),
-    ...mapActions('search', ['updatePage','computeTotalPages']),
+    ...mapMutations('search', ['setPage', 'setSearchResults', 'setResultsPerPage']),
+    ...mapActions('search', ['updatePage', 'computeTotalPages']),
     // removeTimeStamp (val) {
     //   // console.log('ConvertToDate', val);
     //   if (this.hasValue(val)) { return val.substring(0, 17) }
@@ -221,12 +219,11 @@ export default {
       console.log('newList', newList)
       this.setSearchResults(newList)
       this.updatePage(this.page)
-    }
-    ,
-    changeResultsPerPage(option){
-      //this.setResultsPerPage(option)
+    },
+    changeResultsPerPage (option) {
+      // this.setResultsPerPage(option)
       this.computeTotalPages()
-      this.updatePage(1) //set the first page
+      this.updatePage(1) // set the first page
     }
   },
   created () {

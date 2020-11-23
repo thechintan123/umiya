@@ -222,7 +222,7 @@ export default {
         type: 'ongoing',
         html: true,
         textColor: 'secondary',
-        timeout : 1500
+        timeout: 1500
       })
     },
     async submitSearchForm () {

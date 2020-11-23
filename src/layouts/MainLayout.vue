@@ -19,7 +19,7 @@
               </q-avatar>               -->
 
             <!-- <q-avatar square > -->
-                <img         
+                <img
                 style="height: 50px;"
               class="my_logo" src="~assets/logos/rings_diamond_heart.svg" />
               <!-- </q-avatar>  -->
@@ -29,7 +29,7 @@
              <div
               class="col-auto text-primary UM_title"
               style="font-family: 'Great Vibes', cursive ;font-size: 36px"
-            > 
+            >
             <span class="text-white">Umiya</span>Matrimony.<span class="text-white">com</span>
 
             </div>
@@ -37,7 +37,7 @@
             <!-- <div
               class="col-auto text-secondary UM_title"
               style="font-family: 'Great Vibes', cursive; font-size: 35px"
-            >            
+            >
               UmiyaMatrimony.com
                </div> -->
           </div>
@@ -262,9 +262,8 @@ export default {
   }
 }
 
-
 .q-drawer .q-router-link--active {
-  color: #d63447 !important; 
+  color: #d63447 !important;
    /* color : $primary !important; */
 }
 

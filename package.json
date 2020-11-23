@@ -1,8 +1,8 @@
 {
   "name": "umiya",
   "version": "0.0.1",
-  "description": "UmiyaMatrimony.com",
-  "productName": "UmiyaMatrimony.com",
+  "description": "UmiyaMatrimony",
+  "productName": "UmiyaMatrimony",
   "cordovaId": "org.cordova.quasar.app",
   "capacitorId": "",
   "author": "Chintan Patel <chintan123@gmail.com>",
@@ -16,15 +16,15 @@
   },
   "dependencies": {
     "@quasar/cli": "^1.1.2",
-    "@quasar/extras": "^1.0.0",
+    "@quasar/extras": "^1.9.10",
     "@quasar/icongenie": "^2.3.3",
     "axios": "^0.18.1",
-    "quasar": "^1.0.0",
+    "quasar": "^1.14.5",
     "snakecase-keys": "^3.2.0",
     "vuex-map-fields": "^1.4.0"
   },
   "devDependencies": {
-    "@quasar/app": "^1.0.0",
+    "@quasar/app": "^1.9.6",
     "babel-eslint": "^10.0.1",
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.0",
