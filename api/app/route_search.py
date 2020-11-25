@@ -2,7 +2,7 @@ from flask import jsonify, request
 from . import app
 from datetime import datetime, timedelta
 from sqlalchemy import and_, desc
-from .models import UserDetails, Country, MaritalStatus, Gender, User, ProfileStatus
+from .models import UserDetails, Country, MaritalStatus, Gender, User, ProfileStatus, Role
 from app import db
 
 
@@ -67,6 +67,7 @@ def search():
         looking_for = int(looking_for)
 
     allowed_status_id = '2' #2 is for Approved
+    allowed_role_id = 2 #2 is for User
     
     user_details_id_from = None
     user_details_id_from = data.get("userDetailsIdFrom")
@@ -90,19 +91,22 @@ def search():
 
     if search_using_single_id is not None:
         formatted_user_details_id = "%{}%".format(search_using_single_id)
-        user_details = db.session.query(UserDetails).join(User).filter(and_(UserDetails.status_id == allowed_status_id, \
+        user_details = db.session.query(UserDetails).join(User).join(Role).filter(and_(UserDetails.status_id == allowed_status_id, \
+                                             Role.name == 'User', \
                                             UserDetails.id.like(formatted_user_details_id))) \
                                           .order_by(desc(User.last_login)).all()
     elif search_using_id_range is True:
-        user_details = db.session.query(UserDetails).join(User).filter(and_(UserDetails.status_id == allowed_status_id, \
+        user_details = db.session.query(UserDetails).join(User).join(Role).filter(and_(UserDetails.status_id == allowed_status_id, \
+                                            Role.name == 'User', \
                                           UserDetails.id.between(user_details_id_from, user_details_id_to))) \
                                           .order_by(desc(User.last_login)).all()
     else:    
-        user_details = db.session.query(UserDetails).join(User).filter(and_(UserDetails.status_id == allowed_status_id,\
+        user_details = db.session.query(UserDetails).join(User).join(Role).filter(and_(UserDetails.status_id == allowed_status_id,\
+                                            Role.name == 'User', \
                                           UserDetails.country_id.in_(country_id_local),\
                                           UserDetails.gender_id == looking_for, \
                                           UserDetails.date_of_birth <= curr_date_plus_min, UserDetails.date_of_birth >= curr_date_plus_max, \
-                                          UserDetails.height.between(height_min_in_cms, height_max_in_cms), \
+                                          UserDetails.height_cms.between(height_min_in_cms, height_max_in_cms), \
                                           UserDetails.marital_status_id.in_(marital_status_id_local))) \
                                           .order_by(desc(User.last_login)).all()
     user_list = []
@@ -125,6 +129,7 @@ def search_by_admin():
     print("data", data)
 
     allowed_status_id = '2' #1 is for Registered
+    allowed_role_id = 2 #2 is for User
 
     first_name = ""
     first_name = data.get("first_name")
@@ -181,13 +186,14 @@ def search_by_admin():
     # print("Profile Statuses", all_profile_statuses, profile_status_id_local, profile_status_list)
 
 
-    user_details = db.session.query(UserDetails).join(User).filter(and_(User.email.like(formatted_email),
+    user_details = db.session.query(UserDetails).join(User).join(Role).filter(and_(User.email.like(formatted_email),
                                         UserDetails.first_name.like(formatted_first_name), \
                                         UserDetails.last_name.like(formatted_last_name) , \
                                         UserDetails.id.like(formatted_user_details_id), \
                                         UserDetails.gender_id.in_(gender_id_local), \
-                                        UserDetails.status_id.in_(profile_status_id_local))) \
-                                        .order_by(desc(User.last_login)).all()       
+                                        UserDetails.status_id.in_(profile_status_id_local), \
+                                        Role.name == 'User' \
+                                        )).order_by(desc(User.last_login)).all()       
     
     # print('User Details',user_details)                                          
     user_list = []

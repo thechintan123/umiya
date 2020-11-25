@@ -230,7 +230,7 @@ export default {
       // console.log("showProgressBar", this.showProgressBar);
       await this.$refs.searchForm.validate().then(success => {
         if (success) {
-          console.log('Success', this.searchParams, this.$refs.searchForm)
+          // console.log('Success', this.searchParams, this.$refs.searchForm)
 
           this.showSearchMessage()
 
@@ -264,7 +264,7 @@ export default {
       return axios
         .post(process.env.API + '/search', data)
         .then(({ data }) => {
-          console.log('Search Success', data)
+          // console.log('Search Success', data)
           this.saveSearchResults(data)
           // Store in Stores
           this.$q.notify({

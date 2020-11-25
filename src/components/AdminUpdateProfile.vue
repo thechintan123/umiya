@@ -2,7 +2,7 @@
   <div class="fit">
     <progressBar v-show="showProgressBar"/>
     <spinner v-show="showProgressBar"/>
-    <adminSearchUser />
+    <adminSearchUser bannerTitle="Search User for Admin Updating Profile"/>
     <adminSearchResultList
       v-if="Object.keys(searchResultsPerPage).length"
     />
