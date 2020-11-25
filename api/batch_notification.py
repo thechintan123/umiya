@@ -94,7 +94,7 @@ for u in users_notif:
         age = relativedelta(now, dob).years
         if (age < u.partner_age_from or age > u.partner_age_to):
             continue
-        if (n.height < u.partner_height_from or n.height > u.partner_height_to):
+        if (n.height_cms < u.partner_height_from_cms or n.height_cms > u.partner_height_to_cms):
             continue
         pms_match = False
         for pms in u.partner_marital_status:

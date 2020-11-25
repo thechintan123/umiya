@@ -27,14 +27,14 @@ for index, row in df.iterrows():
         father_name=row['father_name'], \
         first_name=row['first_name'], gender_id=row['gender_id'], \
         gotra_id=row['gotra_id'], \
-        height=row['height'], \
+        height_cms=row['height'], \
         last_name=row['last_name'], \
         marital_status_id=row['marital_status_id'], \
         original_surname=row['original_surname'], \
         partner_age_from=row['partner_age_from'], \
         partner_age_to=row['partner_age_to'], \
-        partner_height_from=row['partner_height_from'], \
-        partner_height_to=row['partner_height_to'], \
+        partner_height_from_cms=row['partner_height_from'], \
+        partner_height_to_cms=row['partner_height_to'], \
         primary_contact=row['primary_contact'], \
         residential_address=row['residential_address'], \
         state=row['state'], \
