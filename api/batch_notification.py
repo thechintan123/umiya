@@ -84,6 +84,8 @@ users_approved = db.session.query(UserDetails) \
 #print('Batch Notification 2',users_notif)
 #print('Batch Notification 3',users_approved)
 
+if not users_notif:
+    print('No users to notify')
 
 for u in users_notif:
     match_users_id = []

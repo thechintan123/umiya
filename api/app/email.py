@@ -83,7 +83,7 @@ def calc_age(match_users):
 def calc_height_ft_inches(match_users):
     height_ft_inches = []
     for m in match_users:
-        heightTotalInches = m.user_details.height * 0.393701
+        heightTotalInches = m.user_details.height_cms * 0.393701
         heightFt = math.floor(heightTotalInches / 12)
         heightInches = round(heightTotalInches - heightFt * 12)
         height_ft_inches.append(str(heightFt) + ' ft ' + str(heightInches) + ' inches')
@@ -100,7 +100,7 @@ def send_match_email(user, match_users, new_match_users):
     new_match_height_ft = calc_height_ft_inches(new_match_users)
     return send_email(
         recipients=recipients,
-        subject='UmiyaMatrimony.com - ' +user.user_details.first_name.capitalize()  +' find your matches',
+        subject='UmiyaMatrimony.com - ' + user.user_details.first_name.capitalize() + ' find your matches',
         text_body=render_template('email_match.txt',
                                   user=user, new_match_users = new_match_users, 
                                   new_match_age_years = new_match_age_years, 
