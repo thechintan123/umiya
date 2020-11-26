@@ -53,8 +53,9 @@ elif(now_weekday == 6):
     end_char = 'z'
 else:
     start_char = 'v'
-    end_char = 'z'  
+    end_char = 'z' 
 
+print(f'First name starts with "{start_char}" and ends with "{end_char}"')
 
 ##defaulting for testing
 # start_char = 'v'
@@ -124,3 +125,5 @@ for u in users_notif:
         else:
             print('Email error sending to', u.user.email,
                   ' with status code ', x.status_code)
+    else:
+        print('No new matched users found')
