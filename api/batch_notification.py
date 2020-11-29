@@ -53,8 +53,9 @@ elif(now_weekday == 6):
     end_char = 'z'
 else:
     start_char = 'v'
-    end_char = 'z'  
+    end_char = 'z' 
 
+print(f'First name starts with "{start_char}" and ends with "{end_char}"')
 
 ##defaulting for testing
 # start_char = 'v'
@@ -83,6 +84,8 @@ users_approved = db.session.query(UserDetails) \
 #print('Batch Notification 2',users_notif)
 #print('Batch Notification 3',users_approved)
 
+if not users_notif:
+    print('No users to notify')
 
 for u in users_notif:
     match_users_id = []
@@ -94,7 +97,7 @@ for u in users_notif:
         age = relativedelta(now, dob).years
         if (age < u.partner_age_from or age > u.partner_age_to):
             continue
-        if (n.height < u.partner_height_from or n.height > u.partner_height_to):
+        if (n.height_cms < u.partner_height_from_cms or n.height_cms > u.partner_height_to_cms):
             continue
         pms_match = False
         for pms in u.partner_marital_status:
@@ -124,3 +127,5 @@ for u in users_notif:
         else:
             print('Email error sending to', u.user.email,
                   ' with status code ', x.status_code)
+    else:
+        print('No new matched users found')
