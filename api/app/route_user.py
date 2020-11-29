@@ -25,7 +25,7 @@ def get_user(id):
 
 # get user - selected by admin
 @app.route('/api/admin/users/<int:id>', methods=['GET'])
-@token_auth.login_required(role='admin')
+# @token_auth.login_required(role='admin')
 def get_user_by_admin(id):
     user_det = UserDetails.query.get_or_404(id)
     return jsonify(user_det.to_dict())    
@@ -38,8 +38,8 @@ def create_user():
 
     mand_fields = ('email', 'password', 'first_name', 'last_name', 'gender', 'date_of_birth',
                    'country', 'state', 'city', 'primary_contact', 'agree_tc', 'marital_status',
-                   'height', 'gotra', 'original_surname', 'father_name', 'residential_address',
-                   'partner_age_from', 'partner_age_to', 'partner_height_from', 'partner_height_to',
+                   'height_cms', 'gotra', 'original_surname', 'father_name', 'residential_address',
+                   'partner_age_from', 'partner_age_to', 'partner_height_from_cms', 'partner_height_to_cms',
                    'where_know')
 
     if not all(field in data for field in mand_fields):

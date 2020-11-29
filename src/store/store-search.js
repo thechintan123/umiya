@@ -94,13 +94,11 @@ const mutations = {
   },
   setCount (state, object) {
     state.count[object.key] = object.value
-    //console.log("setCount", state.count, object, object.key, object.value)
-  }
-  ,
-  setResultsPerPage(state, value){
+    // console.log("setCount", state.count, object, object.key, object.value)
+  },
+  setResultsPerPage (state, value) {
     state.resultsPerPage = value
-   // console.log("setResultsPerPage", state.resultsPerPage, value)
-
+    // console.log("setResultsPerPage", state.resultsPerPage, value)
   }
 }
 

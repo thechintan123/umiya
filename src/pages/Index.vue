@@ -74,7 +74,8 @@
     <div class="flex flex-center q-pa-md row q-gutter-x-xl q-gutter-y-xl">
 
      <q-card
-      flat bordered class="my-card cursor-pointer" @click="register()" align="center" key="card1">
+      flat bordered class="my-card cursor-pointer" @click="register()" align="center" key="card1" 
+      data-aos="zoom-in-up">
         <q-card-section class="bg-dark">
           <q-icon name="far fa-edit" class="text-secondary" style="font-size: 3rem;" />
         </q-card-section>
@@ -87,7 +88,7 @@
       </q-card>
 
       <q-card
-       flat bordered class="my-card" align="center" >
+       flat bordered class="my-card" align="center" data-aos="zoom-in-up">
         <q-card-section class="bg-dark">
           <q-icon name="phone_android" class="text-secondary" style="font-size: 3rem;" />
         </q-card-section>
@@ -107,7 +108,7 @@
     </div>
     <div
     class="flex flex-center q-pa-md row q-gutter-x-xl q-gutter-y-xl">
-      <q-card flat bordered class="my-card" align="center" >
+      <q-card flat bordered class="my-card" align="center" data-aos="zoom-in-up">
         <q-card-section class="bg-dark">
           <q-icon name="fas fa-user-lock" class="text-secondary" style="font-size: 3rem;" />
         </q-card-section>
@@ -121,7 +122,7 @@
       </q-card>
 
       <q-card
-      flat bordered class="my-card" align="center">
+      flat bordered class="my-card" align="center" data-aos="zoom-in-up">
         <q-card-section class="bg-dark">
           <q-icon name="fas fa-user-check" class="text-secondary" style="font-size: 3rem;" />
         </q-card-section>
@@ -135,7 +136,7 @@
       </q-card>
 
       <q-card
-      flat bordered class="my-card" align="center" >
+      flat bordered class="my-card" align="center" data-aos="zoom-in-up">
         <q-card-section class="bg-dark">
           <q-icon name="fas fa-search" class="text-secondary" style="font-size: 3rem;" />
         </q-card-section>
@@ -147,7 +148,7 @@
       </q-card>
 
       <q-card
-      flat bordered class="my-card" align="center" >
+      flat bordered class="my-card" align="center" data-aos="zoom-in-up">
         <q-card-section class="bg-dark">
           <q-icon name="fas fa-ban" class="text-secondary" style="font-size: 3rem;" />
         </q-card-section>
@@ -159,9 +160,19 @@
       </q-card>
     </div>
   </q-page>
+
 </template>
 
 <script>
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
+AOS.init({
+  duration: 1200,
+  easing : 'linear'
+});
+
+
 export default {
   name: 'PageIndex',
   data () {
@@ -193,6 +204,8 @@ export default {
     }
   }
 }
+
+
 </script>
 
 <style>
@@ -215,13 +228,13 @@ export default {
   max-width: 420px;
   height: 220px;
   /*transition: width 0.5s;*/
-  transition: transform 0.2s;
+  transition: transform 0.2s !important;
 }
 
 .my-card:hover {
   /*max-width: 425px;*/
   /* border-color: #d63447; */ /*$secondary : #d63447;*/
-  transform: scale(1.1);
+  transform: scale(1.1) !important;
 }
 
 .my-carousel {
@@ -231,5 +244,9 @@ export default {
 
 .my-style {
   font-family: "Great Vibes", cursive;
+}
+
+* {
+  box-sizing: border-box;
 }
 </style>
