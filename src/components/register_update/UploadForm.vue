@@ -101,6 +101,8 @@ import mixinFormValidations from 'src/mixins/Mixin_FormValidations.js'
 import mixinComputations from 'src/mixins/Mixin_Computations.js'
 import mixinUtils from 'src/mixins/Mixin_Utils.js'
 
+import { Platform } from 'quasar'
+
 export default {
   mixins: [mixinComputations, mixinFormValidations, mixinUtils],
   props: ['updateProfile'],
@@ -144,7 +146,6 @@ export default {
       'setSuccessProcess'
     ]),
     async uploadPhoto (file) {
-
       // console.log("uploadPhoto START");
       var uploadFile = true
       if (this.updateProfile === true) {
@@ -176,8 +177,8 @@ export default {
         fd.append('filetype', 'photo')
         fd.append('user_details_id', this.formData.userDetailsId)
         // console.log("Upload Photo", this.formData.userDetailsId, fd, file);
-         //uploadImageResponse = await this.uploadImage(fd, 'Photo')
-         await this.uploadImage(fd, 'Photo')
+        // uploadImageResponse = await this.uploadImage(fd, 'Photo')
+        await this.uploadImage(fd, 'Photo')
       }
       // console.log("uploadPhoto End", uploadImageResponse);
     },
@@ -343,10 +344,11 @@ export default {
       if (this.updateProfile !== true || this.updatePhoto === true) {
         if (this.$refs.photo.files.length > 4) {
           this.$refs.photo.files.length = 4 // This will reduce the allowed files to 4 photos;
-          this.$q.notify({
-            type: 'negative',
-            message: 'Only 4 Photos are allowed. Addtional ones are removed'
-          })
+          // this.$q.notify({
+          //   type: 'negative',
+          //   message: 'Only 4 Photos are allowed. Addtional ones are removed'
+          // })
+          this.showNotification('negative', 'Only 4 Photos are allowed. Addtional ones are removed')
         } else if (this.$refs.photo.files.length === 0) {
           this.isErrorPhoto = true
           // this.uploadHasError = true;
@@ -377,7 +379,7 @@ export default {
     },
     validateUploadForm () {
       this.setShowProgressBar(true)
-
+      this.$q.loading.show()
       this.checkPhoto()
       this.checkProof()
 
@@ -464,6 +466,7 @@ export default {
           this.registerFinalForm()
         }
       }
+
     },
     async registerFinalForm () {
       // console.log("registerFinalForm", this.formData);
@@ -485,6 +488,27 @@ export default {
         this.setFormDataIndividual({ key: 'heightCms', value: heightCms })
       }
 
+      //Adding System_Source related details
+      var systemSource;
+      var systemAdditional;
+      if(Platform.is.desktop){
+        systemSource = 'Desktop Browser'
+      }else if(Platform.is.mobile){
+        systemSource = 'Mobile Browser'
+      }else if(Platform.is.android){
+        systemSource = 'Android App'
+      }else if(Platform.is.ios){
+        systemSource = 'iOS App'
+      }
+      systemAdditional = JSON.stringify(Platform);
+
+      console.log("systemSource", systemSource,systemAdditional );
+
+      this.setFormDataIndividual({ key: 'systemSource', value: systemSource })
+
+      this.setFormDataIndividual({ key: 'systemAdditional', value: systemAdditional })
+
+
       // Convert From Camel to Snake Case
       // converting from CamelCase to SnakeCase
       var formDataSnakeCase = {}
@@ -495,28 +519,25 @@ export default {
       }
       //  console.log("Converted to Snake Case", formDataSnakeCase);
       try {
-          await this.registerUser(formDataSnakeCase)
+        await this.registerUser(formDataSnakeCase)
         // console.log("Register User", this.formData.userDetailsId, this.formData);
         if (this.hasValue(this.formData.userDetailsId)) {
-            await this.$refs.photo.upload() //CP
-            await this.$refs.proof.upload() 
-            // this.successProcess = true
-            // console.log("Post Photo Upload")
-            
-            //this.postSubmit()
-          this.setSuccessProcess(true)        
-          }
-      }
-      catch(error) {
+          await this.$refs.photo.upload() // CP
+          await this.$refs.proof.upload()
+          // this.successProcess = true
+          // console.log("Post Photo Upload")
+
+          // this.postSubmit()
+          this.setSuccessProcess(true)
+        }
+      } catch (error) {
         // console.log("Register User Error", error)
-      }
-      finally {
+      } finally {
         this.setShowProgressBar(false)
       }
 
-  
-    this.setError({ key: 'finalSubmitClicked', value: false })
-    this.setShowProgressBar(false)
+      this.setError({ key: 'finalSubmitClicked', value: false })
+      this.setShowProgressBar(false)
     // console.log("Show Progress Bar", this.showProgressBar);
     },
 
@@ -646,22 +667,23 @@ export default {
         .then(resolve => {
           // console.log("uploadImage - Then");
 
-          this.$q.notify({
-            type: 'positive',
-            message: file + ' successfully uploaded'
-          })
+          // this.$q.notify({
+          //   type: 'positive',
+          //   message: file + ' successfully uploaded'
+          // })
+          var message =  file + ' successfully uploaded'
+          this.showNotification('positive', message)
           // if(file == 'Photo'){
           //   this.isErrorPhoto = false;
           // }else if(file == 'Proof'){
           //   this.isErrorProof = false;
           // }
-        // console.log("uploadImage - DONE");
-
+          // console.log("uploadImage - DONE");
         })
         .catch(error => {
-          var message = "Only your "+file +" was not uploaded. Your registration is successful. Please login and upload your "+file +"."
-          //console.log("Error", error, message);
-          this.showErrorDialog(error, message);
+          var message = 'Only your ' + file + ' was not uploaded. Your registration is successful. Please login and upload your ' + file + '.'
+          // console.log("Error", error, message);
+          this.showErrorDialog(error, message)
           // this.showMessageDialog(message);
         })
     },
@@ -673,7 +695,7 @@ export default {
           method: 'POST'
         })
       })
-    },*/
+    }, */
     hasKey (obj, key) {
       return key.split('.').every(function (x) {
         if (typeof obj !== 'object' || obj === null || !(x in obj)) return false
@@ -693,15 +715,16 @@ export default {
           })
 
           // console.log("this.userDetailsId", this.formData.userDetailsId, typeof data);
-
-          this.$q.notify({
-            type: 'positive',
-            message: 'Successfully registered'
-          })
+          this.showNotification('positive','Succesfully registered')
+          // this.$q.notify({
+          //   type: 'positive',
+          //   message: 'Successfully registered',
+          //   position : 'top-right'
+          // })
           /* this.$router.push('/login') */
         })
         .catch(error => {
-          var message = "Due to some technical reasons, your profile is not registered. Please try again. If issue continues, please let us know and try in some time."
+          var message = 'Due to some technical reasons, your profile is not registered. Please try again. If issue continues, please let us know and try in some time.'
           this.showErrorDialog(error, message)
         })
     },
@@ -723,10 +746,12 @@ export default {
     onRejected (rejectedEntries) {
       // Notify plugin needs to be installed
       // https://quasar.dev/quasar-plugins/notify#Installation
-      this.$q.notify({
-        type: 'negative',
-        message: `${rejectedEntries.length} file(s) did not pass validation constraints`
-      })
+      // this.$q.notify({
+      //   type: 'negative',
+      //   message: `${rejectedEntries.length} file(s) did not pass validation constraints`
+      // })
+      var message = `${rejectedEntries.length} file(s) did not pass validation constraints`
+      this.showNotification('negative', message)
     },
     goBack () {
       this.$store.commit('registerUpdate/setTab', 'personal')

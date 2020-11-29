@@ -1,4 +1,4 @@
-import { Dialog } from 'quasar'
+import { Dialog, Notify } from 'quasar'
 
 export default {
   methods: {
@@ -9,7 +9,8 @@ export default {
           type: 'negative',
           multiLine: true,
           message: 'You need to login to access this page.You are redirected to Login Page',
-          icon: 'warning'
+          icon: 'warning',
+          position :  'center'
         })
         this.$router.push('/login')
       } else {
@@ -22,15 +23,16 @@ export default {
               multiLine: true,
               message:
               'You do not have right permission to access this page.You are redirected to Home Page',
-              icon: 'warning'
+              icon: 'warning',
+              position : 'center'
             })
             this.$router.push('/')
           }
         }
       }
     },
-    showErrorDialog (error, msg="") {
-      //console.log("showErrorDialog", error, msg);
+    showErrorDialog (error, msg = '') {
+      // console.log("showErrorDialog", error, msg);
       let errorMessage = ''
       errorMessage = error.toString()
 
@@ -60,6 +62,21 @@ export default {
         html: true
       })
     },
+    showNotification(type, message){
+      var position;
+      if(type === 'positive'){
+        position = 'top-right'
+      }else{
+        position = 'center'
+      }
+        Notify.create({
+            type: type,
+            message: message,
+            position : position
+          })
+          /* this.$router.push('/login') */
+    }
+,
     hasKey (obj, key) {
       // console.log('hasKey', obj, key)
       return key.split('.').every(function (x) {

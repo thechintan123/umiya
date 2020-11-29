@@ -7,9 +7,9 @@
         v-show="successProcess"
               />
     <q-card>
-      <progressBar v-show="showProgressBar" />
+      <progressBar v-if="showProgressBar" />
       <spinner
-        v-show="showProgressBar"
+        v-if="showProgressBar"
       />
       <q-form no-reset-focus
       greedy ref="changePasswordForm"
@@ -150,10 +150,11 @@ export default {
         .post(process.env.API + '/change_password', data)
         .then(({ data }) => {
           this.successProcess = true
-          this.$q.notify({
-            type: 'positive',
-            message: 'Password has been changed successfully'
-          })
+          // this.$q.notify({
+          //   type: 'positive',
+          //   message: 'Password has been changed successfully'
+          // })
+          this.showNotification('positive','Password has been changed successfully');
           this.$refs.changePasswordForm.reset()
           this.showProgressBar = false
         })

@@ -222,7 +222,7 @@ export default {
         type: 'ongoing',
         html: true,
         textColor: 'secondary',
-        timeout : 1500
+        timeout: 2400
       })
     },
     async submitSearchForm () {
@@ -267,12 +267,14 @@ export default {
           // console.log('Search Success', data)
           this.saveSearchResults(data)
           // Store in Stores
-          this.$q.notify({
-            type: 'positive',
-            message: 'Successfully search. Matching results are ' + data.length,
-            position: 'top-right'
+          // this.$q.notify({
+          //   type: 'positive',
+          //   message: 'Successfully search. Matching results are ' + data.length,
+          //   position: 'top-right'
 
-          })
+          // })
+          var message = 'Successfully search. Matching results are ' + data.length
+          this.showNotification('positive', message)
         })
         .catch(error => {
           console.log('fetchSearch', error)

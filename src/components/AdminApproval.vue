@@ -1,7 +1,7 @@
 <template>
   <div class="fit">
-    <progressBar v-show="showProgressBar"/>
-    <spinner v-show="showProgressBar"/>
+    <progressBar v-if="showProgressBar"/>
+    <spinner v-if="showProgressBar"/>
     <adminSearchUser bannerTitle="Search User for Admin Approval"/>
     <adminSearchResults
       v-if="Object.keys(searchResultsPerPage).length"

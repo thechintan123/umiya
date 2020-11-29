@@ -109,13 +109,14 @@ module.exports = function (ctx) {
         'QCheckbox',
         'QTable',
         'QSkeleton',
-        'QSpinnerGears'
+        'QSpinnerGears',
+        'QSpinnerHearts'
       ],
 
       directives: ['Ripple', 'ClosePopup'],
 
       // Quasar plugins
-      plugins: ['Dialog', 'Notify']
+      plugins: ['Dialog', 'Notify','Loading']
     },
 
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie
@@ -185,9 +186,9 @@ module.exports = function (ctx) {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {}, // only for GenerateSW
       manifest: {
-        name: 'UmiyaMatrimony.com',
-        short_name: 'UmiyaMatrimony.com',
-        description: 'Umiya Matrimony',
+        name: 'UmiyaMatrimony',
+        short_name: 'UmiyaMatrimony',
+        description: 'UmiyaMatrimony',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
@@ -227,7 +228,7 @@ module.exports = function (ctx) {
       // noIosLegacyBuildFlag: true, // uncomment only if you know what you are doing
       //id: 'org.cordova.umiyamatrimony.app',
       id : 'com.umiyamatrimony.app',
-      version: '2.0.0'
+      version: '1.0.1'
     },
 
     // Full list of options: https://quasar.dev/quasar-cli/developing-capacitor-apps/configuring-capacitor

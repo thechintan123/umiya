@@ -1,8 +1,8 @@
 <template>
   <div class="fit column">
    <!-- <q-linear-progress v-show="showProgressBar" indeterminate size="10px" color="secondary" /> -->
-   <progressBar v-show="showProgressBar" />
-    <spinner v-show="showProgressBar" />
+   <!-- <progressBar v-show="showProgressBar" />
+    <spinner v-show="showProgressBar" /> -->
     <q-card v-if="showfield">
 
         <!-- <q-banner rounded dense class="bg-grey-3">
@@ -163,17 +163,18 @@ export default {
           this.showErrorDialog(error)
           // console.log('uploadImage - Error - Error Message', errMsg)
         })
-    } else {
-      this.$q.notify({
-        type: 'negative',
-        multiLine: true,
+    // } else {
+    //   this.$q.notify({
+    //     type: 'negative',
+    //     multiLine: true,
 
-        message: 'You need to login to access this page.You are redirected to Login Page',
-        icon: 'warning'
+    //     message: 'You need to login to access this page.You are redirected to Login Page',
+    //     icon: 'warning'
 
-      })
-      this.$router.push('/login')
-    }
+    //   })
+    //   this.$router.push('/login')
+    // }
+  }
   }
 
 }
