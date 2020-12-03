@@ -91,8 +91,7 @@ def calc_height_ft_inches(match_users):
 
 # Send match partner email
 def send_match_email(user, match_users, new_match_users):
-    # recipients = [user.email]
-    recipients = ['chintan123@gmail.com']
+    recipients = [user.email]
     match_age_years = calc_age(match_users)
     match_height_ft = calc_height_ft_inches(match_users)
 
