@@ -50,7 +50,7 @@ elif(now_weekday == 6):
     end_char = 'z'
 else:
     start_char = 'v'
-    end_char = 'z' 
+    end_char = 'z'
 
 print(f'First name starts with "{start_char}" and ends with "{end_char}"')
 
@@ -85,16 +85,17 @@ for u in users_notif:
                 pms_match = True
         if not pms_match:
             continue
-        new_user_approval_days = relativedelta(now, n.approval_date).days
+
+        new_user_approval_days = (now - n.approval_date).days
 
         if new_user_approval_days > 7:
             match_users_id.append(n.user.id)
         else:
             new_match_users_id.append(n.user.id)
 
-        
+
     print (f'Checking user {u.first_name} {u.last_name} ({u.user.email})')
-        
+
     if new_match_users_id:
         url = os.environ['EMAIL_NOTIF_URL']
         payload = {'user_id': u.user.id, 'match_users_id': match_users_id,
