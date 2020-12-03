@@ -243,7 +243,6 @@ def batch_notification():
     match_users_id = request.json['match_users_id']
     new_match_users_id = request.json['new_match_users_id']
 
-    print('Route_user',user_id,match_users_id, new_match_users_id)
     if user_id is None or new_match_users_id is None:
         return bad_request('Mandatory data was missing')
     user = User.query.filter_by(id=user_id).first()
