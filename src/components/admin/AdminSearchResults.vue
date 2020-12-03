@@ -236,10 +236,12 @@ export default {
             } else if (newStatusId === 2) {
               this.setSearchItemParameter({ item: item, key: 'approvalDate', value: data.approval_date })
             }
-            this.$q.notify({
-              type: 'positive',
-              message: 'Profile status of ' + data.first_name + ' is updated to ' + data.status.name
-            })
+            // this.$q.notify({
+            //   type: 'positive',
+            //   message: 'Profile status of ' + data.first_name + ' is updated to ' + data.status.name
+            // })
+            var message = 'Profile status of ' + data.first_name + ' is updated to ' + data.status.name
+            this.showNotification('positive', message)
             this.setShowProgressBar(false)
           })
           .catch(error => {

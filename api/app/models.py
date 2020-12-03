@@ -131,6 +131,8 @@ class UserDetails(db.Model):
     approval_date = db.Column(db.DateTime)
     correction_comments = db.Column(db.String(500))
     migration_data = db.Column(db.Boolean, default=False)
+    system_source = db.Column(db.String(50))
+    system_additional = db.Column(db.String(500))
 
     def to_dict(self):
         # many to many

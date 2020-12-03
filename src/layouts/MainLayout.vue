@@ -2,6 +2,7 @@
   <q-layout view="hHh lpR fFf">
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
 
+
 <!-- <link href="https://fonts.googleapis.com/css2?family=Niconne&display=swap" rel="stylesheet"> -->
 
     <q-header reveal elevated class="bg-secondary text-white" height-hint="98">
@@ -9,8 +10,8 @@
         <q-btn dense flat round icon="menu" @click="left = !left" />
 
         <q-toolbar-title>
-          <div class="row">
-            <div class="col-auto q-mr-xs">
+          <!-- <div class="row"> -->
+            <!-- <div class="col-auto q-mr-xs"> -->
               <!-- <q-avatar square size="42px">
                 <img src="statics/icons/favicon-128x128.png" contain />
               </q-avatar> -->
@@ -18,21 +19,27 @@
                 <img src="~assets/logos/LogoMakr_Ring_RED.png" contain />
               </q-avatar>               -->
 
-            <!-- <q-avatar square > -->
-                <img
+            <q-avatar square size="3.3rem"> 
+               <!-- <img
                 style="height: 50px;"
-              class="my_logo" src="~assets/logos/rings_diamond_heart.svg" />
-              <!-- </q-avatar>  -->
+              class="my_logo" src="~assets/logos/rings_diamond_heart.svg" /> -->
+              <img
+              src="~assets/logos/rings_diamond_heart.svg" />              
+              </q-avatar> 
+            
 
-            </div>
+            <!-- </div> -->
 
-             <div
+             <!-- <div
               class="col-auto text-primary UM_title"
               style="font-family: 'Great Vibes', cursive ;font-size: 36px"
-            >
+            > -->
+            <span
+              class="text-primary"
+              style="font-family: 'Great Vibes', cursive ;font-size: 36px">
             <span class="text-white">Umiya</span>Matrimony.<span class="text-white">com</span>
-
-            </div>
+            </span>
+            <!-- </div> -->
 
             <!-- <div
               class="col-auto text-secondary UM_title"
@@ -48,7 +55,7 @@
     </q-header>
 
     <q-drawer
-      content-class="bg-primary"
+      content-class="bg-primary text-white"
       :breakpoint="600"
       v-model="left"
       show-if-above
@@ -60,12 +67,15 @@
         v-for="(menuItem, index) in filteredMenuList"
         :key="index"
       >
-        <q-item exact class="text-grey-1" :to="menuItem.link"
-         v-ripple>
+        <q-item exact :to="menuItem.link"
+         v-ripple clickable>
           <q-item-section avatar>
             <q-icon :name="menuItem.icon" />
           </q-item-section>
-          <q-item-section>{{ menuItem.label }}</q-item-section>
+          </q-item-section>          
+          <q-item-section>{{ menuItem.label }}
+          </q-item-section>
+
         </q-item>
 
         <q-separator v-if="menuItem.separator" />
@@ -103,7 +113,7 @@ const menuList = [
     link: '/logout',
     separator: true,
     loggedIn: true,
-    clicable: true
+    clickable: true
   },
   {
     icon: 'person_add',
@@ -167,18 +177,21 @@ export default {
     return {
       drawer: false,
       left: false,
+      logoutPopup : false,
       menuList
     }
   },
   methods: {
     ...mapActions('auth', ['logoutUser']),
     logout () {
-      this.logoutUser()
-      this.$q.notify({
-        type: 'positive',
-        message: 'You are now logged out'
-      })
-      this.$router.push('/')
+      console.log("Logout Called", this.logoutPopup);
+      this.logoutPopup = true;
+      // this.logoutUser()
+      // this.$q.notify({
+      //   type: 'positive',
+      //   message: 'You are now logged out'
+      // })
+      // this.$router.push('/')
     },
     showMenuItem (menuItem) {
       var loggedInStatus = this.loggedIn
@@ -251,6 +264,10 @@ export default {
     }
 
   }
+  ,
+  components : {
+      logout: require('../components/Logout.vue').default
+  }
 
 }
 </script>
@@ -282,5 +299,13 @@ export default {
     font-size: 14px;
   }
 }
+
+
+/*For Border Resizing*/
+
+* {
+  box-sizing: border-box;
+}
+
 
 </style>

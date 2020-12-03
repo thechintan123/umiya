@@ -2,9 +2,9 @@
   <div class="fit column">
     <q-card bordered>
 
-      <progressBar v-show="showProgressBar" />
+      <progressBar v-if="showProgressBar" />
       <spinner
-        v-show="showProgressBar"
+        v-if="showProgressBar"
       />
         <banner
         iconName="fas fa-sign-in-alt"
@@ -78,6 +78,7 @@
 import { mapActions } from 'vuex'
 import mixinFormValidations from 'src/mixins/Mixin_FormValidations.js'
 import mixinUtils from 'src/mixins/Mixin_Utils.js'
+import { testLoginData } from 'src/constants/testingDefaults.js'
 
 export default {
   mixins: [mixinFormValidations, mixinUtils],
@@ -99,10 +100,11 @@ export default {
       this.showProgressBar = true
       this.loginUser(this.formData)
         .then(() => {
-          this.$q.notify({
-            type: 'positive',
-            message: 'Welcome ! You are now logged in.'
-          })
+          // this.$q.notify({
+          //   type: 'positive',
+          //   message: 'Welcome ! You are now logged in.'
+          // })
+          this.showNotification('positive','Welcome ! You are now logged in.')
           this.showProgressBar = false
 
           this.$router.push('/profile')
@@ -114,8 +116,7 @@ export default {
         })
     },
     defaultTestingData () {
-      this.formData.email = 'chin1@gmail.com'
-      this.formData.password = 'password'
+      this.formData = testLoginData
     }
   },
   components: {

@@ -2,6 +2,8 @@ import axios from 'axios'
 import mixinComputations from 'src/mixins/Mixin_Computations.js'
 import mixinUtils from 'src/mixins/Mixin_Utils.js'
 import { testData, testTmpData } from 'src/constants/testingDefaults'
+import { Platform } from 'quasar'
+
 
 const getDefaultState = () => {
   return {
@@ -175,7 +177,7 @@ const actions = {
         commit('setList', { key: 'genderOptions', value: genderOptions })
       })
       .catch(error => {
-        console.log("Fetch List",error)
+        console.log('Fetch List', error)
         mixinUtils.methods.showErrorDialog(error)
       })
   },
@@ -444,9 +446,9 @@ const actions = {
   // },
   defaultTestingData ({ commit }) {
     // this.formData = this.testData
-    // console.log("Test Data", JSON.stringify(testData));
-    
-    var newTestObject= Object.assign({}, testData)
+    console.log("Platform", Platform, navigator);
+
+    var newTestObject = Object.assign({}, testData)
     commit('setFormData', newTestObject)
 
     commit('setTmpDataFull', testTmpData)

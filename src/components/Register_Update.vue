@@ -1,7 +1,7 @@
 <template>
   <div class="fit column">
-    <progress-bar v-show="showProgressBar" />
-    <spinner v-show="showProgressBar" />
+    <progress-bar v-if="showProgressBar" />
+    <spinner v-if="showProgressBar" />
     <successUpdate
       v-if="successProcess"
       :updateProfile="updateProfile"
@@ -10,7 +10,7 @@
       <banner
         :iconName="updateProfile ? 'edit' : 'account_circle'"
         :bannerTitle="
-          updateProfile ? 'Update Profile' : 'Register on website!!'
+          updateProfile ? 'Update Profile' : 'Register - It\'s FREE'
         "
       />
       <q-tabs

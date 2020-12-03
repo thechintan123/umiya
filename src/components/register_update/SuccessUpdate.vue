@@ -1,12 +1,10 @@
 <template>
     <q-card>
-      <q-banner class="bg-grey-3 q-mb-xs">
-        <template v-slot:avatar>
-          <q-icon name="assignment_turned_in" color="secondary" />
-        </template>
-        <template v-if="updateProfile">Successful Update !!</template>
-        <template v-else>Sucessful Registration !!</template>
-        </q-banner>
+      <banner
+        iconName="assignment_turned_in"
+        :bannerTitle="
+          updateProfile ? 'Successful Update !!' : 'Sucessful Registration !'"
+      /> 
       <q-card-section>
         Thank you
         <span class="text-weight-bolder text-capitalize"
@@ -70,6 +68,10 @@ export default {
   },
   methods: {
     ...mapMutations('registerUpdate', ['setSuccessProcess', 'setTab'])
+  }
+  ,
+  components: {
+    banner: require('../general/Banner.vue').default,
   }
 
 }

@@ -118,7 +118,7 @@ import mixinDataElements from 'src/mixins/Mixin_DataElements.js'
 import mixinComputations from 'src/mixins/Mixin_Computations.js'
 
 export default {
-  props : ['bannerTitle'],
+  props: ['bannerTitle'],
   mixins: [mixinFormValidations, mixinUtils, mixinDataElements, mixinComputations],
 
   mounted () {
@@ -176,10 +176,12 @@ export default {
           // console.log('Search Success', data)
           this.saveSearchResults(data)
           // Store in Stores
-          this.$q.notify({
-            type: 'positive',
-            message: 'Successfully search. Matching results are ' + data.length
-          })
+          // this.$q.notify({
+          //   type: 'positive',
+          //   message: 'Successfully search. Matching results are ' + data.length
+          // })
+          var message = 'Successfully search. Matching results are ' + data.length;
+          this.showNotification('positive',message)
         })
         .catch(error => {
           console.log('fetchSearch', error)
