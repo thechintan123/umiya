@@ -25,7 +25,7 @@ def get_user(id):
 
 # get user - selected by admin
 @app.route('/api/admin/users/<int:id>', methods=['GET'])
-# @token_auth.login_required(role='admin')
+@token_auth.login_required(role='admin')
 def get_user_by_admin(id):
     user_det = UserDetails.query.get_or_404(id)
     return jsonify(user_det.to_dict())    
@@ -87,7 +87,7 @@ def update_user(id):
 
 # update user by admin
 @app.route('/api/admin/users/<int:id>', methods=['PUT'])
-# @token_auth.login_required(role='admin')
+@token_auth.login_required(role='admin')
 def admin_update_user(id):
     user_det = UserDetails.query.get_or_404(id)
     data = request.get_json() or {}
@@ -197,7 +197,7 @@ def get_photo(id, filename):
 
 # delete photo from database and folder
 @app.route('/api/photos/<int:id>/<string:filename>', methods=['DELETE'])
-# @token_auth.login_required
+@token_auth.login_required
 def delete_photo(id, filename):
     UserDetails.query.get_or_404(id)
     # curr_user = token_auth.current_user()
