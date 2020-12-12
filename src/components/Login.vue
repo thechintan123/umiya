@@ -104,7 +104,7 @@ export default {
           //   type: 'positive',
           //   message: 'Welcome ! You are now logged in.'
           // })
-          this.showNotification('positive','Welcome ! You are now logged in.')
+          this.showNotification('positive', 'Welcome ! You are now logged in.')
           this.showProgressBar = false
 
           this.$router.push('/profile')

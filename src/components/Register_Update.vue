@@ -117,7 +117,7 @@ export default {
   },
   mounted () {
     // for updateProfile
-    // console.log("Mounted", this, this.$props)
+    // console.log("Register_update Mounted", this.updateProfile, this)
     var selectedUserDetailsId = ''
     var selectedByAdmin = false
 
@@ -130,11 +130,22 @@ export default {
         this.fetchLoggedInUserDetails()
         selectedUserDetailsId = this.loggedInUserDetailsId
       }
-      console.log('selectedUserDetailsId', selectedUserDetailsId)
+      this.resetState()
+      // console.log('selectedUserDetailsId', selectedUserDetailsId)
       this.fetchUserDetails({
         userDetailsId: selectedUserDetailsId,
         selectedByAdmin: selectedByAdmin
       })
+    } else { // User has selected Register Link - updateProfile is false
+      // If user is already logged in
+      this.fetchLoggedInUserDetails()
+      selectedUserDetailsId = this.loggedInUserDetailsId
+      // console.log("Register_update selectedUserDetailsId",selectedUserDetailsId)
+
+      if (selectedUserDetailsId !== '') {
+        // if user is logged in and wants to register
+        this.resetState()
+      }
     }
     this.fetchList()
   },
@@ -164,7 +175,7 @@ export default {
 
   beforeDestroy () {
     // console.log('REgister-Update - Before Destroyed');
-    this.resetState()
+    // this.resetState()
   },
   components: {
     successUpdate: require('./register_update/SuccessUpdate.vue').default,

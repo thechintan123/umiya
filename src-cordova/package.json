@@ -1,11 +1,7 @@
 {
   "name": "org.cordova.umiyamatrimony.app",
-<<<<<<< HEAD
-  "displayName": "Umiya Matrimony",
-=======
   "displayName": "UmiyaMatrimony",
->>>>>>> b32a5d382302a96192b224cb441f64a4c9f36c67
-  "version": "1.0.0",
+  "version": "2.1.0",
   "description": "A sample Apache Cordova application that responds to the deviceready event.",
   "main": "index.js",
   "scripts": {

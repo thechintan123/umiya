@@ -41,3 +41,6 @@ migrations
 api/app/static/uploads/
 api/uploads/
 api/data/
+
+# Mobile App KeyStore and App
+apk_key/

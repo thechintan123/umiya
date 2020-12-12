@@ -45,9 +45,9 @@ var testTmpData = {
   age: 30
 }
 
-var testLoginData={
-  email : 'chin1@gmail.com',
-  password : 'password'
+var testLoginData = {
+  email: 'chin1@gmail.com',
+  password: 'password'
 }
 
 export { testData, testTmpData, testLoginData }

@@ -180,8 +180,8 @@ export default {
           //   type: 'positive',
           //   message: 'Successfully search. Matching results are ' + data.length
           // })
-          var message = 'Successfully search. Matching results are ' + data.length;
-          this.showNotification('positive',message)
+          var message = 'Successfully search. Matching results are ' + data.length
+          this.showNotification('positive', message)
         })
         .catch(error => {
           console.log('fetchSearch', error)

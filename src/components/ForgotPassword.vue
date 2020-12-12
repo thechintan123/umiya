@@ -8,10 +8,18 @@
         v-show="successProcess"
               />
 
-      <progressBar v-show="showProgressBar" />
+      <progressBar v-if="showProgressBar" />
       <spinner
-        v-show="showProgressBar"
+        v-if="showProgressBar"
       />
+  <div class="q-pb-md q-gutter-sm">
+        <q-breadcrumbs active-color="secondary">
+          <q-breadcrumbs-el icon="home" to="/" />
+          <q-breadcrumbs-el label="Login" icon="toggle_on" to= "/login" />
+          <q-breadcrumbs-el label="Forgot Password" icon="vpn_key" />
+        </q-breadcrumbs>
+  </div>
+
     <q-card bordered>
       <banner
         iconName="vpn_key"

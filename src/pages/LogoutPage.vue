@@ -21,12 +21,11 @@ import { mapActions } from 'vuex'
 import mixinUtils from 'src/mixins/Mixin_Utils.js'
 
 export default {
-      data(){
-      return{
-        confirm : true
-      }
+  data () {
+    return {
+      confirm: true
     }
-    ,
+  },
   methods: {
     ...mapActions('auth', ['logoutUser']),
     logout () {
@@ -37,16 +36,15 @@ export default {
       // })
       this.showNotification('positive', 'Thank you. You have succesfully logged out')
       this.$router.push('/')
-    }
-    ,
-    goBack(){
-      this.$router.back();
+    },
+    goBack () {
+      this.$router.back()
     }
   },
   mounted () {
     // this.logout()
   },
-  mixins: [ mixinUtils]
+  mixins: [mixinUtils]
 }
 </script>
 

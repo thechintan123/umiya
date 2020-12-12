@@ -10,7 +10,7 @@ export default {
           multiLine: true,
           message: 'You need to login to access this page.You are redirected to Login Page',
           icon: 'warning',
-          position :  'center'
+          position: 'center'
         })
         this.$router.push('/login')
       } else {
@@ -24,7 +24,7 @@ export default {
               message:
               'You do not have right permission to access this page.You are redirected to Home Page',
               icon: 'warning',
-              position : 'center'
+              position: 'center'
             })
             this.$router.push('/')
           }
@@ -62,21 +62,20 @@ export default {
         html: true
       })
     },
-    showNotification(type, message){
-      var position;
-      if(type === 'positive'){
+    showNotification (type, message) {
+      var position
+      if (type === 'positive') {
         position = 'top-right'
-      }else{
+      } else {
         position = 'center'
       }
-        Notify.create({
-            type: type,
-            message: message,
-            position : position
-          })
-          /* this.$router.push('/login') */
-    }
-,
+      Notify.create({
+        type: type,
+        message: message,
+        position: position
+      })
+      /* this.$router.push('/login') */
+    },
     hasKey (obj, key) {
       // console.log('hasKey', obj, key)
       return key.split('.').every(function (x) {
