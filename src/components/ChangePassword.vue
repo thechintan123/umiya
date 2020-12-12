@@ -50,7 +50,8 @@
                   tabindex="2"
                   outlined
                   v-model="params.newPassword"
-                  :rules="[ val => !!val || 'Field is required']"
+                  :rules="[ val => !!val || 'Field is required',
+                  val => val.length > 6 || 'Minimum Password length should be greater than 6']"
                   lazy-rules
                   ref="password"
                   label="New Password*"
@@ -154,7 +155,7 @@ export default {
           //   type: 'positive',
           //   message: 'Password has been changed successfully'
           // })
-          this.showNotification('positive','Password has been changed successfully');
+          this.showNotification('positive', 'Password has been changed successfully')
           this.$refs.changePasswordForm.reset()
           this.showProgressBar = false
         })

@@ -4,7 +4,7 @@
         iconName="assignment_turned_in"
         :bannerTitle="
           updateProfile ? 'Successful Update !!' : 'Sucessful Registration !'"
-      /> 
+      />
       <q-card-section>
         Thank you
         <span class="text-weight-bolder text-capitalize"
@@ -52,6 +52,18 @@
             >
           </q-item-section>
         </q-item>
+
+        <q-separator inset color="dark"/>
+    <br/>
+    <div class="row">
+      <span class="text-subtitle2 q-mt-sm">Need to register one more profile >></span>
+      <q-space/>
+        <q-btn
+        color="primary"
+        label="New Registration >"
+        @click="newRegister"
+      />
+    </div>
        </template>
       </q-card-section>
     </q-card>
@@ -67,11 +79,14 @@ export default {
     ...mapState('registerUpdate', ['formData'])
   },
   methods: {
-    ...mapMutations('registerUpdate', ['setSuccessProcess', 'setTab'])
-  }
-  ,
+    ...mapMutations('registerUpdate', ['setSuccessProcess', 'setTab', 'resetState']),
+    newRegister () {
+      this.resetState()
+      this.setTab('basic')
+    }
+  },
   components: {
-    banner: require('../general/Banner.vue').default,
+    banner: require('../general/Banner.vue').default
   }
 
 }

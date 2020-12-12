@@ -1,5 +1,5 @@
 <template>
-  <q-form greedy ref="basicForm">
+  <q-form greedy ref="basicForm" no-reset-focus>
     <!-- Start - This button is only visible in Testing Mode -->
       <q-btn
         class="my-button q-mb-md"

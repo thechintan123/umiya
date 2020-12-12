@@ -74,7 +74,7 @@
     <div class="flex flex-center q-pa-md row q-gutter-x-xl q-gutter-y-xl">
 
      <q-card
-      flat bordered class="my-card cursor-pointer" @click="register()" align="center" key="card1" 
+      flat bordered class="my-card cursor-pointer" @click="register()" align="center" key="card1"
       data-aos="zoom-in-up">
         <q-card-section class="bg-dark">
           <q-icon name="far fa-edit" class="text-secondary" style="font-size: 3rem;" />
@@ -164,14 +164,13 @@
 </template>
 
 <script>
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+import AOS from 'aos'
+import 'aos/dist/aos.css'
 
 AOS.init({
   duration: 1200,
-  easing : 'linear'
-});
-
+  easing: 'linear'
+})
 
 export default {
   name: 'PageIndex',
@@ -204,7 +203,6 @@ export default {
     }
   }
 }
-
 
 </script>
 

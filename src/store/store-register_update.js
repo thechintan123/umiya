@@ -2,8 +2,6 @@ import axios from 'axios'
 import mixinComputations from 'src/mixins/Mixin_Computations.js'
 import mixinUtils from 'src/mixins/Mixin_Utils.js'
 import { testData, testTmpData } from 'src/constants/testingDefaults'
-import { Platform } from 'quasar'
-
 
 const getDefaultState = () => {
   return {
@@ -102,6 +100,7 @@ const state = getDefaultState()
 const mutations = {
 
   resetState (state) {
+    // console.log("resetState");
     Object.assign(state, getDefaultState())
   },
   setFormData (state, userDetail) {
@@ -132,6 +131,7 @@ const mutations = {
     state.formData.gender = value
   },
   setTab (state, value) {
+    // console.log("setTab");
     state.tab = value
   },
   setError (state, object) {
@@ -446,7 +446,7 @@ const actions = {
   // },
   defaultTestingData ({ commit }) {
     // this.formData = this.testData
-    console.log("Platform", Platform, navigator);
+    // console.log('Platform', Platform, navigator)
 
     var newTestObject = Object.assign({}, testData)
     commit('setFormData', newTestObject)

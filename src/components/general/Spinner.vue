@@ -1,5 +1,6 @@
 <template>
-
+      <span>
+        </span>
     <!-- <q-spinner
       class="z-top fixed-center"
       color="secondary"
@@ -9,25 +10,20 @@
 </template>
 
 <script>
-import { QSpinnerHearts } from 'quasar'
 
 export default {
-created(){
-      this.$q.loading.show({
-                  spinnerColor: 'secondary',
-                  backgroundColor : 'dark',
-                  messageColor : 'secondary',
-                  spinnerSize: 100,
+  created () {
+    this.$q.loading.show({
+      spinnerColor: 'secondary',
+      backgroundColor: 'dark',
+      messageColor: 'secondary',
+      spinnerSize: 100
 
-      })
-
-   
-}
-,
-destroyed(){
-      this.$q.loading.hide()
-
-}
+    })
+  },
+  destroyed () {
+    this.$q.loading.hide()
+  }
 }
 </script>
 

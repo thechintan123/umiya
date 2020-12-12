@@ -110,7 +110,9 @@ module.exports = function (ctx) {
         'QTable',
         'QSkeleton',
         'QSpinnerGears',
-        'QSpinnerHearts'
+        'QSpinnerHearts',
+        'QBreadcrumbs',
+        'QBreadcrumbsEl'
       ],
 
       directives: ['Ripple', 'ClosePopup'],
@@ -157,7 +159,8 @@ module.exports = function (ctx) {
 
       env: ctx.dev
         ? {
-          API: JSON.stringify('http://localhost:5000/api')
+          // API: JSON.stringify('http://localhost:5000/api')
+          API: JSON.stringify('http://10.0.2.2:5000/api') //for Android Emulator Testing
         }
         : {
           API: JSON.stringify('https://thechintan123.pythonanywhere.com/api')
@@ -228,7 +231,7 @@ module.exports = function (ctx) {
       // noIosLegacyBuildFlag: true, // uncomment only if you know what you are doing
       //id: 'org.cordova.umiyamatrimony.app',
       id : 'com.umiyamatrimony.app',
-      version: '1.0.1'
+      version: '2.1.0'
     },
 
     // Full list of options: https://quasar.dev/quasar-cli/developing-capacitor-apps/configuring-capacitor

@@ -76,8 +76,6 @@ import { mapState } from 'vuex'
 export default {
   mixins: [mixinUtils, mixinComputations],
   components: {
-    progressBar: require('./general/ProgressBar.vue').default,
-    spinner: require('./general/Spinner.vue').default,
     banner: require('./general/Banner.vue').default
   },
 
@@ -163,18 +161,18 @@ export default {
           this.showErrorDialog(error)
           // console.log('uploadImage - Error - Error Message', errMsg)
         })
-    // } else {
-    //   this.$q.notify({
-    //     type: 'negative',
-    //     multiLine: true,
+      // } else {
+      //   this.$q.notify({
+      //     type: 'negative',
+      //     multiLine: true,
 
-    //     message: 'You need to login to access this page.You are redirected to Login Page',
-    //     icon: 'warning'
+      //     message: 'You need to login to access this page.You are redirected to Login Page',
+      //     icon: 'warning'
 
     //   })
     //   this.$router.push('/login')
     // }
-  }
+    }
   }
 
 }

@@ -2,7 +2,6 @@
   <q-layout view="hHh lpR fFf">
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
 
-
 <!-- <link href="https://fonts.googleapis.com/css2?family=Niconne&display=swap" rel="stylesheet"> -->
 
     <q-header reveal elevated class="bg-secondary text-white" height-hint="98">
@@ -19,14 +18,13 @@
                 <img src="~assets/logos/LogoMakr_Ring_RED.png" contain />
               </q-avatar>               -->
 
-            <q-avatar square size="3.3rem"> 
+            <q-avatar square size="3.3rem">
                <!-- <img
                 style="height: 50px;"
               class="my_logo" src="~assets/logos/rings_diamond_heart.svg" /> -->
               <img
-              src="~assets/logos/rings_diamond_heart.svg" />              
-              </q-avatar> 
-            
+              src="~assets/logos/rings_diamond_heart.svg" />
+              </q-avatar>
 
             <!-- </div> -->
 
@@ -47,7 +45,7 @@
             >
               UmiyaMatrimony.com
                </div> -->
-          </div>
+          <!-- </div> -->
         </q-toolbar-title>
 
       </q-toolbar>
@@ -72,7 +70,6 @@
           <q-item-section avatar>
             <q-icon :name="menuItem.icon" />
           </q-item-section>
-          </q-item-section>          
           <q-item-section>{{ menuItem.label }}
           </q-item-section>
 
@@ -177,15 +174,15 @@ export default {
     return {
       drawer: false,
       left: false,
-      logoutPopup : false,
+      logoutPopup: false,
       menuList
     }
   },
   methods: {
     ...mapActions('auth', ['logoutUser']),
     logout () {
-      console.log("Logout Called", this.logoutPopup);
-      this.logoutPopup = true;
+      console.log('Logout Called', this.logoutPopup)
+      this.logoutPopup = true
       // this.logoutUser()
       // this.$q.notify({
       //   type: 'positive',
@@ -264,10 +261,6 @@ export default {
     }
 
   }
-  ,
-  components : {
-      logout: require('../components/Logout.vue').default
-  }
 
 }
 </script>
@@ -300,12 +293,10 @@ export default {
   }
 }
 
-
 /*For Border Resizing*/
 
 * {
   box-sizing: border-box;
 }
-
 
 </style>

@@ -466,7 +466,6 @@ export default {
           this.registerFinalForm()
         }
       }
-
     },
     async registerFinalForm () {
       // console.log("registerFinalForm", this.formData);
@@ -488,26 +487,28 @@ export default {
         this.setFormDataIndividual({ key: 'heightCms', value: heightCms })
       }
 
-      //Adding System_Source related details
-      var systemSource;
-      var systemAdditional;
-      if(Platform.is.desktop){
+      // Adding System_Source related details
+      var systemSource
+      var systemAdditional
+      if (Platform.is.desktop) {
         systemSource = 'Desktop Browser'
-      }else if(Platform.is.mobile){
-        systemSource = 'Mobile Browser'
-      }else if(Platform.is.android){
+      } else if (Platform.is.cordova && Platform.is.android && Platform.is.mobile) {
         systemSource = 'Android App'
-      }else if(Platform.is.ios){
+      } else if (Platform.is.cordova && Platform.is.ios && Platform.is.mobile) {
         systemSource = 'iOS App'
+      } else if (Platform.is.mobile) {
+        systemSource = 'Mobile Browser'
+      } else {
+        systemSource = 'Unknown'
       }
-      systemAdditional = JSON.stringify(Platform);
 
-      console.log("systemSource", systemSource,systemAdditional );
+      systemAdditional = JSON.stringify(Platform)
+
+      // console.log('systemSource', systemSource, systemAdditional)
 
       this.setFormDataIndividual({ key: 'systemSource', value: systemSource })
 
       this.setFormDataIndividual({ key: 'systemAdditional', value: systemAdditional })
-
 
       // Convert From Camel to Snake Case
       // converting from CamelCase to SnakeCase
@@ -671,7 +672,7 @@ export default {
           //   type: 'positive',
           //   message: file + ' successfully uploaded'
           // })
-          var message =  file + ' successfully uploaded'
+          var message = file + ' successfully uploaded'
           this.showNotification('positive', message)
           // if(file == 'Photo'){
           //   this.isErrorPhoto = false;
@@ -715,7 +716,7 @@ export default {
           })
 
           // console.log("this.userDetailsId", this.formData.userDetailsId, typeof data);
-          this.showNotification('positive','Succesfully registered')
+          this.showNotification('positive', 'Succesfully registered')
           // this.$q.notify({
           //   type: 'positive',
           //   message: 'Successfully registered',

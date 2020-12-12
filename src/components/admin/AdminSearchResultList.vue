@@ -125,7 +125,7 @@ export default {
             //   message: 'Profile status of ' + data.first_name + ' is updated to ' + data.status.name
             // })
             var message = 'Profile status of ' + data.first_name + ' is updated to ' + data.status.name
-            this.showNotification('positive',message)
+            this.showNotification('positive', message)
             this.setShowProgressBar(false)
           })
           .catch(error => {
