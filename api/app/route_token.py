@@ -66,18 +66,13 @@ def forgot_password(email):
 # @basic_auth.login_required
 def change_password():
     data = request.get_json() or {}
-    print("1 - change_password", data)
     current_password = data["currentPassword"]
     new_password = data["newPassword"]
     email = data["email"]
-    # print("1 - change_password - Old Password matches", data)
     user = User.query.filter_by(email=email).first()
-    # print("2- change_password - Old Password matches", user)
-    # return '', 204
     if user:
         # check old Password matches
         if user.check_password(current_password):
-            print("Current Password matches")
             user.set_password(new_password)
             db.session.add(user)
             db.session.commit()

@@ -25,7 +25,7 @@ def get_user(id):
 
 # get user - selected by admin
 @app.route('/api/admin/users/<int:id>', methods=['GET'])
-# @token_auth.login_required(role='admin')
+@token_auth.login_required(role='admin')
 def get_user_by_admin(id):
     user_det = UserDetails.query.get_or_404(id)
     return jsonify(user_det.to_dict())    
@@ -197,7 +197,7 @@ def get_photo(id, filename):
 
 # delete photo from database and folder
 @app.route('/api/photos/<int:id>/<string:filename>', methods=['DELETE'])
-# @token_auth.login_required
+@token_auth.login_required
 def delete_photo(id, filename):
     UserDetails.query.get_or_404(id)
     # curr_user = token_auth.current_user()
@@ -237,13 +237,12 @@ def delete_photo(id, filename):
 
 
 @app.route('/api/batch-notification', methods=['POST'])
-#@basic_auth.login_required(role='email')
+@basic_auth.login_required(role='email')
 def batch_notification():
     user_id = request.json['user_id']
     match_users_id = request.json['match_users_id']
     new_match_users_id = request.json['new_match_users_id']
 
-    print('Route_user',user_id,match_users_id, new_match_users_id)
     if user_id is None or new_match_users_id is None:
         return bad_request('Mandatory data was missing')
     user = User.query.filter_by(id=user_id).first()

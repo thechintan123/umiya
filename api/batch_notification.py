@@ -21,15 +21,12 @@ from sqlalchemy import and_, asc
 now = datetime.now()
 one_day_ago = now - timedelta(days=1)
 
-#CP - 
-# now = datetime(2020, 11, 13)
 now_weekday = now.weekday()
 start_char = 'a'
 end_char = 'z'
 allowed_status_id = '2' #2 is for Approved
 
 #Weekday function returns 0-Monday to 6-Sunday
-
 if(now_weekday == 0):
     start_char = 'a'
     end_char = 'd'
@@ -53,36 +50,18 @@ elif(now_weekday == 6):
     end_char = 'z'
 else:
     start_char = 'v'
-    end_char = 'z' 
+    end_char = 'z'
 
 print(f'First name starts with "{start_char}" and ends with "{end_char}"')
 
-##defaulting for testing
-# start_char = 'v'
-# end_char = 'z' 
-
-# print('Batch Notification 1',now, now_weekday, start_char, end_char)
-
-# users_notif = db.session.query(UserDetails) \
-#     .filter(and_(UserDetails.email_matched_notification == False, \
-#         UserDetails.first_name.startswith("A"))).all()
-
-
-
 users_notif = db.session.query(UserDetails) \
     .filter(and_(UserDetails.email_matched_notification == True, \
-        UserDetails.first_name.between(start_char + "%", end_char+"%"))) \
+        UserDetails.first_name.between(start_char + "%", end_char+"%"), \
+        UserDetails.status_id == allowed_status_id)) \
         .order_by(asc(UserDetails.first_name)).all()
 
 users_approved = db.session.query(UserDetails) \
-    .filter(and_(UserDetails.status_id == allowed_status_id)).all()
-
-# users_new = db.session.query(UserDetails) \
-#     .filter(and_(UserDetails.status_id == allowed_status_id, \
-#     UserDetails.approval_date >= one_day_ago )).all()
-
-#print('Batch Notification 2',users_notif)
-#print('Batch Notification 3',users_approved)
+    .filter(UserDetails.status_id == allowed_status_id).all()
 
 if not users_notif:
     print('No users to notify')
@@ -90,6 +69,7 @@ if not users_notif:
 for u in users_notif:
     match_users_id = []
     new_match_users_id = []
+
     for n in users_approved:
         if (u.gender.id == n.gender.id):
             continue
@@ -105,14 +85,17 @@ for u in users_notif:
                 pms_match = True
         if not pms_match:
             continue
-        new_user_approval_days = relativedelta(now, n.approval_date).days
-        # print('new_user_approval_days', new_user_approval_days, now, n.approval_date)
+
+        new_user_approval_days = (now - n.approval_date).days
+
         if new_user_approval_days > 7:
             match_users_id.append(n.user.id)
         else:
             new_match_users_id.append(n.user.id)
-    
-    #print('New Match', new_match_users_id, 'Matched', match_users_id)              
+
+
+    print (f'Checking user {u.first_name} {u.last_name} ({u.user.email})')
+
     if new_match_users_id:
         url = os.environ['EMAIL_NOTIF_URL']
         payload = {'user_id': u.user.id, 'match_users_id': match_users_id,
