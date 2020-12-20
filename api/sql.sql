@@ -363,3 +363,7 @@ set role_id =3
 where id=1035;
 
 insert into role values (3, 'email');
+
+-- SQL to delete data from database --
+select a.id,a.first_name,a.last_name,a.user_id,b.id as 'upload_photos id' from user_details a left join upload_photos b ON (b.user_
+details_id=a.id);
