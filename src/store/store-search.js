@@ -3,50 +3,83 @@ import mixinComputations from 'src/mixins/Mixin_Computations.js'
 import mixinUtils from 'src/mixins/Mixin_Utils.js'
 import { maxSearchResultsPerPage } from '../constants/registerFormConstants.js'
 
-const state = {
+const getDefaultState = () => {
+  return {
+    searchParams: {
+      ageFromTo: {
+        min: 20,
+        max: 40
+      },
+      lookingFor: '2', // 2 is for Bride ; Defaulted to Bride
+      heightFrom: '',
+      heightTo: '',
+      maritalStatusPreference: [],
+      country: [{ id: 81, name: 'India' }], // defaulted to India
+      // country : ['India']
+      userDetailsIdFrom: '',
+      userDetailsIdTo: '',
+      searchUsingId: false
+    },
+    searchResults: [],
+    searchResultsPerPage: [],
 
-  searchParams: {
-    ageFromTo: {
-      min: 20,
-      max: 40
+    showProgressBar: false,
+    // page: 1,
+    resultsPerPage: maxSearchResultsPerPage,
+    searchPerformed: false,
+    totalPages: 0,
+    page: 1,
+    expand: true,
+    count: {
+      start: 0,
+      end: 0
+    },
+    list: {
+      countryOptions: [],
+      maritalOptions: []
     },
 
-    lookingFor: '2', // 2 is for Bride ; Defaulted to Bride
-    heightFrom: '',
-    heightTo: '',
-    maritalStatusPreference: [],
-    country: [{ id: 81, name: 'India' }], // defaulted to India
-    // country : ['India']
-    userDetailsIdFrom: '',
-    userDetailsIdTo: '',
-    searchUsingId: false
-  },
-  searchResults: [],
-  searchResultsPerPage: [],
-
-  showProgressBar: false,
-  // page: 1,
-  resultsPerPage: maxSearchResultsPerPage,
-
-  list: {
-    countryOptions: [],
-    maritalOptions: []
-  },
-
-  tmpData: {
-    countryList: []
-  },
-
-  searchPerformed: false,
-  totalPages: 0,
-  page: 1,
-  expand: true,
-  count: {
-    start: 0,
-    end: 0
+    tmpData: {
+      countryList: []
+    }
   }
-
 }
+
+const state = getDefaultState()
+
+// searchParams: {
+//   ageFromTo: {
+//     min: 20,
+//     max: 40
+//   },
+
+//   lookingFor: '2', // 2 is for Bride ; Defaulted to Bride
+//   heightFrom: '',
+//   heightTo: '',
+//   maritalStatusPreference: [],
+//   country: [{ id: 81, name: 'India' }], // defaulted to India
+//   // country : ['India']
+//   userDetailsIdFrom: '',
+//   userDetailsIdTo: '',
+//   searchUsingId: false
+// },
+// searchResults: [],
+// searchResultsPerPage: [],
+
+// showProgressBar: false,
+// // page: 1,
+// resultsPerPage: maxSearchResultsPerPage,
+
+// list: {
+//   countryOptions: [],
+//   maritalOptions: []
+// },
+
+// tmpData: {
+//   countryList: []
+// },
+
+// }
 
 const getters = {
   getSearchResults: state => {
@@ -57,6 +90,9 @@ const getters = {
 // Not using Action and mutations since on updating page number and state of Search Results is not changed
 const mutations = {
 
+  resetState (state) {
+    Object.assign(state, getDefaultState())
+  },
   setSearchParamsIndividual (state, object) {
     state.searchParams[object.key] = object.value
   },

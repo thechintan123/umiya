@@ -159,8 +159,8 @@ module.exports = function (ctx) {
 
       env: ctx.dev
         ? {
-          // API: JSON.stringify('http://localhost:5000/api')
-          API: JSON.stringify('http://10.0.2.2:5000/api') //for Android Emulator Testing
+          API: JSON.stringify('http://localhost:5000/api')
+          // API: JSON.stringify('http://10.0.2.2:5000/api') //for Android Emulator Testing
         }
         : {
           API: JSON.stringify('https://thechintan123.pythonanywhere.com/api')

@@ -125,15 +125,16 @@
 
             </div>
           </div>
-          <q-separator inset color="secondary"/>
-          <p class="text-subtitle no-margin text-grey-6">Search based on above parameters or Search using profile ID.</p>
+          <!-- <q-separator inset color="secondary"/> -->
+          <p class="add-line no-margin text-secondary">&nbsp;&nbsp;OR&nbsp;&nbsp;</p>
+          <span>Search using Profile ID</span>
           <div class="row">
             <div class="col">
                 <q-input
                   tabindex="7"
                   outlined
                   v-model="userDetailsIdFrom"
-                  label="Only Search by Profile ID(From)"
+                  label="Profile ID(From)"
                   type="number"
                   dense
                   clearable
@@ -145,7 +146,7 @@
               tabindex="7"
               outlined
               v-model="userDetailsIdTo"
-              label="Only Search by Profile ID(To)"
+              label="Profile ID(To)"
               type="number"
               dense
               clearable
@@ -156,6 +157,8 @@
              </div>
              </div>
           <div class="row">
+            <q-btn
+            color="secondary" flat label="Clear Results & Reset" @click="resetSearchForm" />
            <q-space />
             <q-btn
               tabindex="8"
@@ -195,7 +198,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('search', ['setShowProgressBar', 'setExpand', 'setSearchParamsIndividual']),
+    ...mapMutations('search', ['setShowProgressBar', 'setExpand', 'setSearchParamsIndividual', 'resetState']),
     ...mapActions('search', ['saveSearchResults', 'fetchList']),
 
     showSearchMessage () {
@@ -315,6 +318,10 @@ export default {
       } else {
         return false
       }
+    },
+    resetSearchForm () {
+      this.resetState()
+      this.fetchList()
     }
   },
   computed: {
@@ -411,5 +418,17 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+        p.add-line {
+            display: flex;
+            flex-direction: row;
+        }
+
+        p.add-line:before,
+        p.add-line:after {
+            content: "";
+            flex: 1 1;
+            border-bottom: 1px dashed #d63447; /*secondary*/
+            margin: auto;
+        }
 </style>
