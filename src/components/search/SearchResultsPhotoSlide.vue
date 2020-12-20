@@ -16,7 +16,9 @@
     >
 
     <q-carousel-slide class="no-padding" v-for="(photo,index) in photos" :key="index" :name="index">
-       <q-img class="my-image-contain" :src="computeURL(photo)" contain>
+       <q-img
+        v-bind:class="[rotateClass]"
+       class="my-image-contain" :src="computeURL(photo)" contain>
         <template v-slot:error>
           <!-- <div class="absolute-full flex flex-center bg-negative text-white">Cannot load image</div> height="200px"-->
           <q-img class="my-image-center bg-dark rounded-borders my-max-width my-image-contain" :src="avatarURL" contain/>
@@ -25,8 +27,26 @@
     </q-carousel-slide>
       <template v-slot:control>
         <q-carousel-control
+          position="bottom-left"
+          :offset="[5, 5]"
+        >
+          <q-btn
+            push round dense color="white" text-color="primary"
+            icon="fas fa-undo"
+            class="flip-vertical"
+            @click="rotateImageLeft"
+          />
+          <q-btn
+            push round dense color="white" text-color="primary"
+            icon="fas fa-undo"
+            class="rotate-180"
+            @click="rotateImageRight"
+          />
+        </q-carousel-control>
+
+        <q-carousel-control
           position="bottom-right"
-          :offset="[18, 18]"
+          :offset="[5, 5]"
         >
           <q-btn
             push round dense color="white" text-color="primary"
@@ -47,7 +67,18 @@ export default {
     return {
       slide: 0,
       fullscreen: false,
-      imageURL: process.env.API + '/photos/'
+      imageURL: process.env.API + '/photos/',
+      rotateClass: ''
+      // rotatedRight : false
+
+    }
+  },
+  methods: {
+    rotateImageLeft () {
+      if (!this.rotateClass) { this.rotateClass = 'rotate-90' } else { this.rotateClass = '' }
+    },
+    rotateImageRight () {
+      if (!this.rotateClass) { this.rotateClass = 'rotate-270' } else { this.rotateClass = '' }
     }
   },
   computed: {

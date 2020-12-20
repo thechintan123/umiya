@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
 import mixinUtils from 'src/mixins/Mixin_Utils.js'
+import { mapActions, mapMutations } from 'vuex'
 
 export default {
   data () {
@@ -28,6 +28,8 @@ export default {
   },
   methods: {
     ...mapActions('auth', ['logoutUser']),
+    ...mapMutations('search', ['resetState']),
+    // ...mapMutations('search', ['setSearchResults','setSearchResultsPerPage','setTotalPages','setSearchPerformed']),
     logout () {
       this.logoutUser()
       // this.$q.notify({
@@ -35,6 +37,12 @@ export default {
       //   message: 'Thank you. You have succesfully logged out'
       // })
       this.showNotification('positive', 'Thank you. You have succesfully logged out')
+      this.resetState()
+      // var emptyList = [];
+      // this.setSearchPerformed(false);
+      // this.setSearchResults(emptyList);
+      // this.setSearchResultsPerPage(emptyList);
+      // this.setTotalPages(0);
       this.$router.push('/')
     },
     goBack () {

@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
   props: ['updateProfile'],
@@ -79,10 +79,15 @@ export default {
     ...mapState('registerUpdate', ['formData'])
   },
   methods: {
-    ...mapMutations('registerUpdate', ['setSuccessProcess', 'setTab', 'resetState']),
-    newRegister () {
+    ...mapMutations('registerUpdate', ['setSuccessProcess', 'setTab', 'resetState', 'setShowProgressBar']),
+    ...mapActions('registerUpdate', ['fetchList']),
+
+    async newRegister () {
       this.resetState()
+      this.setShowProgressBar(true)
+      await this.fetchList() // to get dropdownlist
       this.setTab('basic')
+      this.setShowProgressBar(false)
     }
   },
   components: {

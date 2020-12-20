@@ -458,7 +458,7 @@ export default {
         }
         this.setFormDataIndividual({ key: 'country', value: country })
 
-        // console.log("Submit Form", this.formData);
+        // console.log("Submit Form", this.formData, this.tmpData, country);
 
         if (this.updateProfile === true) {
           this.updateFinalForm()
@@ -518,7 +518,7 @@ export default {
         formDataSnakeCase[this.camelToSnake(key)] =
               this.formData[key]
       }
-      //  console.log("Converted to Snake Case", formDataSnakeCase);
+      // console.log("Converted to Snake Case", formDataSnakeCase);
       try {
         await this.registerUser(formDataSnakeCase)
         // console.log("Register User", this.formData.userDetailsId, this.formData);

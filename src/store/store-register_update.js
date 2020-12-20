@@ -116,12 +116,15 @@ const mutations = {
   },
   setTmpDataFull (state, object) {
     // state.tmpData = object;
+    // console.log("setTmpDataFull 1", JSON.stringify(state.tmpData), JSON.stringify(object))
     const mergedObject = Object.assign(state.tmpData, object)
+    // console.log("setTmpDataFull mergedObject1", JSON.stringify(mergedObject))
     state.tmpData = mergedObject
   },
 
   setShowProgressBar (state, value) {
     state.showProgressBar = value
+    console.log('setShowProgressBar', state.showProgressBar, value, state)
   },
   setList (state, object) {
     state.list[object.key] = object.value
@@ -175,6 +178,8 @@ const actions = {
 
         var genderOptions = response.data.gender
         commit('setList', { key: 'genderOptions', value: genderOptions })
+
+        console.log('fetchList - Then')
       })
       .catch(error => {
         console.log('Fetch List', error)
