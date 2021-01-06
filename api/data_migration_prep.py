@@ -88,7 +88,7 @@ def clean_photo(photo):
 
 
 # Read in data
-df = pd.read_csv(basedir / 'data' / 'DB_RegistrationDetails_WORK3.txt', sep='\t', encoding='cp1252')
+df = pd.read_csv(basedir / 'data' / 'new_rec.txt', sep='\t', encoding='cp1252')
 
 # Add columns
 df['gender_id'] = df['isMale'].apply(map_gender)
@@ -133,9 +133,9 @@ df['PartnerMaritalStatus'].fillna(value='Never Married,Divorced,Widowed,Awaiting
 df['alternate_contact'].fillna(value='nil', inplace=True)
 
 # Read in photos data
-df2 = pd.read_csv(basedir / 'data' / 'DB_MemberImages.txt', sep='\t', encoding='cp1252')
+df2 = pd.read_csv(basedir / 'data' / 'new_img.txt', sep='\t', encoding='cp1252')
 df2['ImageUrl'] = df2['ImageUrl'].apply(clean_photo)
-df2.to_csv(basedir / 'data' / 'out_b.txt', sep='\t', index=False)
+df2.to_csv(basedir / 'data' / 'out_new_b.txt', sep='\t', index=False)
 
 for index, row in df.iterrows():
     photo_rows = df2.loc[df2['MemberId'] == row['Pkid']]
@@ -149,5 +149,5 @@ for index, row in df.iterrows():
         df.at[index, 'upload_photos'] = 'nil'
 
 # Write to file
-df.to_csv(basedir / 'data' / 'out_a.txt', sep='\t', index=False)
+df.to_csv(basedir / 'data' / 'out_new_a.txt', sep='\t', index=False)
 

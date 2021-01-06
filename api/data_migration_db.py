@@ -7,7 +7,7 @@ from datetime import datetime
 basedir = Path(__file__).parent
 
 # Read in data
-df = pd.read_csv(basedir / 'data' / 'out_a.txt', sep='\t')
+df = pd.read_csv(basedir / 'data' / 'out_new_a.txt', sep='\t')
 
 for index, row in df.iterrows():
     # User object
