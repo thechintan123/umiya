@@ -107,6 +107,7 @@ class UserDetails(db.Model):
     original_surname = db.Column(db.String(40), nullable=False)
     father_name = db.Column(db.String(50), nullable=False)
     residential_address = db.Column(db.String(200), nullable=False)
+    education = db.Column(db.String(200), nullable=False)
     about_yourself = db.Column(db.String(500))
     upload_photos = db.relationship(
         'UploadPhotos', backref='user_details', lazy='dynamic')
@@ -133,6 +134,7 @@ class UserDetails(db.Model):
     migration_data = db.Column(db.Boolean, default=False)
     system_source = db.Column(db.String(50))
     system_additional = db.Column(db.String(500))
+    testing_user = db.Column(db.Boolean, default=False, nullable=False)
 
     def to_dict(self):
         # many to many
@@ -163,6 +165,7 @@ class UserDetails(db.Model):
             'original_surname': self.original_surname,
             'father_name': self.father_name,
             'residential_address': self.residential_address,
+            'education': self.education,
             'about_yourself': self.about_yourself,
             'partner_age_from': self.partner_age_from,
             'partner_age_to': self.partner_age_to,

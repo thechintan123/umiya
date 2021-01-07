@@ -165,6 +165,18 @@ const menuList = [
     loggedIn: true,
     separator: true,
     role: 'admin'
+  },
+  {
+    icon: 'far fa-question-circle',
+    label: 'Help/FAQ',
+    link: '/help',
+    separator: true
+  },
+  {
+    icon: 'fas fa-phone-square-alt',
+    label: 'Contact Us',
+    link: '/contact-us',
+    separator: true
   }
 
 ]

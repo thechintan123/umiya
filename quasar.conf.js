@@ -112,7 +112,9 @@ module.exports = function (ctx) {
         'QSpinnerGears',
         'QSpinnerHearts',
         'QBreadcrumbs',
-        'QBreadcrumbsEl'
+        'QBreadcrumbsEl',
+        'QTooltip',
+        'QUploaderAddTrigger'
       ],
 
       directives: ['Ripple', 'ClosePopup'],

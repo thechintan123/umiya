@@ -46,6 +46,14 @@ const routes = [
       {
         path: '/admin-update-profile',
         component: () => import('pages/AdminUpdateProfilePage.vue')
+      },
+      {
+        path: '/help',
+        component: () => import('pages/HelpPage.vue')
+      },
+      {
+        path: '/contact-us',
+        component: () => import('pages/ContactUsPage.vue')
       }
     ]
   }

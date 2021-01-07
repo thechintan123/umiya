@@ -22,6 +22,7 @@ var testData = {
   originalSurname: 'Surname',
   fatherName: 'father',
   residentialAddress: 'address',
+  education: 'education',
   aboutYourself: 'about yourself',
   partnerAgeFrom: '30',
   partnerAgeTo: '40',

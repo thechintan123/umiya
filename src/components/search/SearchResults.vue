@@ -119,6 +119,11 @@
                         {{searchItem.residentialAddress}}
                       </q-item-label>
                       <q-item-label>
+                        <u>Education</u>
+                        :
+                        {{searchItem.education}}
+                      </q-item-label>
+                      <q-item-label>
                         <u>
                           About
                           {{ searchItem.firstName}}
