@@ -50,6 +50,7 @@ const getDefaultState = () => {
       originalSurname: '',
       fatherName: '',
       residentialAddress: '',
+      education: '',
       aboutYourself: '',
       partnerAgeFrom: '',
       partnerAgeTo: '',
@@ -124,7 +125,7 @@ const mutations = {
 
   setShowProgressBar (state, value) {
     state.showProgressBar = value
-    console.log('setShowProgressBar', state.showProgressBar, value, state)
+    // console.log('setShowProgressBar', state.showProgressBar, value, state)
   },
   setList (state, object) {
     state.list[object.key] = object.value
@@ -179,7 +180,7 @@ const actions = {
         var genderOptions = response.data.gender
         commit('setList', { key: 'genderOptions', value: genderOptions })
 
-        console.log('fetchList - Then')
+        // console.log('fetchList - Then')
       })
       .catch(error => {
         console.log('Fetch List', error)

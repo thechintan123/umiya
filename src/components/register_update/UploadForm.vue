@@ -21,9 +21,9 @@
           <template v-slot:control>
             <q-uploader
               :factory="uploadPhoto"
-              label="Upload Photos (Max 4 images)"
+              label="Upload Photos (Maximum of 4 images)"
               class="my-uploader"
-              accept="image/*, .jpg, .jpeg, .gif, .png"
+              accept="image/*, .jpg, .jpeg, .gif, .png ,.bmp"
               multiple
               :max-files="4"
               ref="photo"
@@ -32,12 +32,17 @@
               @removed="checkPhoto"
               @rejected="onRejected"
             />
-          </template>
+         </template>
         </q-field>
       </q-slide-transition>
     </div>
 
     <div class="q-mb-xs">
+    Please provide ID proof having name of <b><u>{{firstName}}&nbsp;{{lastName}}</u></b>
+    &nbsp;and date of birth as <b><u>{{dateOfBirth}}</u></b>.
+    <br>
+    ID Proof can be either Driving License or Aadhar Card or PAN Card or Passport.
+
       <q-toggle
         v-model="updateProof"
         checked-icon="check"
@@ -47,7 +52,6 @@
         @input="getProof"
         v-if="updateProfile"
       />
-
       <q-slide-transition>
         <q-field
           error-message="Please upload ID Proof."
@@ -61,7 +65,7 @@
               :factory="uploadProof"
               label="Upload ID Proof (only 1 image)"
               class="my-uploader"
-              accept="image/*, .jpg, .jpeg, .gif, .png"
+              accept="image/*, .jpg, .jpeg, .gif, .png, .bmp"
               color="accent"
               ref="proof"
               hide-upload-btn
@@ -72,6 +76,7 @@
           </template>
         </q-field>
       </q-slide-transition>
+
       <p v-if="(updateProfile && hasKey(formData, 'status.name')) ? formData.status.name === 'Approved' : false" class="text-negative">
         <q-icon name="warning" class="text-negative" style="font-size: 2rem;" />
         As your profile is already Approved, you cannot update your ID Proof.
@@ -133,7 +138,28 @@ export default {
     ]),
     ...mapState('admin', [
       'selectedIdByAdmin'
-    ])
+    ]),
+    firstName () {
+      if (this.formData.firstName !== '') {
+        return this.formData.firstName
+      } else {
+        return "(Profile's Name)"
+      }
+    },
+    lastName () {
+      if (this.formData.lastName !== '') {
+        return this.formData.lastName
+      } else {
+        return ''
+      }
+    },
+    dateOfBirth () {
+      if (this.formData.dateOfBirth !== '') {
+        return this.formData.dateOfBirth
+      } else {
+        return "(Profile's Date of Birth)"
+      }
+    }
   },
   methods: {
     ...mapActions('registerUpdate', ['fetchPhotos']),
@@ -756,9 +782,24 @@ export default {
     },
     goBack () {
       this.$store.commit('registerUpdate/setTab', 'personal')
+    },
+    rotateImage () {
+      console.log('rotateImage 1 ', this.$refs.test.files[0])
+      var img = this.$refs.test.files[0]
+      console.log('rotateImage 2', img)
+      img.className = 'element'
+      var c = document.getElementsByClassName('q-uploader__file--img')
+      console.log('rotateImage 3', c, c[0])
+      c[0].style.transform = 'rotate(90deg)'
+      var id = document.getElementById('test_ID')
+      console.log('rotateImage 4', id)
     }
   }
 }
 </script>
 
-<style></style>
+<style>
+        .element {
+            transform: rotate(90deg);
+        }
+</style>

@@ -87,6 +87,18 @@
               maxlength="100"
             />
             <q-input
+              tabindex="20"
+              clearable
+              outlined
+              v-model="education"
+              label="Education*"
+              :rules="[val => !!val || 'Field is required']"
+              dense
+              placeholder="Degree/Diploma completed. Can provile multiple"
+              hint="Hint: BCom, CA or BE, MBA or HSC Completed"
+              maxlength="100"
+            />
+            <q-input
               tabindex="21"
               clearable
               v-model="aboutYourself"
@@ -94,8 +106,8 @@
               dense
               label="Tell us about yourself (Optional)"
               type="textarea"
-              placeholder="Your education, profession, Interest and family"
-              hint="Hint: Your education, profession, Interest and family"
+              placeholder="Your profession, hobbies and family"
+              hint="Hint: Your profession, hobbies and family"
               maxlength="200"
             />
             <q-select
@@ -318,6 +330,14 @@ export default {
       },
       set (value) {
         this.$store.commit('registerUpdate/setFormDataIndividual', { key: 'residentialAddress', value: value })
+      }
+    },
+    education: {
+      get () {
+        return this.$store.state.registerUpdate.formData.education
+      },
+      set (value) {
+        this.$store.commit('registerUpdate/setFormDataIndividual', { key: 'education', value: value })
       }
     },
     aboutYourself: {
