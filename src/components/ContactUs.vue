@@ -80,38 +80,14 @@
         </template>
         <q-card>
           <q-card-section>
-            <div
-              class="fb-like"
-              data-href="https://www.facebook.com/umiyamatrimony/"
-              data-width=""
-              data-layout="standard"
-              data-action="like"
-              data-size="large"
-              data-share="true"
-            ></div>
+          
+          <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&width=450&layout=standard&action=like&size=large&share=true&height=35&appId" width="450" height="35" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
+          </iframe>
             <br>
             <br>
-            
-            <div
-              class="fb-page"
-              data-href="https://www.facebook.com/umiyamatrimony/"
-              data-tabs=""
-              data-width=""
-              data-height="300"
-              data-small-header="false"
-              data-adapt-container-width="false"
-              data-hide-cover="false"
-              data-show-facepile="true"
-            >
-              <blockquote
-                cite="https://www.facebook.com/umiyamatrimony/"
-                class="fb-xfbml-parse-ignore"
-              >
-                <a href="https://www.facebook.com/umiyamatrimony/"
-                  >UmiyaMatrimony.com</a
-                >
-              </blockquote>
-            </div>
+          
+          <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fumiyamatrimony%2F&tabs&width=340&height=130&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId" width="340" height="130" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+
           </q-card-section>
         </q-card>
       </q-expansion-item>
