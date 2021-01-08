@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title><%= htmlWebpackPlugin.options.productName %></title>
+  <title><%= htmlWebpackPlugin.options.productName %>-<%= htmlWebpackPlugin.options.productDescription %></title>
 
   <meta charset="utf-8">
+  
   <meta name="description" content="<%= htmlWebpackPlugin.options.productDescription %>">
   <meta name="format-detection" content="telephone=no">
   <meta name="msapplication-tap-highlight" content="no">
@@ -30,12 +31,19 @@ src="https://platform-api.sharethis.com/js/sharethis.js#property=5ff51cbf16f5060
 <script type='text/javascript' 
 src='https://platform-api.sharethis.com/js/sharethis.js#property=5ff51cbf16f5060012ad18e0&product=sticky-share-buttons' async='async'></script>
 
-<!-- <span class="st_sharethis" st_url="http://sharethis.com" st_title="Sharing is great!"></span> -->
+
+<!-- <span class="st_whatsapp" st_url="http://sharethis.com" st_title="Sharing is great!"></span> -->
 
 
 <!-- ShareThis Plugin -END -->
 
 
+
+<!-- ShareThis BODY- START -->
+<!-- <div class="sharethis-inline-share-buttons"
+data-url="www.UmiyaMatrimony.com"
+data-title="Check this FREE website"></div> -->
+<!-- ShareThis BODY- END -->
 
 
 </head>
@@ -61,21 +69,7 @@ type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
     href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css"
   >
 
-  <!-- For Scrolling Expand Animation- START-->
-  <!-- <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" /> -->
-<!-- For Scrolling Expand Animation- END-->
-
-<style>
-  #fb-root > div.fb_dialog.fb_dialog_advanced.fb_shrink_active {
-     right: initial !important;
-     left: 18pt;
-     z-index: 9999999 !important;
-  }
-  .fb-customerchat.fb_invisible_flow.fb_iframe_widget iframe {
-     right: initial !important;
-     left: 18pt !important;
-  }
-</style>
+ 
 
 <!-- Load Facebook SDK for JavaScript -->
       <!-- <div id="fb-root"></div>
@@ -97,10 +91,10 @@ type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
 
 </script> -->
 
-<div id="fb-root"></div>
+<!-- <div id="fb-root"></div>
 <script async defer crossorigin="anonymous" 
 src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v9.0" nonce="IPxwVyds">
-</script>
+</script> -->
 
 
       <!-- Your Chat Plugin code -->
@@ -110,7 +104,7 @@ src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v9.0" nonce="IPxw
       </div> -->
 
 <!-- Load Facebook SDK for JavaScript -->
-<div id="fb-root"></div>
+<!-- <div id="fb-root"></div> -->
 <script>
   window.fbAsyncInit = function() {
     FB.init({
@@ -135,21 +129,13 @@ logged_in_greeting="Hi! Welcome to UmiyaMatrimony.com.  How can we help you?"
 logged_out_greeting="Hi! Welcome to UmiyaMatrimony.com.  How can we help you?">
 </div>
 
-<!-- For Scrolling Expand Animation- START-->
-<!-- <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-<script>
-  AOS.init( {duration: 1200,
-  });
-</script> -->
-<!-- For Scrolling Expand Animation- END-->
-
-<!-- ShareThis BODY- START -->
-<div class="sharethis-inline-share-buttons"
-data-title="Check this FREE website"></div>
-<!-- ShareThis BODY- END -->
 
 
 
+<!-- Facebook - Page Plugin-->
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" 
+src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v9.0" nonce="21Bz62a1"></script>
 
 </body>
 </html>

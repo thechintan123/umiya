@@ -1,8 +1,8 @@
 {
   "name": "umiya",
   "version": "1.0.1",
-  "description": "Umiya Matrimony",
-  "productName": "Umiya Matrimony",
+  "description": "Free Matrimonial website for KKP",
+  "productName": "UmiyaMatrimony.com",
   "cordovaId": "com.umiyamatrimony.app",
   "capacitorId": "",
   "author": "Chintan Patel <chintan123@gmail.com>",
