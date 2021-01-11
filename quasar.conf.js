@@ -165,7 +165,7 @@ module.exports = function (ctx) {
           // API: JSON.stringify('http://10.0.2.2:5000/api') //for Android Emulator Testing
         }
         : {
-          API: JSON.stringify('https://thechintan123.pythonanywhere.com/api')
+          API: JSON.stringify('https://www.umiyamatrimony.com/api')
         }
     },
 
