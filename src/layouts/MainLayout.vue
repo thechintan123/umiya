@@ -187,7 +187,7 @@ export default {
       drawer: false,
       left: false,
       logoutPopup: false,
-      menuList,
+      menuList
     }
   },
   methods: {

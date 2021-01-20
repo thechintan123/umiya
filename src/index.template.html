@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title><%= htmlWebpackPlugin.options.productName %>-<%= htmlWebpackPlugin.options.productDescription %></title>
+  <title><%= htmlWebpackPlugin.options.productName %> - <%= htmlWebpackPlugin.options.productDescription %></title>
 
   <meta charset="utf-8">
   
@@ -10,13 +10,14 @@
   <meta name="msapplication-tap-highlight" content="no">
   <meta name="viewport"
   content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width<% if (htmlWebpackPlugin.options.ctx.mode.cordova || htmlWebpackPlugin.options.ctx.mode.capacitor) { %>, viewport-fit=cover<% } %>">
-  <!--<link rel="icon" type="image/png" sizes="128x128" href="statics/icons/favicon-128x128.png">
-  <link rel="icon" type="image/png" sizes="96x96" href="statics/icons/favicon-96x96.png"> -->
-  <!-- <link rel="icon" type="image/png" sizes="512x512" href="statics/icons/umiya/favicon-32x32.png"> -->
-  <!--<link rel="icon" type="image/png" sizes="32x32" href="statics/icons/umiya/favicon-32x32.png"> -->
-  <!-- <link rel="icon" type="image/png" sizes="16x16" href="statics/icons/umiya/favicon-16x16.png"> -->
-  <!-- <link rel="icon" type="image/ico" href="statics/icons/umiya/favicon_yellow.ico"> -->
-  <!-- <link rel="manifest" href="statics/icons/umiya/site.webmanifest"> -->
+  
+
+  <link rel="icon" type="image/png" sizes="128x128" href="statics/icons/favicon-128x128.png">
+<link rel="icon" type="image/png" sizes="96x96" href="statics/icons/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="32x32" href="statics/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="statics/icons/favicon-16x16.png">
+<link rel="icon" type="image/ico" href="statics/icons/favicon.ico">
+
 
   <link rel="icon" type="image/png" sizes="128x128" href="statics/icons/favicon-128x128.png">
   <link rel="icon" type="image/png" sizes="96x96" href="statics/icons/favicon-96x96.png">
@@ -32,26 +33,13 @@
   })(window,document,'script','dataLayer','GTM-MX8S2F4');</script>
   <!-- End Google Tag Manager -->
 
-  <!-- ShareThis Plugin -START -->
-  <script type='text/javascript' 
-  src='https://platform-api.sharethis.com/js/sharethis.js#property=5ff51cbf16f5060012ad18e0&product=sticky-share-buttons' async='async'></script>
+
 
 </head>
 <body>
 <!-- DO NOT touch the following DIV-->
 <div id="q-app"></div>
 
-<!--Commenting Zendesk Chat
-<!--Start of Zendesk Chat Script-
-<script type="text/javascript">
-window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
-d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
-_.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
-$.src="https://v2.zopim.com/?2EuXEN4mYMs8FeFbUXMtOX3NezKrLMTh";z.t=+new Date;$.
-type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
-</script>
-<!--End of Zendesk Chat Script
--->
 
   <!-- CDN example for Animate.css -->
   <link
@@ -85,6 +73,9 @@ logged_in_greeting="Hi! Welcome to UmiyaMatrimony.com.  How can we help you?"
 logged_out_greeting="Hi! Welcome to UmiyaMatrimony.com.  How can we help you?">
 </div>
 <!-- Your FB Chat Plugin code - END-->
+
+
+
 
 </body>
 </html>
