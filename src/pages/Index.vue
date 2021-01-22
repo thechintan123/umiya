@@ -44,7 +44,7 @@
           <q-carousel-slide :name="5" img-src="~assets/images/Wedding.jpg">
             <div class="absolute-bottom-left custom-caption text-primary">
               <div class="text-h2 my-style">It's Free</div>
-              <div class="text-subtitle1">500+ Profiles</div>
+              <div class="text-subtitle1">200+ Profiles</div>
             </div>
           </q-carousel-slide>
 
