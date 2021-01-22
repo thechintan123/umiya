@@ -4,7 +4,7 @@
 
 <q-icon name="fas fa-share-alt" class="text-white"/>
 
-<a :href="whatsappShare" target="_blank">
+<a :href="whatsappShare">
   <q-icon name="fab fa-whatsapp" class="text-white"/>
 </a>
 
@@ -30,7 +30,7 @@
 export default {
   data () {
     return {
-      postTitle: encodeURI('Hi! Please check this FREE matrimony website for our KKP community.'),
+      postTitle: encodeURI('Hi! Please check this FREE matrimony website for our KKP community.\n*Features*\n - It is *FREE* \n - It is only for KKP \n - Completely online(Easy website) \n Please spread the awareness.'),
       postUrl: encodeURI(document.location.href)
     }
   },
@@ -89,20 +89,4 @@ export default {
 transform: scale(1.4)
 }
 
-/*
-.share-btn-container .fa-facebook{
-color : #3b5998;
-}
-
-.share-btn-container .fa-whatsapp {
-color : #fff;
-}
-
-.share-btn-container .fa-sms {
-color : #000;
-}
-
-.share-btn-container {
-color : #fff;
-} */
 </style>
