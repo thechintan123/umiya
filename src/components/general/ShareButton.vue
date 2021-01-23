@@ -31,7 +31,7 @@ export default {
   data () {
     return {
       postTitle: encodeURI('Hi! Please check this FREE matrimony website for our KKP community.\n*Features*\n - It is *FREE* \n - It is only for KKP \n - Completely online(Easy website) \n Please spread the awareness.'),
-      postUrl: encodeURI(document.location.href)
+      postUrl: encodeURI('http://www.UmiyaMatrimony.com')
     }
   },
   computed: {
