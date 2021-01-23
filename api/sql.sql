@@ -367,3 +367,8 @@ insert into role values (3, 'email');
 -- SQL to delete data from database --
 select a.id,a.first_name,a.last_name,a.user_id,b.id as 'upload_photos id' from user_details a left join upload_photos b ON (b.user_
 details_id=a.id);
+
+
+
+select a.id as "udid", b.id as "uid", a.first_name, a.last_name, b.last_login, a.education, b.email from user_details a inner join 
+user b ON (b.id = a.user_id) order by a.id asc;

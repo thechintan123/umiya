@@ -17,7 +17,8 @@ module.exports = function (ctx) {
     // https://quasar.dev/quasar-cli/cli-documentation/boot-files
     boot: [
       'axios',
-      'gtm'
+      ctx.mode.cordova ? '' : 'gtm' ,
+      ctx.mode.cordova ? 'ga' : ''
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -168,7 +169,8 @@ module.exports = function (ctx) {
 
       env: ctx.dev
         ? {
-          API: JSON.stringify('http://localhost:5000/api')
+          //API: JSON.stringify('http://localhost:5000/api')
+          API: JSON.stringify('https://www.umiyamatrimony.com/api')
           // API: JSON.stringify('http://10.0.2.2:5000/api') //for Android Emulator Testing
         }
         : {
