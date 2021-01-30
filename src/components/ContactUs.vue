@@ -9,7 +9,7 @@
         In case you still need to contact us, please see below options.
       </q-card-section>
 
-      <q-expansion-item group="somegroup" expand-separator>
+      <q-expansion-item group="somegroup" expand-separator v-model="expandFacebook" >
         <template v-slot:header>
           <q-item-section avatar>
             <q-icon class="text-facebook-messenger" name="fab fa-facebook-messenger" />
@@ -23,9 +23,9 @@
           <q-card-section>
             Please send us message on Facebook Messenger by clicking on Icon.
             <q-img
-              src="~assets/images/FB_Messenger_Click.png"
-              width="80%"
-              height="80%"
+              src="~assets/images/FB_Messenger_Click_1.png"
+              width="100%"
+              height="100%"
             />
           </q-card-section>
         </q-card>
@@ -97,8 +97,20 @@
 
 <script>
 export default {
+  data () {
+    return {
+      expandFacebook: false
+    }
+  },
   components: {
     banner: require('./general/Banner.vue').default
+  },
+  mounted: function () {
+    var parameters = this.$route.query
+    console.log('parameters', parameters)
+
+    this.expandFacebook = Boolean(this.$route.query.openFacebook)
+    console.log('expandFacebook', this.expandFacebook)
   }
 }
 </script>

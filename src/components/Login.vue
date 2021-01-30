@@ -48,7 +48,13 @@
               />
             </template>
           </q-input>
-
+          <!-- <q-toggle
+            v-model="formData.rememberPassword"
+            checked-icon="check"
+            color="secondary"
+            label="Remeber Password"
+            unchecked-icon="clear"
+          /> -->
           <div class="row">
             <q-space/>
             <q-btn
@@ -88,6 +94,7 @@ export default {
       formData: {
         email: '',
         password: ''
+        // rememberPassword :  false
       },
       showProgressBar: false,
       devEnv: process.env.DEV // This is true for development environment and false for production
