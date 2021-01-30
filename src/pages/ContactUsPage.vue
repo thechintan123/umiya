@@ -9,6 +9,7 @@ export default {
   components: {
     contactUs: require('components/contactUs.vue').default
   }
+
 }
 </script>
 
