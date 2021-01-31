@@ -8,12 +8,6 @@ from .email import send_forgotpwd_email
 from strgen import StringGenerator
 
 
-# Serve the Vue file
-@app.route('/')
-def index():
-    return app.send_static_file('index.html')
-
-
 # basic auth or token auth is passed so user is now logged in
 # return either a new token or an existing token back to Vue
 # This is the route Vue calls when user first login

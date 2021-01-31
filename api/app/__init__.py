@@ -16,4 +16,4 @@ migrate = Migrate(app, db, compare_type=True)
 # cors = CORS(app, resources={r"/api/*": {"origins": "http://localhost:8080"}})
 CORS(app)
 
-from . import route_search, route_token, route_user, errors, auth, models, route_test
+from . import route_search, route_token, route_user, errors, auth, models, route_index
