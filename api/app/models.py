@@ -39,6 +39,9 @@ class User(db.Model):
         self.token = jwt.encode(
             payload, app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
         self.token_expiration = now + timedelta(seconds=expires_in)
+
+        # print('token expiry', self.token_expiration)
+        # print('now', datetime.utcnow())
         db.session.add(self)
         return self.token
 

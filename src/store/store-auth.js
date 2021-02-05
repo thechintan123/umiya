@@ -37,7 +37,9 @@ const actions = {
     return axios
       .post(
         process.env.API + '/tokens',
-        {},
+        {
+          remember_me: false /* hardcoded pls change */
+        },
         {
           auth: {
             username: credentials.email,

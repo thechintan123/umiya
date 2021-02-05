@@ -15,7 +15,13 @@ from strgen import StringGenerator
 @basic_auth.login_required
 def get_token():
     user = basic_auth.current_user()
-    token = user.get_token()
+    data = request.get_json() or {}
+    remember_me = data.get('remember_me')
+    if remember_me:
+        expiry = 604800 # 7 days token expiry
+    else:
+        expiry = 3600 # 1 hour token expiry
+    token = user.get_token(expires_in = expiry)
     payload = {
         'token': token,
         'email': user.email,
