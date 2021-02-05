@@ -171,8 +171,8 @@ module.exports = function (ctx) {
         ? {
           // API: JSON.stringify('http://www.umiyamatrimony.com/api')
           // API: JSON.stringify('http://10.0.2.2:5000/api') //for Android Emulator Testing
-          API: JSON.stringify('http://localhost:5000/api'),
-          URL: JSON.stringify('http://localhost:5000')
+          API: JSON.stringify('http://localhost:8080/api'),
+          URL: JSON.stringify('http://localhost:8080')
         }
         : {
           API: JSON.stringify('https://www.umiyamatrimony.com/api'),
