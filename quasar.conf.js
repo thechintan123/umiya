@@ -175,10 +175,10 @@ module.exports = function (ctx) {
           URL: JSON.stringify('http://localhost:5000')
         }
         : {
-          //API: JSON.stringify('https://www.umiyamatrimony.com/api'),
-          //URL : JSON.stringify('https://www.umiyamatrimony.com')
-          API: JSON.stringify('http://localhost:5000/api'),
-          URL: JSON.stringify('http://localhost:5000')
+          API: JSON.stringify('https://www.umiyamatrimony.com/api'),
+          URL : JSON.stringify('https://www.umiyamatrimony.com')
+          //API: JSON.stringify('http://localhost:5000/api'),
+          //URL: JSON.stringify('http://localhost:5000')
         }
     },
 

@@ -20,7 +20,7 @@ def get_token():
     if remember_me:
         expiry = 604800 # 7 days token expiry
     else:
-        expiry = 10 # 1 hour token expiry
+        expiry = 3600 # 1 hour token expiry
     token = user.get_token(expires_in = expiry)
     payload = {
         'token': token,
