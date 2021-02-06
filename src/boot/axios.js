@@ -13,6 +13,7 @@ export default ({ app, router, store, Vue }) => {
     }
     return Promise.reject(err)
   })
+
 }
 
 Vue.prototype.$axios = axios

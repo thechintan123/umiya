@@ -20,8 +20,7 @@ def verify_password(email, password):
 # this function is called if there is an error with basic authentication
 @basic_auth.error_handler
 def basic_auth_error(status):
-    # It is actually 401 error, but we use 400 so that browser doesnt do their autopopup
-    return error_response(401, 'You have entered incorrect login credentials.')
+    return error_response(status, 'You have entered incorrect login credentials.')
 
 
 # used by http-auth to provide authentication based on roles
@@ -41,9 +40,12 @@ def verify_token(token):
 
 # this function is called if there is an error with token authentication
 @token_auth.error_handler
-def auth_error():
-    # It is actually 401 error, but we use 400 so that browser doesnt do their autopopup
-    return error_response(401, 'Invalid token')
+def auth_error(status):
+    if status == 401:
+        return error_response(status, 'Invalid token')
+    else:
+        # this will be 403 error
+        return error_response(status, "You don't have permission to access this page")
 
 
 # used by http-auth to provide authentication based on roles
