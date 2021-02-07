@@ -106,7 +106,7 @@ export default {
     banner: require('./general/Banner.vue').default
   },
   mounted: function () {
-    var parameters = this.$route.query
+    // var parameters = this.$route.query
     // console.log('parameters', parameters)
 
     this.expandFacebook = Boolean(this.$route.query.openFacebook)

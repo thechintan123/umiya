@@ -168,7 +168,6 @@ import 'aos/dist/aos.css'
 
 import { productName, description } from '../../package.json'
 
-
 AOS.init({
   duration: 1200,
   easing: 'linear'
@@ -203,22 +202,21 @@ export default {
       console.log('Register')
       this.$router.push('register')
     }
-  }
-  ,
-  meta : {
+  },
+  meta: {
     // sets document title
     // title: 'UmiyaMatrimony.com - Free Matrimonial for KKP',
-    title: productName + "- Free Matrimonial website for KKP",
+    title: productName + '- Free Matrimonial website for KKP',
     // // optional; sets final title as "Index Page - My Website", useful for multiple level meta
     // titleTemplate: title => `${title} - Welcome`,
     // meta tags
     meta: {
-       description: { name: 'description', content: description },
+      description: { name: 'description', content: description }
       // description: { name: 'description', content: 'It is FREE Matrimonial website for Kutch Kadva Patidar Sanatan Samaj. It is completely online and it is self register and self search.' },
       // keywords: { name: 'keywords', content: 'Quasar website' },
       // equiv: { 'http-equiv': 'Content-Type', content: 'text/html; charset=UTF-8' },
     }
-  }  
+  }
 }
 
 </script>

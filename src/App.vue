@@ -11,7 +11,6 @@
 <script>
 import { productName, description } from '../package.json'
 
-
 export default {
   name: 'App',
   beforeCreate () {
@@ -21,17 +20,16 @@ export default {
   components: {
     shareButton: require('components/general/ShareButton.vue').default,
     facebookChatButton: require('components/general/FacebookChatButton.vue').default
-  }
-  ,
-  meta : {
+  },
+  meta: {
     // sets document title
-    title: productName +' - Free Matrimony wesbite for KKP',
+    title: productName + ' - Free Matrimony wesbite for KKP',
     meta: {
-      description: { name: 'description', content: description },
+      description: { name: 'description', content: description }
       // keywords: { name: 'keywords', content: 'Quasar website' },
       // equiv: { 'http-equiv': 'Content-Type', content: 'text/html; charset=UTF-8' },
     }
-  }   
+  }
 }
 </script>
 
