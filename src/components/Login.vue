@@ -52,11 +52,11 @@
           <div class="row">
           <q-toggle
             v-model="formData.rememberMe"
-            checked-icon="check"
+            checked-icon="fas fa-lock"
             color="secondary"
-            label="Remeber me for 7 days"
-            unchecked-icon="clear"
-          />            
+            label="Remember me for 7 days"
+            unchecked-icon="fas fa-lock-open"
+          />
             <q-space/>
             <q-btn
               tabIndex=3
@@ -95,7 +95,7 @@ export default {
       formData: {
         email: '',
         password: '',
-        rememberMe :  true
+        rememberMe: true
       },
       showProgressBar: false,
       devEnv: process.env.DEV // This is true for development environment and false for production
@@ -132,8 +132,6 @@ export default {
     spinner: require('./general/Spinner.vue').default,
     banner: require('./general/Banner.vue').default
   }
-  
-
 
 }
 </script>
