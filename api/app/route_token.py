@@ -18,7 +18,7 @@ def get_token():
     data = request.get_json() or {}
     remember_me = data.get('remember_me')
     print('rem me', remember_me)
-    expiry = 10 # default 1 hour token expiry
+    expiry = 3600 # default 1 hour token expiry
     if remember_me:
         expiry = 604800 # 7 days token expiry
     token = user.get_token(expires_in = expiry)
