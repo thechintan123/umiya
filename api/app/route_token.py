@@ -18,6 +18,7 @@ def get_token():
     data = request.get_json() or {}
     remember_me = data.get('remember_me')
     if remember_me:
+        # expiry = 10 
         expiry = 604800 # 7 days token expiry
     else:
         expiry = 3600 # 1 hour token expiry

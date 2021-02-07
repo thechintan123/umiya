@@ -107,10 +107,10 @@ export default {
   },
   mounted: function () {
     var parameters = this.$route.query
-    console.log('parameters', parameters)
+    // console.log('parameters', parameters)
 
     this.expandFacebook = Boolean(this.$route.query.openFacebook)
-    console.log('expandFacebook', this.expandFacebook)
+    // console.log('expandFacebook', this.expandFacebook)
   }
 }
 </script>
