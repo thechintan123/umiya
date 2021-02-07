@@ -35,7 +35,7 @@ export default {
       // console.log("showErrorDialog", error, msg);
       let errorMessage = ''
 
-      if(msg!= ''){
+      if (msg !== '') {
         errorMessage += msg + '<br>'
       }
 
@@ -53,7 +53,7 @@ export default {
         persistent: true,
         transitionShow: 'scale',
         transitionHide: 'scale',
-        message:  errorMessage ,
+        message: errorMessage,
         backgroundColor: 'blue',
         html: true
       })

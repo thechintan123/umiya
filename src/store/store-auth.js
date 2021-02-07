@@ -28,6 +28,8 @@ const mutations = {
       var user = JSON.parse(localStorage.getItem('user'))
       state.user = user
       state.role = user.role
+      // console.log("User Token", user, user.token);
+      axios.defaults.headers.common.Authorization = `Bearer ${user.token}`
     }
   }
 }

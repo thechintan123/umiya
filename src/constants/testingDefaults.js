@@ -49,7 +49,7 @@ var testTmpData = {
 var testLoginData = {
   email: 'chin1@gmail.com',
   password: 'password',
-  rememberMe: true,
+  rememberMe: true
 }
 
 export { testData, testTmpData, testLoginData }
