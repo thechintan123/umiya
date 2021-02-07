@@ -38,7 +38,7 @@ const actions = {
       .post(
         process.env.API + '/tokens',
         {
-          remember_me: false /* hardcoded pls change */
+          remember_me: credentials.rememberMe
         },
         {
           auth: {

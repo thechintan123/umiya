@@ -34,20 +34,26 @@ export default {
     showErrorDialog (error, msg = '') {
       // console.log("showErrorDialog", error, msg);
       let errorMessage = ''
-      errorMessage = error.toString()
+
+      if(msg!= ''){
+        errorMessage += msg + '<br>'
+      }
 
       if (this.hasKey(error, 'response.data.message')) {
-        errorMessage += '<br><br>Server Message :' + error.response.data.message
+        errorMessage += '<b>Message :' + error.response.data.message + '</b><br>'
       }
       if (this.hasKey(error, 'response.data.error')) {
-        errorMessage += '<br>Server Error :' + error.response.data.error
+        errorMessage += 'Server Error :' + error.response.data.error + '<br>'
       }
+
+      errorMessage += error.toString()
+
       Dialog.create({
         title: "<font color='red'><b><u>Error!</u></b></font>",
         persistent: true,
         transitionShow: 'scale',
         transitionHide: 'scale',
-        message: msg + '<br><br><i>' + errorMessage + '</i>',
+        message:  errorMessage ,
         backgroundColor: 'blue',
         html: true
       })

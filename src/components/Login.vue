@@ -48,14 +48,15 @@
               />
             </template>
           </q-input>
-          <!-- <q-toggle
-            v-model="formData.rememberPassword"
+
+          <div class="row">
+          <q-toggle
+            v-model="formData.rememberMe"
             checked-icon="check"
             color="secondary"
-            label="Remeber Password"
+            label="Remeber me for 7 days"
             unchecked-icon="clear"
-          /> -->
-          <div class="row">
+          />            
             <q-space/>
             <q-btn
               tabIndex=3
@@ -93,8 +94,8 @@ export default {
       isPwd: true,
       formData: {
         email: '',
-        password: ''
-        // rememberPassword :  false
+        password: '',
+        rememberMe :  true
       },
       showProgressBar: false,
       devEnv: process.env.DEV // This is true for development environment and false for production
@@ -131,6 +132,9 @@ export default {
     spinner: require('./general/Spinner.vue').default,
     banner: require('./general/Banner.vue').default
   }
+  
+
+
 }
 </script>
 

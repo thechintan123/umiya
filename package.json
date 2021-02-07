@@ -1,7 +1,7 @@
 {
   "name": "umiya",
   "version": "1.0.1",
-  "description": "Free Matrimonial website for KKP",
+  "description": "It is FREE Matrimonial website for Kutch Kadva Patidar Sanatan Samaj. It is completely online and it is self register and self search.",
   "productName": "UmiyaMatrimony.com",
   "cordovaId": "com.umiyamatrimony.app",
   "capacitorId": "",

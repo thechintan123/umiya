@@ -42,7 +42,7 @@ def verify_token(token):
 @token_auth.error_handler
 def auth_error(status):
     if status == 401:
-        return error_response(status, 'Invalid token')
+        return error_response(status, 'Your password was only remembered for 7 days. Please login again.')
     else:
         # this will be 403 error
         return error_response(status, "You don't have permission to access this page")

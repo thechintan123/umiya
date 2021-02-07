@@ -48,7 +48,8 @@ var testTmpData = {
 
 var testLoginData = {
   email: 'chin1@gmail.com',
-  password: 'password'
+  password: 'password',
+  rememberMe: true,
 }
 
 export { testData, testTmpData, testLoginData }
