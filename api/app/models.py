@@ -28,13 +28,14 @@ class User(db.Model):
         return check_password_hash(self.password_hash, password)
 
     # If token hasn't expired yet then return existing token
+    # this allows user to log in from multiple devices using same token.
+    # Downside is if user logs in with remember me it will only take effect if existing token has expired***
     # Otherwise create a new token with expiry date 1 hour from now
     # Update database with token info and return token
-    # KF 7/2/2021 - changed it so it always creates a new token every time user logs in
     def get_token(self, expires_in=3600):
         now = datetime.utcnow()
-        #if self.token and self.token_expiration > now + timedelta(seconds=60):
-        #    return self.token
+        if self.token and self.token_expiration > now + timedelta(seconds=60):
+            return self.token
         payload = {'user': self.id, 'exp': now + timedelta(seconds=expires_in)}
         # decode('utf-8') converts token to string
         self.token = jwt.encode(
