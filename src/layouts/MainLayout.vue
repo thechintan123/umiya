@@ -114,7 +114,7 @@ const menuList = [
   },
   {
     icon: 'person_add',
-    label: 'Register',
+    label: 'Register FREE',
     link: '/register',
     separator: true
 
@@ -176,6 +176,13 @@ const menuList = [
     icon: 'fas fa-phone-square-alt',
     label: 'Contact Us',
     link: '/contact-us',
+    separator: true
+  }
+  ,
+    {
+    icon: 'fas fa-mobile-alt',
+    label: 'Get Android App',
+    link: '/get-android-app',
     separator: true
   }
 

@@ -96,12 +96,14 @@
         <q-card-section>
           <div class="text-h6">Free & Easy Mobile App</div>
           <!-- <div class="text-subtitle1">Free and Easy to use Android App available</div> -->
+          <a href="https://play.google.com/store/apps/details?id=com.umiyamatrimony.app" target="_blank">
           <q-img
-          src="~assets/images/Google-Play-Badge.png"
+          src="~assets/images/Download_Android_App.svg"
           :ratio="1"
-          style="max-width: 150px; height: 75px;"
+          style="max-width: 250px; height: 90px;"
           contain
                   />
+          </a>
         </q-card-section>
       </q-card>
 
@@ -206,7 +208,7 @@ export default {
   meta: {
     // sets document title
     // title: 'UmiyaMatrimony.com - Free Matrimonial for KKP',
-    title: productName + '- Free Matrimonial website for KKP',
+    title: productName + ' - Free matrimonial website for KKP',
     // // optional; sets final title as "Index Page - My Website", useful for multiple level meta
     // titleTemplate: title => `${title} - Welcome`,
     // meta tags
