@@ -9,9 +9,9 @@
         <br />
           <a href="https://play.google.com/store/apps/details?id=com.umiyamatrimony.app" target="_blank">
           <q-img
-          src="~assets/images/Google-Play-Badge.png"
+          src="~assets/images/Download_Android_App.svg"
           :ratio="1"
-          style="max-width: 150px; height: 75px;"
+          style="max-width: 250px; height: 90px;"
           contain
                   />
           </a>        
