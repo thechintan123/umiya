@@ -81,6 +81,31 @@
             </template>
           </q-item-label>
 
+          <q-item-label v-if="profileStatus[searchItem.userDetailsId] === 3">
+            <q-radio v-model="correctionOption[searchItem.userDetailsId]" 
+            size="xs"
+            color="secondary"
+            val="AddPhoto" label="Add Photo"  
+            @input="correctionComments[searchItem.userDetailsId] = 'Please upload photo.' "/>
+            <q-radio v-model="correctionOption[searchItem.userDetailsId]" 
+            size="xs"
+            color="secondary"
+            val="AddProof" label="Add Proof" 
+            @input="correctionComments[searchItem.userDetailsId] = 'Please upload proof.'" />
+            <q-radio v-model="correctionOption[searchItem.userDetailsId]" 
+            size="xs"
+            color="secondary"
+            val="AddPhotoAndProof" label="Add Photo & Proof"
+            @input="correctionComments[searchItem.userDetailsId] = 'Please upload photo and proof.'"
+             />
+            <q-radio 
+            size="xs"
+            color="secondary"
+            v-model="correctionOption[searchItem.userDetailsId]" 
+            val="Clear" label="Clear"
+            @input="correctionComments[searchItem.userDetailsId] = ''"   
+            />          
+      </q-item-label>
           <q-item-label>
               <q-input v-if="profileStatus[searchItem.userDetailsId] === 3"
                 v-model="correctionComments[searchItem.userDetailsId]"
@@ -89,7 +114,6 @@
                 autogrow
                 :maxlength = "correctionCommentsMax"
                 :rules="[val => checkCorrectionCommentsLength(val, searchItem.correctionComments) || correctionErrorMessage]"
-
               />
            <q-btn color="primary" label="Change Status"
            @click="changeStatus(searchItem)"/>
@@ -188,6 +212,7 @@ export default {
     return {
       profileStatus: [],
       correctionComments: [],
+      correctionOption : [],
       correctionCommentsMax: correctionCommentsMaxLength,
       correctionErrorMessage: 'Max length of Correction Commments has reached'
 
@@ -210,7 +235,8 @@ export default {
       var hasError = false
       if (newStatusId === 3) { // 3- Correction
       // validate Correction Comments Length
-        currentComments = this.correctionComments[userDetailsId]
+        currentComments = this.firstLetterUpper(this.correctionComments[userDetailsId])
+        // console.log("currentComments", currentComments);
         currDate = new Date().toDateString()
         previousComments = ''
         if (this.hasValue(item.correctionComments)) {
@@ -288,11 +314,13 @@ export default {
         return false
       }
     }
+    
+
   }
 
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>
