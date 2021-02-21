@@ -256,8 +256,9 @@ export default {
     },
     photosAndProof (searchItem) {
       var fileList = []
-      fileList.push(searchItem.uploadPhotos)
       fileList.push(searchItem.uploadProof)
+      fileList.push(...searchItem.uploadPhotos) 
+      // console.log("photosAndProof File", fileList)
       return fileList
     },
     changeSort (sortOption) {
