@@ -177,9 +177,8 @@ const menuList = [
     label: 'Contact Us',
     link: '/contact-us',
     separator: true
-  }
-  ,
-    {
+  },
+  {
     icon: 'fas fa-mobile-alt',
     label: 'Get Android App',
     link: '/get-android-app',
