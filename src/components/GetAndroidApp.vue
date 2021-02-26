@@ -14,8 +14,8 @@
           style="max-width: 250px; height: 90px;"
           contain
                   />
-          </a>        
-      </q-card-section> 
+          </a>
+      </q-card-section>
     </q-card>
   </div>
 </template>

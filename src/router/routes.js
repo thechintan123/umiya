@@ -54,12 +54,11 @@ const routes = [
       {
         path: '/contact-us',
         component: () => import('pages/ContactUsPage.vue')
-      }
-      ,
+      },
       {
         path: '/get-android-app',
         component: () => import('pages/GetAndroidAppPage.vue')
-      }      
+      }
     ]
   }
 ]

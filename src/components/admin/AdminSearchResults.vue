@@ -82,29 +82,35 @@
           </q-item-label>
 
           <q-item-label v-if="profileStatus[searchItem.userDetailsId] === 3">
-            <q-radio v-model="correctionOption[searchItem.userDetailsId]" 
+            <q-radio v-model="correctionOption[searchItem.userDetailsId]"
             size="xs"
             color="secondary"
-            val="AddPhoto" label="Add Photo"  
-            @input="correctionComments[searchItem.userDetailsId] = 'Please upload photo.' "/>
-            <q-radio v-model="correctionOption[searchItem.userDetailsId]" 
+            val="AddPhoto" label="Add Photo"
+            @input="correctionComments[searchItem.userDetailsId] = 'Please upload your photo.' "/>
+            <q-radio v-model="correctionOption[searchItem.userDetailsId]"
             size="xs"
             color="secondary"
-            val="AddProof" label="Add Proof" 
-            @input="correctionComments[searchItem.userDetailsId] = 'Please upload proof.'" />
-            <q-radio v-model="correctionOption[searchItem.userDetailsId]" 
+            val="AddProof" label="Add Proof"
+            @input="correctionComments[searchItem.userDetailsId] = 'Please upload ID proof such as Driving License, Aadhar Card etc.'" />
+            <q-radio v-model="correctionOption[searchItem.userDetailsId]"
             size="xs"
             color="secondary"
             val="AddPhotoAndProof" label="Add Photo & Proof"
-            @input="correctionComments[searchItem.userDetailsId] = 'Please upload photo and proof.'"
+            @input="correctionComments[searchItem.userDetailsId] = 'Please upload your photo and ID proof such as Driving License, Aadhar Card etc.'"
              />
-            <q-radio 
+            <q-radio v-model="correctionOption[searchItem.userDetailsId]"
             size="xs"
             color="secondary"
-            v-model="correctionOption[searchItem.userDetailsId]" 
+            val="UploadCorrectProof" label="Upload Correct Proof"
+            @input="correctionComments[searchItem.userDetailsId] = 'Your ID proof is incorrect. Please upload CORRECT ID proof showing your name and date of birth such as Driving License, Aadhar Card etc.'"
+             />
+            <q-radio
+            size="xs"
+            color="secondary"
+            v-model="correctionOption[searchItem.userDetailsId]"
             val="Clear" label="Clear"
-            @input="correctionComments[searchItem.userDetailsId] = ''"   
-            />          
+            @input="correctionComments[searchItem.userDetailsId] = ''"
+            />
       </q-item-label>
           <q-item-label>
               <q-input v-if="profileStatus[searchItem.userDetailsId] === 3"
@@ -212,7 +218,7 @@ export default {
     return {
       profileStatus: [],
       correctionComments: [],
-      correctionOption : [],
+      correctionOption: [],
       correctionCommentsMax: correctionCommentsMaxLength,
       correctionErrorMessage: 'Max length of Correction Commments has reached'
 
@@ -283,7 +289,7 @@ export default {
     photosAndProof (searchItem) {
       var fileList = []
       fileList.push(searchItem.uploadProof)
-      fileList.push(...searchItem.uploadPhotos) 
+      fileList.push(...searchItem.uploadPhotos)
       // console.log("photosAndProof File", fileList)
       return fileList
     },
@@ -314,7 +320,6 @@ export default {
         return false
       }
     }
-    
 
   }
 
