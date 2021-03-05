@@ -130,7 +130,7 @@ module.exports = function (ctx) {
         'Notify',
         'Loading',
         'Meta'
-      ]
+            ]
     },
 
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie
