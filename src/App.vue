@@ -9,7 +9,9 @@
 </template>
 
 <script>
+import { Platform } from 'quasar'
 import { productName, description } from '../package.json'
+import fcm from './utils/fcm'
 
 export default {
   name: 'App',
@@ -28,6 +30,11 @@ export default {
       description: { name: 'description', content: description }
       // keywords: { name: 'keywords', content: 'Quasar website' },
       // equiv: { 'http-equiv': 'Content-Type', content: 'text/html; charset=UTF-8' },
+    }
+  },
+  mounted() {
+    if (Platform.is.cordova) {
+      fcm.init()
     }
   }
 }

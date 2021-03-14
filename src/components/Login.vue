@@ -114,7 +114,6 @@ export default {
           // })
           this.showNotification('positive', 'Welcome ! You are now logged in.')
           this.showProgressBar = false
-
           this.$router.push('/profile')
         })
         .catch(error => {
@@ -132,7 +131,6 @@ export default {
     spinner: require('./general/Spinner.vue').default,
     banner: require('./general/Banner.vue').default
   }
-
 }
 </script>
 
