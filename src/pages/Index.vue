@@ -54,7 +54,13 @@
               <div class="text-subtitle1">Only for Kutch Kadva Patidar Sanatan Samaj</div>
             </div>
           </q-carousel-slide>
-
+          <q-carousel-slide :name="6" img-src="~assets/images/Private_Registration.jpg">
+            <div class="absolute-bottom-left text-center custom-caption text-primary">
+              <div class="text-h2 my-style">Private/Confidential</div>
+              <div class="text-subtitle1">Only for Girls. No details will be shared. 
+                Girls can search and contact Boys/Grooms.</div>
+            </div>
+          </q-carousel-slide>
           <q-carousel-slide :name="3" img-src="~assets/images/Validate1.jpg">
             <div class="absolute-bottom-left custom-caption text-primary">
               <div class="text-h2 my-style">We Verify</div>
@@ -116,10 +122,11 @@
         </q-card-section>
         <q-separator />
         <q-card-section>
-          <div class="text-h6">100% Secure</div>
+          <div class="text-h6">Private/Confidential</div>
           <div
             class="text-subtitle1"
-          >Your details are secured. It is not shared with any other website.</div>
+          >We have private/confidential registration for girls. 
+          No details will be visible to others. They can search and contact other boys.</div>
         </q-card-section>
       </q-card>
 
@@ -228,12 +235,13 @@ export default {
   text-align: center;
   padding: 5px;
   color: white;
-  background-color: rgba(
+  /* background-color: white; */
+   background-color: rgba(
     214,
     52,
     71,
-    0.4
-  ); /*/* $secondary : #d63447;- This is secondary color*/
+    0.7
+  );/* $secondary : #d63447;- This is secondary color*/ 
   /*background-color :  #d63447; */ /* $primary   : #ffd31d; */ /* $secondary : #d63447;*/
   /*opacity: 0.1;*/
 }

@@ -64,10 +64,26 @@
                         {{ searchItem.residentialAddress }}
                       </q-item-label>
                       <q-item-label>
+                        <u>Registration Type</u>
+                        :
+                        <b>{{ searchItem.registrationType.name }} </b> 
+                      </q-item-label>  
+                      <q-item-label>
+                        <u>Proof</u>
+                        :
+                        <i><u>{{ searchItem.uploadProof }} </u></i>
+                      </q-item-label>  
+                      <q-item-label>
+                        <u>Photos</u>
+                        :
+                        <i><u>{{ searchItem.uploadPhotos }} </u></i>
+                      </q-item-label>                                                                 
+                      <q-item-label>
                         <u>Current Status</u>
                         :
                         <b>{{ searchItem.status.name }} </b> <i>(Approval Date : {{ searchItem.approvalDate}})</i>
                       </q-item-label>
+                    
                       <q-item-label>
                         <u>Previous Correction Comments</u>
                         :

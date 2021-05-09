@@ -3,7 +3,7 @@ from . import app, db
 from .auth import basic_auth, token_auth
 from .errors import bad_request, error_response
 from datetime import datetime
-from .models import User, UserDetails, Country, Gotra, WhereKnow, MaritalStatus, Gender, UploadPhotos, ProfileStatus
+from .models import User, UserDetails, Country, Gotra, WhereKnow, MaritalStatus, Gender, UploadPhotos, ProfileStatus, RegistrationType
 from .email import send_reg_email, send_match_email, send_update_status_email
 from PIL import Image
 from strgen import StringGenerator
@@ -40,13 +40,14 @@ def create_user():
                    'country', 'state', 'city', 'primary_contact', 'agree_tc', 'marital_status',
                    'height_cms', 'gotra', 'original_surname', 'father_name', 'residential_address',
                    'partner_age_from', 'partner_age_to', 'partner_height_from_cms', 'partner_height_to_cms',
-                   'where_know')
+                   'where_know', 'registration_type')
 
     if not all(field in data for field in mand_fields):
         return bad_request('Please provide all mandatory fields')
     if 'id' not in data['gotra'] or \
        'id' not in data['where_know'] or \
        'id' not in data['marital_status'] or \
+       'id' not in data['registration_type'] or \
        'id' not in data['gender']:
         return bad_request('Please provide all mandatory fields')
 
@@ -117,8 +118,9 @@ def lists():
     marital_status = get_list(MaritalStatus)
     gender = get_list(Gender)
     profile_status = get_list(ProfileStatus)
+    registration_type = get_list(RegistrationType)
     payload = {'country': country, 'gotra': gotra, 'where_know': where_know,
-               'marital_status': marital_status, 'gender': gender, 'profile_status': profile_status}
+               'marital_status': marital_status, 'gender': gender, 'profile_status': profile_status, 'registration_type' : registration_type}
     return jsonify(payload)
 
 

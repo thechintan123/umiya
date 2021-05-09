@@ -9,7 +9,38 @@
         @click="defaultTestingData"
       />
     <!-- End - This button is only visible in Testing Mode -->
-
+    <br>
+  <!-- <div class="q-pa-sm rounded-borders">
+        Registration Type:
+    <!-- <q-option-group
+      :options="list.registrationOptions"
+      type="radio"
+      v-model="registrationType"
+      @input="updateGender"
+    />
+    </div> -->
+        <q-radio
+          tabindex="0"
+          v-model="registrationType"
+          :val="list.registrationOptions[1].name"
+          left-label
+          label="Registration Type : Visible"
+          @input="updateGender"
+        />
+        <q-radio
+          tabindex="0"
+          v-model="registrationType"
+          :val="list.registrationOptions[0].name"
+          left-label
+          label="Confidential/Private(only for Girls)"
+          @input="updateGender"
+        />
+        <span class="text-negative" style="font-size: 13px;" v-if="registrationType == 'special'">
+          Girl's(Bride's) profile is 100% confidential. It is NOT visible to anyone.</span>
+        <div class="text-grey-6" style="font-size: 13px;">Hint: Special registration is only for girls(brides) in 
+          which Girl's profile is 100% confidential and it is not visible on searching. 
+          But, girl's profile can see Boy's(Groom's) profile and can contact them. 
+          We have created this on request of our KKP community members.</div>
     <q-input
       outlined
       tabindex="1"
@@ -106,6 +137,7 @@
       option-value="id"
       option-label="name"
       :options="list.genderOptions"
+      :disable = "disableGender"
       dense
       options-dense
       clearable
@@ -323,7 +355,8 @@ export default {
       devEnv: process.env.DEV, // This is true for development environment and false for production
       localCountryOptions: [],
       locaFormData: {},
-      isPwd: true
+      isPwd: true,
+      disableGender : false
     }
   },
 
@@ -378,6 +411,20 @@ export default {
         return false
       }
     },
+    updateGender(regType){
+      console.log("UpdateGender", regType)
+      if(regType.includes('Confidential')){
+        var findFemale = this.list.genderOptions.find(element => element.name == 'Female');
+        console.log("findFemale :",findFemale, this.list.genderOptions);
+        this.setFormDataIndividual({ key: 'gender', value: findFemale }); 
+        this.disableGender =  true;
+      }
+      else{
+        this.disableGender =  false;
+        this.setFormDataIndividual({ key: 'gender', value: '' });
+      }
+    }
+    ,
     submitBasicForm () {
       // console.log("submitBasicForm ");
 
@@ -467,6 +514,23 @@ export default {
         })
       }
     },
+    registrationType: {
+      get () {
+        // console.log("registrationType", this.formData.registrationType);
+        return this.formData.registrationType.name;
+      },
+      set (value) {
+        
+        var findObj = this.list.registrationOptions.find(element => element.name == value);
+
+        console.log("set registrationType", value, findObj );
+
+           this.$store.commit('registerUpdate/setFormDataIndividual', {
+          key: 'registrationType',
+          value: findObj
+        })
+      }
+    },    
     email: {
       get () {
         return this.$store.state.registerUpdate.formData.email

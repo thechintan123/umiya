@@ -63,7 +63,9 @@
         @transition = "transitionFn"
       >
         <q-tab-panel name="basic">
-          <basicForm ref="basicFormRef" :updateProfile="updateProfile" />
+          <template v-if="list.registrationOptions.length > 0">
+                    <basicForm ref="basicFormRef" :updateProfile="updateProfile" />
+          </template>         
         </q-tab-panel>
 
         <q-tab-panel name="personal">
@@ -102,7 +104,7 @@ export default {
 
   computed: {
     ...mapState('registerUpdate', ['showProgressBar', 'tab', 'error', 'successProcess',
-      'emptyFormData', 'loggedInUserDetailsId']),
+      'emptyFormData', 'loggedInUserDetailsId','list']),
     ...mapState('admin', ['selectedIdByAdmin']),
 
     tab: {

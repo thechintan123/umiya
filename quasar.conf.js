@@ -119,7 +119,9 @@ module.exports = function (ctx) {
         'QBreadcrumbs',
         'QBreadcrumbsEl',
         'QTooltip',
-        'QUploaderAddTrigger'
+        'QUploaderAddTrigger',
+        'QOptionGroup'
+
       ],
 
       directives: ['Ripple', 'ClosePopup'],
