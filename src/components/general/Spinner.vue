@@ -13,6 +13,7 @@
 
 export default {
   created () {
+    console.log("Spinner - created")
     this.$q.loading.show({
       spinnerColor: 'secondary',
       backgroundColor: 'dark',
@@ -22,6 +23,7 @@ export default {
     })
   },
   destroyed () {
+    console.log("Spinner - Destoryed")
     this.$q.loading.hide()
   }
 }

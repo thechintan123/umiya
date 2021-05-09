@@ -39,7 +39,7 @@
 
     <div class="q-mb-xs">
     Please provide ID proof having name of <b><u>{{firstName}}&nbsp;{{lastName}}</u></b>
-    &nbsp;and date of birth as <b><u>{{dateOfBirth}}</u></b>.
+    &nbsp;and date of birth as <b><u>{{removeTimeStamp(dateOfBirth)}}</u></b>.
     <br>
     ID Proof can be either Driving License or Aadhar Card or PAN Card or Passport.
 
@@ -405,7 +405,7 @@ export default {
     },
     validateUploadForm () {
       this.setShowProgressBar(true)
-      this.$q.loading.show()
+      // this.$q.loading.show()
       this.checkPhoto()
       this.checkProof()
 
@@ -544,7 +544,7 @@ export default {
         formDataSnakeCase[this.camelToSnake(key)] =
               this.formData[key]
       }
-      // console.log("Converted to Snake Case", formDataSnakeCase);
+      console.log("Converted to Snake Case", formDataSnakeCase);
       try {
         await this.registerUser(formDataSnakeCase)
         // console.log("Register User", this.formData.userDetailsId, this.formData);

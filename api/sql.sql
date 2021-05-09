@@ -311,6 +311,13 @@ VALUES('Registered'),
     ('Correction'),
     ('Deactivated')
 
+/* registration_type */
+INSERT INTO registration_type
+    (name)
+VALUES('Visible'),
+    ('Confidential/Private')
+
+
 
 /* quick fix */
 update user_details
