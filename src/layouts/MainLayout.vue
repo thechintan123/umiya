@@ -23,6 +23,7 @@
                 style="height: 50px;"
               class="my_logo" src="~assets/logos/rings_diamond_heart.svg" /> -->
               <img
+              
               src="~assets/logos/rings_diamond_heart.svg" />
               </q-avatar>
 

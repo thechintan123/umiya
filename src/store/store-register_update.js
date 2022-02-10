@@ -25,11 +25,13 @@ const getDefaultState = () => {
       gotraOptions: [],
       whereKnowOptions: [],
       maritalOptions: [],
-      genderOptions: []
+      genderOptions: [],
+      registrationOptions : []
     },
     // form fields
     formData: {
       userDetailsId: '',
+      registrationType : '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -125,7 +127,7 @@ const mutations = {
 
   setShowProgressBar (state, value) {
     state.showProgressBar = value
-    // console.log('setShowProgressBar', state.showProgressBar, value, state)
+      console.log('setShowProgressBar', state.showProgressBar, value, state)
   },
   setList (state, object) {
     state.list[object.key] = object.value
@@ -180,7 +182,10 @@ const actions = {
         var genderOptions = response.data.gender
         commit('setList', { key: 'genderOptions', value: genderOptions })
 
-        // console.log('fetchList - Then')
+        var registrationOptions = response.data.registration_type
+        commit('setList', { key: 'registrationOptions', value: registrationOptions })
+      
+        console.log('fetchList - Then',registrationOptions );
       })
       .catch(error => {
         console.log('Fetch List', error)
@@ -224,7 +229,7 @@ const actions = {
             ] = data[key]
           }
 
-          // console.log("userDetail", userDetail);
+          console.log("userDetail", userDetail);
           // state.formData = userDetail
           commit('setFormData', userDetail)
 

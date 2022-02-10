@@ -40,7 +40,15 @@ def search():
         # otherwise default to all marital status
         ms = MaritalStatus.query.all()
         marital_status_id_local = [m.id for m in ms]
-        
+
+    #allowed Registration Type
+    not_allowed_registration_type_id = 2 
+    # 2 for Confidential/Private
+
+    #allowed role
+    allowed_role = 'User'
+
+
     curr_date = datetime.now()
     age_from_to = data["ageFromTo"]
     if age_from_to is not None:
@@ -92,19 +100,25 @@ def search():
 
     if search_using_single_id is not None:
         formatted_user_details_id = "%{}%".format(search_using_single_id)
-        user_details = db.session.query(UserDetails).join(User).join(Role).filter(and_(UserDetails.status_id == allowed_status_id, \
+        user_details = db.session.query(UserDetails).join(User).join(Role).filter(
+                                            and_(UserDetails.status_id == allowed_status_id, \
                                             UserDetails.testing_user != test_user_id, \
-                                             Role.name == 'User', \
+                                            UserDetails.registration_type_id != not_allowed_registration_type_id, \
+                                            Role.name == allowed_role, \
                                             UserDetails.id.like(formatted_user_details_id))) \
                                           .order_by(desc(User.last_login)).all()
     elif search_using_id_range is True:
         user_details = db.session.query(UserDetails).join(User).join(Role).filter(and_(UserDetails.status_id == allowed_status_id, \
-                                          UserDetails.testing_user != test_user_id, Role.name == 'User', \
+                                          UserDetails.testing_user != test_user_id, \
+                                          UserDetails.registration_type_id != not_allowed_registration_type_id, \
+                                          Role.name == allowed_role, \
                                           UserDetails.id.between(user_details_id_from, user_details_id_to))) \
                                           .order_by(desc(User.last_login)).all()
     else:    
         user_details = db.session.query(UserDetails).join(User).join(Role).filter(and_(UserDetails.status_id == allowed_status_id,\
-                                          UserDetails.testing_user != test_user_id, Role.name == 'User', \
+                                          UserDetails.testing_user != test_user_id, \
+                                          Role.name == allowed_role, \
+                                          UserDetails.registration_type_id != not_allowed_registration_type_id, \
                                           UserDetails.country_id.in_(country_id_local),\
                                           UserDetails.gender_id == looking_for, \
                                           UserDetails.date_of_birth <= curr_date_plus_min, UserDetails.date_of_birth >= curr_date_plus_max, \

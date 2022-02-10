@@ -1,5 +1,6 @@
 
 var testData = {
+  registrationType: 'normal',
   email: 'test9@test.com',
   password: 'password',
   confirmPassword: 'password',
