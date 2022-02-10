@@ -92,8 +92,8 @@ class UserDetails(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey(
         'user.id', ondelete='CASCADE'), nullable=False)
     # registration_type = db.Column(db.String(50), default='normal', nullable=False)
-    registration_type_id = db.Column(db.Integer, db.ForeignKey(
-        'registration_type.id'), nullable=True)    
+    '''registration_type_id = db.Column(db.Integer, db.ForeignKey(
+        'registration_type.id'), nullable=True)    '''
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     gender_id = db.Column(db.Integer, db.ForeignKey(
@@ -155,7 +155,7 @@ class UserDetails(db.Model):
         data = {
             'id': self.id,
             'email': self.user.email,
-            'registration_type': self.registration_type.to_dict(),
+            #'registration_type': self.registration_type.to_dict(),
             'first_name': self.first_name,
             'last_name': self.last_name,
             'gender': self.gender.to_dict(),
@@ -206,7 +206,7 @@ class UserDetails(db.Model):
                      'gotra', 'where_know', 'marital_status', 'gender',
                      'date_of_birth', 'partner_marital_status',
                      'status', 'id', 'email', 'upload_photos', 'upload_proof', 
-                     'correction_comments','registration_type']:
+                     'correction_comments']:
                 setattr(self, key, data[key])
 
         # had to separate queries and assign to self otherwise SQLachemy seems to commit too early???
@@ -226,9 +226,9 @@ class UserDetails(db.Model):
         if 'gender' in data and data['gender'] is not None:
             gender = Gender.query.filter_by(
                 id=int(data['gender']['id'])).first()
-        if 'registration_type' in data and data['registration_type'] is not None:
+        '''if 'registration_type' in data and data['registration_type'] is not None:
             registration_type = RegistrationType.query.filter_by(
-                id=int(data['registration_type']['id'])).first()                
+                id=int(data['registration_type']['id'])).first()   '''             
         if 'status' in data and data['status'] is not None:
             status = ProfileStatus.query.filter_by(
                 id=int(data['status']['id'])).first()
@@ -246,8 +246,8 @@ class UserDetails(db.Model):
             self.marital_status = marital_status
         if gender is not None:
             self.gender = gender
-        if registration_type is not None:
-            self.registration_type = registration_type            
+        '''if registration_type is not None:
+            self.registration_type = registration_type  '''          
         if status is not None:
             self.status = status
             if status.name == 'Approved':
@@ -283,6 +283,7 @@ class ProfileStatus(db.Model):
     def __repr__(self):
         return '<ProfileStatus {}>'.format(self.name)
 
+'''
 class RegistrationType(db.Model):
     __tablename__ = 'registration_type'
     id = db.Column(db.Integer, primary_key=True)
@@ -295,6 +296,7 @@ class RegistrationType(db.Model):
 
     def __repr__(self):
         return '<RegistrationType {}>'.format(self.name)
+'''
 
 
 class UploadPhotos(db.Model):

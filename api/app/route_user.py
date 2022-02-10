@@ -40,14 +40,13 @@ def create_user():
                    'country', 'state', 'city', 'primary_contact', 'agree_tc', 'marital_status',
                    'height_cms', 'gotra', 'original_surname', 'father_name', 'residential_address',
                    'partner_age_from', 'partner_age_to', 'partner_height_from_cms', 'partner_height_to_cms',
-                   'where_know', 'registration_type')
+                   'where_know')
 
     if not all(field in data for field in mand_fields):
         return bad_request('Please provide all mandatory fields')
     if 'id' not in data['gotra'] or \
        'id' not in data['where_know'] or \
        'id' not in data['marital_status'] or \
-       'id' not in data['registration_type'] or \
        'id' not in data['gender']:
         return bad_request('Please provide all mandatory fields')
 
