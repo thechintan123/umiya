@@ -55,7 +55,7 @@ def forgot_password(email):
             db.session.commit()
             return '', 204
         else:
-            return error_response(502, 'unable to send email xx')
+            return error_response(502, 'unable to send email')
     else:
         return error_response(400, "email doesn't exist")
 
