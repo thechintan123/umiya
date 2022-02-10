@@ -1,3 +1,4 @@
+<!--
 <template>
   <q-page class="flex">
       <resetPassword/>
@@ -11,4 +12,4 @@ export default {
   }
 
 }
-</script>
+</script>-->
