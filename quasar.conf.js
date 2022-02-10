@@ -145,7 +145,6 @@ module.exports = function (ctx) {
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
       vueRouterMode: 'history', // available values: 'hash', 'history'
-
       // rtl: false, // https://quasar.dev/options/rtl-support
       // preloadChunks: true,
       // showProgress: false,
@@ -168,7 +167,6 @@ module.exports = function (ctx) {
           }
         })
       },
-
       env: ctx.dev
         ? {
           //API: JSON.stringify('http://www.umiyamatrimony.com/api')

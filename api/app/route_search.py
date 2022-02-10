@@ -128,8 +128,6 @@ def search():
 def search_by_admin():
     data = request.get_json() or {}
 
-    print("data", data)
-
     allowed_status_id = '2' #1 is for Registered
     allowed_role_id = 2 #2 is for User
 
@@ -139,8 +137,6 @@ def search_by_admin():
         first_name = ""
 
     formatted_first_name = "%{}%".format(first_name)
-    # print("formatted_first_name", formatted_first_name)
-
 
     last_name = ""
     last_name = data.get("last_name")
@@ -164,7 +160,6 @@ def search_by_admin():
     all_genders =[]
     gender_id_local = []
     gender = data.get("gender")
-    # print("Gender 1", gender)
 
     if gender != "" and gender is not None:
         gender_id_local.append(gender.get("id"))
@@ -172,8 +167,6 @@ def search_by_admin():
         all_genders = Gender.query.all()
         for gen in all_genders:
             gender_id_local.append(gen.id)
-    
-    # print("Gender 2", all_genders, gender_id_local)
     
     profile_status_id_local = []
     all_profile_statuses = {}
@@ -185,9 +178,6 @@ def search_by_admin():
         for p_s in all_profile_statuses:
             profile_status_id_local.append(p_s.id)
 
-    # print("Profile Statuses", all_profile_statuses, profile_status_id_local, profile_status_list)
-
-
     user_details = db.session.query(UserDetails).join(User).join(Role).filter(and_(User.email.like(formatted_email),
                                         UserDetails.first_name.like(formatted_first_name), \
                                         UserDetails.last_name.like(formatted_last_name) , \
@@ -196,8 +186,7 @@ def search_by_admin():
                                         UserDetails.status_id.in_(profile_status_id_local), \
                                         Role.name == 'User' \
                                         )).order_by(desc(User.last_login)).all()       
-    
-    # print('User Details',user_details)                                          
+                                             
     user_list = []
     for user_d in user_details:
         upload_photos = user_d.upload_photos.all()

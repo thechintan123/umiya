@@ -1,7 +1,8 @@
 from flask import render_template
 from . import app
 from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail, Content, Personalization, Email, From, Bcc, Subject, ReplyTo
+from sendgrid.helpers.mail import Mail, From, To, Bcc, \
+    Subject, Content, ReplyTo
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import math
@@ -11,21 +12,20 @@ import math
 def send_email(recipients, subject, text_body, html_body, send_admin=False):
     message = Mail()
 
-    # personalization is used so you can't see other people sent email
+    msg_to = []
     for r in recipients:
-        person = Personalization()
-        person.add_to(Email(r))
-        message.add_personalization(person)
+        msg_to.append(To(r))
+    message.to = msg_to
 
     if send_admin:
         admin_list = app.config['MAIL_ADMINS'].split(';')
         message.bcc = [Bcc(a) for a in admin_list]
+
     message.subject = Subject(subject)
     message.from_email = From(
         app.config['MAIL_FROM'], 'Umiya Matrimony')
     message.reply_to = ReplyTo(
         app.config['MAIL_REPLY_TO'], 'Umiya Matrimony Reply')
-
     message.content = [
         Content('text/html', html_body),
         Content('text/txt', text_body)
@@ -66,7 +66,7 @@ def send_forgotpwd_email(user, new_pwd):
                                   user=user, new_pwd=new_pwd),
         html_body=render_template('email_pwdreset.html',
                                   user=user, new_pwd=new_pwd),
-                                  send_admin=True)
+        send_admin=True)
 
 
 # Calculate age of person for display purpose

@@ -2,7 +2,6 @@ from . import app
 
 # Serve the Quasar index file
 # This should match all the routes you have in Quasar
-# Not the most ideal solution !
 @app.route('/')
 @app.route('/register')
 @app.route('/search')
