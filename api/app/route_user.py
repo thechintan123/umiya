@@ -3,7 +3,7 @@ from . import app, db
 from .auth import basic_auth, token_auth
 from .errors import bad_request, error_response
 from datetime import datetime
-from .models import User, UserDetails, Country, Gotra, WhereKnow, MaritalStatus, Gender, UploadPhotos, ProfileStatus, RegistrationType
+from .models import User, UserDetails, Country, Gotra, WhereKnow, MaritalStatus, Gender, UploadPhotos, ProfileStatus
 from .email import send_reg_email, send_match_email, send_update_status_email
 from PIL import Image
 from strgen import StringGenerator
@@ -117,9 +117,8 @@ def lists():
     marital_status = get_list(MaritalStatus)
     gender = get_list(Gender)
     profile_status = get_list(ProfileStatus)
-    registration_type = get_list(RegistrationType)
     payload = {'country': country, 'gotra': gotra, 'where_know': where_know,
-               'marital_status': marital_status, 'gender': gender, 'profile_status': profile_status, 'registration_type' : registration_type}
+               'marital_status': marital_status, 'gender': gender, 'profile_status': profile_status}
     return jsonify(payload)
 
 
